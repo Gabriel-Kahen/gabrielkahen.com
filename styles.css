@@ -36,7 +36,6 @@
 
 }
 
-
 .rubik-tab {
   font-family: "Rubik", sans-serif;
   font-optical-sizing: auto;
@@ -86,7 +85,7 @@
     padding: 0px
 }
 
-body {
+body {  
     color: #000000;
     background-color: #FAF9F9;
     font: arial;
@@ -94,4 +93,3 @@ body {
     margin: 0px;
     padding: 0px
 }
-
