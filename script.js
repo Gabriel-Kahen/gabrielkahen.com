@@ -1,17 +1,20 @@
 tabs.style.height = (screen.height * .042) + "px";
 url.style.height = (screen.height * .041) + "px";
 bookmarks.style.height = (screen.height * .035) + "px";
-tabimg.style.height = (screen.height * .05) + "px";
+var imgHeight = (screen.height * .05)
+tabimg.style.height = imgHeight + "px";
+
+var imgWidth = imgHeight * 1942 / 36;
 
 gabrielkahen.style.bottom = (screen.height * .05)/8 + "px";
 LinkedIn.style.bottom = (screen.height * .05)/8 + "px";
 GitHub.style.bottom = (screen.height * .05)/8 + "px";
 Email.style.bottom = (screen.height * .05)/8 + "px";
 
-gabrielkahen.style.left = 20/1472 * screen.width + "px";
-LinkedIn.style.left = 250/1472 * screen.width + "px";
-GitHub.style.left = 491/1472 * screen.width + "px";
-Email.style.left = 728/1472 * screen.width + "px";
+gabrielkahen.style.left = 20/2570 * imgWidth + "px";
+LinkedIn.style.left = 250/2570 * imgWidth + "px";
+GitHub.style.left = 491/2570 * imgWidth + "px";
+Email.style.left = 728/2570 * imgWidth + "px";
 
 function reload(){
     location.reload();
