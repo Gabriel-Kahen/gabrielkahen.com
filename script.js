@@ -8,10 +8,10 @@ LinkedIn.style.bottom = (screen.height * .05)/8 + "px";
 GitHub.style.bottom = (screen.height * .05)/8 + "px";
 Email.style.bottom = (screen.height * .05)/8 + "px";
 
-gabrielkahen.style.left = 20 + "px";
-LinkedIn.style.left = 13 + 237 * 1 + "px";
-GitHub.style.left = 17 + 237 * 2 + "px";
-Email.style.left = 17 + 237 * 3 + "px";
+gabrielkahen.style.left = 20/1472 * screen.width + "px";
+LinkedIn.style.left = 250/1472 * screen.width + "px";
+GitHub.style.left = 491/1472 * screen.width + "px";
+Email.style.left = 728/1472 * screen.width + "px";
 
 function reload(){
     location.reload();
