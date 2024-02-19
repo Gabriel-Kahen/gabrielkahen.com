@@ -7,14 +7,19 @@ tabimg.style.height = imgHeight + "px";
 var imgWidth = imgHeight * 1942 / 36;
 
 gabrielkahen.style.bottom = (screen.height * .05)/8 + "px";
-LinkedIn.style.bottom = (screen.height * .05)/8 + "px";
-GitHub.style.bottom = (screen.height * .05)/8 + "px";
-Email.style.bottom = (screen.height * .05)/8 + "px";
+LinkedIn.style.bottom = (screen.height * .05)/8 + 2 + "px";
+GitHub.style.bottom = (screen.height * .05)/8 + 2 + "px";
+Email.style.bottom = (screen.height * .05)/8 + 2 + "px";
 
 gabrielkahen.style.left = 20/2570 * imgWidth + "px";
 LinkedIn.style.left = 250/2570 * imgWidth + "px";
 GitHub.style.left = 491/2570 * imgWidth + "px";
 Email.style.left = 728/2570 * imgWidth + "px";
+
+gabrielkahen.style.width = imgWidth * .085 + "px"
+LinkedIn.style.width = imgWidth * .085 + "px"
+GitHub.style.width = imgWidth * .085 + "px"
+Email.style.width = imgWidth * .085 + "px"
 
 function reload(){
     location.reload();
