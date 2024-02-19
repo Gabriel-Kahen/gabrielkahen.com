@@ -1,0 +1,97 @@
+#tabs {
+    color: #000000;
+    background-color: #DFE4E5;
+    font: arial;
+    font-size: 5px;
+    margin: 0px; 
+    padding: 0px;
+    position: relative;
+    display: inline-black;
+}
+
+#gabrielkahen {
+    margin: 0px;
+    color: #1B1C1C;
+}
+
+#gabrielkahen:hover {
+    background-color: transparent;
+}
+
+.tab {
+    background-color: transparent;
+    color: #3F4648;
+    font-size: 13px;
+    align-items: center;
+    vertical-align: center;
+    text-align: left;    
+    padding: 0px;
+    border-radius: 8px;
+    border-color: transparent;
+    position: absolute;
+    left: 200px;
+    bottom: 7px;
+    width: 220px;
+    display: flex;
+
+}
+
+
+.rubik-tab {
+  font-family: "Rubik", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 360;
+  font-style: normal;
+}
+
+.tab:hover{
+    background-color: #BBC9CC;
+    transition: .3s;
+}
+
+.logo   {
+    margin: 2px;
+    align-items: left;
+    align-self: center;
+    width: 16px;
+    height: 16px;
+}
+
+#tabimg {
+    color: #000000;
+    background-color: #FAF9F9;
+    margin: 0px; 
+    vertical-align: bottom;
+    padding: 0px
+}
+
+#url {
+    color: #919293;
+    background-color: #FAF9F9;
+    font: arial;
+    font-size: 7px;
+    flex: start;
+    display: block;
+    margin: 0px;
+    padding: 0px
+}
+
+#bookmarks {
+    color: #000000;
+    background-color: #FAF9F9;
+    font: arial;
+    font-size: 5px;
+    display: block;
+    margin: 0px;
+    padding: 0px
+}
+
+body {
+    color: #000000;
+    background-color: #FAF9F9;
+    font: arial;
+    font-size: 7px;
+    margin: 0px;
+    padding: 0px
+}
+
