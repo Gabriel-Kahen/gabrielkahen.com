@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>gabrielkahen</title>
-    <link rel="icon" type="image/x-icon" href="icons/logo.png">
+    <link rel="icon" type="image/x-icon" href="/Users/gabrielkahen/Desktop/code/Personal Site/icons/logo.png">
     <link rel="stylesheet" href="styles.css"> 
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,7 +12,7 @@
 </head>
 <body>
     <div id = "tabs">
-        <img src = "icons/noicons.png" id = "tabimg">
+        <img src = "noicons.png" id = "tabimg">
         <button class = "tab" id = "gabrielkahen" onclick = "reload()"> 
             <img src = "icons/logo.png" class = "logo">
             &nbsp&nbspgabrielkahen
@@ -22,17 +22,27 @@
             &nbsp&nbspLinkedIn
         </button>
         <button class = "tab" id = "GitHub" onclick = "github()"> 
-            <img src = "icons/github.png" class = "logo">
+            <img src = "github.png" class = "logo">
             &nbsp&nbspGitHub
         </button>
         <button class = "tab" id = "Email" onclick = "email()"> 
-            <img src = "icons/gmail.png" class = "logo">
+            <img src = "gmail.png" class = "logo">
             &nbsp&nbspgabekahen@gmail.com
         </button>
     </div>
     
     <div id = "url">
+        <button class = "mod" id = "arrow_back">
+            <img src = "icons/arrow_back.png" class = modImg>
+        </button>
+        <button class = "mod"  id = "arrow_forward">
+            <img src = "icons/arrow_forward.png" class = modImg>
+        </button>
+        <button class = "mod" id = "refresh" onclick = "reload()">
+            <img src = "icons/refresh.png" class = modImg>
+        </button>
     </div>
+
     <div id = "bookmarks">
     </div>
     <hr>
