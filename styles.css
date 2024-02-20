@@ -1,6 +1,6 @@
 #tabs {
-    color: #000000;
-    background-color: #DFE4E5;
+    color: #474747;
+    background-color: #DFE5E7;
     font: arial;
     font-size: 5px;
     margin: 0px; 
@@ -11,7 +11,7 @@
 
 #gabrielkahen {
     margin: 0px;
-    color: #1B1C1C;
+    color: #1F1F1F;
 }
 
 #gabrielkahen:hover {
@@ -20,12 +20,12 @@
 
 .tab {
     background-color: transparent;
-    color: #3F4648;
+    color:  #474747;
     font-size: 13px;
     align-items: center;
     vertical-align: center;
     text-align: left;    
-    padding: 0px;
+    padding: 2px;
     border-radius: 8px;
     border-color: transparent;
     position: absolute;
@@ -33,7 +33,6 @@
     bottom: 7px;
     width: 220px;
     display: flex;
-
 }
 
 .rubik-tab {
@@ -44,8 +43,8 @@
 }
 
 .tab:hover{
-    background-color: #BBC9CC;
-    transition: .3s;
+    background-color: #bec4d1;
+    transition: .25s;
 }
 
 .logo   {
@@ -64,6 +63,7 @@
     padding: 0px
 }
 
+
 #url {
     color: #919293;
     background-color: #FAF9F9;
@@ -72,12 +72,38 @@
     flex: start;
     display: block;
     margin: 0px;
-    padding: 0px
+    padding: 0px;
+    position: relative;
 }
+
+.mod {
+    color: transparent;
+    background-color: transparent;
+    border-color: transparent;
+    padding: 0px;
+    align-items: center;
+    align-content: center;
+    flex: center;
+    vertical-align: center;
+    border-radius: 10000px;
+    position: absolute;
+}
+
+#refresh:hover {
+    background-color: #EEEBED;
+    transition: 0.3s;
+}
+
+.modImg {
+    align-self: center;
+}
+
+
+
 
 #bookmarks {
     color: #000000;
-    background-color: #FAF9F9;
+    background-color: #909090;
     font: arial;
     font-size: 5px;
     display: block;
