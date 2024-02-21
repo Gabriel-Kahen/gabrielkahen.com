@@ -68,7 +68,7 @@ function search(input){
 }
 
 function resizeURL(){
-    urlbar.style.width = (window.innerWidth) - (screenWidth * .215 - 100) + "px";
+    urlbar.style.width = (window.innerWidth) - (screenWidth * .077 + 100) + "px";
 }
 
 function reload(){
