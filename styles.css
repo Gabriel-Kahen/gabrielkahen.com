@@ -89,21 +89,72 @@
     position: absolute;
 }
 
+.modImg {
+    vertical-align: middle;
+}
+
 #refresh:hover {
     background-color: #EEEBED;
     transition: 0.3s;
 }
 
-.modImg {
-    align-self: center;
+#account {
+    color: transparent;
+    background-color: transparent;
+    border-color: transparent;
+    padding: 0px;
+    align-items: center;
+    align-content: center;
+    flex: center;
+    vertical-align: center;
+    border-radius: 10000px;
+    position: absolute;
+    justify-content: center;
+    justify-self: center;
+    justify-items: center;
 }
+
+#account:hover {
+    background-color: #EEEBED;
+    transition: 0.3s;
+}
+
+#accountImg {
+    vertical-align: middle;
+}
+
+
+#tripledots:hover {
+    background-color: #EEEBED;
+    transition: 0.3s;
+}
+
+#urlbar {
+    background-color: #EAE9ED;
+    border-radius: 25px;
+    border-color: transparent;
+    position: absolute;
+}
+
+input {
+    padding-left: 15px;
+}
+
+#urlbar:hover{
+    background-color :#DEDDE1;
+}
+
+
+
+
+
 
 
 
 
 #bookmarks {
     color: #000000;
-    background-color: #909090;
+    background-color: #FAF9F9;
     font: arial;
     font-size: 5px;
     display: block;
