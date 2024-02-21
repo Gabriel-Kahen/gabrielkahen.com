@@ -1,6 +1,7 @@
 /* tab */
 
 var screenHeight = screen.height;
+var screenWidth = screen.width;
 var imgHeight = (screenHeight * .05)
 var imgWidth = imgHeight * 1942 / 36;
 
@@ -22,7 +23,7 @@ document.querySelectorAll('.tab').forEach(element => {
 /* url */
 
 var size = imgWidth * .0053;
-var spacing = imgWidth * .0065;
+var spacing = imgWidth * .006;
 
 document.querySelectorAll('.mod').forEach(element => {
     element.style.width = size + spacing + "px";
@@ -35,9 +36,40 @@ document.querySelectorAll('.modImg').forEach(element => {
     element.style.height = size + "px";
 });
 
+account.style.width = (size + spacing) + "px";
+account.style.height = (size + spacing) + "px";
+account.style.bottom =  screenHeight * .0058 + "px";
+accountImg.style.width = size * 1.5 + "px";
+accountImg.style.height = size * 1.5 + "px";
+
 arrow_back.style.left = imgWidth * .0037 + "px";
 arrow_forward.style.left = imgWidth * .0161 + "px";
 refresh.style.left = imgWidth * .028 + "px";
+
+tripledots.style.right = imgWidth * .0034 + "px";
+account.style.right = imgWidth * .0155 + "px";
+
+urlbar.style.height = (screenHeight * .041) * .65 + "px";
+urlbar.style.bottom = screenHeight * .004 + "px"
+urlbar.style.left = imgWidth * .042 + "px";
+resizeURL();
+
+window.addEventListener("resize", resizeURL);
+
+document.getElementById('urlbar').addEventListener('keypress', function(event) {
+    if (event.key === 'Enter') {
+      var inputValue = event.target.value;
+      search(inputValue);
+    }
+  });
+
+function search(input){
+    window.open("https://www.google.com/search?q=" + input);
+}
+
+function resizeURL(){
+    urlbar.style.width = (Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0)) - (screen.width * .144) + "px";
+}
 
 function reload(){
     location.reload();
@@ -53,4 +85,8 @@ function github(){
 
 function email(){
     window.open("mailto:gabekahen@gmail.com");
+}
+
+function tripledot(){
+    location.reload();
 }
