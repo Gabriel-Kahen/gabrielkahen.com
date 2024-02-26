@@ -68,7 +68,11 @@ function search(input){
 }
 
 function resizeURL(){
-    var urlWidth = (window.innerWidth) - (220);
+    var urlbarElement = document.getElementById("urlbar");
+    var computedStyleLeft = window.getComputedStyle(urlbarElement);
+    var left = computedStyleLeft.getPropertyValue("left");
+    var leftValue = parseFloat(left);
+    var urlWidth = (window.innerWidth - leftValue * 2);
     urlbar.style.width = urlWidth + "px";
 }
 
