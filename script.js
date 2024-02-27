@@ -116,13 +116,13 @@ function openTripledots(){
 }
 
 function openTwitter(){
-    window.open("https://twitter.com/gabekahen_")
+    window.open("https://twitter.com/gabekahen_");
 }
 
 function openWikirace(){
-    window.open("https://gabriel-kahen.github.io/wikirace-prompt-generator/")
+    window.open("https://gabriel-kahen.github.io/wikirace-prompt-generator/");
 }
 
 function openMonkeyarchive(){
-    window.open("http://monkeyarchive.com")
+    window.open("http://monkeyarchive.com");
 }
