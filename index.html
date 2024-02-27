@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>gabrielkahen</title>
-    <link rel="icon" type="image/x-icon" href="icons/logo.png">
+    <link rel="icon" type="image/x-icon" href="/Users/gabrielkahen/Desktop/code/Personal Site/icons/logo.png">
     <link rel="stylesheet" href="styles.css"> 
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,48 +12,60 @@
 </head>
 <body>
     <div id = "tabs">
-        <img src = "icons/noicons.png" id = "tabimg">
+        <img src = "/Users/gabrielkahen/Desktop/code/Personal Site/icons/noicons.png" id = "tabimg">
         <button class = "tab" id = "gabrielkahen" onclick = "reload()"> 
-            <img src = "icons/logo.png" class = "logo">
+            <img src = "/Users/gabrielkahen/Desktop/code/Personal Site/icons/logo.png" class = "logo">
             &nbsp&nbspgabrielkahen
         </button>
-        <button class = "tab" id = "LinkedIn" onclick = "linkedin()">
-            <img src = "icons/linkedin.png" class = "logo"> 
+        <button class = "tab" id = "LinkedIn" onclick = "openLinkedin()">
+            <img src = "/Users/gabrielkahen/Desktop/code/Personal Site/icons/linkedin.png" class = "logo"> 
             &nbsp&nbspLinkedIn
         </button>
-        <button class = "tab" id = "GitHub" onclick = "github()"> 
-            <img src = "icons/github.png" class = "logo">
+        <button class = "tab" id = "GitHub" onclick = "openGithub()"> 
+            <img src = "/Users/gabrielkahen/Desktop/code/Personal Site/icons/github.png" class = "logo">
             &nbsp&nbspGitHub
         </button>
-        <button class = "tab" id = "Email" onclick = "email()"> 
-            <img src = "icons/gmail.png" class = "logo">
+        <button class = "tab" id = "Email" onclick = "openEmail()"> 
+            <img src = "/Users/gabrielkahen/Desktop/code/Personal Site/icons/gmail.png" class = "logo">
             &nbsp&nbspgabekahen@gmail.com
         </button>
     </div>
     
     <div id = "url">
         <button class = "mod" id = "arrow_back">
-            <img src = "icons/arrow_back.png" class = modImg>
+            <img src = "/Users/gabrielkahen/Desktop/code/Personal Site/icons/arrow_back.png" class = "modImg">
         </button>
         <button class = "mod"  id = "arrow_forward">
-            <img src = "icons/arrow_forward.png" class = modImg>
+            <img src = "/Users/gabrielkahen/Desktop/code/Personal Site/icons/arrow_forward.png" class = "modImg">
         </button>
         <button class = "mod" id = "refresh" onclick = "reload()">
-            <img src = "icons/refresh.png" class = modImg>
+            <img src = "/Users/gabrielkahen/Desktop/code/Personal Site/icons/refresh.png" class = "modImg">
         </button>
-
-        <input type = "text" id = "urlbar" value="gabrielkahen.com">
-
-
+        <input type = "text" id = "urlbar" value="gabrielkahen.com" onfocus= "this.select()">
         <button id = "account">
-            <img src = "icons/logo-circle.png" id = accountImg>
+            <img src = "/Users/gabrielkahen/Desktop/code/Personal Site/icons/logo-circle.png" id = "accountImg">
         </button>
-        <button class = "mod" id = "tripledots" onclick = "tripledot()">
-            <img src = "icons/tripledots.png" class = modImg>
+        <button class = "mod" id = "tripledots" onclick = "openTripledots()">
+            <img src = "/Users/gabrielkahen/Desktop/code/Personal Site/icons/tripledots.png" class = "modImg">
         </button>
     </div>
 
     <div id = "bookmarks">
+        <button class = "bookmark" id = "twitter">
+            <img src = "/Users/gabrielkahen/Desktop/code/Personal Site/icons/twitter.png" class  = "bookmarkImg" id = "twitterImg" onclick = "openTwitter()">
+            &nbsp&nbspTwitter
+        </button>
+        <button class = "bookmark" id = "monkeyarchive">
+            <img src = "/Users/gabrielkahen/Desktop/code/Personal Site/icons/monkeyarchive.png" class = "bookmarkImg" id = "monkeyarchiveImg" onclick = "openMonkeyarchive()">
+            &nbsp&nbspmonkeyarchive
+        </button>
+        <button class = "bookmark" id = "wikirace">
+            <img src = "/Users/gabrielkahen/Desktop/code/Personal Site/icons/wiki.png" class  = "bookmarkImg" id = "wikiraceImg" onclick = "openWikirace()">
+            &nbsp&nbspwikirace
+        </button>
+    </div>
+    <div id = "body">
+
     </div>
     <hr>
     <script src="script.js"></script>
