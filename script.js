@@ -54,7 +54,26 @@ urlbar.style.bottom = screenHeight * .004 + "px"
 urlbar.style.left = imgWidth * .042 + "px";
 resizeURL();
 
-window.addEventListener("resize", resizeURL);
+/* bookmarks */
+
+document.querySelectorAll('.bookmark').forEach(element => {
+    element.style.height = screenHeight * .025 + "px";
+    element.style.bottom = screenHeight * .005 + "px";
+
+});
+
+twitter.style.width = screenWidth * .055 + "px";
+twitter.style.left = screenWidth * .0025 + "px";
+
+monkeyarchive.style.width = screenWidth * .09 + "px";
+monkeyarchive.style.left = screenWidth * .06  + "px";
+
+wikirace.style.width = screenWidth * .06 + "px";
+wikirace.style.left = screenWidth * .155  + "px";
+
+/* functions */
+
+window.addEventListener("resize", resizeURL());
 
 document.getElementById('urlbar').addEventListener('keypress', function(event) {
     if (event.key === 'Enter') {
@@ -80,18 +99,30 @@ function reload(){
     location.reload();
 }
 
-function linkedin(){
+function openLinkedin(){
     window.open("https://www.linkedin.com/in/gabrielkahen/");
 }
 
-function github(){
+function openGithub(){
     window.open("https://github.com/Gabriel-Kahen");
 }
 
-function email(){
+function openEmail(){
     window.open("mailto:gabekahen@gmail.com");
 }
 
-function tripledot(){
+function openTripledots(){
     location.reload();
+}
+
+function openTwitter(){
+    window.open("https://twitter.com/gabekahen_")
+}
+
+function openWikirace(){
+    window.open("https://gabriel-kahen.github.io/wikirace-prompt-generator/")
+}
+
+function openMonkeyarchive(){
+    window.open("http://monkeyarchive.com")
 }
