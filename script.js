@@ -61,15 +61,15 @@ document.querySelectorAll('.bookmark').forEach(element => {
     element.style.bottom = screenHeight * .005 + "px";
 
 });
-
 twitter.style.width = screenWidth * .055 + "px";
-twitter.style.left = screenWidth * .0025 + "px";
+twitter.style.width = 80 + "px";
+twitter.style.left = 4 + "px";
 
-monkeyarchive.style.width = screenWidth * .09 + "px";
-monkeyarchive.style.left = screenWidth * .06  + "px";
+monkeyarchive.style.width = 131 + "px";
+monkeyarchive.style.left = 87  + "px";
 
-wikirace.style.width = screenWidth * .06 + "px";
-wikirace.style.left = screenWidth * .155  + "px";
+wikirace.style.width = 87+ "px";
+wikirace.style.left = 226  + "px";
 
 /* functions */
 
