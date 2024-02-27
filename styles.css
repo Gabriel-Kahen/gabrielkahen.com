@@ -179,6 +179,21 @@ input {
     position: relative;
 }
 
+#twitter {
+    width: 80px;
+    left: 4px;
+}
+
+#monkeyarchive {
+    width: 131px;
+    left: 87px;
+}
+
+#wikirace {
+    width: 87px;
+    left: 220px;
+}
+
 hr {
     margin: 0px;
     padding: 0px;
