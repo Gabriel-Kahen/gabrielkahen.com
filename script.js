@@ -73,7 +73,7 @@ wikirace.style.left = screenWidth * .155  + "px";
 
 /* functions */
 
-window.addEventListener("resize", resizeURL());
+window.addEventListener("resize", resizeURL);
 
 document.getElementById('urlbar').addEventListener('keypress', function(event) {
     if (event.key === 'Enter') {
