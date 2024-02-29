@@ -207,3 +207,9 @@ body {
     margin: 0px;
     padding: 0px
 }
+
+#gabelogo {
+    background-color: #FAF9F9;
+    display: block; /* Set the image as a block-level element */
+    margin: auto;
+}
