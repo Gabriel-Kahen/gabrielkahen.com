@@ -62,6 +62,12 @@ document.querySelectorAll('.bookmark').forEach(element => {
 
 });
 
+/* body */
+
+gabelogo.style.height = screenHeight * .08 + "px";
+gabelogo.style.marginTop = screenHeight * .13 + "px";
+
+
 /* functions */
 
 window.addEventListener("resize", resizeURL);
