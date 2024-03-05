@@ -199,19 +199,37 @@ hr {
     padding: 0px;
 }
 
+
+#gabelogo {
+    background-color: #FAF9F9;
+    display: block;
+    margin: auto;
+}
+
 body {  
     color: #000000;
     background-color: #FAF9F9;
     font: arial;
     font-size: 7px;
     margin: 0px;
-    padding: 0px
+    padding: 0px;
+    position: relative;
+    display: block;
 }
 
-#gabelogo {
-    background-color: #FAF9F9;
-    display: block;
-    margin: auto;
+#orangelogoImg {
+    width: 32px;
+    height: 32px;
+    align-self: center;
+    padding: 0px;
+    display: center;
+}
+
+#dotsarrayImg {
+    width: 24px;
+    height: 24px;
+    align-self: center;
+    padding: 0px;
 }
 
 .bodybutton {
@@ -221,18 +239,28 @@ body {
     border-radius: 10000px;
     position: absolute;
     display: flex;
+    justify-content: center;
     vertical-align: center;
-    align-items: center;   
     height: 30px;
     width: 30px; 
 }
 
-#dotsarrayImg {
-    width: 26px;
-    height: 26px;
+.bodybutton:hover {
+    background-color: #F2F2F2;
+    cursor: pointer;
 }
 
-#orangelogoImg {
-    width: 32px;
-    height: 32px;
+#bodyGmail {
+    color: #212121;
+    border-color: transparent;
+    background-color: #FAF9F9;
+    justify-content: center;
+    vertical-align: center;
+    position: absolute;
+    padding: 0px;
+}
+
+#bodyGmail:hover {
+    text-decoration: underline;
+    cursor: pointer;
 }
