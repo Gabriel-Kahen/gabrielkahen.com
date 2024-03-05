@@ -222,7 +222,9 @@ body {
     position: absolute;
     display: flex;
     vertical-align: center;
-    align-items: center;    
+    align-items: center;   
+    height: 30px;
+    width: 30px; 
 }
 
 #dotsarrayImg {
