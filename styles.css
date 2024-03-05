@@ -210,6 +210,27 @@ body {
 
 #gabelogo {
     background-color: #FAF9F9;
-    display: block; /* Set the image as a block-level element */
+    display: block;
     margin: auto;
+}
+
+.bodybutton {
+    background-color: transparent;
+    border-color: transparent;
+    padding: 5px;
+    border-radius: 10000px;
+    position: absolute;
+    display: flex;
+    vertical-align: center;
+    align-items: center;    
+}
+
+#dotsarrayImg {
+    width: 26px;
+    height: 26px;
+}
+
+#orangelogoImg {
+    width: 32px;
+    height: 32px;
 }
