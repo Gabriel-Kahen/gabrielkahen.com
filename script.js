@@ -63,7 +63,7 @@ document.querySelectorAll('.bookmark').forEach(element => {
 });
 
 gabelogo.style.height = screenHeight * .08 + "px";
-gabelogo.style.marginTop = screenHeight * .13 + "px";
+gabelogo.style.marginTop = screenHeight * .2 + "px";
 
 /* body */
 
@@ -85,12 +85,25 @@ bodyGmail.style.height = imgWidth * .017 * .5 + "px";
 /* search bar */
 
 dropdown.style.marginTop = screenHeight * .07 + "px";
+dropdown.style.height = screenHeight * .04 + "px";
+resizeSearch();
+
+
 
 /* functions */
 
 window.addEventListener("resize", resizeURL);
+window.addEventListener("resize", resizeSearch);
+
 
 document.getElementById('urlbar').addEventListener('keypress', function(event) {
+    if (event.key === 'Enter') {
+      var inputValue = event.target.value;
+      search(inputValue);
+    }
+  });
+
+  document.getElementById('textInput').addEventListener('keypress', function(event) {
     if (event.key === 'Enter') {
       var inputValue = event.target.value;
       search(inputValue);
@@ -101,6 +114,21 @@ function search(input){
     window.open("https://www.google.com/search?q=" + input);
 }
 
+function resizeSearch(){
+    var ratio = window.innerWidth / window.innerHeight;
+    if(ratio > 1){
+        dropdown.style.width = 550 + "px";
+    }
+    else{
+        var urlbarElement = document.getElementById("urlbar");
+        var computedStyleLeft = window.getComputedStyle(urlbarElement);
+        var left = computedStyleLeft.getPropertyValue("left");
+        var leftValue = parseFloat(left);
+        var urlWidth = (window.innerWidth - leftValue * 1.8);
+        dropdown.style.width = urlWidth + "px";
+    }
+}
+
 function resizeURL(){
     var urlbarElement = document.getElementById("urlbar");
     var computedStyleLeft = window.getComputedStyle(urlbarElement);
@@ -108,6 +136,7 @@ function resizeURL(){
     var leftValue = parseFloat(left);
     var urlWidth = (window.innerWidth - leftValue * 2);
     urlbar.style.width = urlWidth + "px";
+
 }
 
 function reload(){
@@ -171,10 +200,8 @@ tooltipButtons.forEach(button => {
   var dropdownOptions = document.getElementById("dropdownOptions");
 
   function toggleDropdown(event) {
-    dropdownOptions.style.borderRadius = "0 0 8px 8px";
-    dropdownOptions.style.borderTopColor = "transparent";
-    dropdown.style.borderRadius = "8px 8px 0 0";
-    dropdown.style.borderBottomColor = "transparent";
+    dropdownOptions.style.borderRadius = "0 0 16px 16px";
+    dropdown.style.borderRadius = "16px 16px 0 0";
 
     event.stopPropagation();
     if (dropdownOptions.style.display === "none" || dropdownOptions.style.display === "") {
@@ -193,7 +220,7 @@ tooltipButtons.forEach(button => {
   }
 
   function closeDropdown(event) {
-    dropdown.style.borderRadius = "8px";
+    dropdown.style.borderRadius = "16px";
     dropdown.style.borderBottomColor = "#CCC";
     var dropdownOptions = document.getElementById("dropdownOptions");
     if (!dropdownOptions.contains(event.target)) {
