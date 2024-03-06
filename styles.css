@@ -267,13 +267,14 @@ body {
   
 #tooltip {
     position: fixed;
-    font-family: arial;
+    font-family: helvetica;
     background-color: #4F5355;
     color: #FAF9F9;
     border-radius: 5px;
     z-index: 999;
     display: none;
-    padding: 7px;
+    padding: 5px;
+    font-size: 12px;
   }
   
   #tooltip.active {

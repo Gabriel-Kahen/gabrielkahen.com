@@ -81,6 +81,9 @@ bodyGmail.style.right = imgWidth * .045 + "px";
 bodyGmail.style.top = screenHeight * .14 + "px";
 bodyGmail.style.width = imgWidth * .017 + "px";
 bodyGmail.style.height = imgWidth * .017 * .5 + "px";
+
+/* search bar */
+
 /* functions */
 
 window.addEventListener("resize", resizeURL);

@@ -42,11 +42,13 @@
             <img src = "icons/refresh.png" class = "modImg">
         </button>
         <input type = "text" id = "urlbar" value="gabrielkahen.com" onfocus= "this.select()">
-        <button id = "account">
+        <button id = "account" class = "hasTooltip" data-tooltip = "Gabriel Kahen">
             <img src = "icons/logo-circle.png" id = "accountImg">
+            <div id="tooltip" class="hidden">
         </button>
-        <button class = "mod" id = "tripledots" onclick = "openTripledots()">
+        <button class = "mod hasTooltip" id = "tripledots" onclick = "openTripledots()" data-tooltip = "idk">
             <img src = "icons/tripledots.png" class = "modImg">
+            <div id="tooltip" class="hidden">
         </button>
     </div>
 
@@ -70,7 +72,7 @@
             <img src = "icons/logo-circle.png" id = "orangelogoImg">
             <div id="tooltip" class="hidden">
         </button>
-        <button id = "dotsarray" class = "bodybutton hasTooltip" data-tooltip = "dotsarray">
+        <button id = "dotsarray" class = "bodybutton hasTooltip" data-tooltip = "idk">
             <img src = "icons/dotsarray.png" id = "dotsarrayImg">
             <div id="tooltip" class="hidden">
         </button>
@@ -78,7 +80,7 @@
             Gmail
             <div id="tooltip" class="hidden">
         </button>
-        <img src = "icons/GABE.png" id = "gabelogo">        
+        <img src = "icons/GABE.png" id = "gabelogo">
     </div>
     <script src="script.js"></script>
 </body>
