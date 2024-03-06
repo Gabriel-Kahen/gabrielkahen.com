@@ -81,6 +81,16 @@
             <div id="tooltip" class="hidden">
         </button>
         <img src = "icons/GABE.png" id = "gabelogo">
+        <div class="custom-dropdown" id="dropdown">
+            <input type="text" id="textInput" onclick="toggleDropdown(event)" value="Input text here" onfocus="this.value='';" onblur="if(this.value=='') this.value='Input text here';">
+            <div class="dropdown-options" id="dropdownOptions">
+              <ul>
+                <li onclick="selectOption('Option 1')" id="option1">Option 1</li>
+                <li onclick="selectOption('Option 2')">Option 2</li>
+                <li onclick="selectOption('Option 3')">Option 3</li>
+              </ul>
+            </div>
+          </div>
     </div>
     <script src="script.js"></script>
 </body>
