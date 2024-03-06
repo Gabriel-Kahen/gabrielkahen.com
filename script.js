@@ -67,20 +67,20 @@ gabelogo.style.marginTop = screenHeight * .13 + "px";
 
 /* body */
 
-orangelogo.style.right = screenWidth * .01 + "px";
-orangelogo.style.top = screenHeight * .128 + "px";
-orangelogo.style.width = screenWidth * .03 + "px";
-orangelogo.style.height = screenWidth * .03 + "px";
+orangelogo.style.right = imgWidth * .005 + "px";
+orangelogo.style.top = imgWidth * .0465 + "px";
+orangelogo.style.width = imgWidth * .017 + "px";
+orangelogo.style.height = imgWidth * .017 + "px";
 
-dotsarray.style.right = screenWidth * .043 + "px";
-dotsarray.style.top = screenHeight * .128 + "px";
-dotsarray.style.width = screenWidth * .03 + "px";
-dotsarray.style.height = screenWidth * .03 + "px";
+dotsarray.style.right = imgWidth * .026 + "px";
+dotsarray.style.top = imgWidth * .0465 + "px";
+dotsarray.style.width = imgWidth * .0165 + "px";
+dotsarray.style.height = imgWidth * .0165 + "px";
 
-bodyGmail.style.right = screenWidth * .076 + "px";
-bodyGmail.style.top = screenHeight * .128 + "px";
-bodyGmail.style.width = screenWidth * .03 + "px";
-bodyGmail.style.height = screenWidth * .03 + "px";
+bodyGmail.style.right = imgWidth * .047 + "px";
+bodyGmail.style.top = imgWidth * .05 + "px";
+bodyGmail.style.width = imgWidth * .017 + "px";
+bodyGmail.style.height = screenWidth * .017 + "px";
 /* functions */
 
 window.addEventListener("resize", resizeURL);
