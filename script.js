@@ -74,11 +74,11 @@ orangelogo.style.height = imgWidth * .017 + "px";
 
 dotsarray.style.right = imgWidth * .025 + "px";
 dotsarray.style.top = screenHeight * .128 + "px";
-dotsarray.style.width = imgWidth * .0165 + "px";
-dotsarray.style.height = imgWidth * .0165 + "px";
+dotsarray.style.width = imgWidth * .017 + "px";
+dotsarray.style.height = imgWidth * .017 + "px";
 
 bodyGmail.style.right = imgWidth * .045 + "px";
-bodyGmail.style.top = screenHeight * .1383 + "px";
+bodyGmail.style.top = screenHeight * .14 + "px";
 bodyGmail.style.width = imgWidth * .017 + "px";
 bodyGmail.style.height = imgWidth * .017 * .5 + "px";
 /* functions */
