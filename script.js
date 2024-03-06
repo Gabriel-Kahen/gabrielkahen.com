@@ -78,9 +78,9 @@ dotsarray.style.width = imgWidth * .0165 + "px";
 dotsarray.style.height = imgWidth * .0165 + "px";
 
 bodyGmail.style.right = imgWidth * .045 + "px";
-bodyGmail.style.top = screenHeight * .138 + "px";
+bodyGmail.style.top = screenHeight * .128 + "px";
 bodyGmail.style.width = imgWidth * .017 + "px";
-bodyGmail.style.height = screenWidth * .017 + "px";
+bodyGmail.style.height = imgWidth * .017 + "px";
 /* functions */
 
 window.addEventListener("resize", resizeURL);
