@@ -136,3 +136,28 @@ function openWikirace(){
 function openMonkeyarchive(){
     window.open("http://monkeyarchive.com");
 }
+
+/* tooltips */
+
+const tooltipButtons = document.querySelectorAll('.hasTooltip');
+const tooltip = document.getElementById('tooltip');
+
+let timeout;
+
+tooltipButtons.forEach(button => {
+    button.addEventListener('mouseenter', () => {
+      timeout = setTimeout(() => {
+        tooltip.textContent = button.dataset.tooltip;
+        tooltip.classList.add('active');
+        const rect = button.getBoundingClientRect();
+        tooltip.style.top = rect.bottom + 'px';
+        tooltip.style.left = rect.left + 'px';
+      }, 500);
+    });
+  
+    button.addEventListener('mouseleave', () => {
+      clearTimeout(timeout);
+      tooltip.classList.remove('active');
+    });
+  });
+  
