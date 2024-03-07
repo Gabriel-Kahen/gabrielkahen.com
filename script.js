@@ -82,12 +82,10 @@ bodyGmail.style.top = screenHeight * .14 + "px";
 bodyGmail.style.width = imgWidth * .017 + "px";
 bodyGmail.style.height = imgWidth * .017 * .5 + "px";
 
-/* search bar */
 
-dropdown.style.marginTop = screenHeight * .07 + "px";
-dropdown.style.height = screenHeight * .04 + "px";
+searchContainer.style.marginTop = screenHeight * .07 + "px";
+searchContainer.style.height = screenHeight * .04 + "px";
 resizeSearch();
-
 
 
 /* functions */
@@ -103,7 +101,7 @@ urlbar.addEventListener('keypress', function(event) {
     }
   });
 
-  document.getElementById('textInput').addEventListener('keypress', function(event) {
+  document.getElementById('searchInput').addEventListener('keypress', function(event) {
     if (event.key === 'Enter') {
       var inputValue = event.target.value;
       search(inputValue);
@@ -117,7 +115,7 @@ function search(input){
 function resizeSearch(){
     var ratio = window.innerWidth / window.innerHeight;
     if(ratio > .8){
-        dropdown.style.width = 550 + "px";
+        searchContainer.style.width = 550 + "px";
     }
     else{
         var urlbarElement = document.getElementById("urlbar");
@@ -125,7 +123,7 @@ function resizeSearch(){
         var left = computedStyleLeft.getPropertyValue("left");
         var leftValue = parseFloat(left);
         var urlWidth = (window.innerWidth - leftValue * 1.8);
-        dropdown.style.width = urlWidth + "px";
+        searchContainer.style.width = urlWidth + "px";
     }
 }
 
@@ -197,35 +195,19 @@ tooltipButtons.forEach(button => {
 
   /* search bar */
 
-  var dropdownOptions = document.getElementById("dropdownOptions");
-
-  function toggleDropdown(event) {
-    dropdownOptions.style.borderRadius = "0 0 16px 16px";
-    dropdown.style.borderRadius = "16px 16px 0 0";
-
-    event.stopPropagation();
-    if (dropdownOptions.style.display === "none" || dropdownOptions.style.display === "") {
-      dropdownOptions.style.display = "block";
-      document.addEventListener("click", closeDropdown);
-    } else {
-      dropdownOptions.style.display = "none";
-      document.removeEventListener("click", closeDropdown);
+  document.addEventListener('click', function(event) {
+    if (!searchContainer.contains(event.target)) {
+      searchHistory.style.display = 'none';
+      searchInput.style.borderRadius = "16px";
     }
-  }
-
-  function selectOption(option) {
-    document.getElementById("textInput").value = option;
-    document.getElementById("dropdownOptions").style.display = "none";
-    document.removeEventListener("click", closeDropdown);
-  }
-
-  function closeDropdown(event) {
-    dropdown.style.borderRadius = "16px";
-    dropdown.style.borderBottomColor = "#CCC";
-    var dropdownOptions = document.getElementById("dropdownOptions");
-    if (!dropdownOptions.contains(event.target)) {
-      dropdownOptions.style.display = "none";
-      document.removeEventListener("click", closeDropdown);
-    }
-  }
+    
+  });
+    
+  searchInput.addEventListener('click', function() {
+    searchHistory.style.display = 'block';
+    searchInput.style.borderBottomLeftRadius = "0px";
+    searchInput.style.borderBottomRightRadius = "0px";
+    searchHistory.style.borderTopLeftRadius = "0px";
+    searchHistory.style.borderTopRightRadius = "0px";
+  });
   
