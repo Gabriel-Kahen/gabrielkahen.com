@@ -198,7 +198,7 @@ tooltipButtons.forEach(button => {
   document.addEventListener('click', function(event) {
     if (!searchContainer.contains(event.target)) {
       searchHistory.style.display = 'none';
-      searchInput.style.borderRadius = "16px";
+      searchInput.style.borderRadius = "20px";
     }
     
   });
@@ -210,4 +210,3 @@ tooltipButtons.forEach(button => {
     searchHistory.style.borderTopLeftRadius = "0px";
     searchHistory.style.borderTopRightRadius = "0px";
   });
-  
