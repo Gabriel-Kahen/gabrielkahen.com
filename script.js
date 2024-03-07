@@ -96,7 +96,7 @@ window.addEventListener("resize", resizeURL);
 window.addEventListener("resize", resizeSearch);
 
 
-document.getElementById('urlbar').addEventListener('keypress', function(event) {
+urlbar.addEventListener('keypress', function(event) {
     if (event.key === 'Enter') {
       var inputValue = event.target.value;
       search(inputValue);
@@ -116,7 +116,7 @@ function search(input){
 
 function resizeSearch(){
     var ratio = window.innerWidth / window.innerHeight;
-    if(ratio > 1){
+    if(ratio > .8){
         dropdown.style.width = 550 + "px";
     }
     else{

@@ -1,0 +1,95 @@
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Search Bar</title>
+<style>
+    body {
+    background-color: white;
+    }
+    
+  #searchContainer {
+    position: relative;
+    width: 300px;
+    border-radius: 16px;
+    box-shadow: 0px 0px 7px 1px rgba(43, 43, 43, 0.3);
+  }
+
+  #searchInput {
+    width: 100%;
+    height: 40px;
+    padding: 10px;
+    border: none;
+    border-radius: 16px;
+    outline: none;
+    position: relative;
+    z-index: 2;
+  }
+
+  #searchHistory {
+    display: none;
+    position: absolute;
+    top: calc(100% - 5px);
+    left: 0;
+    width: 100%;
+    background-color: white;
+    border-radius: 16px;
+    z-index: 1;
+  }
+
+  .option {
+    padding: 10px;
+    cursor: pointer;
+  }
+
+  .option:hover {
+    background-color: #f0f0f0;
+  }
+
+  #buffer {
+    height: 8px;
+    padding: 0px;
+    display: inline-block;
+  }
+
+  #buffer:hover {
+    background-color: white;
+  }
+</style>
+</head>
+<body>
+
+<div id ="searchContainer">
+  <input type="text" id="searchInput" placeholder="Search">
+  <div id = "searchHistory">
+    <div class="option">Option 1</div>
+    <div class="option">Option 2</div>
+    <div class="option">Option 3</div>
+    <div class="option">Option 4</div>
+    <div class="option">Option 5</div>
+    <div class="option" id = "buffer"></div>
+
+  </div>
+</div>
+
+<script>
+
+document.addEventListener('click', function(event) {
+    if (!searchContainer.contains(event.target)) {
+      searchHistory.style.display = 'none';
+      searchInput.style.borderRadius = "16px";
+    }
+    
+  });
+    
+  searchInput.addEventListener('click', function() {
+    searchHistory.style.display = 'block';
+    searchInput.style.borderBottomLeftRadius = "0px";
+    searchInput.style.borderBottomRightRadius = "0px";
+    searchHistory.style.borderTopLeftRadius = "0px";
+    searchHistory.style.borderTopRightRadius = "0px";
+  });
+</script>
+
+</body>
+</html>
