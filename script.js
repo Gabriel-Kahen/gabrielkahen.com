@@ -85,6 +85,9 @@ bodyGmail.style.height = imgWidth * .017 * .5 + "px";
 
 searchContainer.style.marginTop = screenHeight * .07 + "px";
 searchContainer.style.height = screenHeight * .04 + "px";
+searchIcon.style.left = imgWidth * .0065 + "px";
+searchIcon.style.top = screenHeight * .014 + "px";
+
 resizeSearch();
 
 
@@ -101,7 +104,7 @@ urlbar.addEventListener('keypress', function(event) {
     }
   });
 
-  document.getElementById('searchInput').addEventListener('keypress', function(event) {
+searchInput.addEventListener('keypress', function(event) {
     if (event.key === 'Enter') {
       var inputValue = event.target.value;
       search(inputValue);
@@ -198,7 +201,7 @@ tooltipButtons.forEach(button => {
   document.addEventListener('click', function(event) {
     if (!searchContainer.contains(event.target)) {
       searchHistory.style.display = 'none';
-      searchInput.style.borderRadius = "20px";
+      searchInput.style.borderRadius = "25px";
     }
     
   });
@@ -210,3 +213,7 @@ tooltipButtons.forEach(button => {
     searchHistory.style.borderTopLeftRadius = "0px";
     searchHistory.style.borderTopRightRadius = "0px";
   });
+
+  function history1(){
+    window.open("https://www.google.com/search?q=" + input);
+  }
