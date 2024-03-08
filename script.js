@@ -214,6 +214,12 @@ tooltipButtons.forEach(button => {
     searchHistory.style.borderTopRightRadius = "0px";
   });
 
-  function history1(){
-    window.open("https://www.google.com/search?q=" + input);
+  function history(num){
+    var name = "history" + num;
+    var value = document.getElementById(name).textContent;
+    value = value.substring(4);
+    searchInput.value = value;
+    setTimeout(function() {
+      search(value);
+  }, 10);
   }
