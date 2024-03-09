@@ -303,7 +303,6 @@ body {
     position: relative;
     z-index: 2;
     background-color: #FFF;
-    height: 22px;
     font-size: 15px;
     padding-left: 45px;
   }
@@ -328,7 +327,6 @@ body {
     background-color: #FFF;
     display: flex;
     cursor: pointer;
-    height: 22px;
     align-items: center;
     font-family: arial;
     font-size: 15px;
