@@ -52,7 +52,7 @@ var spacing = imgWidth * .006 * (8/3);
 document.querySelectorAll('.mod').forEach(element => {
     element.style.width = size + spacing + "px";
     element.style.height = size + spacing + "px";
-    element.style.bottom =  screenHeight * .0025 + "px";
+    element.style.bottom =  imgWidth * .0025 + "px";
 });
 
 document.querySelectorAll('.modImg').forEach(element => {
@@ -62,7 +62,7 @@ document.querySelectorAll('.modImg').forEach(element => {
 
 account.style.width = (size + spacing) + "px";
 account.style.height = (size + spacing) + "px";
-account.style.bottom =  screenHeight * .002 + "px";
+account.style.bottom =  imgWidth * .001 + "px";
 accountImg.style.width = size * 1.5 + "px";
 accountImg.style.height = size * 1.5 + "px";
 
@@ -74,7 +74,7 @@ tripledots.style.right = imgWidth * .0034 * (8/3) + "px";
 account.style.right = imgWidth * .0155 * (8/3) + "px";
 
 urlbar.style.height = (screenHeight * .025) + "px";
-urlbar.style.bottom = screenHeight * .001 + "px"
+urlbar.style.bottom = 0 + "px"
 urlbar.style.left = imgWidth * .042 * (8/3) + "px";
 resizeURL();
 
