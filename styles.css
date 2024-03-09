@@ -33,7 +33,7 @@
     bottom: 7px;
     width: 220px;
     display: flex;
-    overflow: hidden;
+    overflow: ellipsis;
     transition: opacity 0.5s ease;
 }
 
