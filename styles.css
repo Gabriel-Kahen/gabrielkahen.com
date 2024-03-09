@@ -29,11 +29,9 @@
     border-radius: 8px;
     border-color: transparent;
     position: absolute;
-    left: 200px;
     bottom: 7px;
-    width: 220px;
     display: flex;
-    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 .tab:hover{
