@@ -75,6 +75,7 @@
     background-color: transparent;
     border-color: transparent;
     padding: 0px;
+    margin: 0px;
     align-items: center;
     align-content: center;
     flex: center;
@@ -84,6 +85,7 @@
 }
 
 .modImg {
+    margin: 0px;
     vertical-align: middle;
 }
 
