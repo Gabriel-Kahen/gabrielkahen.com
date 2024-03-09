@@ -8,12 +8,12 @@ var imgWidth = imgHeight * 1942 / 96;
 function updateTab(){
   var ratio = window.innerWidth / window.innerHeight;
   if(ratio < .75){
-      imgWidth = imgHeight * (859 * 80);
-      document.getElementById("tabimg").src = "icons/noiconssmall.png";
+      imgWidth = imgHeight * (853 / 96);
       Email.style.display = 'none';
-      gabrielkahen.style.left = 20/2570 * imgWidth * (8/3) + "px";
-      LinkedIn.style.left = 120/2570 * imgWidth * (8/3) + "px";
-      GitHub.style.left = 491/2570 * imgWidth * (8/3) + "px";
+      document.getElementById("tabimg").src = "icons/noiconssmall.png";
+      gabrielkahen.style.left = .0165 * imgWidth * (8/3) + "px";
+      LinkedIn.style.left = .325 * imgWidth  + "px";
+      GitHub.style.left = .68 * imgWidth + "px";
   }
   else{
       imgWidth = imgHeight * 1942 / 36;
@@ -34,7 +34,7 @@ tabimg.style.height = imgHeight + "px";
 document.querySelectorAll('.tab').forEach(element => {
     element.style.bottom = (screenHeight * 0.05) / 8 + 'px';
     element.style.width = imgWidth * .085 * (8/3) + "px";
-});
+}); 
 
 /* url */
 
