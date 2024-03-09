@@ -36,7 +36,7 @@ function updateTab(){
 
 tabs.style.height = (screenHeight * .042) + "px";
 url.style.height = (screenHeight * .041) + "px";
-bookmarks.style.height = (screenHeight * .035) + "px";
+bookmarks.style.height = (screenHeight * .04) + "px";
 tabimg.style.height = imgHeight + "px";
 
 
@@ -52,7 +52,7 @@ var spacing = imgWidth * .006 * (8/3);
 document.querySelectorAll('.mod').forEach(element => {
     element.style.width = size + spacing + "px";
     element.style.height = size + spacing + "px";
-    element.style.bottom =  screenHeight * .003 + "px";
+    element.style.bottom =  0 + "px";
 });
 
 document.querySelectorAll('.modImg').forEach(element => {
@@ -62,7 +62,7 @@ document.querySelectorAll('.modImg').forEach(element => {
 
 account.style.width = (size + spacing) + "px";
 account.style.height = (size + spacing) + "px";
-account.style.bottom =  screenHeight * .003 + "px";
+account.style.bottom =  0 + "px";
 accountImg.style.width = size * 1.5 + "px";
 accountImg.style.height = size * 1.5 + "px";
 
@@ -74,7 +74,7 @@ tripledots.style.right = imgWidth * .0034 * (8/3) + "px";
 account.style.right = imgWidth * .0155 * (8/3) + "px";
 
 urlbar.style.height = (screenHeight * .025) + "px";
-urlbar.style.bottom = 2 + "px"
+urlbar.style.bottom = 0 + "px"
 urlbar.style.left = imgWidth * .042 * (8/3) + "px";
 resizeURL();
 
