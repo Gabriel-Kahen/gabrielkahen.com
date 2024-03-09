@@ -84,6 +84,10 @@ document.querySelectorAll('.bookmark').forEach(element => {
     element.style.height = screenHeight * .025 + "px";
     element.style.bottom = screenHeight * .005 + "px";
 
+twitter.style.left = imgWidth * .003 * (8/3) + "px";
+wikirace.style.left = imgWidth * .033 * (8/3) + "px";
+monkeyarchive.style.left = imgWidth * .067 * (8/3) + "px";
+
 });
 
 gabelogo.style.height = screenHeight * .08 + "px";
