@@ -33,8 +33,7 @@
     bottom: 7px;
     width: 220px;
     display: flex;
-    overflow: ellipsis;
-    transition: opacity 0.5s ease;
+    text-overflow: ellipsis;
 }
 
 .tab:hover{
