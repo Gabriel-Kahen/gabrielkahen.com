@@ -28,7 +28,7 @@ function updateTab(){
       GitHub.style.left = .0717 * imgWidth * (8/3) + "px";
       Email.style.left = .106 * imgWidth * (8/3) + "px";
       document.querySelectorAll('.tab').forEach(element => {
-        element.style.width = imgWidth * .085 * (8/3) + "px";
+        element.style.width = imgWidth * .085 + "px";
     }); 
 
   }
