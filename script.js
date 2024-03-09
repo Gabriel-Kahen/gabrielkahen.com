@@ -122,6 +122,8 @@ document.querySelectorAll('.option').forEach(element => {
   element.style.height = screenHeight * .025 + "px";
 });
 
+buffer.style.height = screenHeight * .025 - 5 + "px";
+
 resizeSearch();
 
 /* functions */
