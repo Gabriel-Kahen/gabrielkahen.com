@@ -82,11 +82,17 @@ bodyGmail.style.top = screenHeight * .14 + "px";
 bodyGmail.style.width = imgWidth * .017 + "px";
 bodyGmail.style.height = imgWidth * .017 * .5 + "px";
 
+/* search */
 
 searchContainer.style.marginTop = screenHeight * .07 + "px";
 searchContainer.style.height = screenHeight * .04 + "px";
 searchIcon.style.left = imgWidth * .0065 + "px";
 searchIcon.style.top = screenHeight * .014 + "px";
+
+searchInput.style.height = screenHeight * .025 + "px";
+document.querySelectorAll('.option').forEach(element => {
+  element.style.height = screenHeight * .025 + "px";
+});
 
 resizeSearch();
 
