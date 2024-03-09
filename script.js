@@ -14,6 +14,10 @@ function updateTab(){
       gabrielkahen.style.left = .0165 * imgWidth * (8/3) + "px";
       LinkedIn.style.left = .325 * imgWidth  + "px";
       GitHub.style.left = .68 * imgWidth + "px";
+      document.querySelectorAll('.tab').forEach(element => {
+        element.style.width = imgWidth * .3 + "px";
+    }); 
+      gabrielkahen.style.width = imgWidth * .25 + "px";
   }
   else{
       imgWidth = imgHeight * 1942 / 36;
@@ -23,6 +27,10 @@ function updateTab(){
       LinkedIn.style.left = .0365 * imgWidth * (8/3) + "px";
       GitHub.style.left = .0717 * imgWidth * (8/3) + "px";
       Email.style.left = .106 * imgWidth * (8/3) + "px";
+      document.querySelectorAll('.tab').forEach(element => {
+        element.style.width = imgWidth * .085 * (8/3) + "px";
+    }); 
+
   }
 }
 
@@ -31,9 +39,9 @@ url.style.height = (screenHeight * .041) + "px";
 bookmarks.style.height = (screenHeight * .035) + "px";
 tabimg.style.height = imgHeight + "px";
 
+
 document.querySelectorAll('.tab').forEach(element => {
-    element.style.bottom = (screenHeight * 0.05) / 8 + 'px';
-    element.style.width = imgWidth * .085 * (8/3) + "px";
+  element.style.bottom = (screenHeight * 0.05) / 8 + 'px';
 }); 
 
 /* url */
