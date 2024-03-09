@@ -52,7 +52,7 @@ var spacing = imgWidth * .006 * (8/3);
 document.querySelectorAll('.mod').forEach(element => {
     element.style.width = size + spacing + "px";
     element.style.height = size + spacing + "px";
-    element.style.bottom =  0 + "px";
+    element.style.bottom =  1 + "px";
 });
 
 document.querySelectorAll('.modImg').forEach(element => {
