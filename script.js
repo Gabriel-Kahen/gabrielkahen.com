@@ -73,7 +73,7 @@ refresh.style.left = imgWidth * .028 * (8/3) + "px";
 tripledots.style.right = imgWidth * .0034 * (8/3) + "px";
 account.style.right = imgWidth * .0155 * (8/3) + "px";
 
-urlbar.style.height = (screenHeight * .041) * .65 - 2 + "px";
+urlbar.style.height = (screenHeight * .025) + "px";
 urlbar.style.bottom = screenHeight * .004 + "px"
 urlbar.style.left = imgWidth * .042 * (8/3) + "px";
 resizeURL();
