@@ -18,8 +18,8 @@ function updateTab(){
         element.style.width = imgWidth * .3 + "px";
     }); 
       gabrielkahen.style.width = imgWidth * .25 + "px";
-      gabetextforfade.style.webkitMaskImage = "linear-gradient(90deg, #000 50%, transparent)";
-      gabetextforfade.style.maskImage = "linear-gradient(90deg, #000 50%, transparent)";
+      gabetextforfade.style.webkitMaskImage = "linear-gradient(90deg, #000 10%, transparent)";
+      gabetextforfade.style.maskImage = "linear-gradient(90deg, #000 10%, transparent)";
   }
   else{    
       gabetextforfade.style.webkitMaskImage = "linear-gradient(90deg, #000 100%, transparent)";
