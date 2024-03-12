@@ -18,8 +18,12 @@ function updateTab(){
         element.style.width = imgWidth * .3 + "px";
     }); 
       gabrielkahen.style.width = imgWidth * .25 + "px";
+      gabetextforfade.style.webkitMaskImage = "linear-gradient(90deg, #000 50%, transparent)";
+      gabetextforfade.style.maskImage = "linear-gradient(90deg, #000 50%, transparent)";
   }
-  else{
+  else{    
+      gabetextforfade.style.webkitMaskImage = "linear-gradient(90deg, #000 100%, transparent)";
+      gabetextforfade.style.maskImage = "linear-gradient(90deg, #000 100%, transparent)";
       imgWidth = imgHeight * 1942 / 36;
       document.getElementById("tabimg").src = "icons/noicons.png";
       Email.style.display = 'flex';
