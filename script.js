@@ -89,8 +89,10 @@ document.querySelectorAll('.bookmark').forEach(element => {
     element.style.bottom = screenHeight * .005 + "px";
 
 twitter.style.left = imgWidth * .003 * (8/3) + "px";
-wikirace.style.left = imgWidth * .033 * (8/3) + "px";
-monkeyarchive.style.left = imgWidth * .067 * (8/3) + "px";
+chromakopia.style.left = imgWidth * .033 * (8/3) + "px";
+easyvga.style.left = imgWidth * .0875 * (8/3) + "px";
+monkeyarchive.style.left = imgWidth * .1245 * (8/3) + "px";
+
 
 });
 
@@ -209,12 +211,16 @@ function openTwitter(){
     window.open("https://twitter.com/gabekahen_");
 }
 
-function openWikirace(){
-    window.open("https://gabriel-kahen.github.io/wikirace-prompt-generator/");
-}
-
 function openMonkeyarchive(){
     window.open("http://monkeyarchive.com");
+}
+
+function openChromakopia(){
+    window.open("https://chromakopiafont.com");
+}
+
+function openEasyVGA(){
+    window.open("https://github.com/Gabriel-Kahen/EasyVGA");
 }
 
 /* tooltips */
