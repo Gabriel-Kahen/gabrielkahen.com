@@ -88,7 +88,7 @@ document.querySelectorAll('.bookmark').forEach(element => {
     element.style.height = screenHeight * .025 + "px";
     element.style.bottom = screenHeight * .005 + "px";
 
-twitter.style.left = imgWidth * .003 * (8/3) + "px";
+paper.style.left = imgWidth * .003 * (8/3) + "px";
 chromakopia.style.left = imgWidth * .033 * (8/3) + "px";
 easyvga.style.left = imgWidth * .0875 * (8/3) + "px";
 monkeyarchive.style.left = imgWidth * .1245 * (8/3) + "px";
@@ -207,8 +207,8 @@ function openTripledots(){
     location.reload();
 }
 
-function openTwitter(){
-    window.open("https://twitter.com/gabekahen_");
+function openPaper(){
+    window.open("https://gabrielkahen.com/paper.pdf");
 }
 
 function openMonkeyarchive(){
