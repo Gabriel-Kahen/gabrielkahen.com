@@ -89,9 +89,8 @@ document.querySelectorAll('.bookmark').forEach(element => {
     element.style.bottom = screenHeight * .005 + "px";
 
 paper.style.left = imgWidth * .003 * (8/3) + "px";
-chromakopia.style.left = imgWidth * .033 * (8/3) + "px";
-easyvga.style.left = imgWidth * .0875 * (8/3) + "px";
-monkeyarchive.style.left = imgWidth * .1245 * (8/3) + "px";
+trading.style.left = imgWidth * .033 * (8/3) + "px";
+music.style.left = imgWidth * .0875 * (8/3) + "px";
 
 
 });
@@ -211,16 +210,12 @@ function openPaper(){
     window.open("https://gabrielkahen.com/paper.pdf");
 }
 
-function openMonkeyarchive(){
-    window.open("http://monkeyarchive.com");
+function openTrading(){
+    window.open("https://gabejaytrading.com");
 }
 
-function openChromakopia(){
-    window.open("https://chromakopiafont.com");
-}
-
-function openEasyVGA(){
-    window.open("https://github.com/Gabriel-Kahen/EasyVGA");
+function openMusic(){
+    window.open("https://www.kaggle.com/datasets/gabrielkahen/music-listening-data-500k-users");
 }
 
 /* tooltips */
