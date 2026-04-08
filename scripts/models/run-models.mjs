@@ -20,7 +20,7 @@ const dryRun = args.includes('--dry-run');
 const onlySlug = onlyIndex === -1 ? null : args[onlyIndex + 1];
 
 const workspaceRoot = process.env.AI_SITE_WORKSPACE_ROOT || path.join(os.homedir(), '.ai-site-playgrounds');
-const copilotBinary = process.env.COPILOT_BIN || 'copilot';
+const opencodeBinary = process.env.OPENCODE_BIN || 'opencode';
 const gitBinary = process.env.GIT_BIN || 'git';
 const gitToken = process.env.AI_SITE_GIT_TOKEN || process.env.COPILOT_GITHUB_TOKEN || process.env.GH_TOKEN || process.env.GITHUB_TOKEN || null;
 const gitAuthorName = process.env.GIT_AUTHOR_NAME || 'Gabriel Kahen';
@@ -79,30 +79,27 @@ async function runModel(model) {
 
   console.log(`running ${model.slug}`);
 
-  const copilotResult = await runCommand(copilotBinary, [
-    '-p',
-    prompt,
+  const opencodeResult = await runCommand(opencodeBinary, [
+    'run',
+    '--pure',
+    '--agent',
+    'build',
     '--model',
-    model.copilotModelId,
-    '--add-dir',
+    model.opencodeModelId,
+    '--dir',
     sandboxRoot,
-    '--allow-tool=write',
-    '--allow-tool=shell',
-    '--deny-tool=shell(git)',
-    '--deny-tool=shell(gh)',
-    '--deny-tool=shell(ssh)',
-    '--deny-tool=shell(scp)',
-    '--deny-tool=shell(rsync)',
-    '--deny-tool=shell(sudo)',
+    '--format',
+    'default',
+    prompt,
   ], {
     cwd: sandboxRoot,
-    env: process.env,
+    env: opencodeEnv(),
   });
 
-  await fs.writeFile(sessionLogPath, copilotResult.output, 'utf8');
+  await fs.writeFile(sessionLogPath, opencodeResult.output, 'utf8');
 
-  if (copilotResult.code !== 0) {
-    throw new Error(`Copilot run failed for ${model.slug}. See ${sessionLogPath}.`);
+  if (opencodeResult.code !== 0) {
+    throw new Error(`OpenCode run failed for ${model.slug}. See ${sessionLogPath}.`);
   }
 
   const indexPath = path.join(sandboxSite, 'index.html');
@@ -148,6 +145,19 @@ function buildPrompt(model) {
     'The main homepage at gabrielkahen.com/ is human-owned and must never be changed.',
     'Do not ask for clarification. Inspect the current site and implement the next creative step now.',
   ].join('\n');
+}
+
+function opencodeEnv() {
+  return {
+    ...process.env,
+    OPENCODE_CONFIG_CONTENT: JSON.stringify({
+      share: 'disabled',
+      snapshot: false,
+      autoupdate: false,
+      enabled_providers: ['github-copilot'],
+    }),
+    OPENCODE_DISABLE_DEFAULT_PLUGINS: '1',
+  };
 }
 
 async function repoChangedPaths() {

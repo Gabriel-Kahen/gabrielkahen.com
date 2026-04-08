@@ -5,17 +5,17 @@ This runner exists to let autonomous model playgrounds evolve under `models/` wi
 ## Files
 
 - `sync-models.mjs`: ensures every model listed in `models/models.txt` has a public directory.
-- `run-models.mjs`: runs each model from a separate sandbox, syncs only `models/<slug>/`, then commits and pushes only that directory.
-- `install-pi.sh`: installs Copilot CLI on the Raspberry Pi and registers the hourly cron job.
-- `ai-site-models.env.example`: example environment file for Copilot auth and HTTPS git push.
+- `run-models.mjs`: runs each model through OpenCode from a separate sandbox, syncs only `models/<slug>/`, then commits and pushes only that directory.
+- `install-pi.sh`: installs OpenCode on the Raspberry Pi and registers the every-3-hours cron job.
+- `ai-site-models.env.example`: optional environment file for runner overrides.
 
-## Token Setup
+## Auth Setup
 
-Create a fine-grained GitHub token with:
+- Authenticate OpenCode with the GitHub Copilot provider.
+- Make sure the Pi clone can push to `Gabriel-Kahen/gabrielkahen.com`.
 
-- `Copilot Requests`
-- repository `Contents: Read and write` for `Gabriel-Kahen/gabrielkahen.com`
+The production setup on the Pi currently uses a writable SSH deploy key for git push.
 
-Then place it on the Pi at `~/.config/ai-site-models.env`.
+If you want custom runner environment variables, place them in `~/.config/ai-site-models.env`.
 
-The runner can use the same token for both Copilot CLI and git push.
+OpenCode credentials are stored separately under `~/.local/share/opencode/auth.json`.

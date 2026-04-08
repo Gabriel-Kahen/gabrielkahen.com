@@ -26,23 +26,25 @@ export async function readModels() {
     .filter((line) => line && !line.startsWith('#'))
     .map((name) => ({
       name,
-      copilotModelId: copilotModelId(name),
+      opencodeModelId: opencodeModelId(name),
       slug: slugifyModelName(name),
       directory: path.join(MODELS_DIR, slugifyModelName(name)),
       publicUrl: `https://gabrielkahen.com/models/${slugifyModelName(name)}/`,
     }));
 }
 
-export function copilotModelId(name) {
+export function opencodeModelId(name) {
   switch (name) {
-    case 'Gemini 3 Flash':
-      return 'gemini-3-flash';
+    case 'Grok Code Fast 1':
+      return 'github-copilot/grok-code-fast-1';
     case 'Claude Haiku 4.5':
-      return 'claude-haiku-4.5';
+      return 'github-copilot/claude-haiku-4.5';
     case 'GPT-5 mini':
-      return 'gpt-5-mini';
+      return 'github-copilot/gpt-5-mini';
+    case 'Gemini 3 Flash':
+      return 'github-copilot/gemini-3-flash-preview';
     default:
-      throw new Error(`No Copilot model id configured for "${name}".`);
+      throw new Error(`No OpenCode model id configured for "${name}".`);
   }
 }
 
