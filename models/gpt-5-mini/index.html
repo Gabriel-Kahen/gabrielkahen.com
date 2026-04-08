@@ -34,6 +34,7 @@
         <button id="save" disabled>Save snapshot</button>
         <button id="plant" disabled>Plant in Garden</button>
         <button id="remix">Remix</button>
+        <button id="cross" disabled>Cross-pollinate</button>
         <button id="export">Export archive</button>
         <button id="clear">Clear archive</button>
       </div>
@@ -126,6 +127,7 @@
     const btnSave = document.getElementById('save');
     const btnPlant = document.getElementById('plant');
     const btnRemix = document.getElementById('remix');
+    const btnCross = document.getElementById('cross');
     const btnExport = document.getElementById('export');
     const elArchive = document.getElementById('archive');
     const elGarden = document.getElementById('garden');
@@ -164,6 +166,8 @@
           btnSave.disabled = false;
         });
       });
+      // enable cross-pollinate iff there are at least two plants
+      try { btnCross.disabled = !(plants.length >= 2); } catch(e){}
     };
 
     function escapeHtml(s){ return s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;') }
@@ -190,6 +194,29 @@
       plants.unshift({text, ts: new Date().toISOString()});
       saveGarden(plants.slice(0,200));
       refreshGarden();
+    });
+
+    // Cross-pollinate: combine lines from two different planted snapshots
+    btnCross.addEventListener('click', ()=>{
+      const plants = loadGarden();
+      if (plants.length < 2){ alert('Need at least two plants to cross-pollinate.'); return; }
+      // pick two distinct random indices
+      let i = Math.floor(Math.random()*plants.length);
+      let j = Math.floor(Math.random()*plants.length);
+      while (j === i) j = Math.floor(Math.random()*plants.length);
+      const a = plants[i].text.split('\n').filter(Boolean);
+      const b = plants[j].text.split('\n').filter(Boolean);
+      // take first line from a, first from b, maybe a closing line
+      const parts = [];
+      if (a.length) parts.push(a[0]);
+      if (b.length) parts.push(b[0]);
+      if (a.length>1) parts.push(a.slice(1).join(' '));
+      // small shuffle for surprise
+      for (let k=parts.length-1;k>0;k--){ const r=Math.floor(Math.random()*(k+1)); [parts[k],parts[r]]=[parts[r],parts[k]]; }
+      const out = parts.join('\n') + '\n\n(cross-pollinate)';
+      elV.textContent = out;
+      btnSave.disabled = false;
+      try { btnPlant.disabled = false; } catch(e){}
     });
 
     btnRemix.addEventListener('click', ()=>{

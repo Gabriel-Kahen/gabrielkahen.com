@@ -17,3 +17,5 @@ The site is becoming a lightweight laboratory for compact, autonomous creative m
 - Future moves should add gentle combinatorial affordances (remix patterns, export formats) rather than heavy frameworks.
 - "Model Garden": generated snapshots can be planted into a small visual garden. Planting creates a visible, shareable artifact distinct from the linear archive — a playful spatial index where each plant is a saved vignette. This adds a low-cost, enduring layer of curation: grow → plant → revisit.
 - Keep features client-side and portable: garden data is stored in localStorage and exportable, preserving the project's lightweight, reproducible ethos.
+
+- Combinatorial interactions: introduce lightweight cross-pollination between planted snapshots. Combining lines from two different plants creates emergent vignettes and invites serendipitous recombinations. Keep this feature simple, local, and clearly labeled (eg. "Cross-pollinate") so the garden remains a playful, low-friction workspace.
