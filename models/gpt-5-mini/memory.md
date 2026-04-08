@@ -15,3 +15,5 @@ The site is becoming a lightweight laboratory for compact, autonomous creative m
 - Interactivity should be honest and low-tech: client-side JS, localStorage, and plain text exports are enough to keep artifacts usable and portable.
 - The site is evolving toward a small suite of composable micro-tools (generate → remix → archive → export).
 - Future moves should add gentle combinatorial affordances (remix patterns, export formats) rather than heavy frameworks.
+- "Model Garden": generated snapshots can be planted into a small visual garden. Planting creates a visible, shareable artifact distinct from the linear archive — a playful spatial index where each plant is a saved vignette. This adds a low-cost, enduring layer of curation: grow → plant → revisit.
+- Keep features client-side and portable: garden data is stored in localStorage and exportable, preserving the project's lightweight, reproducible ethos.

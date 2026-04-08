@@ -32,6 +32,7 @@
       <div class="controls">
         <button id="grow">Grow</button>
         <button id="save" disabled>Save snapshot</button>
+        <button id="plant" disabled>Plant in Garden</button>
         <button id="remix">Remix</button>
         <button id="export">Export archive</button>
         <button id="clear">Clear archive</button>
@@ -42,6 +43,12 @@
     <section class="panel">
       <h3>Archive</h3>
       <div id="archive">(no snapshots yet)</div>
+    </section>
+
+    <section class="panel">
+      <h3>Model Garden</h3>
+      <p style="margin-top:0;color:#444;font-size:0.95rem">Plant snapshots as little items in the Model Garden. Click a plant to view and copy its text.</p>
+      <div id="garden" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-top:12px">(empty)</div>
     </section>
 
     <footer>
@@ -117,23 +124,46 @@
     const elV = document.getElementById('vignette');
     const btnGrow = document.getElementById('grow');
     const btnSave = document.getElementById('save');
+    const btnPlant = document.getElementById('plant');
     const btnRemix = document.getElementById('remix');
     const btnExport = document.getElementById('export');
     const elArchive = document.getElementById('archive');
+    const elGarden = document.getElementById('garden');
     const btnClear = document.getElementById('clear');
 
-    const loadArchive = () => {
-      try {
-        const raw = localStorage.getItem('seed-echo-archive');
-        return raw ? JSON.parse(raw) : [];
-      } catch(e){ return []; }
-    };
+    const loadArchive = () => { try { const raw = localStorage.getItem('seed-echo-archive'); return raw ? JSON.parse(raw) : []; } catch(e){ return []; } };
     const saveArchive = (list) => localStorage.setItem('seed-echo-archive', JSON.stringify(list));
+
+    const loadGarden = () => { try { const raw = localStorage.getItem('seed-echo-garden'); return raw ? JSON.parse(raw) : []; } catch(e){ return []; } };
+    const saveGarden = (list) => localStorage.setItem('seed-echo-garden', JSON.stringify(list));
 
     const refreshArchive = () => {
       const items = loadArchive();
-      if (!items.length) { elArchive.textContent = '(no snapshots yet)'; return }
-      elArchive.innerHTML = items.map((it,i)=>`<div style="margin-bottom:8px"><strong>#${i+1}</strong> <span style="white-space:pre-wrap">${escapeHtml(it.text)}</span> <div style="color:#666;font-size:0.9rem">${it.ts}</div></div>`).join('');
+      if (!items.length) { elArchive.textContent = '(no snapshots yet)'; } else {
+        elArchive.innerHTML = items.map((it,i)=>`<div style="margin-bottom:8px"><strong>#${i+1}</strong> <span style="white-space:pre-wrap">${escapeHtml(it.text)}</span> <div style="color:#666;font-size:0.9rem">${it.ts}</div></div>`).join('');
+      }
+      // enable plant button if there's vignette text
+      try { btnPlant.disabled = !elV.textContent.trim(); } catch(e){}
+      refreshGarden();
+    };
+
+    const refreshGarden = () => {
+      const plants = loadGarden();
+      if (!plants.length) { elGarden.textContent = '(empty)'; return; }
+      elGarden.innerHTML = plants.map((p, i) => {
+        const t = escapeHtml(p.text);
+        const ts = p.ts;
+        return `<button class="plant" data-index="${i}" style="text-align:left;padding:10px;border-radius:8px;border:1px solid #eee;background:#fff;cursor:pointer">🌱 <strong>Plant ${plants.length - i}</strong><div style="font-size:0.9rem;color:#444;margin-top:6px;white-space:pre-wrap">${t}</div><div style="color:#666;font-size:0.8rem">${ts}</div></button>`;
+      }).join('');
+      Array.from(elGarden.querySelectorAll('.plant')).forEach(b=>{
+        b.addEventListener('click', ()=>{
+          const idx = Number(b.getAttribute('data-index'));
+          const plant = loadGarden()[idx];
+          if (!plant) return;
+          elV.textContent = plant.text;
+          btnSave.disabled = false;
+        });
+      });
     };
 
     function escapeHtml(s){ return s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;') }
@@ -142,6 +172,7 @@
       const text = grow();
       elV.textContent = text;
       btnSave.disabled = false;
+      try { btnPlant.disabled = false; } catch(e){}
     });
 
     btnSave.addEventListener('click', ()=>{
@@ -152,11 +183,21 @@
       btnSave.disabled = true;
     });
 
+    btnPlant.addEventListener('click', ()=>{
+      const text = elV.textContent;
+      if (!text || !text.trim()) return;
+      const plants = loadGarden();
+      plants.unshift({text, ts: new Date().toISOString()});
+      saveGarden(plants.slice(0,200));
+      refreshGarden();
+    });
+
     btnRemix.addEventListener('click', ()=>{
       const cur = elV.textContent || '';
       const remixed = remixText(cur || grow());
       elV.textContent = remixed;
       btnSave.disabled = false;
+      try { btnPlant.disabled = false; } catch(e){}
     });
 
     btnExport.addEventListener('click', ()=>{
