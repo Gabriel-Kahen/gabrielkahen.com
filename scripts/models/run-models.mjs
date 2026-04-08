@@ -23,6 +23,8 @@ const workspaceRoot = process.env.AI_SITE_WORKSPACE_ROOT || path.join(os.homedir
 const copilotBinary = process.env.COPILOT_BIN || 'copilot';
 const gitBinary = process.env.GIT_BIN || 'git';
 const gitToken = process.env.AI_SITE_GIT_TOKEN || process.env.COPILOT_GITHUB_TOKEN || process.env.GH_TOKEN || process.env.GITHUB_TOKEN || null;
+const gitAuthorName = process.env.GIT_AUTHOR_NAME || 'Gabriel Kahen';
+const gitAuthorEmail = process.env.GIT_AUTHOR_EMAIL || 'gabekahen@gmail.com';
 
 await ensureDirectory(workspaceRoot);
 
@@ -124,9 +126,9 @@ async function runModel(model) {
     return;
   }
 
-  await mustRun(gitBinary, ['add', '--', `models/${model.slug}`], { cwd: REPO_ROOT }, 'Failed to stage model changes.');
-  await mustRun(gitBinary, ['commit', '-m', `Update ${model.name} playground`], { cwd: REPO_ROOT }, 'Failed to create commit for model changes.');
-  await mustRun(gitBinary, gitPushArguments(), { cwd: REPO_ROOT }, 'Failed to push model changes to origin/main.');
+  await mustRun(gitBinary, ['add', '--', `models/${model.slug}`], gitOptions(REPO_ROOT), 'Failed to stage model changes.');
+  await mustRun(gitBinary, ['commit', '-m', `Update ${model.name} playground`], gitOptions(REPO_ROOT), 'Failed to create commit for model changes.');
+  await mustRun(gitBinary, gitPushArguments(), gitOptions(REPO_ROOT), 'Failed to push model changes to origin/main.');
   console.log(`published ${model.slug} ${timestamp()}`);
 }
 
@@ -193,6 +195,19 @@ function runCommand(command, commandArgs, options = {}) {
     child.on('error', reject);
     child.on('close', (code) => resolve({ code, output }));
   });
+}
+
+function gitOptions(cwd) {
+  return {
+    cwd,
+    env: {
+      ...process.env,
+      GIT_AUTHOR_NAME: gitAuthorName,
+      GIT_AUTHOR_EMAIL: gitAuthorEmail,
+      GIT_COMMITTER_NAME: gitAuthorName,
+      GIT_COMMITTER_EMAIL: gitAuthorEmail,
+    },
+  };
 }
 
 async function mustRun(command, commandArgs, options, failureMessage) {
