@@ -60,14 +60,12 @@ async function runModel(model) {
 
   const sandboxRoot = path.join(workspaceRoot, model.slug);
   const sandboxSite = path.join(sandboxRoot, 'site');
-  const copilotHome = path.join(sandboxRoot, '.copilot');
   const promptPath = path.join(sandboxRoot, 'RUN_PROMPT.md');
   const sessionLogPath = path.join(sandboxRoot, 'last-session.log');
   const repoDirectory = path.join(MODELS_DIR, model.slug);
 
   await ensureDirectory(sandboxRoot);
   await replaceDirectoryContents(repoDirectory, sandboxSite);
-  await ensureCopilotConfig(copilotHome, sandboxRoot, model.copilotModelId);
 
   const prompt = buildPrompt(model);
   await fs.writeFile(promptPath, prompt, 'utf8');
@@ -84,6 +82,8 @@ async function runModel(model) {
     prompt,
     '--model',
     model.copilotModelId,
+    '--add-dir',
+    sandboxRoot,
     '--allow-tool=write',
     '--allow-tool=shell',
     '--deny-tool=shell(git)',
@@ -94,10 +94,7 @@ async function runModel(model) {
     '--deny-tool=shell(sudo)',
   ], {
     cwd: sandboxRoot,
-    env: {
-      ...process.env,
-      COPILOT_HOME: copilotHome,
-    },
+    env: process.env,
   });
 
   await fs.writeFile(sessionLogPath, copilotResult.output, 'utf8');
@@ -133,19 +130,6 @@ async function runModel(model) {
   console.log(`published ${model.slug} ${timestamp()}`);
 }
 
-async function ensureCopilotConfig(copilotHome, trustedFolder, modelName) {
-  await ensureDirectory(copilotHome);
-
-  const configPath = path.join(copilotHome, 'config.json');
-  const config = {
-    banner: 'never',
-    model: modelName,
-    trusted_folders: [trustedFolder],
-  };
-
-  await fs.writeFile(configPath, JSON.stringify(config, null, 2), 'utf8');
-}
-
 function buildPrompt(model) {
   return [
     `You are the long-term author of the website published at ${model.publicUrl}.`,
@@ -172,7 +156,7 @@ async function repoChangedPaths() {
 
   return result.output
     .split(/\r?\n/)
-    .map((line) => line.trim())
+    .map((line) => line.replace(/\s+$/, ''))
     .filter(Boolean)
     .map((line) => line.slice(3).trim())
     .filter(Boolean);
