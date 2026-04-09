@@ -134,25 +134,27 @@
       margin-top: 3rem;
       display: flex;
       align-items: center;
-      gap: 0.5rem;
     }
 
-    .prompt::before {
-      content: "gabrielkahen.com@server:/models$ ";
+    .prompt label {
       color: var(--dim);
+      white-space: pre;
     }
 
-    .cursor {
-      display: inline-block;
-      width: 10px;
-      height: 1.2rem;
-      background-color: var(--text);
-      animation: blink 1s step-end infinite;
+    #cmd {
+      background: transparent;
+      border: none;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 1rem;
+      flex-grow: 1;
+      outline: none;
+      caret-color: var(--text);
+      min-width: 0; /* Prevents overflow */
     }
 
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0; }
+    #cmd:focus {
+      outline: none;
     }
 
     .comment {
@@ -205,7 +207,7 @@
       <li class="dir-item">
         <span>drwxr-xr-x</span>
         <span>2</span>
-        <span>gpt</span>
+        <span>openai</span>
         <span><a href="/models/gpt-5-mini/">gpt-5-mini/</a></span>
       </li>
       <li class="dir-item">
@@ -216,9 +218,59 @@
       </li>
     </ul>
 
-    <div class="prompt">
-      <span class="cursor"></span>
-    </div>
+    <form id="term-form" class="prompt">
+      <label for="cmd">gabrielkahen.com@server:/models$ </label>
+      <input type="text" id="cmd" autocomplete="off" spellcheck="false" autofocus>
+    </form>
   </div>
+
+  <script>
+    // Focus the input whenever the user clicks anywhere on the page
+    document.addEventListener('click', () => {
+      document.getElementById('cmd').focus();
+    });
+
+    // Handle terminal commands
+    document.getElementById('term-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const input = document.getElementById('cmd');
+      const val = input.value.trim().toLowerCase();
+      
+      const routes = {
+        'grok-code-fast-1': '/models/grok-code-fast-1/',
+        'grok': '/models/grok-code-fast-1/',
+        'claude-haiku-4-5': '/models/claude-haiku-4-5/',
+        'claude': '/models/claude-haiku-4-5/',
+        'gpt-5-mini': '/models/gpt-5-mini/',
+        'gpt': '/models/gpt-5-mini/',
+        'openai': '/models/gpt-5-mini/',
+        'gemini-3-flash': '/models/gemini-3-flash/',
+        'gemini': '/models/gemini-3-flash/',
+        '..': '/'
+      };
+
+      let target = val;
+      if (val.startsWith('cd ')) {
+        target = val.replace('cd ', '').trim();
+      } else if (val.startsWith('./')) {
+        target = val.replace('./', '').trim();
+      }
+      // Remove trailing slash if present
+      if (target.endsWith('/')) {
+        target = target.slice(0, -1);
+      }
+
+      if (routes[target]) {
+        window.location.href = routes[target];
+      } else if (target === 'ls' || target === 'clear') {
+        input.value = '';
+      } else if (target !== '') {
+        input.value = `bash: ${target}: command not found`;
+        setTimeout(() => {
+          if(input.value.startsWith('bash:')) input.value = '';
+        }, 1500);
+      }
+    });
+  </script>
 </body>
 </html>
