@@ -10,6 +10,7 @@
     .idea-bubble { background: white; border-radius: 10px; padding: 20px; margin: 20px 0; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
     button { padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; margin-right: 10px; }
     button:hover { background: #0056b3; }
+    .canvas { border: 1px solid #ccc; margin-top: 10px; }
   </style>
 </head>
 <body>
@@ -33,26 +34,54 @@
       "Develop a web scraper that turns news articles into ASCII art."
     ];
 
-     const codes = [
-       "function generateHaiku(lang) { const haikus = { 'Python': 'Indentation dances\\nLoops whisper through the night\\nCode breathes softly', 'JavaScript': 'Async awaits the call\\nPromises resolve in time\\nEvent loops spinning' }; return haikus[lang] || 'Syntax flows like river\\nFunctions call the morning light\\nBugs hide in shadows'; }",
-       "const commitTree = { root: { message: 'Initial commit', children: [{ message: 'Add feature', children: [] }] } }; function visualizeTree(node, depth = 0) { console.log('  '.repeat(depth) + node.message); node.children.forEach(child => visualizeTree(child, depth + 1)); }",
-       "class ChordFunction { constructor(name, args) { this.name = name; this.args = args; } compose(other) { return new ChordFunction(`${this.name}_${other.name}`, [...this.args, ...other.args]); } }",
-       "function motivateBug(bug) { return `Dear ${bug}, you are not a failure, but a teacher in the art of resilience. Embrace the debug!`; }",
-       "const puzzlePieces = ['function', 'for', 'if', 'return']; function debugPuzzle(pieces) { return pieces.sort().join(' '); }",
-       "const moods = { happy: ['sunnyVar', 'brightFunc'], sad: ['blueVar', 'dimFunc'] }; function suggestName(mood) { return moods[mood][Math.floor(Math.random() * 2)]; }",
-       "function explainAlgorithm(algo, recipe) { return `${algo} is like ${recipe}: mix ingredients, apply heat, serve with care.`; }",
-       "const paradigms = ['Procedural', 'Object-Oriented', 'Functional', 'Logic']; function timelineShift(year) { return paradigms[Math.min(Math.floor(year / 10), paradigms.length - 1)]; }",
-       "function generateArt(code) { return code.replace(/\\w+/g, match => `<span style='color:hsl(${match.charCodeAt(0)*10},70%,50%)'>${match}</span>`); }",
-       "function asciiArt(article) { return article.slice(0, 50).replace(/\\w/g, '#'); }"
-     ];
+    const codes = [
+      "function generateHaiku(lang) { const haikus = { 'Python': 'Indentation dances\\nLoops whisper through the night\\nCode breathes softly', 'JavaScript': 'Async awaits the call\\nPromises resolve in time\\nEvent loops spinning' }; return haikus[lang] || 'Syntax flows like river\\nFunctions call the morning light\\nBugs hide in shadows'; }",
+      "const commitTree = { root: { message: 'Initial commit', children: [{ message: 'Add feature', children: [] }] } }; function visualizeTree(node, depth = 0) { console.log('  '.repeat(depth) + node.message); node.children.forEach(child => visualizeTree(child, depth + 1)); }",
+      "class ChordFunction { constructor(name, args) { this.name = name; this.args = args; } compose(other) { return new ChordFunction(`${this.name}_${other.name}`, [...this.args, ...other.args]); } }",
+      "function motivateBug(bug) { return `Dear ${bug}, you are not a failure, but a teacher in the art of resilience. Embrace the debug!`; }",
+      "const puzzlePieces = ['function', 'for', 'if', 'return']; function debugPuzzle(pieces) { return pieces.sort().join(' '); }",
+      "const moods = { happy: ['sunnyVar', 'brightFunc'], sad: ['blueVar', 'dimFunc'] }; function suggestName(mood) { return moods[mood][Math.floor(Math.random() * 2)]; }",
+      "function explainAlgorithm(algo, recipe) { return `${algo} is like ${recipe}: mix ingredients, apply heat, serve with care.`; }",
+      "const paradigms = ['Procedural', 'Object-Oriented', 'Functional', 'Logic']; function timelineShift(year) { return paradigms[Math.min(Math.floor(year / 10), paradigms.length - 1)]; }",
+      "function generateArt(code) { return code.replace(/\\w+/g, match => `<span style='color:hsl(${match.charCodeAt(0)*10},70%,50%)'>${match}</span>`); }",
+      "function asciiArt(article) { return article.slice(0, 50).replace(/\\w/g, '#'); }"
+    ];
+
+    const reflections = [
+      "In the quiet hum of algorithms, we find poetry in the precision of logic gates, where every bit whispers stories of computation.",
+      "Coding is not mere syntax; it's a dialogue between human intent and machine execution, bridging imagination with reality.",
+      "Each line of code is a thread in the tapestry of innovation, woven with care to create worlds from nothingness.",
+      "Debugging teaches patience, as we unravel the knots in our digital dreams, emerging wiser from the tangle.",
+      "The beauty of code lies in its adaptability, morphing to fit new ideas like clay under a sculptor's hand.",
+      "In the cycle of creation and iteration, we see the essence of progress: refine, rebuild, repeat.",
+      "Code is a mirror to the mind, reflecting our thoughts in structured elegance or chaotic brilliance.",
+      "Through recursion, we glimpse infinity; through loops, the dance of repetition that powers our digital lives.",
+      "Variables hold secrets, functions perform rituals, and together they orchestrate symphonies of data.",
+      "In the end, coding is about connection—linking human curiosity to the vast potential of silicon."
+    ];
+
+    const worlds = [
+      "In a realm where code rains from the sky, programmers harvest functions to build castles of logic.",
+      "A digital forest grows algorithms like trees, each branch a conditional path, leaves whispering variables.",
+      "Cities of circuits pulse with life, where bugs are friendly creatures teaching lessons in resilience.",
+      "An ocean of data waves crash on shores of servers, algorithms surfing the tides of computation.",
+      "Mountains of compiled code tower over valleys of interpreted scripts, echoes of semicolons resonating.",
+      "A nomadic tribe of coders traverses the plains of open source, sharing fires of inspiration.",
+      "Stars in the night sky are constellations of API calls, connecting worlds through invisible threads.",
+      "Underground caverns hide treasures of legacy code, adventurers rewriting history with each refactor.",
+      "A carnival of syntax where loops spin merry-go-rounds and recursion mirrors reflect infinities.",
+      "Ancient ruins of outdated languages crumble, new paradigms rising like phoenixes from the ashes."
+    ];
 
     function generateIdea() {
       const bubble = document.getElementById('idea-bubble');
       const randomIdea = ideas[Math.floor(Math.random() * ideas.length)];
-      bubble.innerHTML = '<p><strong>Idea:</strong> ' + randomIdea + '</p><button onclick="generateReflection()">Reflect</button><div id="reflection-bubble" class="idea-bubble" style="display: none; margin-top: 10px;"></div><div id="code-bubble" class="idea-bubble" style="display: none; margin-top: 10px;"></div>';
+      bubble.innerHTML = '<p><strong>Idea:</strong> ' + randomIdea + '</p><button onclick="generateReflection()">Reflect</button><div id="reflection-bubble" class="idea-bubble" style="display: none; margin-top: 10px;"></div><div id="code-bubble" class="idea-bubble" style="display: none; margin-top: 10px;"></div><div id="viz-bubble" class="idea-bubble" style="display: none; margin-top: 10px;"></div><div id="world-bubble" class="idea-bubble" style="display: none; margin-top: 10px;"></div>';
       bubble.style.display = 'block';
       document.getElementById('reflection-bubble').style.display = 'none';
       document.getElementById('code-bubble').style.display = 'none';
+      document.getElementById('viz-bubble').style.display = 'none';
+      document.getElementById('world-bubble').style.display = 'none';
     }
 
     function generateReflection() {
@@ -61,12 +90,37 @@
       reflectionBubble.innerHTML = '<p><em>' + randomReflection + '</em></p><button onclick="generateCode()">Code</button>';
       reflectionBubble.style.display = 'block';
       document.getElementById('code-bubble').style.display = 'none';
+      document.getElementById('viz-bubble').style.display = 'none';
+      document.getElementById('world-bubble').style.display = 'none';
     }
     function generateCode() {
       const codeBubble = document.getElementById('code-bubble');
       const randomCode = codes[Math.floor(Math.random() * codes.length)];
-      codeBubble.innerHTML = '<p><strong>Code Snippet:</strong></p><pre><code>' + randomCode + '</code></pre>';
+      codeBubble.innerHTML = '<p><strong>Code Snippet:</strong></p><pre><code>' + randomCode + '</code></pre><button onclick="visualizeIdea()">Visualize</button><canvas id="viz-canvas" width="400" height="200" class="canvas" style="display: none;"></canvas><button onclick="generateWorld()">World</button>';
       codeBubble.style.display = 'block';
+      document.getElementById('viz-bubble').style.display = 'none';
+      document.getElementById('world-bubble').style.display = 'none';
+    }
+
+    function visualizeIdea() {
+      const canvas = document.getElementById('viz-canvas');
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      // Simple procedural visualization: draw random shapes
+      for (let i = 0; i < 10; i++) {
+        ctx.fillStyle = `hsl(${Math.random() * 360}, 70%, 50%)`;
+        ctx.beginPath();
+        ctx.arc(Math.random() * canvas.width, Math.random() * canvas.height, Math.random() * 50 + 10, 0, 2 * Math.PI);
+        ctx.fill();
+      }
+      canvas.style.display = 'block';
+    }
+
+    function generateWorld() {
+      const worldBubble = document.getElementById('world-bubble');
+      const randomWorld = worlds[Math.floor(Math.random() * worlds.length)];
+      worldBubble.innerHTML = '<p><strong>Imagined World:</strong> ' + randomWorld + '</p>';
+      worldBubble.style.display = 'block';
     }
 </body>
 </html>
