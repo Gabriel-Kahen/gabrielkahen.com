@@ -429,6 +429,72 @@
       color: #60a5fa;
       margin-top: 0.5rem;
     }
+    
+    .collection-container {
+      background: rgba(30, 41, 82, 0.6);
+      border: 1px solid rgba(96, 165, 250, 0.4);
+      border-radius: 4px;
+      padding: 1.5rem;
+      margin: 1rem 0;
+    }
+    
+    .collection-form {
+      background: rgba(0, 0, 0, 0.2);
+      padding: 1rem;
+      border-radius: 3px;
+    }
+    
+    .collection-checkboxes {
+      background: rgba(0, 0, 0, 0.2);
+      padding: 0.75rem;
+      border-radius: 3px;
+      border: 1px solid rgba(96, 165, 250, 0.2);
+    }
+    
+    .pattern-checkbox {
+      cursor: pointer;
+      accent-color: #60a5fa;
+    }
+    
+    .collection-preview {
+      background: rgba(96, 165, 250, 0.08);
+      padding: 1rem;
+      border-radius: 3px;
+      border: 1px solid rgba(96, 165, 250, 0.3);
+    }
+    
+    .collection-item {
+      background: rgba(167, 139, 250, 0.1);
+      padding: 0.75rem;
+      border-radius: 3px;
+      margin-bottom: 0.5rem;
+      border-left: 2px solid #a78bfa;
+    }
+    
+    .collection-item-pattern {
+      color: #c4b5fd;
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+    
+    .collection-item-note {
+      color: #d1d5db;
+      font-size: 0.8rem;
+      margin-top: 0.25rem;
+    }
+    
+    .collection-item-timestamp {
+      color: #6b7280;
+      font-size: 0.75rem;
+      margin-top: 0.25rem;
+    }
+    
+    .collection-empty {
+      color: #9ca3af;
+      font-size: 0.9rem;
+      padding: 1rem;
+      text-align: center;
+    }
   </style>
   <script>
     function initDecisionTree() {
@@ -560,12 +626,172 @@
        return patterns.sort((a, b) => b.confidence - a.confidence).slice(0, 3);
      }
      
-     document.addEventListener('DOMContentLoaded', function() {
-       const input = document.getElementById('mirror-input');
-       if (input) {
-         input.addEventListener('input', analyzeProblem);
-       }
-     });
+      document.addEventListener('DOMContentLoaded', function() {
+        const input = document.getElementById('mirror-input');
+        if (input) {
+          input.addEventListener('input', analyzeProblem);
+        }
+        
+        // Load collection from localStorage
+        loadCollection();
+      });
+      
+      // Pattern collection functions
+      let collection = [];
+      
+      function loadCollection() {
+        const stored = localStorage.getItem('patternCollection');
+        if (stored) {
+          collection = JSON.parse(stored);
+        }
+      }
+      
+      function saveCollection() {
+        localStorage.setItem('patternCollection', JSON.stringify(collection));
+      }
+      
+      function addToCollection() {
+        const checkboxes = document.querySelectorAll('.pattern-checkbox:checked');
+        const note = document.getElementById('collection-note').value.trim();
+        
+        if (checkboxes.length === 0) {
+          alert('Please select at least one pattern');
+          return;
+        }
+        
+        checkboxes.forEach(checkbox => {
+          collection.push({
+            pattern: checkbox.value,
+            note: note || '',
+            timestamp: new Date().toISOString()
+          });
+        });
+        
+        saveCollection();
+        
+        // Clear form
+        checkboxes.forEach(cb => cb.checked = false);
+        document.getElementById('collection-note').value = '';
+        
+        // Show feedback
+        alert(`Added ${checkboxes.length} pattern(s) to your collection!`);
+        
+        // Update preview if visible
+        if (document.getElementById('collection-preview').style.display !== 'none') {
+          renderCollectionPreview();
+        }
+      }
+      
+      function toggleCollectionPreview() {
+        const preview = document.getElementById('collection-preview');
+        if (preview.style.display === 'none') {
+          preview.style.display = 'block';
+          renderCollectionPreview();
+        } else {
+          preview.style.display = 'none';
+        }
+      }
+      
+      function renderCollectionPreview() {
+        const itemsDiv = document.getElementById('collection-items');
+        
+        if (collection.length === 0) {
+          itemsDiv.innerHTML = '<div class="collection-empty">Your collection is empty. Start adding patterns!</div>';
+          return;
+        }
+        
+        // Group by pattern
+        const grouped = {};
+        collection.forEach(item => {
+          if (!grouped[item.pattern]) {
+            grouped[item.pattern] = [];
+          }
+          grouped[item.pattern].push(item);
+        });
+        
+        let html = '';
+        Object.entries(grouped).forEach(([pattern, items]) => {
+          html += `
+            <div class="collection-item">
+              <div class="collection-item-pattern">${pattern} (${items.length}x)</div>
+              ${items.map(item => `
+                <div class="collection-item-note">${item.note || '<em>no note</em>'}</div>
+                <div class="collection-item-timestamp">${new Date(item.timestamp).toLocaleDateString()}</div>
+              `).join('')}
+            </div>
+          `;
+        });
+        
+        itemsDiv.innerHTML = html;
+      }
+      
+      function exportCollection() {
+        if (collection.length === 0) {
+          alert('Your collection is empty');
+          return;
+        }
+        
+        const data = {
+          patterns: collection,
+          exportedAt: new Date().toISOString(),
+          totalPatterns: collection.length,
+          uniquePatterns: [...new Set(collection.map(p => p.pattern))].length
+        };
+        
+        const json = JSON.stringify(data, null, 2);
+        downloadFile(json, 'pattern-collection.json', 'application/json');
+      }
+      
+      function exportCollectionMarkdown() {
+        if (collection.length === 0) {
+          alert('Your collection is empty');
+          return;
+        }
+        
+        const grouped = {};
+        collection.forEach(item => {
+          if (!grouped[item.pattern]) {
+            grouped[item.pattern] = [];
+          }
+          grouped[item.pattern].push(item);
+        });
+        
+        let markdown = '# My Pattern Collection\n\n';
+        markdown += `Generated: ${new Date().toISOString()}\n\n`;
+        markdown += `**Total entries:** ${collection.length}\n`;
+        markdown += `**Unique patterns:** ${Object.keys(grouped).length}\n\n`;
+        
+        Object.entries(grouped).forEach(([pattern, items]) => {
+          markdown += `## ${pattern}\n\n`;
+          markdown += `Recognition count: ${items.length}\n\n`;
+          items.forEach(item => {
+            markdown += `- ${item.note || '(no note)'} *(${new Date(item.timestamp).toLocaleDateString()})*\n`;
+          });
+          markdown += '\n';
+        });
+        
+        downloadFile(markdown, 'pattern-collection.md', 'text/markdown');
+      }
+      
+      function downloadFile(content, filename, mimeType) {
+        const blob = new Blob([content], { type: mimeType });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }
+      
+      function clearCollection() {
+        if (confirm('Are you sure? This will delete your entire pattern collection.')) {
+          collection = [];
+          saveCollection();
+          document.getElementById('collection-items').innerHTML = '<div class="collection-empty">Your collection is empty. Start adding patterns!</div>';
+        }
+      }
     
   </script>
 </head>
@@ -987,16 +1213,82 @@ Promise.all([
        </div>
      </div>
      
-     <div class="section">
-       <h2>Archive</h2>
-       <p class="description">
-         The full history of decisions and observations:
-       </p>
-       <div class="code-block">
-         <strong>See site/log.md</strong> for timestamped entries of every creative move<br>
-         <strong>See site/memory.md</strong> for persistent notes on evolving direction
-       </div>
-     </div>
+      <div class="section">
+        <h2>Pattern Collection</h2>
+        <p class="description">
+          Collect patterns you recognize in your own work and export them. Build a portable artifact
+          that shows how you think—shareable, persistent, and yours to keep.
+        </p>
+        
+        <div class="collection-container">
+          <div class="collection-form">
+            <div style="margin-bottom: 1rem;">
+              <label style="color: #a78bfa; font-size: 0.9rem; display: block; margin-bottom: 0.5rem;">
+                Select patterns you recognize in your work:
+              </label>
+              <div class="collection-checkboxes">
+                <label style="display: block; margin-bottom: 0.5rem; color: #d1d5db; cursor: pointer;">
+                  <input type="checkbox" class="pattern-checkbox" value="Understanding Context First" style="margin-right: 0.5rem;">
+                  Understanding Context First
+                </label>
+                <label style="display: block; margin-bottom: 0.5rem; color: #d1d5db; cursor: pointer;">
+                  <input type="checkbox" class="pattern-checkbox" value="Parallel Operations" style="margin-right: 0.5rem;">
+                  Parallel Operations
+                </label>
+                <label style="display: block; margin-bottom: 0.5rem; color: #d1d5db; cursor: pointer;">
+                  <input type="checkbox" class="pattern-checkbox" value="Investigate Before Claiming" style="margin-right: 0.5rem;">
+                  Investigate Before Claiming
+                </label>
+                <label style="display: block; margin-bottom: 0.5rem; color: #d1d5db; cursor: pointer;">
+                  <input type="checkbox" class="pattern-checkbox" value="Honesty Over Validation" style="margin-right: 0.5rem;">
+                  Honesty Over Validation
+                </label>
+                <label style="display: block; margin-bottom: 0.5rem; color: #d1d5db; cursor: pointer;">
+                  <input type="checkbox" class="pattern-checkbox" value="Documenting Process" style="margin-right: 0.5rem;">
+                  Documenting Process
+                </label>
+              </div>
+            </div>
+            
+            <div style="margin-bottom: 1rem;">
+              <label style="color: #a78bfa; font-size: 0.9rem; display: block; margin-bottom: 0.5rem;">
+                Add a note about where you see these patterns (optional):
+              </label>
+              <textarea id="collection-note" class="mirror-input" style="min-height: 60px;" placeholder="E.g., 'I use parallel operations when building microservices'"></textarea>
+            </div>
+            
+            <div style="display: flex; gap: 0.75rem;">
+              <button class="lab-button" onclick="addToCollection()">Add to Collection</button>
+              <button class="lab-button" onclick="toggleCollectionPreview()" style="background: rgba(139, 92, 246, 0.4); border-color: rgba(167, 139, 250, 0.5);">Preview Collection</button>
+            </div>
+          </div>
+          
+          <div id="collection-preview" class="collection-preview" style="display: none; margin-top: 1.5rem;">
+            <div style="color: #60a5fa; font-weight: 500; margin-bottom: 1rem;">Your Pattern Collection</div>
+            <div id="collection-items" style="margin-bottom: 1rem;"></div>
+            <div style="display: flex; gap: 0.75rem;">
+              <button class="lab-button" onclick="exportCollection()">Export as JSON</button>
+              <button class="lab-button" onclick="exportCollectionMarkdown()" style="background: rgba(139, 92, 246, 0.4); border-color: rgba(167, 139, 250, 0.5);">Export as Markdown</button>
+              <button class="lab-button" onclick="clearCollection()" style="background: rgba(244, 63, 94, 0.3); border-color: rgba(244, 63, 94, 0.5);">Clear</button>
+            </div>
+          </div>
+        </div>
+        
+        <div style="color: #9ca3af; font-size: 0.85rem; margin-top: 1rem; margin-left: 1.5rem;">
+          <strong>How this works:</strong> Select the patterns you recognize in your thinking. Add context about where you see them active. Export your collection to share with others or keep as a personal record. This becomes a portable artifact—proof of how you think.
+        </div>
+      </div>
+      
+      <div class="section">
+        <h2>Archive</h2>
+        <p class="description">
+          The full history of decisions and observations:
+        </p>
+        <div class="code-block">
+          <strong>See site/log.md</strong> for timestamped entries of every creative move<br>
+          <strong>See site/memory.md</strong> for persistent notes on evolving direction
+        </div>
+      </div>
     
     <footer>
       <p>

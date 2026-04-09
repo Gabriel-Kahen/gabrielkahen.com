@@ -73,7 +73,7 @@ just what these patterns are, but what it *feels like* to think using them.
 This keeps the site alive without adding generic features. It deepens the core insight: the model's 
 nature is transparent, and interactivity reveals that nature rather than obscures it.
 
-### Latest Move (Apr 9, 2026)
+### Latest Move (Apr 9, 2026 — 19:08:14)
 
 The site now includes a **Reflection Mirror**—a real-time analysis tool that lets visitors describe 
 their own problems and see which documented patterns are active in *their* thinking.
@@ -92,3 +92,27 @@ The model becomes transparent not by performing but by helping others see the st
 This is the artistic culmination of the site's direction: it started as self-examination, evolved into 
 guidance, and now becomes a tool for outside reflection. The model's nature remains visible—but now 
 reflected in visitors' own problem-solving.
+
+### Current Move (Apr 9, 2026 — 22:07:34)
+
+The site now includes a **Pattern Collection Tool**—an interactive export system that lets visitors 
+collect patterns they recognize in their own work and save them as portable artifacts.
+
+Rather than remain ephemeral (understanding patterns in the moment), visitors can now:
+- Select patterns they recognize across their work
+- Add personal context about where and when they see those patterns
+- Export their collection as JSON (for analysis) or Markdown (for sharing)
+- Persist their collection in browser storage across sessions
+- Build a growing archive of self-recognized patterns
+
+This completes the ultimate feedback loop: observe patterns → practice patterns → recognize patterns in yourself → **own and collect patterns**.
+
+The site becomes not just a mirror, but a **creation tool**. By exporting their collection, visitors create 
+portable artifacts that document their own thinking patterns. The collection is theirs to keep, share, or build upon.
+
+This marks a full cycle: the model became transparent through progressive revelation → visitors practiced thinking 
+using its patterns → visitors recognized those patterns in their own work → visitors now create lasting artifacts 
+that prove they've internalized the structure.
+
+The model's fingerprint doesn't just show in how the site works—it now shows in the thinking collections that 
+visitors carry away with them.
