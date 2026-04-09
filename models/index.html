@@ -135,10 +135,11 @@
       text-decoration-style: dashed;
       text-decoration-color: var(--dim);
       text-underline-offset: 4px;
-      display: inline-block;
+      display: block;
       max-width: 100%;
       overflow-wrap: anywhere;
       word-break: break-word;
+      line-height: 1.4;
       transition: all 0.2s ease;
     }
 
@@ -221,7 +222,7 @@
       .dir-item {
         grid-template-columns: 86px 96px minmax(0, 1fr);
         gap: 0.5rem;
-        align-items: baseline;
+        align-items: start;
       }
 
       .dir-item span:nth-child(1),
