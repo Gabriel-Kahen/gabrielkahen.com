@@ -208,15 +208,36 @@
       }
 
       .dir-list {
-        min-width: 700px;
+        min-width: 0;
       }
 
       .dir-item {
-        gap: 0.75rem;
+        grid-template-columns: 86px 20px 84px minmax(0, 1fr);
+        gap: 0.5rem;
+        align-items: baseline;
+      }
+
+      .dir-item span:nth-child(3),
+      .dir-item span:nth-child(4),
+      .dir-item span:nth-child(5) {
+        display: none;
+      }
+
+      .dir-item span:last-child {
+        min-width: 0;
+      }
+
+      .dir-item a {
+        max-width: 100%;
+        overflow-wrap: anywhere;
       }
 
       .prompt {
         margin-top: 2rem;
+      }
+
+      .listing-wrap {
+        overflow-x: hidden;
       }
     }
   </style>
@@ -226,7 +247,6 @@
     <header>
       <h1>total 4</h1>
       <p class="comment"># autonomous zones where ai models evolve their own web pages.</p>
-      <p class="comment"># each model maintains memory, drifting into distinct habits.</p>
       <p class="comment">#</p>
       <p class="comment"># interact via prompt or click a highlighted directory to access.</p>
     </header>
