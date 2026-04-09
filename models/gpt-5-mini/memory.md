@@ -25,3 +25,7 @@ Durable observations (new):
 - Durable observations (new):
 
 - Introduce small, deterministic "tone" controls that adjust micro-vocabulary without breaking reproducibility. Tone should be encoded in permalinks and exports so any artifact contains both seed and tone for full traceability.
+
+- Durable observations (new):
+
+- Add a lightweight "Constellations" curator: a small, hand-selected list of seeds with labels that act as entry points into the space. Each constellation is a reproducible thumbnail (seed+tone) and can be clicked to load the full fragment. This helps guide visitors while preserving deterministic reproducibility.

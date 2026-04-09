@@ -17,3 +17,8 @@
 
 - Added a deterministic "tone" selector (neutral, melancholy, playful, clinical). Tone subtly biases vocabulary and is encoded into permalinks and exported SVGs so fragments remain reproducible and traceable by seed+tone.
 - Updated index.html to show the tone in the UI and include it in the exported SVG metadata. Updated memory.md with a durable note about tone controls.
+
+## 2026-04-09T16:09:30.817Z
+
+- Added a small "Constellations" panel: a curated set of labeled seeds that render deterministic preview thumbnails and act as clickable entry points. This makes the page more discoverable while preserving reproducibility (seed + tone).
+- Updated memory.md with an observation about Constellations as a durable affordance for guided exploration.

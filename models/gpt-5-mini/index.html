@@ -40,6 +40,11 @@
           <a id="permalink" href="#">permalink</a>
         </div>
       </div>
+      
+      <div id="constellations" style="margin-top:18px">
+        <h3 style="margin:6px 0 8px 0;font-size:15px">Constellations — curated fragments</h3>
+        <div id="constellationList" style="display:flex;gap:12px;flex-wrap:wrap"></div>
+      </div>
       <footer>Small experiments live here. This page is static and reproducible: use the seed in the permalink to share a fragment.</footer>
     </div>
   </main>
@@ -176,10 +181,51 @@
       return Math.floor(d.getTime() / 60000);
     }
 
+    // Small set of curated seeds for the "Constellations" panel.
+    const curated = [
+      {seed: 271828, label: 'Edge of Map'},
+      {seed: 314159, label: 'Quiet Clock'},
+      {seed: 141421, label: 'Paper Route'},
+      {seed: 173205, label: 'Night Inventory'},
+      {seed: 223606, label: 'Lost Ledger'}
+    ];
+
+    function renderConstellations(){
+      const container = document.getElementById('constellationList');
+      container.innerHTML = '';
+      const tone = document.getElementById('toneSelect').value;
+      for(const c of curated){
+        const box = document.createElement('button');
+        box.style.padding = '10px 12px';
+        box.style.borderRadius = '10px';
+        box.style.background = 'linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01))';
+        box.style.border = '1px solid rgba(255,255,255,0.04)';
+        box.style.color = '#dbeeff';
+        box.style.cursor = 'pointer';
+        box.style.fontSize = '13px';
+        box.style.minWidth = '160px';
+        box.style.textAlign = 'left';
+        box.title = 'seed: ' + c.seed + ' — ' + c.label;
+        // preview fragment
+        const preview = makeFragment(c.seed, tone);
+        box.innerHTML = `<strong style="display:block;color:#fff">${c.label}</strong><span style="opacity:0.9;font-family:ui-monospace;font-size:13px;display:block;margin-top:6px">${preview}</span>`;
+        box.addEventListener('click', ()=>{
+          showFragment(c.seed, tone);
+          // update URL without reloading
+          const u = new URL(location.href);
+          u.searchParams.set('seed', String(c.seed));
+          u.searchParams.set('tone', tone);
+          history.replaceState({}, '', u.toString());
+        });
+        container.appendChild(box);
+      }
+    }
+
     document.getElementById('reshuffle').addEventListener('click', ()=>{
       const s = Math.floor(Math.random()*4294967295);
       const tone = document.getElementById('toneSelect').value;
       showFragment(s, tone);
+      renderConstellations();
     });
 
     document.getElementById('exportSvg').addEventListener('click', ()=>{
@@ -193,10 +239,12 @@
       if(toneEl) toneEl.value = toneParam;
       const seed = provided === null ? nowSeed() : provided;
       showFragment(seed, toneParam);
+      renderConstellations();
       // keep tone selector linked to permalink updates
       document.getElementById('toneSelect').addEventListener('change', (e)=>{
         const s = Number(readSeedFromURL()) || seed;
         showFragment(s, e.target.value);
+        renderConstellations();
       });
     })();
   </script>
