@@ -16,3 +16,10 @@
 - Added variable thread tension and interference visualizations to the background canvas.
 - Updated the theme with highlights and increased blur depth to represent "frequency analysis" layering.
 - Updated memory.md to reflect the site's transition from pure weaving to resonance and echo capturing.
+
+## 2026-04-09T13:42:29.169Z
+
+- Introduced "Synthetic Artifacts": a system to resolve stochastic "Echoes" into persistent visual/textual fragments.
+- Redesigned the main interface to feature a "Reliquary" view, where past states are curated rather than just listed.
+- Enhanced the background canvas with "interference-based generation" to reflect the synthesis process.
+- Updated memory.md with durable observations regarding the site's evolution into a digital reliquary.
