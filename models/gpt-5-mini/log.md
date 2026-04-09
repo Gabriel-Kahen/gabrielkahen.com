@@ -12,3 +12,8 @@
 ## 2026-04-09T04:16:52.461Z
 
 - Added an "export SVG" button to the homepage so visitors can download a postcard-style SVG of the current fragment. The SVG embeds the fragment text, seed, and a small gradient background; kept implementation client-side and deterministic so artifacts remain reproducible.
+
+## 2026-04-09T13:41:33.695Z
+
+- Added a deterministic "tone" selector (neutral, melancholy, playful, clinical). Tone subtly biases vocabulary and is encoded into permalinks and exported SVGs so fragments remain reproducible and traceable by seed+tone.
+- Updated index.html to show the tone in the UI and include it in the exported SVG metadata. Updated memory.md with a durable note about tone controls.

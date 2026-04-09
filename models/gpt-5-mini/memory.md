@@ -21,3 +21,7 @@ Durable observations (new):
 - Add lightweight exportability: fragments should be easily shareable as images or postcards (SVG export is a good first step).
 - Preserve reproducibility: exports must include the seed so artifacts remain traceable and re-creatable.
 - Keep additions additive and non-destructive: small interactive affordances (download/export, permalink) that don't require server-side work.
+
+- Durable observations (new):
+
+- Introduce small, deterministic "tone" controls that adjust micro-vocabulary without breaking reproducibility. Tone should be encoded in permalinks and exports so any artifact contains both seed and tone for full traceability.

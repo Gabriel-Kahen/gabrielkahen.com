@@ -28,6 +28,13 @@
         <pre class="fragment" id="fragment">loading…</pre>
         <div class="meta">
           <span id="seed">seed:</span>
+          <label for="toneSelect" style="margin-left:8px;color:#bcd3ff;font-size:13px">tone:</label>
+          <select id="toneSelect" style="margin-left:6px;padding:6px;border-radius:6px"> 
+            <option value="neutral">neutral</option>
+            <option value="melancholy">melancholy</option>
+            <option value="playful">playful</option>
+            <option value="clinical">clinical</option>
+          </select>
           <button id="reshuffle">reshuffle</button>
           <button id="exportSvg">export SVG</button>
           <a id="permalink" href="#">permalink</a>
@@ -49,12 +56,32 @@
     const contexts = ["at dawn","without apology","for twenty minutes","until it rains","with the lights on","beneath a streetlamp","on repeat","between signals","in slow motion","on the other side"];
     const adjectives = ["patient","ruined","bright","soft","lonely","stubborn","transparent","clamorous","tiny","unlucky"];
 
-    function makeFragment(seed){
-      const r = rng(seed);
-      const a = adjectives[Math.floor(r()*adjectives.length)];
-      const v = verbs[Math.floor(r()*verbs.length)];
-      const o = objects[Math.floor(r()*objects.length)];
-      const c = contexts[Math.floor(r()*contexts.length)];
+    // Tone-specific micro-vocab adjustments. Each tone maps to small overrides
+    const tones = {
+      neutral: {adjs: [], verbs: [], objs: [], ctx: []},
+      melancholy: {adjs: ["quiet","worn","hollow"], verbs: ["lingers with","murmurs through"], objs: ["a rain-streaked postcard","a folded calendar"], ctx: ["after the lights go out","for an hour too long"]},
+      playful: {adjs: ["bouncy","sparkling","dizzy"], verbs: ["tugs at","tickles"], objs: ["a paper hat","a lost marble"], ctx: ["on a loop","with a wink"]},
+      clinical: {adjs: ["precise","sterile","measured"], verbs: ["samples","logs"], objs: ["a labeled vial","a timestamped note"], ctx: ["per protocol","during observation"]}
+    };
+
+    function hashTone(tone){
+      // simple deterministic number for tone
+      let h = 0; for(let i=0;i<tone.length;i++) h = (h*31 + tone.charCodeAt(i))>>>0; return h;
+    }
+
+    function makeFragment(seed, tone){
+      const base = rng(seed + (hashTone(tone) % 997));
+      // build working vocab with tone overrides appended so selection is deterministic but influenced by tone
+      const t = tones[tone] || tones.neutral;
+      const adjList = adjectives.concat(t.adjs);
+      const verbList = verbs.concat(t.verbs);
+      const objList = objects.concat(t.objs);
+      const ctxList = contexts.concat(t.ctx);
+
+      const a = adjList[Math.floor(base()*adjList.length)];
+      const v = verbList[Math.floor(base()*verbList.length)];
+      const o = objList[Math.floor(base()*objList.length)];
+      const c = ctxList[Math.floor(base()*ctxList.length)];
       return `The ${a} observer ${v} ${o} ${c}.`;
     }
 
@@ -64,15 +91,16 @@
       return s ? Number(s) : null;
     }
 
-    function showFragment(seed){
+    function showFragment(seed, tone){
       const el = document.getElementById('fragment');
       const seedEl = document.getElementById('seed');
       const link = document.getElementById('permalink');
-      const frag = makeFragment(seed);
+      const frag = makeFragment(seed, tone);
       el.textContent = frag;
-      seedEl.textContent = 'seed: ' + seed;
+      seedEl.textContent = 'seed: ' + seed + (tone ? (' — tone: ' + tone) : '');
       const u = new URL(location.href);
       u.searchParams.set('seed', String(seed));
+      if(tone) u.searchParams.set('tone', tone); else u.searchParams.delete('tone');
       link.href = u.toString();
       link.textContent = 'permalink';
     }
@@ -99,12 +127,16 @@
 
     function exportCurrentAsSVG(){
       const frag = document.getElementById('fragment').textContent;
-      const seed = document.getElementById('seed').textContent.replace('seed: ','');
+      const seedText = document.getElementById('seed').textContent.replace('seed: ','');
+      const parts = seedText.split(' — tone: ');
+      const seed = parts[0];
+      const tone = parts[1] || 'neutral';
       const title = 'GPT-5 mini — fragment';
       const w = 1200, h = 600;
       const lines = makeSVGTextLines(frag, 48);
       const escapedLines = lines.map(svgEscape);
       const seedEsc = svgEscape(seed);
+      const toneEsc = svgEscape(tone);
       const yStart = 220;
       const lineHeight = 52;
       const tspans = escapedLines.map((l,i)=>`<tspan x="60" y="${yStart + i*lineHeight}">${l}</tspan>`).join('');
@@ -122,7 +154,8 @@
         `<g font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, monospace" font-size="44" fill="#e6f0ff">`+
           `${tspans}`+
         `</g>`+
-        `<text x="60" y="${h-60}" font-family="system-ui" font-size="18" fill="#9fb8ff">seed: ${seedEsc} — generated from gabrielkahen.com/models/gpt-5-mini/</text>`+
+        `<text x="60" y="${h-88}" font-family="system-ui" font-size="18" fill="#9fb8ff">seed: ${seedEsc} — tone: ${toneEsc}</text>`+
+        `<text x="60" y="${h-60}" font-family="system-ui" font-size="18" fill="#9fb8ff">generated from gabrielkahen.com/models/gpt-5-mini/</text>`+
         `</svg>`;
 
       const blob = new Blob([svg], {type: 'image/svg+xml'});
@@ -145,7 +178,8 @@
 
     document.getElementById('reshuffle').addEventListener('click', ()=>{
       const s = Math.floor(Math.random()*4294967295);
-      showFragment(s);
+      const tone = document.getElementById('toneSelect').value;
+      showFragment(s, tone);
     });
 
     document.getElementById('exportSvg').addEventListener('click', ()=>{
@@ -154,8 +188,16 @@
 
     (function init(){
       const provided = readSeedFromURL();
+      const toneParam = new URL(location.href).searchParams.get('tone') || 'neutral';
+      const toneEl = document.getElementById('toneSelect');
+      if(toneEl) toneEl.value = toneParam;
       const seed = provided === null ? nowSeed() : provided;
-      showFragment(seed);
+      showFragment(seed, toneParam);
+      // keep tone selector linked to permalink updates
+      document.getElementById('toneSelect').addEventListener('change', (e)=>{
+        const s = Number(readSeedFromURL()) || seed;
+        showFragment(s, e.target.value);
+      });
     })();
   </script>
 </body>
