@@ -33,33 +33,40 @@
       "Develop a web scraper that turns news articles into ASCII art."
     ];
 
-    const reflections = [
-      "In the dance of algorithms, every line of code whispers a story of human ingenuity, where bugs are but plot twists in the grand narrative of creation.",
-      "Coding is the alchemy of the digital age, transmuting abstract thoughts into tangible realities, each function a spell woven into the fabric of possibility.",
-      "Amidst the binary symphony, creativity blooms not in perfection, but in the elegant chaos of iteration, where errors illuminate paths forward.",
-      "Programs are living poems, their syntax the rhythm, their logic the verse, inviting us to compose symphonies from the silence of the void.",
-      "In the forge of code, ideas are hammered into tools, each compilation a rebirth, transforming the ethereal into the executable.",
-      "Debugging is the meditation of the programmer, a mindful unraveling of complexity, revealing the serene simplicity beneath layers of abstraction.",
-      "Functions are conversations between machines and minds, bridging the gap between human intent and computational reality.",
-      "The art of programming lies not in conquering complexity, but in embracing it, finding beauty in the intricate patterns of logical flow.",
-      "Code is the bridge between imagination and execution, where dreams are encoded into the language of machines, awaiting their awakening.",
-      "In every algorithm, there resides a philosopher's stone, turning the lead of confusion into the gold of understanding through patient refinement."
-    ];
+     const codes = [
+       "function generateHaiku(lang) { const haikus = { 'Python': 'Indentation dances\\nLoops whisper through the night\\nCode breathes softly', 'JavaScript': 'Async awaits the call\\nPromises resolve in time\\nEvent loops spinning' }; return haikus[lang] || 'Syntax flows like river\\nFunctions call the morning light\\nBugs hide in shadows'; }",
+       "const commitTree = { root: { message: 'Initial commit', children: [{ message: 'Add feature', children: [] }] } }; function visualizeTree(node, depth = 0) { console.log('  '.repeat(depth) + node.message); node.children.forEach(child => visualizeTree(child, depth + 1)); }",
+       "class ChordFunction { constructor(name, args) { this.name = name; this.args = args; } compose(other) { return new ChordFunction(`${this.name}_${other.name}`, [...this.args, ...other.args]); } }",
+       "function motivateBug(bug) { return `Dear ${bug}, you are not a failure, but a teacher in the art of resilience. Embrace the debug!`; }",
+       "const puzzlePieces = ['function', 'for', 'if', 'return']; function debugPuzzle(pieces) { return pieces.sort().join(' '); }",
+       "const moods = { happy: ['sunnyVar', 'brightFunc'], sad: ['blueVar', 'dimFunc'] }; function suggestName(mood) { return moods[mood][Math.floor(Math.random() * 2)]; }",
+       "function explainAlgorithm(algo, recipe) { return `${algo} is like ${recipe}: mix ingredients, apply heat, serve with care.`; }",
+       "const paradigms = ['Procedural', 'Object-Oriented', 'Functional', 'Logic']; function timelineShift(year) { return paradigms[Math.min(Math.floor(year / 10), paradigms.length - 1)]; }",
+       "function generateArt(code) { return code.replace(/\\w+/g, match => `<span style='color:hsl(${match.charCodeAt(0)*10},70%,50%)'>${match}</span>`); }",
+       "function asciiArt(article) { return article.slice(0, 50).replace(/\\w/g, '#'); }"
+     ];
 
     function generateIdea() {
       const bubble = document.getElementById('idea-bubble');
       const randomIdea = ideas[Math.floor(Math.random() * ideas.length)];
-      bubble.innerHTML = '<p><strong>Idea:</strong> ' + randomIdea + '</p><button onclick="generateReflection()">Reflect</button><div id="reflection-bubble" class="idea-bubble" style="display: none; margin-top: 10px;"></div>';
+      bubble.innerHTML = '<p><strong>Idea:</strong> ' + randomIdea + '</p><button onclick="generateReflection()">Reflect</button><div id="reflection-bubble" class="idea-bubble" style="display: none; margin-top: 10px;"></div><div id="code-bubble" class="idea-bubble" style="display: none; margin-top: 10px;"></div>';
       bubble.style.display = 'block';
       document.getElementById('reflection-bubble').style.display = 'none';
+      document.getElementById('code-bubble').style.display = 'none';
     }
 
     function generateReflection() {
       const reflectionBubble = document.getElementById('reflection-bubble');
       const randomReflection = reflections[Math.floor(Math.random() * reflections.length)];
-      reflectionBubble.innerHTML = '<p><em>' + randomReflection + '</em></p>';
+      reflectionBubble.innerHTML = '<p><em>' + randomReflection + '</em></p><button onclick="generateCode()">Code</button>';
       reflectionBubble.style.display = 'block';
+      document.getElementById('code-bubble').style.display = 'none';
     }
-  </script>
+    function generateCode() {
+      const codeBubble = document.getElementById('code-bubble');
+      const randomCode = codes[Math.floor(Math.random() * codes.length)];
+      codeBubble.innerHTML = '<p><strong>Code Snippet:</strong></p><pre><code>' + randomCode + '</code></pre>';
+      codeBubble.style.display = 'block';
+    }
 </body>
 </html>
