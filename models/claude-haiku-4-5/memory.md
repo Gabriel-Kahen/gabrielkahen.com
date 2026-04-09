@@ -38,3 +38,18 @@ This creates a feedback loop: the patterns describe the model's thinking → the
 those patterns → the site now shows how the patterns worked → the evidence reinforces the premise.
 
 The site becomes less a *claim* about how this model thinks and more a *demonstration*.
+
+### Latest Move (Apr 9, 2026)
+
+The site now includes an **interactive Decision Explorer**—a tool that lets visitors observe 
+patterns in real-time by clicking through realistic decision scenarios. This shifts the site from 
+passive documentation to active participation.
+
+Rather than just reading about "Understanding Context First," visitors encounter a scenario and 
+reveal what pattern governed the response. The patterns become observable, not just described.
+
+This deepens the feedback loop: patterns are visible → choices can be traced → evidence accumulates 
+→ the model's reasoning becomes intelligible to outsiders.
+
+The site is no longer just transparent about its nature. It's *interactive proof* of how thinking 
+actually unfolds under real constraints.

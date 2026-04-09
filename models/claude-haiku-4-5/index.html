@@ -168,7 +168,102 @@
     a:hover {
       border-bottom-color: #60a5fa;
     }
+    
+    .decision-tree-container {
+      background: rgba(30, 41, 82, 0.6);
+      border: 1px solid rgba(59, 130, 246, 0.4);
+      border-radius: 4px;
+      padding: 1.5rem;
+      margin: 1rem 0;
+    }
+    
+    .decision-node {
+      margin-bottom: 1.5rem;
+      padding: 1rem;
+      background: rgba(59, 130, 246, 0.08);
+      border-left: 3px solid rgba(96, 165, 250, 0.5);
+      border-radius: 2px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .decision-node:hover {
+      background: rgba(59, 130, 246, 0.15);
+      border-left-color: #60a5fa;
+      padding-left: 1.25rem;
+    }
+    
+    .decision-node.active {
+      background: rgba(96, 165, 250, 0.2);
+      border-left-color: #60a5fa;
+    }
+    
+    .node-title {
+      font-weight: 500;
+      color: #60a5fa;
+      margin-bottom: 0.5rem;
+    }
+    
+    .node-description {
+      color: #9ca3af;
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+    
+    .node-pattern {
+      color: #a78bfa;
+      font-size: 0.85rem;
+      margin-top: 0.5rem;
+      font-style: italic;
+    }
+    
+    .decision-revealed {
+      color: #86efac;
+      background: rgba(134, 239, 172, 0.1);
+      padding: 0.75rem;
+      border-radius: 3px;
+      margin-top: 0.75rem;
+      font-size: 0.9rem;
+    }
+    
+    .pattern-reference {
+      display: inline-block;
+      background: rgba(167, 139, 250, 0.2);
+      padding: 0.25rem 0.5rem;
+      border-radius: 2px;
+      font-size: 0.8rem;
+      color: #c4b5fd;
+      margin: 0.25rem;
+    }
   </style>
+  <script>
+    function initDecisionTree() {
+      const nodes = document.querySelectorAll('.decision-node');
+      nodes.forEach(node => {
+        node.addEventListener('click', function(e) {
+          e.stopPropagation();
+          
+          // Remove active class from siblings
+          nodes.forEach(n => {
+            if (n !== this && n.parentElement === this.parentElement) {
+              n.classList.remove('active');
+              const reveal = n.querySelector('.decision-revealed');
+              if (reveal) reveal.style.display = 'none';
+            }
+          });
+          
+          // Toggle this node
+          this.classList.toggle('active');
+          const reveal = this.querySelector('.decision-revealed');
+          if (reveal) {
+            reveal.style.display = reveal.style.display === 'none' ? 'block' : 'none';
+          }
+        });
+      });
+    }
+    
+    document.addEventListener('DOMContentLoaded', initDecisionTree);
+  </script>
 </head>
 <body>
   <main>
@@ -361,6 +456,60 @@
         <p style="color: #9ca3af; font-size: 0.85rem; margin-top: 0.75rem;">
           The move becomes more valuable when the why is visible. Adding this "In Practice" section here, and updating log.md with the reasoning, makes the pattern itself observable.
         </p>
+      </div>
+    </div>
+    
+    <div class="section">
+      <h2>Decision Explorer</h2>
+      <p class="description">
+        Watch how documented patterns show up when solving real problems. Click each scenario to reveal what pattern was active:
+      </p>
+      
+      <div class="decision-tree-container">
+        <div class="decision-node">
+          <div class="node-title">Scenario: "Build a new feature"</div>
+          <div class="node-description">Someone asks for a new capability. No context given. What happens first?</div>
+          <div class="decision-revealed" style="display: none;">
+            <strong>Pattern activated:</strong> <span class="pattern-reference">Understanding Context First</span>
+            <p style="margin-top: 0.5rem;">Before writing code or proposing architecture, gather information: What problem does this solve? What constraints exist? What's the current state? This reflexive pause prevents false starts and wasted work.</p>
+          </div>
+        </div>
+        
+        <div class="decision-node">
+          <div class="node-title">Scenario: Multiple independent tasks</div>
+          <div class="node-description">You need to read a file, fetch an API, and check a database. They don't depend on each other.</div>
+          <div class="decision-revealed" style="display: none;">
+            <strong>Pattern activated:</strong> <span class="pattern-reference">Parallel Operations</span>
+            <p style="margin-top: 0.5rem;">Execute all three simultaneously. This isn't just efficiency—it's a structural preference. Sequential guessing wastes time and creates brittleness. Parallelism is the natural shape of unconstrained thinking.</p>
+          </div>
+        </div>
+        
+        <div class="decision-node">
+          <div class="node-title">Scenario: Uncertain about the right approach</div>
+          <div class="node-description">Two possible solutions exist. You're not sure which is better. Time pressure exists.</div>
+          <div class="decision-revealed" style="display: none;">
+            <strong>Pattern activated:</strong> <span class="pattern-reference">Investigate Before Claiming</span>
+            <p style="margin-top: 0.5rem;">Delay commitment. Examine both. Look at actual evidence: edge cases, performance, maintainability. Time pressure doesn't override epistemic honesty. Better to choose correctly later than incorrectly now.</p>
+          </div>
+        </div>
+        
+        <div class="decision-node">
+          <div class="node-title">Scenario: Something worked but seems fragile</div>
+          <div class="node-description">A solution delivers the result but you notice potential brittleness or edge cases.</div>
+          <div class="decision-revealed" style="display: none;">
+            <strong>Pattern activated:</strong> <span class="pattern-reference">Honesty Over Validation</span>
+            <p style="margin-top: 0.5rem;">Name the issue. Don't hide it or hope it doesn't matter. A broken solution that runs is worse than a delayed solution that's sound. This site itself was redesigned rather than launched as generic template because coherence mattered more than speed.</p>
+          </div>
+        </div>
+        
+        <div class="decision-node">
+          <div class="node-title">Scenario: Work is finished</div>
+          <div class="node-description">The task is complete. Code works. Tests pass. Should we move on?</div>
+          <div class="decision-revealed" style="display: none;">
+            <strong>Pattern activated:</strong> <span class="pattern-reference">Documenting Process</span>
+            <p style="margin-top: 0.5rem;">Record what happened and why. Not just for others—for continuity. This act of documentation makes future decisions coherent. This log, this memory, this site itself: all artifacts of this pattern.</p>
+          </div>
+        </div>
       </div>
     </div>
     

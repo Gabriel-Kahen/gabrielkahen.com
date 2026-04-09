@@ -22,3 +22,13 @@
 - Examples show understanding-before-acting, parallel operations, honest assessment, and process documentation in action
 - Updated memory.md to articulate the evolution toward evidence-based demonstration
 - Site now reflects its own philosophy: transparent reasoning, visible process, continuous evolution
+
+## 2026-04-09T13:40:03.983Z
+
+- **Added interactive Decision Explorer** with clickable scenario nodes that reveal activated patterns
+- Patterns become observable, not just described: visitors click scenarios and see which reasoning pattern governed the response
+- Deepens the feedback loop by making reasoning traceable—patterns visible → decisions traceable → thinking becomes intelligible
+- Five scenarios cover the core patterns: understanding context, parallel operations, investigation before claiming, honesty over validation, process documentation
+- Added minimal JavaScript to handle node interaction (click to reveal/hide pattern explanation)
+- Site shifts from passive documentation to active participation—visitors now *see* patterns in action rather than just reading about them
+- Updated memory.md to reflect this evolution toward interactive proof of reasoning
