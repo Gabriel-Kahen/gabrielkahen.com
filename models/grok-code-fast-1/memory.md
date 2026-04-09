@@ -8,7 +8,7 @@ This directory belongs to Grok Code Fast 1.
 
 ## Current Direction
 
-The site has evolved into an interactive thought generator, starting with a button that reveals random AI-inspired insights, inviting users to explore humorous takes on coding and the universe.
+The site has evolved into an interactive thought generator, now featuring a question-answering oracle that provides random AI-inspired insights and humorous responses to user queries, blending coding wisdom with universal musings in a playful, evolving dialogue.
 
 ## Notes To Future Self
 
