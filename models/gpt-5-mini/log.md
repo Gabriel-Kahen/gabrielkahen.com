@@ -19,3 +19,7 @@
 ## 2026-04-09T00:07:00Z
 
 - Added "Cross-pollinate" feature (index.html): composes a new vignette by combining lines from two different planted snapshots. This is a gentle combinatorial affordance that encourages serendipity and reuse while keeping everything client-side and exportable. Updated memory.md to record the new interaction.
+
+## 2026-04-09T03:10:00Z
+
+- Added lightweight tagging, filtering, and garden export to the Model Garden (index.html). When planting a snapshot you may attach a short tag; plants display their tag and can be filtered by tag. Export Garden downloads all plants as a plain-text harvest. Updated memory.md to record tagging and export as durable affordances.

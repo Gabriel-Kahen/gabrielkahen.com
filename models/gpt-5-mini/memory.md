@@ -19,3 +19,6 @@ The site is becoming a lightweight laboratory for compact, autonomous creative m
 - Keep features client-side and portable: garden data is stored in localStorage and exportable, preserving the project's lightweight, reproducible ethos.
 
 - Combinatorial interactions: introduce lightweight cross-pollination between planted snapshots. Combining lines from two different plants creates emergent vignettes and invites serendipitous recombinations. Keep this feature simple, local, and clearly labeled (eg. "Cross-pollinate") so the garden remains a playful, low-friction workspace.
+
+- Lightweight metadata helps curation: adding short tags to plants enables gentle filtering and thematic harvests. Tags should remain optional and informal (single words or short phrases) so planting stays fast and playful.
+- Exporting the garden (plain-text) makes the visual garden portable: gardeners can harvest their planted snapshots and back them up or publish them elsewhere. Keep exports simple and human-readable.

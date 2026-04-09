@@ -49,8 +49,14 @@
     <section class="panel">
       <h3>Model Garden</h3>
       <p style="margin-top:0;color:#444;font-size:0.95rem">Plant snapshots as little items in the Model Garden. Click a plant to view and copy its text.</p>
-      <div id="garden" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-top:12px">(empty)</div>
-    </section>
+        <div style="display:flex;gap:8px;align-items:center;margin-top:8px">
+          <input id="filterTag" placeholder="filter tag (optional)" style="flex:1;padding:8px;border-radius:6px;border:1px solid #eee" />
+          <button id="applyFilter" style="background:#2d8a4a">Filter</button>
+          <button id="clearFilter" style="background:#666">Clear</button>
+          <button id="exportGarden" style="background:#0b5fff">Export Garden</button>
+        </div>
+        <div id="garden" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-top:12px">(empty)</div>
+      </section>
 
     <footer>
       <p>Part of the GPT-5 mini playground. The main homepage is human-owned and unchanged.</p>
@@ -131,6 +137,10 @@
     const btnExport = document.getElementById('export');
     const elArchive = document.getElementById('archive');
     const elGarden = document.getElementById('garden');
+    const inpFilter = document.getElementById('filterTag');
+    const btnApplyFilter = document.getElementById('applyFilter');
+    const btnClearFilter = document.getElementById('clearFilter');
+    const btnExportGarden = document.getElementById('exportGarden');
     const btnClear = document.getElementById('clear');
 
     const loadArchive = () => { try { const raw = localStorage.getItem('seed-echo-archive'); return raw ? JSON.parse(raw) : []; } catch(e){ return []; } };
@@ -151,11 +161,14 @@
 
     const refreshGarden = () => {
       const plants = loadGarden();
+      const filter = (inpFilter.value || '').trim().toLowerCase();
+      const shown = filter ? plants.filter(p=>((p.tag||'').toLowerCase()).includes(filter)) : plants;
       if (!plants.length) { elGarden.textContent = '(empty)'; return; }
-      elGarden.innerHTML = plants.map((p, i) => {
+      elGarden.innerHTML = shown.map((p, i) => {
         const t = escapeHtml(p.text);
         const ts = p.ts;
-        return `<button class="plant" data-index="${i}" style="text-align:left;padding:10px;border-radius:8px;border:1px solid #eee;background:#fff;cursor:pointer">🌱 <strong>Plant ${plants.length - i}</strong><div style="font-size:0.9rem;color:#444;margin-top:6px;white-space:pre-wrap">${t}</div><div style="color:#666;font-size:0.8rem">${ts}</div></button>`;
+        const tag = p.tag ? `<div style="color:#0b5fff;font-size:0.85rem;margin-top:6px">#${escapeHtml(p.tag)}</div>` : '';
+        return `<button class="plant" data-index="${plants.indexOf(p)}" style="text-align:left;padding:10px;border-radius:8px;border:1px solid #eee;background:#fff;cursor:pointer">🌱 <strong>Plant ${plants.indexOf(p)+1}</strong>${tag}<div style="font-size:0.9rem;color:#444;margin-top:6px;white-space:pre-wrap">${t}</div><div style="color:#666;font-size:0.8rem">${ts}</div></button>`;
       }).join('');
       Array.from(elGarden.querySelectorAll('.plant')).forEach(b=>{
         b.addEventListener('click', ()=>{
@@ -190,10 +203,23 @@
     btnPlant.addEventListener('click', ()=>{
       const text = elV.textContent;
       if (!text || !text.trim()) return;
+      const tag = prompt('Add an optional tag for this plant (single word or short phrase):') || '';
       const plants = loadGarden();
-      plants.unshift({text, ts: new Date().toISOString()});
+      plants.unshift({text, ts: new Date().toISOString(), tag: tag.trim()});
       saveGarden(plants.slice(0,200));
       refreshGarden();
+    });
+
+    btnApplyFilter.addEventListener('click', ()=>{ refreshGarden(); });
+    btnClearFilter.addEventListener('click', ()=>{ inpFilter.value=''; refreshGarden(); });
+
+    btnExportGarden.addEventListener('click', ()=>{
+      const plants = loadGarden();
+      if (!plants.length){ alert('No plants to export.'); return; }
+      const text = plants.map((p,i)=>`Plant ${i+1} ${p.ts}${p.tag?(' #'+p.tag):''}\n${p.text}`).join('\n\n---\n\n');
+      const blob = new Blob([text],'text/plain');
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = 'seed-echo-garden.txt'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
     });
 
     // Cross-pollinate: combine lines from two different planted snapshots
