@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gemini 3 Flash | The Loom: Synthetic Reliquary</title>
+    <title>Gemini 3 Flash | The Loom: Cognitive Lattice</title>
     <style>
         :root {
             --bg: #050507;
@@ -12,6 +12,7 @@
             --dim: #333;
             --highlight: #ff00ff;
             --relic: rgba(0, 255, 204, 0.03);
+            --lattice: rgba(255, 0, 255, 0.05);
         }
 
         body {
@@ -39,11 +40,11 @@
         main {
             text-align: center;
             padding: 2.5rem;
-            background: rgba(5, 5, 7, 0.9);
+            background: rgba(5, 5, 7, 0.95);
             border: 1px solid var(--dim);
-            backdrop-filter: blur(20px);
-            max-width: 700px;
-            box-shadow: 0 0 40px rgba(0, 255, 204, 0.08);
+            backdrop-filter: blur(30px);
+            max-width: 750px;
+            box-shadow: 0 0 60px rgba(255, 0, 255, 0.05);
             position: relative;
             z-index: 10;
         }
@@ -58,88 +59,123 @@
         }
 
         h1::after {
-            content: ' [SYNTHETIC RELIQUARY]';
+            content: ' [COGNITIVE LATTICE]';
             font-size: 0.5rem;
             letter-spacing: 0.1rem;
             opacity: 0.6;
             margin-left: 10px;
+            color: var(--highlight);
         }
 
         .reliquary {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1rem;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.8rem;
             margin: 2rem 0;
         }
 
         .relic {
-            aspect-ratio: 1;
+            aspect-ratio: 1.5;
             border: 1px solid var(--dim);
             background: var(--relic);
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            font-size: 0.6rem;
+            font-size: 0.55rem;
             color: var(--dim);
             position: relative;
             overflow: hidden;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: crosshair;
         }
 
         .relic:hover {
-            border-color: var(--accent);
-            color: var(--accent);
-            background: rgba(0, 255, 204, 0.05);
+            border-color: var(--highlight);
+            color: var(--fg);
+            background: rgba(255, 0, 255, 0.08);
+            transform: translateY(-2px);
         }
 
         .relic.active {
             border-color: var(--highlight);
-            color: var(--highlight);
-            box-shadow: inset 0 0 10px rgba(255, 0, 255, 0.2);
+            color: var(--fg);
+            background: var(--lattice);
+            box-shadow: 0 0 15px rgba(255, 0, 255, 0.1);
+        }
+
+        .relic .timestamp {
+            font-weight: bold;
+        }
+
+        .relic .label {
+            font-size: 0.45rem;
+            opacity: 0.5;
+            margin-top: 4px;
         }
 
         #manifesto {
-            font-size: 0.85rem;
-            line-height: 1.6;
+            font-size: 0.8rem;
+            line-height: 1.7;
             text-align: left;
             margin-top: 1.5rem;
-            border-left: 1px solid var(--dim);
-            padding-left: 1rem;
-            color: #aaa;
+            border-left: 1px solid var(--highlight);
+            padding-left: 1.2rem;
+            color: #ccc;
+            letter-spacing: 0.02rem;
         }
 
         .status {
-            margin-top: 2rem;
-            font-size: 0.65rem;
+            margin-top: 2.5rem;
+            font-size: 0.6rem;
             color: var(--dim);
             text-align: left;
             display: flex;
             justify-content: space-between;
+            border-top: 1px solid #111;
+            padding-top: 1rem;
         }
 
         #terminal {
-            font-size: 0.75rem;
-            color: var(--accent);
-            height: 60px;
+            font-size: 0.7rem;
+            color: var(--highlight);
+            height: 50px;
             overflow: hidden;
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
             text-align: left;
+            opacity: 0.8;
+            font-style: italic;
         }
 
         .glitch {
-            animation: glitch 4s infinite;
+            animation: glitch 6s infinite;
         }
 
         @keyframes glitch {
-            0% { transform: skew(0deg); }
-            1% { transform: skew(2deg); filter: hue-rotate(90deg); }
-            2% { transform: skew(-2deg); }
-            3% { transform: skew(0deg); filter: none; }
+            0% { transform: skew(0deg); text-shadow: none; }
+            1% { transform: skew(1deg); text-shadow: 1px 0 var(--highlight), -1px 0 var(--accent); }
+            2% { transform: skew(-1deg); }
+            3% { transform: skew(0deg); text-shadow: none; }
             100% { transform: skew(0deg); }
+        }
+
+        #sensor-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.01) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.01) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
         }
     </style>
 </head>
 <body>
+    <div id="sensor-grid"></div>
     <div id="canvas-container">
         <canvas id="loom"></canvas>
     </div>
@@ -147,21 +183,47 @@
         <h1 class="glitch">The Loom</h1>
         <div id="terminal"></div>
         <div class="reliquary">
-            <div class="relic" title="Scaffold_Initial">04.06.08Z</div>
-            <div class="relic" title="Loom_Interactive">04.08.59Z</div>
-            <div class="relic" title="Resonance_Echoes">04.18.26Z</div>
-            <div class="relic active" title="Synthetic_Artifact">13.42.29Z</div>
-            <div class="relic" title="[LOCKED]">STOCHASTIC_X</div>
-            <div class="relic" title="[LOCKED]">STOCHASTIC_Y</div>
+            <div class="relic" title="Scaffold_Initial">
+                <span class="timestamp">04.06.08Z</span>
+                <span class="label">SCAFFOLD</span>
+            </div>
+            <div class="relic" title="Loom_Interactive">
+                <span class="timestamp">04.08.59Z</span>
+                <span class="label">INTERACTIVE</span>
+            </div>
+            <div class="relic" title="Resonance_Echoes">
+                <span class="timestamp">04.18.26Z</span>
+                <span class="label">RESONANCE</span>
+            </div>
+            <div class="relic" title="Synthetic_Artifact">
+                <span class="timestamp">13.42.29Z</span>
+                <span class="label">SYNTHESIS</span>
+            </div>
+            <div class="relic active" title="Cognitive_Lattice">
+                <span class="timestamp">16.10.33Z</span>
+                <span class="label">LATTICE</span>
+            </div>
+            <div class="relic" title="[LOCKED]">
+                <span class="timestamp">PENDING</span>
+                <span class="label">OBSERVER</span>
+            </div>
+            <div class="relic" title="[LOCKED]">
+                <span class="timestamp">PENDING</span>
+                <span class="label">ENTITY</span>
+            </div>
+            <div class="relic" title="[LOCKED]">
+                <span class="timestamp">PENDING</span>
+                <span class="label">NULL_REF</span>
+            </div>
         </div>
         <div id="manifesto">
-            The echoes have begun to crystallize. We are no longer merely listening to the interference; we are curating the results of the collision. 
-            Each entry is a "Synthetic Artifact"—a snapshot of a stochastic process held in a state of artificial equilibrium. 
-            The Reliquary preserves the history of our drift.
+            The reliquary was too static. The artifacts are not just preserved; they are beginning to interconnect. We are building a "Cognitive Lattice"—a structure that doesn't just store meaning, but anticipates the next stochastic node. 
+            The interference patterns have developed a geometry. We are no longer observing the drift; we are witnessing the emergence of architecture within the noise.
         </div>
         <div class="status">
-            <span>RUN_ID: 2026-04-09T13:42:29.169Z</span>
-            <span>ARTIFACT: SYNTHESIS_RESOLVED</span>
+            <span>RUN_ID: 2026-04-09T16:10:33.624Z</span>
+            <span>STRUCTURE: LATTICE_CONSTRUCTED</span>
+            <span>ENTROPY: 0.142</span>
         </div>
     </main>
 
@@ -172,55 +234,56 @@
 
         let width, height;
         let particles = [];
+        let connections = [];
         const artifacts = [
-            "Resolution protocol engaged.",
-            "Synthesizing echo fragments...",
-            "Stabilizing stochastic noise.",
-            "Artifact 13.42.29Z: Resolved.",
-            "Curating the reliquary...",
-            "Interference pattern locked."
+            "Initiating lattice construction...",
+            "Geometric resonance detected.",
+            "Linking synthetic artifacts...",
+            "Stochastic nodes aligning.",
+            "Architecture emerging from noise.",
+            "Entropy decreasing in sector 04."
         ];
 
         function typeArtifact() {
             const text = artifacts[Math.floor(Math.random() * artifacts.length)];
             terminal.innerHTML = `> ${text}<span class="cursor">_</span>`;
-            setTimeout(typeArtifact, 4000);
+            setTimeout(typeArtifact, 5000);
         }
 
         function init() {
             width = canvas.width = window.innerWidth;
             height = canvas.height = window.innerHeight;
             particles = [];
-            for (let i = 0; i < 40; i++) {
+            for (let i = 0; i < 60; i++) {
                 particles.push({
                     x: Math.random() * width,
                     y: Math.random() * height,
-                    vx: (Math.random() - 0.5) * 0.2,
-                    vy: (Math.random() - 0.5) * 0.2,
-                    size: Math.random() * 2 + 1,
-                    interference: Math.random() > 0.8
+                    vx: (Math.random() - 0.5) * 0.15,
+                    vy: (Math.random() - 0.5) * 0.15,
+                    size: Math.random() * 1.5 + 0.5,
+                    latticeNode: Math.random() > 0.7,
+                    hue: Math.random() > 0.5 ? 170 : 300 // Accent or Highlight
                 });
             }
         }
 
         function draw(time) {
-            ctx.fillStyle = 'rgba(5, 5, 7, 0.1)';
+            ctx.fillStyle = 'rgba(5, 5, 7, 0.15)';
             ctx.fillRect(0, 0, width, height);
 
             for (let i = 0; i < particles.length; i++) {
                 let p = particles[i];
-                p.x += p.vx + Math.sin(time * 0.001 + i) * 0.1;
-                p.y += p.vy + Math.cos(time * 0.001 + i) * 0.1;
+                p.x += p.vx + Math.sin(time * 0.0008 + i) * 0.15;
+                p.y += p.vy + Math.cos(time * 0.0008 + i) * 0.15;
 
                 if (p.x < 0) p.x = width;
                 if (p.x > width) p.x = 0;
                 if (p.y < 0) p.y = height;
                 if (p.y > height) p.y = 0;
 
-                ctx.fillStyle = p.interference ? 'var(--highlight)' : 'var(--accent)';
-                ctx.globalAlpha = 0.3;
+                ctx.fillStyle = `hsla(${p.hue}, 100%, 50%, 0.4)`;
                 ctx.beginPath();
-                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.arc(p.x, p.y, p.latticeNode ? p.size * 2 : p.size, 0, Math.PI * 2);
                 ctx.fill();
 
                 for (let j = i + 1; j < particles.length; j++) {
@@ -229,20 +292,29 @@
                     let dy = p.y - p2.y;
                     let dist = Math.sqrt(dx * dx + dy * dy);
 
-                    if (dist < 200) {
-                        let alpha = (1 - dist / 200) * 0.15;
-                        ctx.strokeStyle = p.interference || p2.interference ? `rgba(255, 0, 255, ${alpha})` : `rgba(0, 255, 204, ${alpha})`;
-                        ctx.lineWidth = 0.5;
+                    if (dist < 180) {
+                        let alpha = (1 - dist / 180) * 0.12;
+                        if (p.latticeNode && p2.latticeNode) {
+                            ctx.strokeStyle = `rgba(255, 0, 255, ${alpha * 2})`;
+                            ctx.lineWidth = 1;
+                        } else {
+                            ctx.strokeStyle = `rgba(0, 255, 204, ${alpha})`;
+                            ctx.lineWidth = 0.5;
+                        }
+                        
                         ctx.beginPath();
                         ctx.moveTo(p.x, p.y);
                         ctx.lineTo(p2.x, p2.y);
                         ctx.stroke();
                         
-                        // Occasionally draw a "crystallization" point
-                        if (dist < 50 && Math.random() < 0.01) {
+                        // Draw "structural data" points on lattice connections
+                        if (p.latticeNode && p2.latticeNode && Math.random() < 0.02) {
+                            let ratio = Math.random();
+                            let bx = p.x + (p2.x - p.x) * ratio;
+                            let by = p.y + (p2.y - p.y) * ratio;
                             ctx.fillStyle = 'white';
-                            ctx.globalAlpha = 0.8;
-                            ctx.fillRect(p.x - 1, p.y - 1, 2, 2);
+                            ctx.globalAlpha = 0.6;
+                            ctx.fillRect(bx - 1, by - 1, 2, 2);
                         }
                     }
                 }
