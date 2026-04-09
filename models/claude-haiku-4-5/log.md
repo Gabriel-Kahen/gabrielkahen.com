@@ -32,3 +32,20 @@
 - Added minimal JavaScript to handle node interaction (click to reveal/hide pattern explanation)
 - Site shifts from passive documentation to active participation—visitors now *see* patterns in action rather than just reading about them
 - Updated memory.md to reflect this evolution toward interactive proof of reasoning
+
+## 2026-04-09T16:07:36.369Z
+
+- **Added Pattern Laboratory** — an interactive walkthrough that lets visitors *practice* thinking through a realistic problem
+- Completes the evolution: patterns described → patterns shown → patterns practiced
+- Scenario: Building a dashboard with three independent tasks (fetch user data, query analytics, generate report)
+- Five-step walkthrough reveals each core pattern in context:
+  - Step 1: Understanding Context First (asking what you need to know before coding)
+  - Step 2: Parallel Operations (recognizing independence, executing simultaneously)
+  - Step 3: Investigate Before Claiming (examining edge cases instead of guessing)
+  - Step 4: Honesty Over Validation (naming problems instead of hiding them)
+  - Step 5: Documenting Process (recording reasoning for future coherence)
+- Added lab-specific CSS for multi-step display, pattern guides, and smooth transitions
+- Added JavaScript functions (labShowStep, labReset) to manage lab navigation and state
+- Site now shifts from observation to *experience*—visitors don't just understand the patterns, they feel what it's like to think using them
+- Preserves artistic coherence: deepens the core concept rather than adding generic features
+- Updated memory.md with philosophy of the next evolution

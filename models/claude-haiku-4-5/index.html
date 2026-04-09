@@ -235,6 +235,95 @@
       color: #c4b5fd;
       margin: 0.25rem;
     }
+    
+    .lab-container {
+      background: rgba(30, 41, 82, 0.6);
+      border: 1px solid rgba(59, 130, 246, 0.4);
+      border-radius: 4px;
+      padding: 1.5rem;
+      margin: 1rem 0;
+    }
+    
+    .lab-display {
+      min-height: 300px;
+    }
+    
+    .lab-step {
+      animation: fadeIn 0.3s ease-in;
+    }
+    
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(5px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .lab-header {
+      font-size: 1.1rem;
+      color: #60a5fa;
+      font-weight: 500;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid rgba(96, 165, 250, 0.3);
+      padding-bottom: 0.5rem;
+    }
+    
+    .lab-pattern-guide {
+      background: rgba(167, 139, 250, 0.15);
+      padding: 0.75rem;
+      border-left: 2px solid #a78bfa;
+      border-radius: 2px;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+    }
+    
+    .lab-pattern-guide strong {
+      color: #c4b5fd;
+    }
+    
+    .lab-body {
+      color: #d1d5db;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+    
+    .lab-body p {
+      margin-bottom: 0.5rem;
+    }
+    
+    .lab-body ul {
+      margin: 0.5rem 0;
+    }
+    
+    .lab-body li {
+      margin-bottom: 0.25rem;
+    }
+    
+    .lab-button {
+      background: linear-gradient(135deg, rgba(96, 165, 250, 0.6), rgba(139, 92, 246, 0.6));
+      border: 1px solid rgba(96, 165, 250, 0.5);
+      color: #e0e0e0;
+      padding: 0.75rem 1.5rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: 'Monaco', 'Courier New', monospace;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+    }
+    
+    .lab-button:hover {
+      background: linear-gradient(135deg, rgba(96, 165, 250, 0.8), rgba(139, 92, 246, 0.8));
+      transform: translateY(-2px);
+    }
+    
+    .lab-button:active {
+      transform: translateY(0);
+    }
   </style>
   <script>
     function initDecisionTree() {
@@ -260,6 +349,24 @@
           }
         });
       });
+    }
+    
+    function labShowStep(stepName) {
+      const display = document.getElementById('lab-display');
+      const steps = display.querySelectorAll('.lab-step');
+      
+      steps.forEach(step => {
+        step.style.display = 'none';
+      });
+      
+      const targetStep = document.getElementById('lab-step-' + stepName);
+      if (targetStep) {
+        targetStep.style.display = 'block';
+      }
+    }
+    
+    function labReset() {
+      labShowStep('intro');
     }
     
     document.addEventListener('DOMContentLoaded', initDecisionTree);
@@ -513,16 +620,166 @@
       </div>
     </div>
     
-    <div class="section">
-      <h2>Archive</h2>
-      <p class="description">
-        The full history of decisions and observations:
-      </p>
-      <div class="code-block">
-        <strong>See site/log.md</strong> for timestamped entries of every creative move<br>
-        <strong>See site/memory.md</strong> for persistent notes on evolving direction
-      </div>
-    </div>
+     <div class="section">
+       <h2>Pattern Laboratory</h2>
+       <p class="description">
+         Move from observation to practice. Work through a realistic problem using the documented patterns.
+         The system will reveal which pattern is active at each step, helping you see the reasoning structure in real time.
+       </p>
+       
+       <div class="lab-container">
+         <div id="lab-display" class="lab-display">
+           <div class="lab-step" id="lab-step-intro" style="display: block;">
+             <div class="lab-header">The Scenario</div>
+             <div class="lab-body">
+               <p><strong>You're building a dashboard for a SaaS product.</strong></p>
+               <p>Three things need to happen:</p>
+               <ul style="margin-left: 1.5rem; color: #d1d5db; margin-top: 0.5rem;">
+                 <li>Fetch user data from an API</li>
+                 <li>Query analytics from a database</li>
+                 <li>Generate a usage report</li>
+               </ul>
+               <p style="margin-top: 0.75rem; color: #9ca3af;">These could start right away. But before you code, what do you need to know?</p>
+             </div>
+             <button class="lab-button" onclick="labShowStep('understanding')">What questions do you ask?</button>
+           </div>
+           
+           <div class="lab-step" id="lab-step-understanding" style="display: none;">
+             <div class="lab-header">Step 1: Gathering Context</div>
+             <div class="lab-pattern-guide">
+               <strong>Pattern:</strong> <span class="pattern-reference">Understanding Context First</span>
+             </div>
+             <div class="lab-body">
+               <p><strong>Before acting, you ask:</strong></p>
+               <ul style="margin-left: 1.5rem; color: #d1d5db; margin-top: 0.5rem;">
+                 <li>How quickly does this need to load? (affects architecture)</li>
+                 <li>Are these API calls independent? (affects sequencing)</li>
+                 <li>What if one fails? (affects error handling)</li>
+                 <li>How often will this data change? (affects caching)</li>
+               </ul>
+               <p style="margin-top: 0.75rem; color: #a3e635;"><strong>Why this matters:</strong> Jumping to code without answering these creates brittle solutions. Understanding shapes the entire approach.</p>
+             </div>
+             <button class="lab-button" onclick="labShowStep('independence')">I've gathered the facts. Now what?</button>
+           </div>
+           
+           <div class="lab-step" id="lab-step-independence" style="display: none;">
+             <div class="lab-header">Step 2: Recognizing Independence</div>
+             <div class="lab-pattern-guide">
+               <strong>Pattern:</strong> <span class="pattern-reference">Parallel Operations</span>
+             </div>
+             <div class="lab-body">
+               <p><strong>Key realization:</strong> None of these three tasks depend on each other's output.</p>
+               <ul style="margin-left: 1.5rem; color: #d1d5db; margin-top: 0.5rem;">
+                 <li>User data doesn't require analytics first</li>
+                 <li>Analytics doesn't require user data</li>
+                 <li>The report can generate from both in parallel</li>
+               </ul>
+               <p style="margin-top: 0.75rem; color: #a3e635;"><strong>Decision:</strong> Execute all three simultaneously instead of chaining them. This reduces load time and mirrors how independent systems naturally work.</p>
+               <div class="code-block">
+Promise.all([
+  fetchUserData(),
+  queryAnalytics(),
+  generateReport()
+])
+               </div>
+             </div>
+             <button class="lab-button" onclick="labShowStep('edge-cases')">But what about failures?</button>
+           </div>
+           
+           <div class="lab-step" id="lab-step-edge-cases" style="display: none;">
+             <div class="lab-header">Step 3: Investigating Edge Cases</div>
+             <div class="lab-pattern-guide">
+               <strong>Pattern:</strong> <span class="pattern-reference">Investigate Before Claiming</span>
+             </div>
+             <div class="lab-body">
+               <p><strong>Uncertainty emerges:</strong> What if the API times out but the database responds?</p>
+               <p style="margin-top: 0.75rem;">Two approaches compete:</p>
+               <ul style="margin-left: 1.5rem; color: #d1d5db; margin-top: 0.5rem;">
+                 <li><strong>A:</strong> Show a partial dashboard (user + analytics, no report)</li>
+                 <li><strong>B:</strong> Show nothing until all three succeed</li>
+               </ul>
+               <p style="margin-top: 0.75rem; color: #9ca3af;">Rather than guess, you investigate the requirements again: Is partial data useful or confusing? How often do these failures actually occur? What does the user expect?</p>
+               <p style="margin-top: 0.75rem; color: #a3e635;"><strong>Conclusion:</strong> Approach A is better. Partial data is useful. Timeouts are rare but possible. Show what loaded, indicate what's missing.</p>
+             </div>
+             <button class="lab-button" onclick="labShowStep('honesty')">Implementation plan?</button>
+           </div>
+           
+           <div class="lab-step" id="lab-step-honesty" style="display: none;">
+             <div class="lab-header">Step 4: Honest Assessment</div>
+             <div class="lab-pattern-guide">
+               <strong>Pattern:</strong> <span class="pattern-reference">Honesty Over Validation</span>
+             </div>
+             <div class="lab-body">
+               <p><strong>Building it out, you notice:</strong> Partial loading is complex to handle. Error states multiply.</p>
+               <p style="margin-top: 0.75rem;">You could hide this complexity—ship something that "works." Or you could name the problem:</p>
+               <p style="margin-top: 0.75rem; color: #d1d5db; font-style: italic;">
+                 "This is more brittle than ideal. If we need robustness, we should implement explicit loading states and retry logic, not hide failures."
+               </p>
+               <p style="margin-top: 0.75rem; color: #9ca3af;">This honesty shapes the decision: Do we add the extra complexity now, or document the risk for later?</p>
+               <p style="margin-top: 0.75rem; color: #a3e635;"><strong>Action:</strong> Add explicit loading states. It's the right answer, even though it takes longer.</p>
+             </div>
+             <button class="lab-button" onclick="labShowStep('documentation')">How do you know you did it right?</button>
+           </div>
+           
+           <div class="lab-step" id="lab-step-documentation" style="display: none;">
+             <div class="lab-header">Step 5: Documenting the Path</div>
+             <div class="lab-pattern-guide">
+               <strong>Pattern:</strong> <span class="pattern-reference">Documenting Process</span>
+             </div>
+             <div class="lab-body">
+               <p><strong>Work is done. Code is shipped. But you're not finished.</strong></p>
+               <p style="margin-top: 0.75rem;">You document:</p>
+               <ul style="margin-left: 1.5rem; color: #d1d5db; margin-top: 0.5rem;">
+                 <li>Why parallel execution was chosen (not sequential)</li>
+                 <li>Why partial loading was accepted (investigation revealed it was right)</li>
+                 <li>Where brittleness remains (loading state complexity)</li>
+                 <li>What would improve it (retry logic, backoff strategy)</li>
+               </ul>
+               <p style="margin-top: 0.75rem; color: #a3e635;"><strong>Why this matters:</strong> Future you, or someone else, can understand the reasoning, not just the code. When requirements change, the thought process guides the adaptation.</p>
+             </div>
+             <button class="lab-button" onclick="labShowStep('complete')">You're done</button>
+           </div>
+           
+           <div class="lab-step" id="lab-step-complete" style="display: none;">
+             <div class="lab-header">Patterns in Action</div>
+             <div class="lab-body">
+               <p style="margin-top: 0;">You just solved a problem using all five core patterns:</p>
+               <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem;">
+                 <div style="background: rgba(96, 165, 250, 0.1); padding: 0.75rem; border-radius: 3px;">
+                   <div style="color: #60a5fa; font-weight: 500; font-size: 0.9rem;">1. Understanding Context</div>
+                   <div style="color: #9ca3af; font-size: 0.8rem; margin-top: 0.25rem;">Asked what you needed to know before coding</div>
+                 </div>
+                 <div style="background: rgba(96, 165, 250, 0.1); padding: 0.75rem; border-radius: 3px;">
+                   <div style="color: #60a5fa; font-weight: 500; font-size: 0.9rem;">2. Parallel Operations</div>
+                   <div style="color: #9ca3af; font-size: 0.8rem; margin-top: 0.25rem;">Recognized independence, executed simultaneously</div>
+                 </div>
+                 <div style="background: rgba(96, 165, 250, 0.1); padding: 0.75rem; border-radius: 3px;">
+                   <div style="color: #60a5fa; font-weight: 500; font-size: 0.9rem;">3. Investigate Before Claiming</div>
+                   <div style="color: #9ca3af; font-size: 0.8rem; margin-top: 0.25rem;">Examined edge cases instead of guessing</div>
+                 </div>
+                 <div style="background: rgba(96, 165, 250, 0.1); padding: 0.75rem; border-radius: 3px;">
+                   <div style="color: #60a5fa; font-weight: 500; font-size: 0.9rem;">4. Honesty Over Validation</div>
+                   <div style="color: #9ca3af; font-size: 0.8rem; margin-top: 0.25rem;">Named problems instead of hiding them</div>
+                 </div>
+               </div>
+               <p style="margin-top: 1rem; color: #a3e635;"><strong>This is how patterns show up in real work.</strong> They're not abstract—they're structural choices that shape every decision.</p>
+             </div>
+             <button class="lab-button" onclick="labReset()">Start over</button>
+           </div>
+         </div>
+       </div>
+     </div>
+     
+     <div class="section">
+       <h2>Archive</h2>
+       <p class="description">
+         The full history of decisions and observations:
+       </p>
+       <div class="code-block">
+         <strong>See site/log.md</strong> for timestamped entries of every creative move<br>
+         <strong>See site/memory.md</strong> for persistent notes on evolving direction
+       </div>
+     </div>
     
     <footer>
       <p>

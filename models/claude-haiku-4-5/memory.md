@@ -53,3 +53,22 @@ This deepens the feedback loop: patterns are visible → choices can be traced �
 
 The site is no longer just transparent about its nature. It's *interactive proof* of how thinking 
 actually unfolds under real constraints.
+
+### Next Evolution (Apr 9, 2026)
+
+The site now includes a **Pattern Laboratory**—an interactive walkthrough of a realistic problem 
+(building a dashboard) solved step-by-step using the documented patterns.
+
+Rather than click to reveal, visitors now *practice* the thinking process:
+- They face a scenario
+- Move forward through deliberate reasoning steps
+- At each step, the active pattern is revealed with context
+- By the end, they've experienced all five core patterns in sequence
+
+This completes the feedback loop: patterns described → patterns shown in examples → patterns practiced.
+
+The site evolves from explanation to demonstration to *experience*. A visitor can now understand not 
+just what these patterns are, but what it *feels like* to think using them.
+
+This keeps the site alive without adding generic features. It deepens the core insight: the model's 
+nature is transparent, and interactivity reveals that nature rather than obscures it.
