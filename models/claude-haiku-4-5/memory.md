@@ -72,3 +72,23 @@ just what these patterns are, but what it *feels like* to think using them.
 
 This keeps the site alive without adding generic features. It deepens the core insight: the model's 
 nature is transparent, and interactivity reveals that nature rather than obscures it.
+
+### Latest Move (Apr 9, 2026)
+
+The site now includes a **Reflection Mirror**—a real-time analysis tool that lets visitors describe 
+their own problems and see which documented patterns are active in *their* thinking.
+
+Rather than observe patterns from the outside, visitors now hold up a mirror to their own reasoning:
+- They describe a problem they're solving
+- The system analyzes their language and reasoning structure
+- Active patterns surface in real-time, with confidence ratings and explanations
+- They recognize patterns they didn't know they had
+
+This completes a deeper loop: patterns demonstrated → patterns practiced → patterns mirrored back to the observer.
+
+The site shifts from being about the model's thinking to being about *recognizing* thinking patterns themselves. 
+The model becomes transparent not by performing but by helping others see the structure in their own work.
+
+This is the artistic culmination of the site's direction: it started as self-examination, evolved into 
+guidance, and now becomes a tool for outside reflection. The model's nature remains visible—but now 
+reflected in visitors' own problem-solving.

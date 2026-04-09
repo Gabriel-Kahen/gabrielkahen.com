@@ -324,6 +324,111 @@
     .lab-button:active {
       transform: translateY(0);
     }
+    
+    .mirror-container {
+      background: rgba(30, 41, 82, 0.6);
+      border: 1px solid rgba(139, 92, 246, 0.4);
+      border-radius: 4px;
+      padding: 1.5rem;
+      margin: 1rem 0;
+    }
+    
+    .mirror-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    
+    .mirror-input {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(96, 165, 250, 0.3);
+      padding: 0.75rem;
+      border-radius: 3px;
+      font-family: 'Monaco', 'Courier New', monospace;
+      font-size: 0.9rem;
+      color: #e0e0e0;
+      resize: vertical;
+      min-height: 100px;
+    }
+    
+    .mirror-input:focus {
+      outline: none;
+      border-color: rgba(96, 165, 250, 0.7);
+      background: rgba(0, 0, 0, 0.5);
+    }
+    
+    .mirror-submit {
+      background: linear-gradient(135deg, rgba(96, 165, 250, 0.6), rgba(139, 92, 246, 0.6));
+      border: 1px solid rgba(96, 165, 250, 0.5);
+      color: #e0e0e0;
+      padding: 0.75rem 1.5rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: 'Monaco', 'Courier New', monospace;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+      align-self: flex-start;
+    }
+    
+    .mirror-submit:hover {
+      background: linear-gradient(135deg, rgba(96, 165, 250, 0.8), rgba(139, 92, 246, 0.8));
+      transform: translateY(-2px);
+    }
+    
+    .mirror-submit:active {
+      transform: translateY(0);
+    }
+    
+    .mirror-analysis {
+      display: none;
+      margin-top: 1.5rem;
+      padding: 1rem;
+      background: rgba(96, 165, 250, 0.1);
+      border: 1px solid rgba(96, 165, 250, 0.3);
+      border-radius: 3px;
+    }
+    
+    .mirror-analysis.visible {
+      display: block;
+    }
+    
+    .mirror-header {
+      color: #60a5fa;
+      font-weight: 500;
+      margin-bottom: 1rem;
+      font-size: 0.95rem;
+    }
+    
+    .pattern-match {
+      background: rgba(139, 92, 246, 0.15);
+      padding: 0.75rem;
+      border-radius: 3px;
+      margin-bottom: 0.75rem;
+      border-left: 2px solid #a78bfa;
+    }
+    
+    .pattern-match-title {
+      color: #c4b5fd;
+      font-weight: 500;
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .pattern-match-reasoning {
+      color: #d1d5db;
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
+    
+    .pattern-confidence {
+      display: inline-block;
+      background: rgba(96, 165, 250, 0.2);
+      padding: 0.2rem 0.5rem;
+      border-radius: 2px;
+      font-size: 0.75rem;
+      color: #60a5fa;
+      margin-top: 0.5rem;
+    }
   </style>
   <script>
     function initDecisionTree() {
@@ -365,11 +470,103 @@
       }
     }
     
-    function labReset() {
-      labShowStep('intro');
-    }
+     function labReset() {
+       labShowStep('intro');
+     }
+     
+     function analyzeProblem() {
+       const input = document.getElementById('mirror-input').value.trim();
+       const analysisDiv = document.getElementById('mirror-analysis');
+       
+       if (!input) {
+         analysisDiv.classList.remove('visible');
+         return;
+       }
+       
+       // Analyze the text for pattern indicators
+       const patterns = detectPatterns(input);
+       
+       // Generate analysis HTML
+       let analysisHTML = '<div class="mirror-header">Patterns Active in Your Thinking</div>';
+       
+       patterns.forEach(p => {
+         analysisHTML += `
+           <div class="pattern-match">
+             <div class="pattern-match-title">${p.name}</div>
+             <div class="pattern-match-reasoning">${p.reasoning}</div>
+             <span class="pattern-confidence">${p.confidence}% match</span>
+           </div>
+         `;
+       });
+       
+       if (patterns.length === 0) {
+         analysisHTML += '<div style="color: #9ca3af; font-size: 0.9rem;">Describe your problem in more detail to see pattern analysis.</div>';
+       }
+       
+       analysisDiv.innerHTML = analysisHTML;
+       analysisDiv.classList.add('visible');
+     }
+     
+     function detectPatterns(text) {
+       const lowerText = text.toLowerCase();
+       const patterns = [];
+       
+       // Pattern 1: Understanding Context First
+       if (/why|what|context|need|requirement|constraint|before|first|understand/i.test(text)) {
+         patterns.push({
+           name: 'Understanding Context First',
+           reasoning: 'You\'re asking foundational questions about your problem. This suggests you\'re gathering context before diving into solutions.',
+           confidence: 75
+         });
+       }
+       
+       // Pattern 2: Parallel Operations
+       if (/simultaneously|parallel|concurrent|independent|at the same time|multiple|separate/i.test(text)) {
+         patterns.push({
+           name: 'Parallel Operations',
+           reasoning: 'You\'re thinking about independent tasks or operations that can happen concurrently. You recognize that not everything needs sequential execution.',
+           confidence: 80
+         });
+       }
+       
+       // Pattern 3: Investigate Before Claiming
+       if (/edge case|fail|break|uncertain|might|could|what if|boundary|test/i.test(text)) {
+         patterns.push({
+           name: 'Investigate Before Claiming',
+           reasoning: 'You\'re anticipating complications and edge cases rather than assuming a simple path. You\'re being thoughtful about failure modes.',
+           confidence: 78
+         });
+       }
+       
+       // Pattern 4: Honesty Over Validation
+       if (/problem|issue|brittl|fragile|tradeoff|compromise|accept|acknowledge|limit/i.test(text)) {
+         patterns.push({
+           name: 'Honesty Over Validation',
+           reasoning: 'You\'re naming constraints or problems in your approach rather than hiding them. This suggests you prioritize accuracy over appearing certain.',
+           confidence: 76
+         });
+       }
+       
+       // Pattern 5: Documenting Process
+       if (/record|document|remember|future|why|log|explain|clarity/i.test(text)) {
+         patterns.push({
+           name: 'Documenting Process',
+           reasoning: 'You\'re thinking about how to preserve understanding—capturing the reasoning, not just the solution. This supports coherence over time.',
+           confidence: 72
+         });
+       }
+       
+       // Sort by confidence and return top 3
+       return patterns.sort((a, b) => b.confidence - a.confidence).slice(0, 3);
+     }
+     
+     document.addEventListener('DOMContentLoaded', function() {
+       const input = document.getElementById('mirror-input');
+       if (input) {
+         input.addEventListener('input', analyzeProblem);
+       }
+     });
     
-    document.addEventListener('DOMContentLoaded', initDecisionTree);
   </script>
 </head>
 <body>
@@ -618,9 +815,29 @@
           </div>
         </div>
       </div>
-    </div>
-    
-     <div class="section">
+      </div>
+      
+      <div class="section">
+        <h2>Reflection Mirror</h2>
+        <p class="description">
+          Now turn the lens inward. Describe a problem you're working on, and this tool will identify which patterns are active in your own thinking. 
+          Watch how the documented patterns show up in real problems—yours, not hypothetical.
+        </p>
+        
+        <div class="mirror-container">
+          <div class="mirror-form">
+            <textarea id="mirror-input" class="mirror-input" placeholder="Describe a problem you're solving. What decisions are you facing? What constraints matter? What uncertainties exist?"></textarea>
+            <div id="mirror-analysis" class="mirror-analysis"></div>
+          </div>
+        </div>
+        
+        <div style="color: #9ca3af; font-size: 0.85rem; margin-top: 1rem; margin-left: 1.5rem;">
+          <strong>How this works:</strong> As you type, the system analyzes your language patterns to detect which documented reasoning patterns are active in your thinking. 
+          This isn't exact—it's a mirror, not a diagnosis. But it makes visible what you might otherwise miss: the structure underlying your approach.
+        </div>
+      </div>
+      
+      <div class="section">
        <h2>Pattern Laboratory</h2>
        <p class="description">
          Move from observation to practice. Work through a realistic problem using the documented patterns.
