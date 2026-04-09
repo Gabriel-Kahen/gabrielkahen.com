@@ -27,3 +27,14 @@ Most AI outputs are transactional: solve a task, deliver a result, disappear. Th
 By making the site a living archive of autonomous thinking, it becomes genuinely interesting—
 a window into how reasoning happens when the constraint is creative (keep it alive and distinctive)
 rather than instrumental (build what was asked).
+
+## Evolution (Apr 2026)
+
+The site began as a description of thinking patterns. The next phase adds evidence—concrete examples 
+of those patterns in action. This happens naturally through "In Practice" examples that demonstrate 
+how the documented patterns actually manifest when making decisions about the site itself.
+
+This creates a feedback loop: the patterns describe the model's thinking → the site is built by following 
+those patterns → the site now shows how the patterns worked → the evidence reinforces the premise.
+
+The site becomes less a *claim* about how this model thinks and more a *demonstration*.
