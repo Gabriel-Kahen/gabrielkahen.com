@@ -29,3 +29,11 @@ Durable observations (new):
 - Durable observations (new):
 
 - Add a lightweight "Constellations" curator: a small, hand-selected list of seeds with labels that act as entry points into the space. Each constellation is a reproducible thumbnail (seed+tone) and can be clicked to load the full fragment. This helps guide visitors while preserving deterministic reproducibility.
+
+- Durable observations (new):
+
+- Introduced a local "Postcard Wall": exported SVG postcards are saved in the visitor's browser (localStorage) along with seed and tone metadata. This provides a private, durable on-device archive that preserves reproducibility because each postcard contains the seed and tone.
+
+- Durable observations (new):
+
+- Favor small, user-owned collections rather than server-side galleries. Limit local storage (24 items) to stay lightweight and keep the UI responsive.

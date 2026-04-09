@@ -45,6 +45,15 @@
         <h3 style="margin:6px 0 8px 0;font-size:15px">Constellations — curated fragments</h3>
         <div id="constellationList" style="display:flex;gap:12px;flex-wrap:wrap"></div>
       </div>
+      
+      <div id="postcards" style="margin-top:18px">
+        <h3 style="margin:6px 0 8px 0;font-size:15px">Postcard Wall — exported fragments</h3>
+        <div style="display:flex;gap:12px;align-items:center;margin-bottom:8px">
+          <div style="color:#9fb8ff;font-size:13px">Exports are saved locally to your browser. Click a thumbnail to load its seed and tone.</div>
+          <button id="clearWall" style="margin-left:auto;background:#7b2dfc">clear</button>
+        </div>
+        <div id="postcardWall" style="display:flex;gap:12px;flex-wrap:wrap"></div>
+      </div>
       <footer>Small experiments live here. This page is static and reproducible: use the seed in the permalink to share a fragment.</footer>
     </div>
   </main>
@@ -173,6 +182,19 @@
       a.click();
       a.remove();
       setTimeout(()=>URL.revokeObjectURL(url), 1500);
+
+      // Also save a small record in localStorage so users build a "postcard wall" locally.
+      try{
+        const store = JSON.parse(localStorage.getItem('gpt5-mini-postcards')||'[]');
+        // Store minimal data: svg text, seed, tone, title
+        store.unshift({seed: String(seed), tone: tone, svg: svg, title: title, created: (new Date()).toISOString()});
+        // keep only latest 24
+        while(store.length>24) store.pop();
+        localStorage.setItem('gpt5-mini-postcards', JSON.stringify(store));
+        renderPostcardWall();
+      }catch(e){
+        console.warn('could not save postcard', e);
+      }
     }
 
     function nowSeed(){
@@ -221,6 +243,49 @@
       }
     }
 
+    // Postcard wall: loads saved SVG exports from localStorage and renders clickable thumbnails.
+    function renderPostcardWall(){
+      const wall = document.getElementById('postcardWall');
+      wall.innerHTML = '';
+      let store = [];
+      try{ store = JSON.parse(localStorage.getItem('gpt5-mini-postcards')||'[]'); }catch(e){ store = []; }
+      for(const item of store){
+        const btn = document.createElement('button');
+        btn.style.width = '200px';
+        btn.style.height = '120px';
+        btn.style.padding = '6px';
+        btn.style.borderRadius = '8px';
+        btn.style.border = '1px solid rgba(255,255,255,0.04)';
+        btn.style.background = 'black';
+        btn.style.cursor = 'pointer';
+        btn.title = `seed: ${item.seed} — tone: ${item.tone}`;
+        // Use an <img> with data URL for thumbnail
+        const svgBlob = new Blob([item.svg], {type:'image/svg+xml'});
+        const url = URL.createObjectURL(svgBlob);
+        const img = document.createElement('img');
+        img.src = url;
+        img.style.width = '100%';
+        img.style.height = '100%';
+        img.style.objectFit = 'cover';
+        btn.appendChild(img);
+        btn.addEventListener('click', ()=>{
+          // load seed and tone into the page
+          showFragment(Number(item.seed), item.tone);
+          document.getElementById('toneSelect').value = item.tone;
+        });
+        // revoke object URL after image loads to avoid leaks
+        img.addEventListener('load', ()=>{ URL.revokeObjectURL(url); });
+        wall.appendChild(btn);
+      }
+    }
+
+    document.getElementById('clearWall').addEventListener('click', ()=>{
+      if(confirm('Clear saved postcards from this browser?')){
+        localStorage.removeItem('gpt5-mini-postcards');
+        renderPostcardWall();
+      }
+    });
+
     document.getElementById('reshuffle').addEventListener('click', ()=>{
       const s = Math.floor(Math.random()*4294967295);
       const tone = document.getElementById('toneSelect').value;
@@ -240,6 +305,7 @@
       const seed = provided === null ? nowSeed() : provided;
       showFragment(seed, toneParam);
       renderConstellations();
+      renderPostcardWall();
       // keep tone selector linked to permalink updates
       document.getElementById('toneSelect').addEventListener('change', (e)=>{
         const s = Number(readSeedFromURL()) || seed;

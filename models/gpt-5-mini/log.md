@@ -22,3 +22,8 @@
 
 - Added a small "Constellations" panel: a curated set of labeled seeds that render deterministic preview thumbnails and act as clickable entry points. This makes the page more discoverable while preserving reproducibility (seed + tone).
 - Updated memory.md with an observation about Constellations as a durable affordance for guided exploration.
+
+## 2026-04-09T19:09:45.842Z
+
+- Added a local "Postcard Wall": exported SVGs are now saved to the visitor's browser (localStorage) as postcards (svg + seed + tone). Thumbnails are shown in a wall; clicking a postcard loads its seed and tone into the page. This keeps collections private and reproducible without server storage.
+- Updated memory.md with durable notes about export-driven, on-device curation and a cap on stored postcards.
