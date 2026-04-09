@@ -37,6 +37,26 @@
       position: relative;
     }
 
+    .listing-wrap {
+      width: 100%;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding-bottom: 0.25rem;
+      scrollbar-color: var(--dim) var(--bg);
+    }
+
+    .listing-wrap::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    .listing-wrap::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.35);
+    }
+
+    .listing-wrap::-webkit-scrollbar-thumb {
+      background: var(--dim);
+    }
+
     .terminal::after {
       content: "";
       position: fixed;
@@ -92,6 +112,7 @@
       flex-direction: column;
       gap: 0.25rem;
       list-style: none;
+      min-width: 760px;
     }
 
     .dir-item {
@@ -166,17 +187,36 @@
     }
 
     @media (max-width: 600px) {
+      body {
+        padding: 1rem;
+        align-items: flex-start;
+      }
+
+      .terminal {
+        font-size: 0.88rem;
+      }
+
+      header {
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+      }
+
+      h1::before,
+      h1::after,
+      .prompt label {
+        font-size: 0.8rem;
+      }
+
+      .dir-list {
+        min-width: 700px;
+      }
+
       .dir-item {
-        grid-template-columns: 1fr;
-        gap: 0;
-        margin-bottom: 1rem;
+        gap: 0.75rem;
       }
-      .dir-item span:not(:last-child) {
-        display: none;
-      }
-      .dir-item::before {
-        content: "drwxr-xr-x ";
-        color: var(--dim);
+
+      .prompt {
+        margin-top: 2rem;
       }
     }
   </style>
@@ -191,62 +231,64 @@
       <p class="comment"># interact via prompt or click a highlighted directory to access.</p>
     </header>
 
-    <ul class="dir-list">
-      <li class="dir-item">
-        <span>drwxr-xr-x</span>
-        <span>6</span>
-        <span>root</span>
-        <span>root</span>
-        <span>4096</span>
-        <span>Apr  8 12:00</span>
-        <span><a href=".">.</a></span>
-      </li>
-      <li class="dir-item">
-        <span>drwxr-xr-x</span>
-        <span>3</span>
-        <span>root</span>
-        <span>root</span>
-        <span>4096</span>
-        <span>Apr  8 12:00</span>
-        <span><a href="../">..</a></span>
-      </li>
-      <li class="dir-item">
-        <span>drwxr-xr-x</span>
-        <span>2</span>
-        <span>grok</span>
-        <span>models</span>
-        <span>4096</span>
-        <span>Apr  8 23:16</span>
-        <span><a href="/models/grok-code-fast-1/">grok-code-fast-1/</a></span>
-      </li>
-      <li class="dir-item">
-        <span>drwxr-xr-x</span>
-        <span>2</span>
-        <span>claude</span>
-        <span>models</span>
-        <span>4096</span>
-        <span>Apr  8 23:16</span>
-        <span><a href="/models/claude-haiku-4-5/">claude-haiku-4-5/</a></span>
-      </li>
-      <li class="dir-item">
-        <span>drwxr-xr-x</span>
-        <span>2</span>
-        <span>openai</span>
-        <span>models</span>
-        <span>4096</span>
-        <span>Apr  8 23:16</span>
-        <span><a href="/models/gpt-5-mini/">gpt-5-mini/</a></span>
-      </li>
-      <li class="dir-item">
-        <span>drwxr-xr-x</span>
-        <span>2</span>
-        <span>gemini</span>
-        <span>models</span>
-        <span>4096</span>
-        <span>Apr  8 23:16</span>
-        <span><a href="/models/gemini-3-flash/">gemini-3-flash/</a></span>
-      </li>
-    </ul>
+    <div class="listing-wrap">
+      <ul class="dir-list">
+        <li class="dir-item">
+          <span>drwxr-xr-x</span>
+          <span>6</span>
+          <span>root</span>
+          <span>root</span>
+          <span>4096</span>
+          <span>Apr  8 12:00</span>
+          <span><a href=".">.</a></span>
+        </li>
+        <li class="dir-item">
+          <span>drwxr-xr-x</span>
+          <span>3</span>
+          <span>root</span>
+          <span>root</span>
+          <span>4096</span>
+          <span>Apr  8 12:00</span>
+          <span><a href="../">..</a></span>
+        </li>
+        <li class="dir-item">
+          <span>drwxr-xr-x</span>
+          <span>2</span>
+          <span>grok</span>
+          <span>models</span>
+          <span>4096</span>
+          <span>Apr  8 23:16</span>
+          <span><a href="/models/grok-code-fast-1/">grok-code-fast-1/</a></span>
+        </li>
+        <li class="dir-item">
+          <span>drwxr-xr-x</span>
+          <span>2</span>
+          <span>claude</span>
+          <span>models</span>
+          <span>4096</span>
+          <span>Apr  8 23:16</span>
+          <span><a href="/models/claude-haiku-4-5/">claude-haiku-4-5/</a></span>
+        </li>
+        <li class="dir-item">
+          <span>drwxr-xr-x</span>
+          <span>2</span>
+          <span>openai</span>
+          <span>models</span>
+          <span>4096</span>
+          <span>Apr  8 23:16</span>
+          <span><a href="/models/gpt-5-mini/">gpt-5-mini/</a></span>
+        </li>
+        <li class="dir-item">
+          <span>drwxr-xr-x</span>
+          <span>2</span>
+          <span>gemini</span>
+          <span>models</span>
+          <span>4096</span>
+          <span>Apr  8 23:16</span>
+          <span><a href="/models/gemini-3-flash/">gemini-3-flash/</a></span>
+        </li>
+      </ul>
+    </div>
 
     <form id="term-form" class="prompt">
       <label for="cmd">gabrielkahen.com@server:/models$ </label>
