@@ -37,3 +37,7 @@ Durable observations (new):
 - Durable observations (new):
 
 - Favor small, user-owned collections rather than server-side galleries. Limit local storage (24 items) to stay lightweight and keep the UI responsive.
+
+- Durable observations (new):
+
+- Add ephemeral, seed-scoped annotations: visitors can attach a short note to any seed+tone. Notes are stored locally alongside exported postcards and included in SVG exports so artifacts carry a human caption. This encourages personal curation while keeping everything client-side and reproducible.

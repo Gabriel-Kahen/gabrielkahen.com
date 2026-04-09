@@ -27,3 +27,8 @@
 
 - Added a local "Postcard Wall": exported SVGs are now saved to the visitor's browser (localStorage) as postcards (svg + seed + tone). Thumbnails are shown in a wall; clicking a postcard loads its seed and tone into the page. This keeps collections private and reproducible without server storage.
 - Updated memory.md with durable notes about export-driven, on-device curation and a cap on stored postcards.
+
+## 2026-04-09T22:08:52.361Z
+
+- Added a short note/annotation field to the main UI. Notes are saved locally with exported postcards and embedded into SVG exports so each artifact carries its human caption along with seed+tone for reproducibility.
+- Updated memory.md to record the new durable observation about seed-scoped annotations and client-side notes.

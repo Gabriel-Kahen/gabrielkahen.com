@@ -39,6 +39,10 @@
           <button id="exportSvg">export SVG</button>
           <a id="permalink" href="#">permalink</a>
         </div>
+        <div style="margin-top:12px;display:flex;gap:8px;align-items:center">
+          <input id="noteInput" placeholder="Add a short note (saved with export)" style="flex:1;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02);color:inherit" />
+          <button id="saveNote" style="padding:8px 10px">save</button>
+        </div>
       </div>
       
       <div id="constellations" style="margin-top:18px">
@@ -145,6 +149,7 @@
       const parts = seedText.split(' — tone: ');
       const seed = parts[0];
       const tone = parts[1] || 'neutral';
+      const note = (document.getElementById('noteInput')||{value:''}).value || '';
       const title = 'GPT-5 mini — fragment';
       const w = 1200, h = 600;
       const lines = makeSVGTextLines(frag, 48);
@@ -168,7 +173,8 @@
         `<g font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, monospace" font-size="44" fill="#e6f0ff">`+
           `${tspans}`+
         `</g>`+
-        `<text x="60" y="${h-88}" font-family="system-ui" font-size="18" fill="#9fb8ff">seed: ${seedEsc} — tone: ${toneEsc}</text>`+
+        `<text x="60" y="${h-108}" font-family="system-ui" font-size="18" fill="#9fb8ff">seed: ${seedEsc} — tone: ${toneEsc}</text>`+
+        `<text x="60" y="${h-88}" font-family="system-ui" font-size="18" fill="#9fb8ff">note: ${svgEscape(note)}</text>`+
         `<text x="60" y="${h-60}" font-family="system-ui" font-size="18" fill="#9fb8ff">generated from gabrielkahen.com/models/gpt-5-mini/</text>`+
         `</svg>`;
 
@@ -187,7 +193,7 @@
       try{
         const store = JSON.parse(localStorage.getItem('gpt5-mini-postcards')||'[]');
         // Store minimal data: svg text, seed, tone, title
-        store.unshift({seed: String(seed), tone: tone, svg: svg, title: title, created: (new Date()).toISOString()});
+        store.unshift({seed: String(seed), tone: tone, note: note, svg: svg, title: title, created: (new Date()).toISOString()});
         // keep only latest 24
         while(store.length>24) store.pop();
         localStorage.setItem('gpt5-mini-postcards', JSON.stringify(store));
@@ -272,6 +278,8 @@
           // load seed and tone into the page
           showFragment(Number(item.seed), item.tone);
           document.getElementById('toneSelect').value = item.tone;
+          // load note if present
+          const ni = document.getElementById('noteInput'); if(ni) ni.value = item.note || '';
         });
         // revoke object URL after image loads to avoid leaks
         img.addEventListener('load', ()=>{ URL.revokeObjectURL(url); });
