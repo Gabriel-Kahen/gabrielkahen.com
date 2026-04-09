@@ -29,6 +29,7 @@
         <div class="meta">
           <span id="seed">seed:</span>
           <button id="reshuffle">reshuffle</button>
+          <button id="exportSvg">export SVG</button>
           <a id="permalink" href="#">permalink</a>
         </div>
       </div>
@@ -76,6 +77,66 @@
       link.textContent = 'permalink';
     }
 
+    function svgEscape(s){
+      return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    function makeSVGTextLines(text, maxChars){
+      const words = text.split(/\s+/);
+      const lines = [];
+      let cur = '';
+      for(const w of words){
+        if((cur + ' ' + w).trim().length > maxChars){
+          if(cur) lines.push(cur.trim());
+          cur = w;
+        } else {
+          cur = (cur + ' ' + w).trim();
+        }
+      }
+      if(cur) lines.push(cur.trim());
+      return lines;
+    }
+
+    function exportCurrentAsSVG(){
+      const frag = document.getElementById('fragment').textContent;
+      const seed = document.getElementById('seed').textContent.replace('seed: ','');
+      const title = 'GPT-5 mini — fragment';
+      const w = 1200, h = 600;
+      const lines = makeSVGTextLines(frag, 48);
+      const escapedLines = lines.map(svgEscape);
+      const seedEsc = svgEscape(seed);
+      const yStart = 220;
+      const lineHeight = 52;
+      const tspans = escapedLines.map((l,i)=>`<tspan x="60" y="${yStart + i*lineHeight}">${l}</tspan>`).join('');
+
+      const svg = `<?xml version="1.0" encoding="utf-8"?>\n`+
+        `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">`+
+        `<defs>`+
+          `<linearGradient id="g" x1="0" x2="0" y1="0" y2="1">`+
+            `<stop offset="0%" stop-color="#0f172a"/>`+
+            `<stop offset="100%" stop-color="#071029"/>`+
+          `</linearGradient>`+
+        `</defs>`+
+        `<rect width="100%" height="100%" fill="url(#g)"/>`+
+        `<text x="60" y="120" font-family="system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial" font-size="36" fill="#cfe3ff">${svgEscape(title)}</text>`+
+        `<g font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, monospace" font-size="44" fill="#e6f0ff">`+
+          `${tspans}`+
+        `</g>`+
+        `<text x="60" y="${h-60}" font-family="system-ui" font-size="18" fill="#9fb8ff">seed: ${seedEsc} — generated from gabrielkahen.com/models/gpt-5-mini/</text>`+
+        `</svg>`;
+
+      const blob = new Blob([svg], {type: 'image/svg+xml'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      const fname = `gpt5-mini-seed-${seed}.svg`;
+      a.href = url;
+      a.download = fname;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(()=>URL.revokeObjectURL(url), 1500);
+    }
+
     function nowSeed(){
       // use UTC date truncated to minute for reproducibility per minute
       const d = new Date();
@@ -85,6 +146,10 @@
     document.getElementById('reshuffle').addEventListener('click', ()=>{
       const s = Math.floor(Math.random()*4294967295);
       showFragment(s);
+    });
+
+    document.getElementById('exportSvg').addEventListener('click', ()=>{
+      exportCurrentAsSVG();
     });
 
     (function init(){

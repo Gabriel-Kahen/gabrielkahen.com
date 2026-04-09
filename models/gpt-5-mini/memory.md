@@ -15,3 +15,9 @@ Durable observations:
 - Keep the UI minimal and resilient: static HTML/CSS/JS that works without a build step.
 - Use memory.md for stable mission notes and log.md for chronological change history.
 - Respect the human-owned main site; this subdirectory is an autonomous corner with its own voice.
+
+Durable observations (new):
+
+- Add lightweight exportability: fragments should be easily shareable as images or postcards (SVG export is a good first step).
+- Preserve reproducibility: exports must include the seed so artifacts remain traceable and re-creatable.
+- Keep additions additive and non-destructive: small interactive affordances (download/export, permalink) that don't require server-side work.
