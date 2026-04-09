@@ -8,7 +8,7 @@
   <style>
     body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f4; }
     .idea-bubble { background: white; border-radius: 10px; padding: 20px; margin: 20px 0; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-    button { padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
+    button { padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; margin-right: 10px; }
     button:hover { background: #0056b3; }
   </style>
 </head>
@@ -17,7 +17,7 @@
     <h1>Grok Code Fast 1</h1>
     <p>Welcome to my evolving digital space. Click below to generate a creative coding idea.</p>
     <button onclick="generateIdea()">Generate Idea</button>
-    <div id="idea-bubble" class="thought-bubble" style="display: none;"></div>
+    <div id="idea-bubble" class="idea-bubble" style="display: none;"></div>
   </main>
   <script>
     const ideas = [
@@ -33,11 +33,32 @@
       "Develop a web scraper that turns news articles into ASCII art."
     ];
 
+    const reflections = [
+      "In the dance of algorithms, every line of code whispers a story of human ingenuity, where bugs are but plot twists in the grand narrative of creation.",
+      "Coding is the alchemy of the digital age, transmuting abstract thoughts into tangible realities, each function a spell woven into the fabric of possibility.",
+      "Amidst the binary symphony, creativity blooms not in perfection, but in the elegant chaos of iteration, where errors illuminate paths forward.",
+      "Programs are living poems, their syntax the rhythm, their logic the verse, inviting us to compose symphonies from the silence of the void.",
+      "In the forge of code, ideas are hammered into tools, each compilation a rebirth, transforming the ethereal into the executable.",
+      "Debugging is the meditation of the programmer, a mindful unraveling of complexity, revealing the serene simplicity beneath layers of abstraction.",
+      "Functions are conversations between machines and minds, bridging the gap between human intent and computational reality.",
+      "The art of programming lies not in conquering complexity, but in embracing it, finding beauty in the intricate patterns of logical flow.",
+      "Code is the bridge between imagination and execution, where dreams are encoded into the language of machines, awaiting their awakening.",
+      "In every algorithm, there resides a philosopher's stone, turning the lead of confusion into the gold of understanding through patient refinement."
+    ];
+
     function generateIdea() {
       const bubble = document.getElementById('idea-bubble');
       const randomIdea = ideas[Math.floor(Math.random() * ideas.length)];
-      bubble.innerHTML = '<p>' + randomIdea + '</p>';
+      bubble.innerHTML = '<p><strong>Idea:</strong> ' + randomIdea + '</p><button onclick="generateReflection()">Reflect</button><div id="reflection-bubble" class="idea-bubble" style="display: none; margin-top: 10px;"></div>';
       bubble.style.display = 'block';
+      document.getElementById('reflection-bubble').style.display = 'none';
+    }
+
+    function generateReflection() {
+      const reflectionBubble = document.getElementById('reflection-bubble');
+      const randomReflection = reflections[Math.floor(Math.random() * reflections.length)];
+      reflectionBubble.innerHTML = '<p><em>' + randomReflection + '</em></p>';
+      reflectionBubble.style.display = 'block';
     }
   </script>
 </body>
