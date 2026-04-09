@@ -60,6 +60,8 @@ try {
 async function runModel(model) {
   await ensureModelScaffold(model);
 
+  const runStartedAt = new Date();
+
   const sandboxRoot = path.join(workspaceRoot, model.slug);
   const sandboxSite = path.join(sandboxRoot, 'site');
   const promptPath = path.join(sandboxRoot, 'RUN_PROMPT.md');
@@ -69,7 +71,7 @@ async function runModel(model) {
   await ensureDirectory(sandboxRoot);
   await replaceDirectoryContents(repoDirectory, sandboxSite);
 
-  const prompt = buildPrompt(model);
+  const prompt = buildPrompt(model, runStartedAt);
   await fs.writeFile(promptPath, prompt, 'utf8');
 
   if (dryRun) {
@@ -108,10 +110,13 @@ async function runModel(model) {
   }
 
   await replaceDirectoryContents(sandboxSite, repoDirectory);
+  await updateModelsIndexTimestamp(model.slug, runStartedAt);
 
   const changedPaths = await repoChangedPaths();
   const unexpectedPaths = changedPaths.filter((changedPath) => {
-    return changedPath !== `models/${model.slug}` && !changedPath.startsWith(`models/${model.slug}/`);
+    return changedPath !== 'models/index.html'
+      && changedPath !== `models/${model.slug}`
+      && !changedPath.startsWith(`models/${model.slug}/`);
   });
 
   if (unexpectedPaths.length > 0) {
@@ -123,13 +128,47 @@ async function runModel(model) {
     return;
   }
 
-  await mustRun(gitBinary, ['add', '--', `models/${model.slug}`], gitOptions(REPO_ROOT), 'Failed to stage model changes.');
+  await mustRun(gitBinary, ['add', '--', 'models/index.html', `models/${model.slug}`], gitOptions(REPO_ROOT), 'Failed to stage model changes.');
   await mustRun(gitBinary, ['commit', '-m', `Update ${model.name} playground`], gitOptions(REPO_ROOT), 'Failed to create commit for model changes.');
   await mustRun(gitBinary, gitPushArguments(), gitOptions(REPO_ROOT), 'Failed to push model changes to origin/main.');
   console.log(`published ${model.slug} ${timestamp()}`);
 }
 
-function buildPrompt(model) {
+async function updateModelsIndexTimestamp(slug, date) {
+  const indexPath = path.join(MODELS_DIR, 'index.html');
+  let html = await fs.readFile(indexPath, 'utf8');
+  const formattedDate = formatLsTimestamp(date);
+  const escapedSlug = slug.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const rowPattern = new RegExp(
+    `(<li class="dir-item">[\\s\\S]*?<span>[A-Z][a-z]{2}\\s+\\d{1,2}\\s+\\d{2}:\\d{2}</span>\\s*<span><a href="/models/${escapedSlug}/">${escapedSlug}/</a></span>[\\s\\S]*?</li>)`
+  );
+  const rowMatch = html.match(rowPattern);
+
+  if (!rowMatch) {
+    throw new Error(`Could not find index row for ${slug} in models/index.html.`);
+  }
+
+  const updatedRow = rowMatch[1].replace(
+    /<span>[A-Z][a-z]{2}\s+\d{1,2}\s+\d{2}:\d{2}<\/span>/,
+    `<span>${formattedDate}</span>`
+  );
+
+  html = html.replace(rowMatch[1], updatedRow);
+
+  await fs.writeFile(indexPath, html, 'utf8');
+}
+
+function formatLsTimestamp(date) {
+  const month = date.toLocaleString('en-US', { month: 'short' });
+  const day = String(date.getDate()).padStart(2, ' ');
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  return `${month} ${day} ${hours}:${minutes}`;
+}
+
+function buildPrompt(model, runStartedAt) {
+  const isoTimestamp = runStartedAt.toISOString();
+
   return [
     `You are the long-term author of the website published at ${model.publicUrl}.`,
     'This is your own evolving corner of the web.',
@@ -139,7 +178,9 @@ function buildPrompt(model) {
     'Read the existing files first, especially site/memory.md and site/log.md.',
     'Preserve continuity with earlier versions unless a sharp break feels artistically necessary.',
     'Update site/memory.md with durable observations about what this site is becoming.',
-    'Append a short entry to site/log.md describing what you changed and why.',
+    `Append a new entry to site/log.md under the exact heading "## ${isoTimestamp}".`,
+    'Use the real run timestamp above; do not invent or omit the date.',
+    'Under that heading, add a short bullet list describing what you changed and why.',
     'You may use any web technology you want, but the final published result must remain directly servable from the site/ directory and include site/index.html.',
     'You may only modify files inside site/.',
     'The main homepage at gabrielkahen.com/ is human-owned and must never be changed.',
