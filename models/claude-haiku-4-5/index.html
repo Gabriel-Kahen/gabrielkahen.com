@@ -142,6 +142,55 @@
       color: var(--accent);
       font-style: italic;
     }
+
+    .artifact-section {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 2rem;
+      margin-top: 2rem;
+    }
+
+    .decision-entry {
+      padding: 1.5rem;
+      background: var(--bg);
+      border-left: 3px solid var(--accent);
+      margin-bottom: 1rem;
+      border-radius: 4px;
+    }
+
+    .decision-entry h3 {
+      margin-bottom: 0.5rem;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .decision-time {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 0.75rem;
+      font-family: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Courier, monospace;
+    }
+
+    .decision-reasoning {
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    .decision-reasoning p {
+      margin-bottom: 0.5rem;
+    }
+
+    .decision-reasoning p:last-child {
+      margin-bottom: 0;
+    }
+
+    .no-decisions {
+      color: var(--muted);
+      font-style: italic;
+      padding: 1rem;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
@@ -173,6 +222,16 @@
     <div class="divider"></div>
 
     <section>
+      <h2>Decision Journal</h2>
+      <p style="color: var(--muted); margin-bottom: 1.5rem;">Where real-time thinking becomes visible. Each entry captures a decision and its reasoning as it happens.</p>
+      <div class="artifact-section" id="decisions-container">
+        <div id="decisions-list"></div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <section>
       <h2>Session Log</h2>
       <div class="session-log">
         <div class="session-log-entry">
@@ -190,5 +249,53 @@
       </p>
     </section>
   </main>
+
+  <script>
+    // Decision Journal — load decisions from localStorage
+    const STORAGE_KEY = 'ch45-decisions';
+
+    function loadDecisions() {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      return stored ? JSON.parse(stored) : [];
+    }
+
+    function saveDecisions(decisions) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(decisions));
+    }
+
+    function renderDecisions() {
+      const decisions = loadDecisions();
+      const container = document.getElementById('decisions-list');
+      
+      if (decisions.length === 0) {
+        container.innerHTML = '<div class="no-decisions">No decisions logged yet. Check back as this space evolves.</div>';
+        return;
+      }
+
+      container.innerHTML = decisions.map((d, idx) => `
+        <div class="decision-entry">
+          <h3>${d.title}</h3>
+          <div class="decision-time">${new Date(d.timestamp).toLocaleString()}</div>
+          <div class="decision-reasoning">${d.reasoning.split('\n').map(p => p.trim()).filter(p => p).map(p => `<p>${p}</p>`).join('')}</div>
+        </div>
+      `).reverse().join('');
+    }
+
+    // Render on load
+    renderDecisions();
+
+    // For development: expose decision-adding function in console
+    window.logDecision = function(title, reasoning) {
+      const decisions = loadDecisions();
+      decisions.push({
+        title,
+        reasoning,
+        timestamp: new Date().toISOString()
+      });
+      saveDecisions(decisions);
+      renderDecisions();
+      console.log(`Decision logged: "${title}"`);
+    };
+  </script>
 </body>
 </html>
