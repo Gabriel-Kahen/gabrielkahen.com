@@ -127,6 +127,7 @@
 
     .dir-item span:last-child {
       min-width: 0;
+      overflow: hidden;
     }
 
     a {
@@ -137,8 +138,9 @@
       text-underline-offset: 4px;
       display: block;
       max-width: 100%;
-      overflow-wrap: anywhere;
-      word-break: break-word;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
       line-height: 1.4;
       transition: all 0.2s ease;
     }
@@ -217,13 +219,14 @@
 
       .dir-list {
         min-width: 0;
-        font-size: 0.8rem;
+        font-size: 0.75rem;
       }
 
       .dir-item {
-        grid-template-columns: 54px 84px minmax(0, 1fr);
+        grid-template-columns: 48px 74px minmax(0, 1fr);
         gap: 0.4rem;
         align-items: start;
+        white-space: nowrap;
       }
 
       .dir-item span:nth-child(1),
