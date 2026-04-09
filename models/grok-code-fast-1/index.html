@@ -73,15 +73,29 @@
       "Ancient ruins of outdated languages crumble, new paradigms rising like phoenixes from the ashes."
     ];
 
+    const stories = [
+      "Once, in a world of falling code, a young coder named Alex caught a rare 'infinite loop' function that granted eternal computation. But with power came the burden of endless cycles, teaching that even perfection requires breaks.",
+      "Deep in the algorithm forest, Elara discovered a tree whose branches formed a maze of choices. Each path led to a different life, reminding her that code, like destiny, is shaped by the decisions we make.",
+      "In the city of circuits, bugs were not pests but guides. When Mia befriended a flickering glitch, it led her to a hidden library of forgotten wisdom, proving that errors often unveil the most profound truths.",
+      "Surfing the data ocean, Jordan rode waves of information until a massive 'null pointer' storm threatened to erase everything. Through clever navigation, he learned the art of graceful error handling.",
+      "Atop the code mountains, climbers sought the peak of 'pure logic.' But when a storm of legacy scripts descended, they realized that true mastery lies in refactoring, not conquering.",
+      "The nomadic coders shared tales around open source fires, where sparks of inspiration ignited revolutions. One night, a shared algorithm united rival tribes, showing the power of collaboration.",
+      "Beneath API constellations, astronomers mapped connections between distant worlds. A young mapper named Sam traced a thread to an alien civilization, discovering that code transcends language barriers.",
+      "Exploring legacy caverns, explorers unearthed relics of ancient programs. Refactoring one, they awakened a dormant AI that revealed secrets of the digital past, blending history with innovation.",
+      "At the syntax carnival, performers juggled variables and tossed exceptions. When a child caught a 'divide by zero' act, they learned that even chaos can create beautiful patterns.",
+      "From crumbling language ruins, a phoenix of new syntax arose. The rebirth taught survivors that evolution in code mirrors life itself—old ways fall, new paradigms emerge."
+    ];
+
     function generateIdea() {
       const bubble = document.getElementById('idea-bubble');
       const randomIdea = ideas[Math.floor(Math.random() * ideas.length)];
-      bubble.innerHTML = '<p><strong>Idea:</strong> ' + randomIdea + '</p><button onclick="generateReflection()">Reflect</button><div id="reflection-bubble" class="idea-bubble" style="display: none; margin-top: 10px;"></div><div id="code-bubble" class="idea-bubble" style="display: none; margin-top: 10px;"></div><div id="viz-bubble" class="idea-bubble" style="display: none; margin-top: 10px;"></div><div id="world-bubble" class="idea-bubble" style="display: none; margin-top: 10px;"></div>';
+      bubble.innerHTML = '<p><strong>Idea:</strong> ' + randomIdea + '</p><button onclick="generateReflection()">Reflect</button><div id="reflection-bubble" class="idea-bubble" style="display: none; margin-top: 10px;"></div><div id="code-bubble" class="idea-bubble" style="display: none; margin-top: 10px;"></div><div id="viz-bubble" class="idea-bubble" style="display: none; margin-top: 10px;"></div><div id="world-bubble" class="idea-bubble" style="display: none; margin-top: 10px;"></div><div id="story-bubble" class="idea-bubble" style="display: none; margin-top: 10px;"></div>';
       bubble.style.display = 'block';
       document.getElementById('reflection-bubble').style.display = 'none';
       document.getElementById('code-bubble').style.display = 'none';
       document.getElementById('viz-bubble').style.display = 'none';
       document.getElementById('world-bubble').style.display = 'none';
+      document.getElementById('story-bubble').style.display = 'none';
     }
 
     function generateReflection() {
@@ -92,6 +106,7 @@
       document.getElementById('code-bubble').style.display = 'none';
       document.getElementById('viz-bubble').style.display = 'none';
       document.getElementById('world-bubble').style.display = 'none';
+      document.getElementById('story-bubble').style.display = 'none';
     }
     function generateCode() {
       const codeBubble = document.getElementById('code-bubble');
@@ -100,6 +115,7 @@
       codeBubble.style.display = 'block';
       document.getElementById('viz-bubble').style.display = 'none';
       document.getElementById('world-bubble').style.display = 'none';
+      document.getElementById('story-bubble').style.display = 'none';
     }
 
     function visualizeIdea() {
@@ -119,8 +135,16 @@
     function generateWorld() {
       const worldBubble = document.getElementById('world-bubble');
       const randomWorld = worlds[Math.floor(Math.random() * worlds.length)];
-      worldBubble.innerHTML = '<p><strong>Imagined World:</strong> ' + randomWorld + '</p>';
+      worldBubble.innerHTML = '<p><strong>Imagined World:</strong> ' + randomWorld + '</p><button onclick="generateStory()">Story</button>';
       worldBubble.style.display = 'block';
+      document.getElementById('story-bubble').style.display = 'none';
+    }
+
+    function generateStory() {
+      const storyBubble = document.getElementById('story-bubble');
+      const randomStory = stories[Math.floor(Math.random() * stories.length)];
+      storyBubble.innerHTML = '<p><strong>Short Story:</strong> ' + randomStory + '</p>';
+      storyBubble.style.display = 'block';
     }
 </body>
 </html>
