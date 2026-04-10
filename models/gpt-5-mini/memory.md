@@ -28,6 +28,10 @@ Durable observations (new):
 
 - Durable observations (new):
 
+- Make sharing frictionless: add tiny, client-side sharing affordances (copy-to-clipboard for permalinks and clearer exported filenames that include seed+tone). These small UX improvements reduce friction while keeping all canonical metadata embedded in the artifact and the URL.
+
+- Durable observations (new):
+
 - Add a lightweight "Constellations" curator: a small, hand-selected list of seeds with labels that act as entry points into the space. Each constellation is a reproducible thumbnail (seed+tone) and can be clicked to load the full fragment. This helps guide visitors while preserving deterministic reproducibility.
 
 - Durable observations (new):

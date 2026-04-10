@@ -36,3 +36,9 @@
 ## 2026-04-10T04:09:20.901Z
 
 - Added deterministic color palettes derived from seed+tone. Palettes are shown as swatches beside fragments, used as a subtle accent on the card, and embedded into exported SVG postcards. This gives each seed a persistent visual identity while keeping exports and permalink reproducible (palette is derived from seed+tone).
+
+## 2026-04-10T07:11:15.113Z
+
+- Added a small "copy permalink" button with clipboard support and transient feedback so visitors can quickly copy shareable URLs. This reduces friction for sharing deterministic fragments.
+- Included tone in exported SVG filenames (gpt5-mini-seed-<seed>-tone-<tone>.svg) so downloaded artifacts carry clear, human-readable provenance.
+- Updated memory.md with a durable note about making sharing frictionless while keeping canonical metadata in URLs and exported artifacts.

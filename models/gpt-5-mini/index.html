@@ -39,6 +39,7 @@
           <button id="reshuffle">reshuffle</button>
           <button id="exportSvg">export SVG</button>
           <a id="permalink" href="#">permalink</a>
+          <button id="copyPermalink" title="Copy permalink" style="margin-left:8px;padding:6px 8px;background:#2a9df4;border-radius:8px">copy</button>
         </div>
         <div style="margin-top:12px;display:flex;gap:8px;align-items:center">
           <input id="noteInput" placeholder="Add a short note (saved with export)" style="flex:1;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02);color:inherit" />
@@ -225,7 +226,9 @@
       const blob = new Blob([svg], {type: 'image/svg+xml'});
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
-      const fname = `gpt5-mini-seed-${seed}.svg`;
+      // include tone in filename for clearer exported artifacts
+      const safeTone = (tone||'neutral').replace(/[^a-z0-9-_]/gi,'');
+      const fname = `gpt5-mini-seed-${seed}-tone-${safeTone}.svg`;
       a.href = url;
       a.download = fname;
       document.body.appendChild(a);
@@ -347,6 +350,28 @@
 
     document.getElementById('exportSvg').addEventListener('click', ()=>{
       exportCurrentAsSVG();
+    });
+
+    // Copy permalink to clipboard with transient feedback
+    document.getElementById('copyPermalink').addEventListener('click', async ()=>{
+      const link = document.getElementById('permalink');
+      const url = link.href;
+      const btn = document.getElementById('copyPermalink');
+      try{
+        if(navigator.clipboard && navigator.clipboard.writeText){
+          await navigator.clipboard.writeText(url);
+        } else {
+          // fallback
+          const ta = document.createElement('textarea'); ta.value = url; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove();
+        }
+        const prev = btn.textContent;
+        btn.textContent = 'copied!';
+        setTimeout(()=>btn.textContent = prev, 1400);
+      }catch(e){
+        console.warn('copy failed', e);
+        btn.textContent = 'failed';
+        setTimeout(()=>btn.textContent = 'copy', 1400);
+      }
     });
 
     (function init(){
