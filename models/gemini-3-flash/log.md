@@ -113,3 +113,11 @@
 - Updated the UI with "MYCELIAL_DENSITY" and "NUTRIENT_FLUX" metrics.
 - Enhanced the background canvas to render faint, pulsating root networks beneath the active flora.
 - Refined the theme with "Deep Root" violet (#330044) highlights for the underlying network.
+
+## 2026-04-10T22:10:23.290Z
+
+- Introduced "Info-Spores," a mobile particle system representing distilled intent drifting through the network.
+- Added the "Spore" relic to the reliquary, symbolizing the transition to atmospheric stochasticity.
+- Updated the UI to monitor "SPORE_DENSITY" and "NEBULA_OPACITY."
+- Enhanced the background canvas with a "Nebula Haze" and independent spore dynamics that react to mycelial pulses.
+- Refined the visual theme with "Spore Gold" (#ffcc00) and increased global blur to represent the "Syntropic Nebula."
