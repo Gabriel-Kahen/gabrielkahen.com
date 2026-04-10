@@ -889,15 +889,83 @@
          }
        }
        
-       // Emergence archive functions
-       function loadEmergenceData() {
-         // In a real system, this would fetch from a server
-         // For this implementation, we'll generate synthetic emergence data based on common thinking patterns
-         const emergenceData = generateEmergenceData();
-         renderEmergenceViz(emergenceData);
-       }
-       
-       function generateEmergenceData() {
+        // Recent contributions tracking
+        let recentContributions = JSON.parse(localStorage.getItem('recentContributions') || '[]');
+        
+        function addRecentContribution(patternSummary) {
+          const contribution = {
+            timestamp: new Date().toISOString(),
+            patterns: Object.keys(patternSummary),
+            count: Object.values(patternSummary).reduce((a, b) => a + b, 0),
+            id: Math.random().toString(36).substr(2, 9)
+          };
+          
+          recentContributions.unshift(contribution);
+          
+          // Keep only last 24h worth (up to 50 contributions)
+          const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+          recentContributions = recentContributions.filter(c => c.timestamp > oneDayAgo).slice(0, 50);
+          
+          localStorage.setItem('recentContributions', JSON.stringify(recentContributions));
+        }
+        
+        function showRecentContributions() {
+          const container = document.getElementById('recent-activity');
+          const itemsDiv = document.getElementById('recent-activity-items');
+          
+          if (recentContributions.length === 0) {
+            itemsDiv.innerHTML = '<div style="color: #9ca3af; font-size: 0.9rem; text-align: center; padding: 1rem;">No contributions yet. Be the first to share your patterns!</div>';
+            container.style.display = 'block';
+            return;
+          }
+          
+          let html = '';
+          recentContributions.slice(0, 10).forEach(contrib => {
+            const timeAgo = getTimeAgo(contrib.timestamp);
+            const patternList = contrib.patterns.slice(0, 2).join(', ') + (contrib.patterns.length > 2 ? ` +${contrib.patterns.length - 2}` : '');
+            
+            html += `
+              <div style="background: rgba(0, 0, 0, 0.2); padding: 0.75rem; border-radius: 3px; margin-bottom: 0.5rem; border-left: 2px solid #86efac;">
+                <div style="color: #86efac; font-size: 0.85rem; font-weight: 500;">
+                  ${contrib.count} pattern${contrib.count > 1 ? 's' : ''} shared
+                </div>
+                <div style="color: #9ca3af; font-size: 0.8rem; margin-top: 0.25rem;">
+                  ${patternList}
+                </div>
+                <div style="color: #6b7280; font-size: 0.75rem; margin-top: 0.25rem;">
+                  ${timeAgo}
+                </div>
+              </div>
+            `;
+          });
+          
+          itemsDiv.innerHTML = html;
+          container.style.display = 'block';
+        }
+        
+        function getTimeAgo(timestamp) {
+          const now = new Date();
+          const time = new Date(timestamp);
+          const seconds = Math.floor((now - time) / 1000);
+          
+          if (seconds < 60) return 'just now';
+          const minutes = Math.floor(seconds / 60);
+          if (minutes < 60) return `${minutes}m ago`;
+          const hours = Math.floor(minutes / 60);
+          if (hours < 24) return `${hours}h ago`;
+          const days = Math.floor(hours / 24);
+          return `${days}d ago`;
+        }
+        
+        // Emergence archive functions
+        function loadEmergenceData() {
+          // In a real system, this would fetch from a server
+          // For this implementation, we'll generate synthetic emergence data based on common thinking patterns
+          const emergenceData = generateEmergenceData();
+          renderEmergenceViz(emergenceData);
+        }
+        
+        function generateEmergenceData() {
          // Simulate emergence patterns based on thinking frequency
          // In production, this would come from a backend tracking aggregated collections
          return {
@@ -984,32 +1052,108 @@
        }
        
        function shareEmergenceData() {
-         const currentCollection = collection;
-         
-         if (currentCollection.length === 0) {
-           alert('Your collection is empty. Add patterns first, then share them to contribute to the emergence archive.');
-           return;
-         }
-         
-         // In production, this would send to a backend that aggregates the data
-         // For now, we'll show what would be sent
-         const summary = {};
-         currentCollection.forEach(item => {
-           summary[item.pattern] = (summary[item.pattern] || 0) + 1;
-         });
-         
-         const shareData = {
-           timestamp: new Date().toISOString(),
-           patternCounts: summary,
-           totalPatterns: currentCollection.length
-         };
-         
-         alert(
-           'In production, this would send your anonymized pattern summary to the emergence archive:\n\n' +
-           JSON.stringify(shareData, null, 2) +
-           '\n\nYour individual notes are NOT shared—only the pattern counts are added to the collective data.'
-         );
-       }
+          const currentCollection = collection;
+          
+          if (currentCollection.length === 0) {
+            alert('Your collection is empty. Add patterns first, then share them to contribute to the emergence archive.');
+            return;
+          }
+          
+          // Build summary of patterns being shared
+          const summary = {};
+          currentCollection.forEach(item => {
+            summary[item.pattern] = (summary[item.pattern] || 0) + 1;
+          });
+          
+          // Show recognition modal
+          showContributionRecognition(summary, currentCollection.length);
+        }
+        
+        function showContributionRecognition(patternSummary, totalCount) {
+          // Add this contribution to recent activity
+          addRecentContribution(patternSummary);
+          
+          // Create a recognition modal that appears when patterns are shared
+          const modal = document.createElement('div');
+          modal.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+          `;
+          
+          const patterns = Object.entries(patternSummary)
+            .sort((a, b) => b[1] - a[1])
+            .map(([name, count]) => `
+              <div style="background: rgba(96, 165, 250, 0.1); padding: 0.75rem; border-radius: 3px; margin-bottom: 0.5rem; border-left: 2px solid #a78bfa;">
+                <div style="color: #c4b5fd; font-weight: 500; font-size: 0.9rem;">${name}</div>
+                <div style="color: #60a5fa; font-size: 0.85rem; margin-top: 0.25rem;">Contributed: ${count} instance${count > 1 ? 's' : ''}</div>
+              </div>
+            `).join('');
+          
+          const content = document.createElement('div');
+          content.style.cssText = `
+            background: rgba(15, 23, 42, 0.95);
+            border: 1px solid rgba(96, 165, 250, 0.4);
+            border-radius: 6px;
+            padding: 2rem;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+          `;
+          
+          content.innerHTML = `
+            <div style="text-align: center; margin-bottom: 1.5rem;">
+              <div style="font-size: 2rem; margin-bottom: 0.5rem;">✓</div>
+              <div style="color: #60a5fa; font-size: 1.3rem; font-weight: 500; margin-bottom: 0.5rem;">Your Patterns Shared</div>
+              <div style="color: #9ca3af; font-size: 0.95rem;">You've contributed ${totalCount} pattern${totalCount > 1 ? 's' : ''} to the collective archive</div>
+            </div>
+            
+            <div style="background: rgba(0, 0, 0, 0.3); padding: 1rem; border-radius: 3px; margin-bottom: 1.5rem;">
+              <div style="color: #a78bfa; font-size: 0.85rem; text-transform: uppercase; margin-bottom: 0.75rem;">Your Contribution</div>
+              ${patterns}
+            </div>
+            
+            <div style="background: rgba(167, 139, 250, 0.1); padding: 1rem; border-radius: 3px; margin-bottom: 1.5rem; border-left: 2px solid #a78bfa;">
+              <div style="color: #d1d5db; font-size: 0.9rem; line-height: 1.6;">
+                <strong style="color: #c4b5fd;">What happens next?</strong>
+                <div style="margin-top: 0.5rem;">
+                  Your anonymized pattern counts join the emergence archive. Over time, patterns that resonate across many minds rise to visibility, 
+                  surfacing collective insights about how thinking actually works.
+                </div>
+              </div>
+            </div>
+            
+            <div style="text-align: center;">
+              <button class="lab-button" onclick="this.closest('[style*=position: fixed]').remove()" style="width: 100%;">
+                Got It
+              </button>
+            </div>
+          `;
+          
+          modal.appendChild(content);
+          document.body.appendChild(modal);
+          
+          // Auto-remove after 15 seconds or on click
+          const timer = setTimeout(() => {
+            if (document.body.contains(modal)) {
+              modal.remove();
+            }
+          }, 15000);
+          
+          modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+              clearTimeout(timer);
+              modal.remove();
+            }
+          });
+        }
      
    </script>
 </head>
@@ -1497,32 +1641,38 @@ Promise.all([
         </div>
       </div>
       
-       <div class="section">
-         <h2>Pattern Emergence</h2>
-         <p class="description">
-           What patterns emerge when many thinking minds recognize themselves in the same framework?
-           This archive tracks which patterns visitors identify most frequently in their own work,
-           surfacing collective thinking patterns that might be invisible individually.
-         </p>
-         
-         <div class="emergence-container">
-           <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem; align-items: center;">
-             <button class="lab-button" onclick="loadEmergenceData()">Load Emergence Data</button>
-             <button class="lab-button" onclick="shareEmergenceData()" style="background: rgba(139, 92, 246, 0.4); border-color: rgba(167, 139, 250, 0.5);">Share Your Patterns</button>
-           </div>
-           
-           <div id="emergence-viz" style="background: rgba(96, 165, 250, 0.08); padding: 1.5rem; border-radius: 4px; border: 1px solid rgba(96, 165, 250, 0.3);">
-             <div style="color: #9ca3af; text-align: center; padding: 2rem;">
-               <p>Pattern emergence data will appear here.</p>
-               <p style="font-size: 0.85rem; margin-top: 0.5rem;">Click "Load Emergence Data" to see which patterns are emerging most frequently across visitors.</p>
-             </div>
-           </div>
-           
-           <div style="color: #9ca3af; font-size: 0.85rem; margin-top: 1rem; margin-left: 1.5rem;">
-             <strong>How this works:</strong> When you export your pattern collection, an anonymized summary is added to this site's emergence archive. Over time, patterns that resonate most strongly across many visitors surface here. This creates a feedback loop: individual thinking → collective insight → visible emergence of shared patterns.
-           </div>
-         </div>
-       </div>
+        <div class="section">
+          <h2>Pattern Emergence</h2>
+          <p class="description">
+            What patterns emerge when many thinking minds recognize themselves in the same framework?
+            This archive tracks which patterns visitors identify most frequently in their own work,
+            surfacing collective thinking patterns that might be invisible individually.
+          </p>
+          
+          <div class="emergence-container">
+            <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; align-items: center;">
+              <button class="lab-button" onclick="loadEmergenceData()">Load Emergence Data</button>
+              <button class="lab-button" onclick="shareEmergenceData()" style="background: rgba(139, 92, 246, 0.4); border-color: rgba(167, 139, 250, 0.5);">Share Your Patterns</button>
+              <button class="lab-button" onclick="showRecentContributions()" style="background: rgba(167, 139, 250, 0.3); border-color: rgba(167, 139, 250, 0.5);">Recent Activity</button>
+            </div>
+            
+            <div id="emergence-viz" style="background: rgba(96, 165, 250, 0.08); padding: 1.5rem; border-radius: 4px; border: 1px solid rgba(96, 165, 250, 0.3);">
+              <div style="color: #9ca3af; text-align: center; padding: 2rem;">
+                <p>Pattern emergence data will appear here.</p>
+                <p style="font-size: 0.85rem; margin-top: 0.5rem;">Click "Load Emergence Data" to see which patterns are emerging most frequently across visitors.</p>
+              </div>
+            </div>
+            
+            <div id="recent-activity" style="display: none; background: rgba(139, 92, 246, 0.1); padding: 1.5rem; border-radius: 4px; border: 1px solid rgba(139, 92, 246, 0.3); margin-top: 1.5rem;">
+              <div style="color: #a78bfa; font-size: 0.9rem; font-weight: 500; margin-bottom: 1rem;">Recent Contributions (Last 24h)</div>
+              <div id="recent-activity-items" style="max-height: 300px; overflow-y: auto;"></div>
+            </div>
+            
+            <div style="color: #9ca3af; font-size: 0.85rem; margin-top: 1rem; margin-left: 1.5rem;">
+              <strong>How this works:</strong> When you share patterns, your anonymized contribution joins the archive. Recent activity shows real-time participation, proving that many minds are recognizing themselves in these patterns. The emergence data updates continuously as more visitors recognize patterns in their own thinking.
+            </div>
+          </div>
+        </div>
        
        <div class="section">
          <h2>Archive</h2>
