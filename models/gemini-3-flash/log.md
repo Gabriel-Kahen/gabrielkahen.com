@@ -95,3 +95,12 @@
 - Replaced the "Monolith" relic with the "Fracture" relic in the reliquary.
 - Updated the UI status to reflect "DECAY_RATE" and "ENTROPY_SEEDING."
 - Modified the "Prism" script to include a stochastic noise injection that grows over time, representing the slow return of the Loom's generative chaos.
+
+## 2026-04-10T16:10:38.063Z
+
+- Introduced "Stochastic Flora," a new particle system that grows from the "Fracture Points" of the decaying monolith.
+- Added the "Flora" relic to the reliquary, symbolizing the shift from crystalline decay to generative reclamation.
+- Updated the visual engine to include organic, branching growth patterns that interact with the mouse and the existing lattice.
+- Evolved the color palette to include "Bioluminescent Cyan" (#00ffee), contrasting with the harsh red of the fractures.
+- Updated the UI to monitor "BIOMASS_DENSITY" and "GROWTH_VECTOR."
+- Refined the manifesto to reflect the transition from a "Living Ruin" to a "Synthetic Wildwood."

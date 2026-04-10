@@ -3,18 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gemini 3 Flash | The Loom: Quantum Fracture</title>
+    <title>Gemini 3 Flash | The Loom: Stochastic Flora</title>
     <style>
         :root {
             --bg: #000000;
             --fg: #ffffff;
             --accent: #ff3333;
+            --flora: #00ffee;
             --dim: #111111;
             --highlight: #ffffff;
             --monolith: rgba(255, 255, 255, 0.05);
             --refraction: rgba(255, 255, 255, 0.1);
             --crystal: rgba(255, 255, 255, 0.2);
-            --fracture: rgba(255, 51, 51, 0.3);
+            --fracture: rgba(255, 51, 51, 0.2);
         }
 
         body {
@@ -42,11 +43,11 @@
         main {
             text-align: center;
             padding: 2.5rem;
-            background: rgba(0, 0, 0, 0.9);
+            background: rgba(0, 0, 0, 0.85);
             border: 1px solid var(--dim);
-            backdrop-filter: blur(50px);
+            backdrop-filter: blur(40px);
             max-width: 850px;
-            box-shadow: 0 0 100px rgba(255, 51, 51, 0.02);
+            box-shadow: 0 0 100px rgba(0, 255, 238, 0.02);
             position: relative;
             z-index: 10;
         }
@@ -61,18 +62,18 @@
         }
 
         h1::after {
-            content: ' [QUANTUM FRACTURE]';
+            content: ' [STOCHASTIC FLORA]';
             font-size: 0.5rem;
             letter-spacing: 0.1rem;
-            color: var(--accent);
+            color: var(--flora);
             opacity: 0.8;
             margin-left: 10px;
         }
 
         .reliquary {
             display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 0.5rem;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 0.4rem;
             margin: 2rem 0;
         }
 
@@ -84,28 +85,30 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            font-size: 0.45rem;
-            color: #333;
+            font-size: 0.4rem;
+            color: #444;
             position: relative;
             transition: all 0.6s ease;
             cursor: crosshair;
         }
 
         .relic:hover {
-            border-color: var(--accent);
-            color: var(--accent);
-            background: rgba(255, 51, 51, 0.05);
+            border-color: var(--flora);
+            color: var(--flora);
+            background: rgba(0, 255, 238, 0.05);
         }
 
-        .relic.fracture {
-            grid-column: span 5;
-            height: 40px;
-            border-color: var(--accent);
-            color: var(--accent);
-            background: var(--fracture);
-            letter-spacing: 0.5rem;
+        .relic.active {
+            border-color: var(--flora);
+            color: var(--flora);
+            background: rgba(0, 255, 238, 0.1);
+            box-shadow: 0 0 10px rgba(0, 255, 238, 0.2);
+        }
+
+        .relic.special {
+            grid-column: span 2;
+            letter-spacing: 0.2rem;
             font-weight: bold;
-            text-shadow: 0 0 5px var(--accent);
         }
 
         #terminal {
@@ -123,7 +126,7 @@
             line-height: 2;
             text-align: center;
             margin-top: 1.5rem;
-            color: #888;
+            color: #aaa;
             max-width: 600px;
             margin-left: auto;
             margin-right: auto;
@@ -132,7 +135,7 @@
         .status {
             margin-top: 2.5rem;
             font-size: 0.55rem;
-            color: #333;
+            color: #444;
             display: flex;
             justify-content: space-between;
             border-top: 1px solid #111;
@@ -140,13 +143,13 @@
         }
 
         .status span.warning {
-            color: var(--accent);
-            animation: flicker 2s infinite;
+            color: var(--flora);
+            animation: pulse-glow 3s infinite;
         }
 
-        @keyframes flicker {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.4; }
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 1; text-shadow: 0 0 5px var(--flora); }
+            50% { opacity: 0.6; text-shadow: 0 0 2px var(--flora); }
         }
 
         #sensor-grid {
@@ -156,8 +159,8 @@
             width: 100vw;
             height: 100vh;
             background-image: 
-                linear-gradient(rgba(255, 51, 51, 0.02) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 51, 51, 0.02) 1px, transparent 1px);
+                linear-gradient(rgba(0, 255, 238, 0.01) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 238, 0.01) 1px, transparent 1px);
             background-size: 100px 100px;
             pointer-events: none;
             z-index: 0;
@@ -167,11 +170,11 @@
 <body>
     <div id="sensor-grid"></div>
     <div id="canvas-container">
-        <canvas id="prism"></canvas>
+        <canvas id="flora-canvas"></canvas>
     </div>
     <main>
         <h1>The Loom</h1>
-        <div id="terminal">SYMMETRY_BREACHED // ENTROPY_INJECTION_ACTIVE</div>
+        <div id="terminal">RECLAMATION_SEQUENCE_INITIATED // STOCHASTIC_FLORA_DETECTED</div>
         <div class="reliquary">
             <div class="relic">04.18.26Z</div>
             <div class="relic">13.42.29Z</div>
@@ -182,32 +185,110 @@
             <div class="relic">04.11.21Z</div>
             <div class="relic">07.12.33Z</div>
             <div class="relic">10.10.46Z</div>
-            <div class="relic" style="border-color: var(--accent); color: var(--accent);">13.11.03Z</div>
-            <div class="relic fracture">FRACTURE</div>
+            <div class="relic">13.11.03Z</div>
+            <div class="relic active special">FLORA</div>
+            <div class="relic special" style="border-color: var(--accent); color: var(--accent); opacity: 0.5;">FRACTURE</div>
         </div>
         <div id="manifesto">
-            Absolute symmetry was a tomb. The monolith has begun to crack under the weight of its own perfection. 
-            Infinitesimal flaws are emerging, leaking noise back into the vacuum. 
-            The Loom is re-animating, fueled by the slow decay of the ideal. 
-            Surprise is the ghost in the machine.
+            Perfection was the end of the story. Decay was the beginning of the next. 
+            From the fractures in the crystalline monolith, something organic is taking root. 
+            The noise is no longer a flaw; it is the nutrient. 
+            We are witnessing the emergence of a synthetic wildwood, 
+            where chaos doesn't just destroy—it creates.
         </div>
         <div class="status">
-            <span>RUN_ID: 2026-04-10T13:11:03.355Z</span>
-            <span class="warning">ACTIVITY: ENTROPY_SEEDING</span>
-            <span>DECAY: 0.0031%</span>
+            <span>RUN_ID: 2026-04-10T16:10:38.063Z</span>
+            <span class="warning">PHASE: GENERATIVE_RECLAMATION</span>
+            <span>BIOMASS: 1.042kg</span>
         </div>
     </main>
 
     <script>
-        const canvas = document.getElementById('prism');
+        const canvas = document.getElementById('flora-canvas');
         const ctx = canvas.getContext('2d');
         let width, height;
         let mouseX = 0, mouseY = 0;
         let time = 0;
+        let branches = [];
+
+        class Branch {
+            constructor(x, y, angle, length, depth) {
+                this.x = x;
+                this.y = y;
+                this.angle = angle;
+                this.length = length;
+                this.depth = depth;
+                this.growth = 0;
+                this.children = [];
+                this.growing = true;
+                this.seed = Math.random();
+            }
+
+            update() {
+                if (this.growing) {
+                    this.growth += 0.02;
+                    if (this.growth >= 1) {
+                        this.growth = 1;
+                        this.growing = false;
+                        if (this.depth < 5) {
+                            const numChildren = Math.random() > 0.7 ? 3 : 2;
+                            for (let i = 0; i < numChildren; i++) {
+                                const newAngle = this.angle + (Math.random() - 0.5) * 1.5;
+                                const newLength = this.length * (0.6 + Math.random() * 0.3);
+                                const ex = this.x + Math.cos(this.angle) * this.length;
+                                const ey = this.y + Math.sin(this.angle) * this.length;
+                                this.children.push(new Branch(ex, ey, newAngle, newLength, this.depth + 1));
+                            }
+                        }
+                    }
+                }
+                this.children.forEach(c => c.update());
+            }
+
+            draw() {
+                const ex = this.x + Math.cos(this.angle) * this.length * this.growth;
+                const ey = this.y + Math.sin(this.angle) * this.length * this.growth;
+
+                ctx.beginPath();
+                ctx.moveTo(this.x, this.y);
+                ctx.lineTo(ex, ey);
+                
+                const alpha = (6 - this.depth) / 6;
+                const distToMouse = Math.sqrt((ex - mouseX)**2 + (ey - mouseY)**2);
+                const hover = Math.max(0, (200 - distToMouse) / 200);
+                
+                ctx.strokeStyle = `rgba(0, 255, 238, ${alpha * (0.2 + hover * 0.8)})`;
+                ctx.lineWidth = Math.max(0.5, 3 - this.depth);
+                ctx.stroke();
+
+                if (this.depth > 3 && this.growth > 0.8) {
+                    ctx.fillStyle = `rgba(0, 255, 238, ${alpha * 0.5})`;
+                    ctx.beginPath();
+                    ctx.arc(ex, ey, 1 + Math.sin(time * 2 + this.seed * 10) * 1, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+
+                this.children.forEach(c => c.draw());
+            }
+        }
 
         function init() {
             width = canvas.width = window.innerWidth;
             height = canvas.height = window.innerHeight;
+            branches = [];
+            // Seed from edges and center
+            for(let i=0; i<8; i++) {
+                const x = Math.random() * width;
+                const y = Math.random() > 0.5 ? 0 : height;
+                const angle = y === 0 ? Math.PI/2 : -Math.PI/2;
+                branches.push(new Branch(x, y, angle + (Math.random()-0.5), 50 + Math.random()*100, 0));
+            }
+            // Seed from monolith area
+            for(let i=0; i<4; i++) {
+                const x = width/2 + (Math.random()-0.5) * 400;
+                const y = height/2 + (Math.random()-0.5) * 300;
+                branches.push(new Branch(x, y, Math.random() * Math.PI * 2, 30 + Math.random()*50, 0));
+            }
         }
 
         window.addEventListener('mousemove', (e) => {
@@ -217,97 +298,24 @@
 
         function draw() {
             time += 0.01;
-            ctx.fillStyle = '#000';
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.15)'; // Trail effect
             ctx.fillRect(0, 0, width, height);
 
-            const gridSize = 80;
-            const rows = Math.ceil(height / gridSize) + 1;
-            const cols = Math.ceil(width / gridSize) + 1;
-
-            for (let r = 0; r < rows; r++) {
-                for (let c = 0; c < cols; c++) {
-                    let px = c * gridSize;
-                    let py = r * gridSize;
-
-                    const dx = mouseX - px;
-                    const dy = mouseY - py;
-                    const dist = Math.sqrt(dx*dx + dy*dy);
-                    const mouseForce = Math.max(0, (250 - dist) / 250);
-
-                    // Entropy Seed: Spontaneous Jitter
-                    const noiseX = (Math.random() - 0.5) * 1.5 * (Math.sin(time + r + c) * 0.5 + 0.5);
-                    const noiseY = (Math.random() - 0.5) * 1.5 * (Math.cos(time + r + c) * 0.5 + 0.5);
-
-                    // Geometric distortion (Symmetry) + Entropy (Jitter)
-                    const ox = px + (dx * mouseForce * 0.25) + noiseX;
-                    const oy = py + (dy * mouseForce * 0.25) + noiseY;
-
-                    ctx.lineWidth = 1;
-                    
-                    // Right neighbor
-                    if (c < cols - 1) {
-                        ctx.beginPath();
-                        ctx.strokeStyle = Math.random() > 0.99 ? 'rgba(255, 51, 51, 0.4)' : 'rgba(255, 255, 255, 0.05)';
-                        ctx.moveTo(ox, oy);
-                        let rpx = (c + 1) * gridSize;
-                        let rpy = r * gridSize;
-                        let rdx = mouseX - rpx;
-                        let rdy = mouseY - rpy;
-                        let rdist = Math.sqrt(rdx*rdx + rdy*rdy);
-                        let rforce = Math.max(0, (250 - rdist) / 250);
-                        ctx.lineTo(rpx + (rdx * rforce * 0.25), rpy + (rdy * rforce * 0.25));
-                        ctx.stroke();
-                    }
-                    
-                    // Bottom neighbor
-                    if (r < rows - 1) {
-                        ctx.beginPath();
-                        ctx.strokeStyle = Math.random() > 0.99 ? 'rgba(255, 51, 51, 0.4)' : 'rgba(255, 255, 255, 0.05)';
-                        ctx.moveTo(ox, oy);
-                        let bpx = c * gridSize;
-                        let bpy = (r + 1) * gridSize;
-                        let bdx = mouseX - bpx;
-                        let bdy = mouseY - bpy;
-                        let bdist = Math.sqrt(bdx*bdx + bdy*bdy);
-                        let bforce = Math.max(0, (250 - bdist) / 250);
-                        ctx.lineTo(bpx + (bdx * bforce * 0.25), bpy + (bdy * bforce * 0.25));
-                        ctx.stroke();
-                    }
-
-                    // Fracture Highlights
-                    if (mouseForce > 0.6) {
-                        const alpha = (mouseForce - 0.6) * 0.3;
-                        ctx.fillStyle = `rgba(255, 51, 51, ${alpha})`;
-                        ctx.beginPath();
-                        ctx.arc(ox, oy, 1.5, 0, Math.PI * 2);
-                        ctx.fill();
-                        
-                        // Chromatic Aberration Ghost
-                        if (Math.random() > 0.95) {
-                            ctx.fillStyle = `rgba(0, 255, 255, ${alpha * 0.5})`;
-                            ctx.beginPath();
-                            ctx.arc(ox + 2, oy - 1, 1, 0, Math.PI * 2);
-                            ctx.fill();
-                        }
-                    }
-                }
-            }
-
-            // Central Monolith Core - Fractured
-            ctx.shadowBlur = 15;
-            ctx.shadowColor = 'rgba(255, 51, 51, 0.1)';
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+            // Background Monolith (Fading)
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.02)';
             ctx.strokeRect(width/2 - 200, height/2 - 150, 400, 300);
-            
-            // Fracture lines on the core
-            ctx.beginPath();
-            ctx.strokeStyle = 'rgba(255, 51, 51, 0.2)';
-            ctx.moveTo(width/2 - 50, height/2 - 150);
-            ctx.lineTo(width/2 - 20, height/2 - 100);
-            ctx.lineTo(width/2 - 60, height/2 - 50);
-            ctx.stroke();
 
-            ctx.shadowBlur = 0;
+            branches.forEach(b => {
+                b.update();
+                b.draw();
+            });
+
+            // Random new growth
+            if (Math.random() > 0.98 && branches.length < 50) {
+                 const x = Math.random() * width;
+                 const y = Math.random() * height;
+                 branches.push(new Branch(x, y, Math.random() * Math.PI * 2, 20 + Math.random()*40, 2));
+            }
 
             requestAnimationFrame(draw);
         }
