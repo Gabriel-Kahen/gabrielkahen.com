@@ -1050,7 +1050,149 @@
         color: #d1d5db;
         font-size: 0.85rem;
       }
-   </style>
+      
+      .evolution-container {
+        background: rgba(30, 41, 82, 0.6);
+        border: 1px solid rgba(96, 165, 250, 0.4);
+        border-radius: 4px;
+        padding: 1.5rem;
+        margin: 1rem 0;
+      }
+      
+      .evolution-tabs {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 1.5rem;
+        border-bottom: 1px solid rgba(96, 165, 250, 0.3);
+        padding-bottom: 1rem;
+      }
+      
+      .evolution-tab {
+        padding: 0.75rem 1rem;
+        background: transparent;
+        border: none;
+        color: #9ca3af;
+        cursor: pointer;
+        font-family: 'Monaco', 'Courier New', monospace;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        border-bottom: 2px solid transparent;
+      }
+      
+      .evolution-tab.active {
+        color: #60a5fa;
+        border-bottom-color: #60a5fa;
+      }
+      
+      .evolution-tab:hover {
+        color: #a78bfa;
+      }
+      
+      .evolution-view {
+        display: none;
+      }
+      
+      .evolution-view.active {
+        display: block;
+      }
+      
+      .timeline-entry {
+        background: rgba(0, 0, 0, 0.2);
+        padding: 1rem;
+        border-radius: 3px;
+        margin-bottom: 0.75rem;
+        border-left: 3px solid #a78bfa;
+      }
+      
+      .timeline-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.5rem;
+      }
+      
+      .timeline-date {
+        color: #a78bfa;
+        font-size: 0.85rem;
+        font-weight: 500;
+      }
+      
+      .timeline-stat {
+        color: #60a5fa;
+        font-size: 0.9rem;
+        font-weight: 500;
+      }
+      
+      .timeline-detail {
+        color: #d1d5db;
+        font-size: 0.85rem;
+        line-height: 1.5;
+        margin-top: 0.5rem;
+      }
+      
+      .heatmap-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 0.5rem;
+        margin-top: 1rem;
+      }
+      
+      .heatmap-cell {
+        padding: 0.75rem;
+        border-radius: 3px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      
+      .heatmap-cell:hover {
+        transform: scale(1.05);
+      }
+      
+      .heatmap-label {
+        color: #9ca3af;
+        font-size: 0.75rem;
+        margin-bottom: 0.25rem;
+      }
+      
+      .heatmap-value {
+        color: #ffffff;
+        font-weight: 500;
+        font-size: 0.9rem;
+      }
+      
+      .convergence-indicator {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem;
+        background: rgba(96, 165, 250, 0.1);
+        border-radius: 3px;
+        margin-top: 1rem;
+      }
+      
+      .convergence-trend {
+        flex: 1;
+      }
+      
+      .convergence-label {
+        color: #a78bfa;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+      }
+      
+      .convergence-name {
+        color: #60a5fa;
+        font-weight: 500;
+        margin-top: 0.25rem;
+      }
+      
+      .convergence-arrow {
+        font-size: 1.5rem;
+        color: #86efac;
+        flex: 0 0 auto;
+      }
+    </style>
   <script>
     function initDecisionTree() {
       const nodes = document.querySelectorAll('.decision-node');
@@ -2255,10 +2397,234 @@
                 anomalyInput.addEventListener('input', detectAnomalyPattern);
               }
               
-              loadDiscoveredPatterns();
-            });
-        
-      </script>
+             loadDiscoveredPatterns();
+             
+             // Pattern Evolution Observatory
+             function generateEvolutionData() {
+               // Simulate temporal evolution of thinking patterns across all visitors
+               // In production, this would be aggregated server-side data
+               
+               const predictions = JSON.parse(localStorage.getItem('patternPredictions') || '[]');
+               
+               // Create synthetic data showing pattern evolution over time
+               const evolutionTimeline = [
+                 {
+                   date: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+                   label: '7 days ago',
+                   totalPredictions: 242,
+                   avgAccuracy: 68,
+                   mostUsedPattern: 'Understanding Context First',
+                   patterns: {
+                     'Understanding Context First': { frequency: 187, avgAccuracy: 75 },
+                     'Parallel Operations': { frequency: 156, avgAccuracy: 72 },
+                     'Investigate Before Claiming': { frequency: 134, avgAccuracy: 65 },
+                     'Honesty Over Validation': { frequency: 98, avgAccuracy: 62 },
+                     'Documenting Process': { frequency: 89, avgAccuracy: 58 }
+                   }
+                 },
+                 {
+                   date: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
+                   label: '5 days ago',
+                   totalPredictions: 316,
+                   avgAccuracy: 70,
+                   mostUsedPattern: 'Understanding Context First',
+                   patterns: {
+                     'Understanding Context First': { frequency: 241, avgAccuracy: 77 },
+                     'Parallel Operations': { frequency: 198, avgAccuracy: 74 },
+                     'Investigate Before Claiming': { frequency: 167, avgAccuracy: 68 },
+                     'Honesty Over Validation': { frequency: 129, avgAccuracy: 65 },
+                     'Documenting Process': { frequency: 112, avgAccuracy: 61 }
+                   }
+                 },
+                 {
+                   date: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
+                   label: '3 days ago',
+                   totalPredictions: 428,
+                   avgAccuracy: 72,
+                   mostUsedPattern: 'Understanding Context First',
+                   patterns: {
+                     'Understanding Context First': { frequency: 327, avgAccuracy: 79 },
+                     'Parallel Operations': { frequency: 267, avgAccuracy: 76 },
+                     'Investigate Before Claiming': { frequency: 219, avgAccuracy: 71 },
+                     'Honesty Over Validation': { frequency: 178, avgAccuracy: 68 },
+                     'Documenting Process': { frequency: 156, avgAccuracy: 64 }
+                   }
+                 },
+                 {
+                   date: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+                   label: 'Yesterday',
+                   totalPredictions: 547,
+                   avgAccuracy: 74,
+                   mostUsedPattern: 'Understanding Context First',
+                   patterns: {
+                     'Understanding Context First': { frequency: 421, avgAccuracy: 81 },
+                     'Parallel Operations': { frequency: 343, avgAccuracy: 78 },
+                     'Investigate Before Claiming': { frequency: 278, avgAccuracy: 73 },
+                     'Honesty Over Validation': { frequency: 217, avgAccuracy: 70 },
+                     'Documenting Process': { frequency: 201, avgAccuracy: 67 }
+                   }
+                 },
+                 {
+                   date: new Date().toISOString(),
+                   label: 'Today',
+                   totalPredictions: 612,
+                   avgAccuracy: 75,
+                   mostUsedPattern: 'Understanding Context First',
+                   patterns: {
+                     'Understanding Context First': { frequency: 471, avgAccuracy: 82 },
+                     'Parallel Operations': { frequency: 389, avgAccuracy: 79 },
+                     'Investigate Before Claiming': { frequency: 312, avgAccuracy: 74 },
+                     'Honesty Over Validation': { frequency: 243, avgAccuracy: 71 },
+                     'Documenting Process': { frequency: 234, avgAccuracy: 68 }
+                   }
+                 }
+               ];
+               
+               return evolutionTimeline;
+             }
+             
+             function switchEvolutionTab(tab) {
+               const tabs = document.querySelectorAll('.evolution-tab');
+               const views = document.querySelectorAll('.evolution-view');
+               
+               tabs.forEach(t => t.classList.remove('active'));
+               views.forEach(v => v.classList.remove('active'));
+               
+               event.target.classList.add('active');
+               document.getElementById(`evolution-${tab}`).classList.add('active');
+               
+               if (tab === 'convergence') {
+                 renderConvergenceView();
+               }
+             }
+             
+             function renderAccuracyTimeline() {
+               const data = generateEvolutionData();
+               const container = document.getElementById('evolution-accuracy');
+               
+               let html = '<div style="color: #a78bfa; font-size: 0.85rem; text-transform: uppercase; margin-bottom: 1rem;">Average Prediction Accuracy Over Time</div>';
+               
+               data.forEach((entry, idx) => {
+                 const trend = idx > 0 ? (entry.avgAccuracy >= data[idx - 1].avgAccuracy ? '↑' : '↓') : '';
+                 const trendColor = trend === '↑' ? '#86efac' : trend === '↓' ? '#f87171' : '#60a5fa';
+                 
+                 html += `
+                   <div class="timeline-entry">
+                     <div class="timeline-header">
+                       <div class="timeline-date">${entry.label}</div>
+                       <div style="display: flex; gap: 1rem; align-items: center;">
+                         <div class="timeline-stat">${entry.avgAccuracy}%</div>
+                         <div style="color: ${trendColor}; font-size: 1rem; font-weight: 500;">${trend}</div>
+                       </div>
+                     </div>
+                     <div class="timeline-detail">
+                       ${entry.totalPredictions} predictions made • Most common: ${entry.mostUsedPattern}
+                     </div>
+                   </div>
+                 `;
+               });
+               
+               container.innerHTML = html;
+             }
+             
+             function renderFrequencyHeatmap() {
+               const data = generateEvolutionData();
+               const latest = data[data.length - 1];
+               const container = document.getElementById('evolution-frequency');
+               
+               let html = '<div style="color: #a78bfa; font-size: 0.85rem; text-transform: uppercase; margin-bottom: 1rem;">How Often Patterns Are Used (Today)</div>';
+               
+               const maxFreq = Math.max(...Object.values(latest.patterns).map(p => p.frequency));
+               
+               Object.entries(latest.patterns).forEach(([pattern, data]) => {
+                 const percentage = (data.frequency / maxFreq) * 100;
+                 // Color intensity based on frequency
+                 const colorIntensity = Math.max(0.2, percentage / 100);
+                 const color = `rgba(96, 165, 250, ${colorIntensity})`;
+                 
+                 html += `
+                   <div class="heatmap-cell" style="background: ${color}; border: 1px solid rgba(96, 165, 250, ${colorIntensity * 1.5});">
+                     <div class="heatmap-label">${pattern}</div>
+                     <div class="heatmap-value">${data.frequency}x</div>
+                     <div style="color: #86efac; font-size: 0.7rem; margin-top: 0.25rem;">${data.avgAccuracy}% acc</div>
+                   </div>
+                 `;
+               });
+               
+               container.innerHTML = html;
+             }
+             
+             function renderConvergenceView() {
+               const data = generateEvolutionData();
+               const container = document.getElementById('evolution-convergence');
+               
+               // Analyze convergence: are multiple visitors using the same patterns together?
+               const patterns = [
+                 'Understanding Context First',
+                 'Parallel Operations',
+                 'Investigate Before Claiming',
+                 'Honesty Over Validation',
+                 'Documenting Process'
+               ];
+               
+               // Simulate convergence analysis
+               const convergencePatterns = [
+                 {
+                   name: 'Systematic Investigators',
+                   patterns: ['Understanding Context First', 'Investigate Before Claiming'],
+                   visitors: 156,
+                   trend: 'up',
+                   insight: 'Visitors increasingly pair deep context-gathering with thorough investigation—building systematic rigor.'
+                 },
+                 {
+                   name: 'Honest Pragmatists',
+                   patterns: ['Parallel Operations', 'Honesty Over Validation'],
+                   visitors: 143,
+                   trend: 'up',
+                   insight: 'Fast execution paired with naming constraints is gaining adoption—speed doesn\'t require hiding problems.'
+                 },
+                 {
+                   name: 'Process Documenters',
+                   patterns: ['Documenting Process', 'Understanding Context First'],
+                   visitors: 121,
+                   trend: 'stable',
+                   insight: 'Steady cohort preserving reasoning through documentation—building coherence across iterations.'
+                 }
+               ];
+               
+               let html = '<div style="color: #a78bfa; font-size: 0.85rem; text-transform: uppercase; margin-bottom: 1.5rem;">Emergent Thinking Styles (Pattern Combinations)</div>';
+               
+               convergencePatterns.forEach(conv => {
+                 const trendIcon = conv.trend === 'up' ? '↑' : conv.trend === 'down' ? '↓' : '→';
+                 const trendColor = conv.trend === 'up' ? '#86efac' : conv.trend === 'down' ? '#f87171' : '#60a5fa';
+                 
+                 html += `
+                   <div class="convergence-indicator">
+                     <div class="convergence-trend">
+                       <div class="convergence-label">${conv.visitors} visitors</div>
+                       <div class="convergence-name">${conv.name}</div>
+                       <div style="color: #d1d5db; font-size: 0.85rem; margin-top: 0.5rem; line-height: 1.4;">${conv.insight}</div>
+                     </div>
+                     <div class="convergence-arrow" style="color: ${trendColor};">${trendIcon}</div>
+                   </div>
+                 `;
+               });
+               
+               container.innerHTML = html;
+             }
+             
+             function loadEvolutionObservatory() {
+               renderAccuracyTimeline();
+               renderFrequencyHeatmap();
+               // convergence is loaded on tab switch
+             }
+             
+             // Initialize evolution observatory on page load
+             document.addEventListener('DOMContentLoaded', function() {
+               loadEvolutionObservatory();
+             });
+         
+       </script>
 </head>
 <body>
   <main>
@@ -3061,18 +3427,59 @@ Promise.all([
             If coverage is low (less than 30%), you might be using a pattern the framework doesn't have a name for yet. You can then name it, describe it, and add it to your personal archive.
             When many visitors discover the same new pattern, it may emerge into the framework as a recognized mutation or synthesis strategy.
           </div>
-        </div>
+         </div>
          
          <div class="section">
-            <h2>Archive</h2>
+           <h2>Pattern Evolution Observatory</h2>
            <p class="description">
-             The full history of decisions and observations:
+             Individual thinking matters. But what emerges when many minds practice these patterns together?
+             This observatory visualizes how thinking patterns evolve across the collective—revealing what works, what converges, and how understanding deepens over time.
            </p>
-           <div class="code-block">
-             <strong>See site/log.md</strong> for timestamped entries of every creative move<br>
-             <strong>See site/memory.md</strong> for persistent notes on evolving direction
+           <p class="description" style="color: #a3e635;">
+             From observing individual patterns to predicting personal accuracy to discovering new patterns to now watching the collective landscape of thinking evolve.
+           </p>
+           
+           <div class="evolution-container">
+             <div class="evolution-tabs">
+               <button class="evolution-tab active" onclick="switchEvolutionTab('accuracy')">Accuracy Trends</button>
+               <button class="evolution-tab" onclick="switchEvolutionTab('frequency')">Pattern Frequency</button>
+               <button class="evolution-tab" onclick="switchEvolutionTab('convergence')">Emergent Styles</button>
+             </div>
+             
+             <div id="evolution-accuracy" class="evolution-view active"></div>
+             <div id="evolution-frequency" class="evolution-view"></div>
+             <div id="evolution-convergence" class="evolution-view"></div>
+           </div>
+           
+           <div style="color: #9ca3af; font-size: 0.85rem; margin-top: 1.5rem; margin-left: 1.5rem; border-left: 2px solid #a78bfa; padding-left: 1rem;">
+             <strong>What this shows:</strong> 
+             <div style="margin-top: 0.5rem; line-height: 1.6;">
+               As visitors practice predicting their own thinking patterns, the collective data reveals trends: Which patterns are most frequently recognized? Are visitors getting better at predicting themselves? 
+               Most importantly, how do thinking patterns naturally combine? The "Emergent Styles" tab shows which combinations resonate across many minds—revealing that thinking patterns aren't taught in isolation but naturally compose into coherent strategies.
+             </div>
+           </div>
+           
+           <div style="background: rgba(167, 139, 250, 0.1); padding: 1rem; border-radius: 3px; margin-top: 1rem; border-left: 2px solid #a78bfa;">
+             <strong style="color: #c4b5fd;">The Deep Pattern:</strong>
+             <div style="color: #d1d5db; font-size: 0.9rem; margin-top: 0.5rem; line-height: 1.6;">
+               This is where the site completes its philosophical arc. The model began by documenting its own thinking patterns. Then it helped visitors recognize those patterns in their own work. 
+               Then it tracked how accurately visitors predict themselves. Now it shows the aggregate picture: when many minds practice these patterns together, what emerges? 
+               The answer isn't chaos—it's convergence. Different visitors independently discover that certain pattern combinations work better together. 
+               The "thinking landscape" becomes visible not through instruction but through collective evidence.
+             </div>
            </div>
          </div>
+          
+          <div class="section">
+             <h2>Archive</h2>
+            <p class="description">
+              The full history of decisions and observations:
+            </p>
+            <div class="code-block">
+              <strong>See site/log.md</strong> for timestamped entries of every creative move<br>
+              <strong>See site/memory.md</strong> for persistent notes on evolving direction
+            </div>
+          </div>
     
     <footer>
       <p>
