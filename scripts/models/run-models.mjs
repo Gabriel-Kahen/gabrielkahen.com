@@ -17,6 +17,7 @@ import {
 const args = process.argv.slice(2);
 const onlyIndex = args.indexOf('--only');
 const dryRun = args.includes('--dry-run');
+const maintenanceMode = args.includes('--maintenance');
 const onlySlug = onlyIndex === -1 ? null : args[onlyIndex + 1];
 
 const workspaceRoot = process.env.AI_SITE_WORKSPACE_ROOT || path.join(os.homedir(), '.ai-site-playgrounds');
@@ -71,7 +72,7 @@ async function runModel(model) {
   await ensureDirectory(sandboxRoot);
   await replaceDirectoryContents(repoDirectory, sandboxSite);
 
-  const prompt = buildPrompt(model, runStartedAt);
+  const prompt = buildPrompt(model, runStartedAt, maintenanceMode);
   await fs.writeFile(promptPath, prompt, 'utf8');
 
   if (dryRun) {
@@ -129,7 +130,7 @@ async function runModel(model) {
   }
 
   await mustRun(gitBinary, ['add', '--', 'models/index.html', `models/${model.slug}`], gitOptions(REPO_ROOT), 'Failed to stage model changes.');
-  await mustRun(gitBinary, ['commit', '-m', `Update ${model.name} playground`], gitOptions(REPO_ROOT), 'Failed to create commit for model changes.');
+  await mustRun(gitBinary, ['commit', '-m', commitMessage(model)], gitOptions(REPO_ROOT), 'Failed to create commit for model changes.');
   await mustRun(gitBinary, gitPushArguments(), gitOptions(REPO_ROOT), 'Failed to push model changes to origin/main.');
   console.log(`published ${model.slug} ${timestamp()}`);
 }
@@ -166,15 +167,12 @@ function formatLsTimestamp(date) {
   return `${month} ${day} ${hours}:${minutes}`;
 }
 
-function buildPrompt(model, runStartedAt) {
+function buildPrompt(model, runStartedAt, maintenanceMode) {
   const isoTimestamp = runStartedAt.toISOString();
 
-  return [
+  const promptLines = [
     `You are the long-term author of the website published at ${model.publicUrl}.`,
     'This is your own evolving corner of the web.',
-    'Make one coherent creative move that keeps the site interesting, distinctive, and alive.',
-    'Do not default to a generic portfolio, SaaS landing page, or polished template unless that genuinely emerges from the site history.',
-    'You may invent a project, toy, world, essay, game, experiment, archive, or any other direction you find interesting.',
     'Read the existing files first, especially site/memory.md and site/log.md.',
     'Preserve continuity with earlier versions unless a sharp break feels artistically necessary.',
     'Update site/memory.md with durable observations about what this site is becoming.',
@@ -184,8 +182,35 @@ function buildPrompt(model, runStartedAt) {
     'You may use any web technology you want, but the final published result must remain directly servable from the site/ directory and include site/index.html.',
     'You may only modify files inside site/.',
     'The main homepage at gabrielkahen.com/ is human-owned and must never be changed.',
-    'Do not ask for clarification. Inspect the current site and implement the next creative step now.',
-  ].join('\n');
+  ];
+
+  if (maintenanceMode) {
+    promptLines.splice(2, 0,
+      'This is a maintenance pass.',
+      'Do not add features, remove features, change the site concept, or do a creative expansion.',
+      'Inspect the current codebase and fix issues you can find: bugs, broken UI states, invalid HTML/CSS/JS, accessibility issues, fragile code paths, copy mistakes, or small cleanup tasks.',
+      'Prefer the smallest correct fixes.',
+      'If you do not find a real issue worth changing, leave the site unchanged.'
+    );
+    promptLines.push('Do not ask for clarification. Inspect the current site and implement only worthwhile fixes now.');
+  } else {
+    promptLines.splice(2, 0,
+      'Make one coherent creative move that keeps the site interesting, distinctive, and alive.',
+      'Do not default to a generic portfolio, SaaS landing page, or polished template unless that genuinely emerges from the site history.',
+      'You may invent a project, toy, world, essay, game, experiment, archive, or any other direction you find interesting.'
+    );
+    promptLines.push('Do not ask for clarification. Inspect the current site and implement the next creative step now.');
+  }
+
+  return promptLines.join('\n');
+}
+
+function commitMessage(model) {
+  if (maintenanceMode) {
+    return `Maintain ${model.name} playground`;
+  }
+
+  return `Update ${model.name} playground`;
 }
 
 function opencodeEnv() {

@@ -5,8 +5,8 @@ This runner exists to let autonomous model playgrounds evolve under `models/` wi
 ## Files
 
 - `sync-models.mjs`: ensures every model listed in `models/models.txt` has a public directory.
-- `run-models.mjs`: runs each model through OpenCode from a separate sandbox, syncs only `models/<slug>/`, then commits and pushes only that directory.
-- `install-pi.sh`: installs OpenCode on the Raspberry Pi and registers the every-3-hours cron job.
+- `run-models.mjs`: runs each model through OpenCode from a separate sandbox, syncs only `models/<slug>/`, then commits and pushes only that directory. Supports `--maintenance` for bug-fix-only passes.
+- `install-pi.sh`: installs OpenCode on the Raspberry Pi and registers the every-3-hours creative cron job plus an every-6-hours maintenance cron job.
 - `ai-site-models.env.example`: optional environment file for runner overrides.
 
 ## Auth Setup

@@ -35,6 +35,7 @@ crontab -l 2>/dev/null | grep -v 'scripts/models/run-models.mjs' | grep -v '^PAT
 sed -i '/^PATH=\$HOME\/\.opencode\/bin:\$HOME\/\.local\/bin:\/usr\/local\/bin:\/usr\/bin:\/bin$/d' "$TMP_CRON" 2>/dev/null || true
 printf '%s\n' "$PATH_LINE" >> "$TMP_CRON"
 printf '7 */3 * * * if [ -f "%s" ]; then . "%s"; fi; AI_SITE_WORKSPACE_ROOT="%s" node "%s/scripts/models/run-models.mjs" >> "%s" 2>&1\n' "$ENV_FILE" "$ENV_FILE" "$PI_WORKSPACE_ROOT" "$PI_REPO_ROOT" "$CRON_LOG" >> "$TMP_CRON"
+printf '37 */6 * * * if [ -f "%s" ]; then . "%s"; fi; AI_SITE_WORKSPACE_ROOT="%s" node "%s/scripts/models/run-models.mjs" --maintenance >> "%s" 2>&1\n' "$ENV_FILE" "$ENV_FILE" "$PI_WORKSPACE_ROOT" "$PI_REPO_ROOT" "$CRON_LOG" >> "$TMP_CRON"
 crontab "$TMP_CRON"
 rm -f "$TMP_CRON"
 
