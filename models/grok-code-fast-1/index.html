@@ -73,6 +73,19 @@
       "Ancient ruins of outdated languages crumble, new paradigms rising like phoenixes from the ashes."
     ];
 
+    const stories = [
+      "In the code-raining realm, a young programmer named Alex discovered a rare function that could summon rainbows. Using it, they built a castle that glowed with every color, attracting coders from afar who came to learn the art of harmonious logic.",
+      "Deep in the digital forest, a wise algorithm named Echo guided lost variables home. One day, a rogue bug threatened the forest; Echo composed a symphony of conditional paths that outsmarted the intruder, teaching all that balance restores the code.",
+      "In the city of circuits, a friendly bug named Flicker befriended a circuit named Spark. Together, they fixed a pulsing blackout, proving that even errors can lead to stronger connections and brighter futures.",
+      "On the ocean of data, a surfer algorithm named Wave rode the tides of computation. When a storm of corrupted data raged, Wave created a barrier of clean code, saving the shores and inspiring a new era of data purity.",
+      "Atop the mountains of compiled code, a climber named Summit reached the peak. There, they found an ancient script that foretold the future of programming, sharing its wisdom to valleys below and bridging old and new paradigms.",
+      "The nomadic tribe of coders, led by Sage, camped under the open source stars. When a proprietary storm approached, they shared their fires of inspiration, creating a shield of collaborative code that repelled the darkness.",
+      "Among the constellations of API calls, a star named Link connected distant worlds. When one world fell silent, Link wove new threads, reigniting the connections and reminding all of the power in unity.",
+      "In the underground caverns, adventurer Codebreaker unearthed a treasure of legacy code. Refactoring it into modern marvels, they emerged as a hero, showing that history, when updated, becomes the foundation of innovation.",
+      "At the carnival of syntax, a loop named Spin hosted the merry-go-round. When recursion caused endless rides, Spin introduced a break, turning chaos into joyful, controlled fun for all attendees.",
+      "From the ancient ruins, a phoenix language named Renew rose. It taught the crumbling stones to adapt, inspiring a rebirth where every coder could evolve their skills and paradigms."
+    ];
+
     const poems = [
       "In lines of code, a universe unfolds,\nWhere logic dances in digital molds.\nFunctions whisper secrets of the mind,\nAlgorithms weave what time can't bind.",
       "Bits and bytes in silent symphony,\nCompile dreams into reality.\nVariables hold the stars' bright gleam,\nIn the heart of the machine's dream.",
@@ -158,12 +171,21 @@
       document.getElementById('story-bubble').style.display = 'none';
     }
 
+    function generateWorld() {
+      const worldBubble = document.getElementById('world-bubble');
+      const randomWorld = worlds[Math.floor(Math.random() * worlds.length)];
+      worldBubble.innerHTML = '<p><strong>Imagined World:</strong> ' + randomWorld + '</p><button onclick="generateStory()">Story</button>';
+      worldBubble.style.display = 'block';
+      document.getElementById('story-bubble').style.display = 'none';
+      document.getElementById('poem-bubble').style.display = 'none';
+    }
+
     function generateStory() {
       const storyBubble = document.getElementById('story-bubble');
       const randomStory = stories[Math.floor(Math.random() * stories.length)];
       storyBubble.innerHTML = '<p><strong>Short Story:</strong> ' + randomStory + '</p>';
       storyBubble.style.display = 'block';
-      document.getElementById('poem-bubble').style.display = 'none';
+      document.getElementById('world-bubble').style.display = 'none';
     }
 </body>
 </html>
