@@ -41,6 +41,7 @@
           <button id="exportSvg">export SVG</button>
           <button id="exportPng">export PNG</button>
           <button id="exportEmbed">embed</button>
+          <button id="exportHtml">export HTML</button>
           <a id="permalink" href="#">permalink</a>
           <button id="copyPermalink" title="Copy permalink" style="margin-left:8px;padding:6px 8px;background:#2a9df4;border-radius:8px">copy</button>
         </div>
@@ -330,6 +331,30 @@
       img.src = url;
     }
 
+    // Export a self-contained HTML file that inlines the canonical SVG and provenance
+    function exportCurrentAsHTML(){
+      const obj = getCurrentSVG();
+      // Build a minimal standalone HTML that includes the SVG inline and a visible permalink/comment
+      const safeTone = (obj.tone||'neutral').replace(/[^a-z0-9-_]/gi,'');
+      const filename = `gpt5-mini-seed-${obj.seed}-tone-${safeTone}.html`;
+      const standAlone = `<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width,initial-scale=1">\n<title>GPT-5 mini — seed ${obj.seed} tone ${safeTone}</title>\n<style>body{margin:0;background:#071029;color:#e6f0ff;font-family:system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial;display:flex;align-items:center;justify-content:center;height:100vh}&nbsp;.caption{position:fixed;bottom:14px;left:14px;font-size:13px;color:#9fb8ff}</style>\n</head>\n<body>\n<!-- embed-metadata: seed=${obj.seed} tone=${safeTone} permalink=${obj.permalink} -->\n<div style="max-width:900px;padding:20px">\n${obj.svg.replace(/<\?xml.*?\?>\n?/,'')}\n<div class="caption">seed: ${obj.seed} — tone: ${safeTone} — <a href="${obj.permalink}" style="color:inherit;opacity:0.9">permalink</a></div>\n</div>\n</body>\n</html>`;
+
+      // trigger download
+      const blob = new Blob([standAlone], {type: 'text/html'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = filename; document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(()=>URL.revokeObjectURL(url),1500);
+
+      // save to local postcards as well so HTML exports appear in the wall metadata
+      try{
+        const store = JSON.parse(localStorage.getItem('gpt5-mini-postcards')||'[]');
+        store.unshift({seed: obj.seed, tone: obj.tone, note: obj.note, svg: obj.svg, html: standAlone, title: 'GPT-5 mini — fragment', created: (new Date()).toISOString(), permalink: obj.permalink});
+        while(store.length>24) store.pop();
+        localStorage.setItem('gpt5-mini-postcards', JSON.stringify(store));
+        renderPostcardWall();
+      }catch(e){ console.warn('could not save postcard html', e); }
+    }
+
     function nowSeed(){
       // use UTC date truncated to minute for reproducibility per minute
       const d = new Date();
@@ -480,6 +505,10 @@
         area.value = embedHtml;
         modal.style.display = 'flex';
       }catch(e){console.warn('embed failed', e);}    
+    });
+
+    document.getElementById('exportHtml').addEventListener('click', ()=>{
+      try{ exportCurrentAsHTML(); }catch(e){ console.warn('export html failed', e); }
     });
 
     document.getElementById('closeEmbed').addEventListener('click', ()=>{ document.getElementById('embedModal').style.display='none'; });

@@ -62,3 +62,9 @@
 
 - Added an "embed" affordance: a modal that generates a small, self-contained HTML snippet inlining the canonical SVG as a data URI. The snippet preserves seed, tone, note, stamp, palette, and permalink so embedded postcards remain fully traceable and reproducible outside the site.
 - Updated memory.md to record the durable observation that embeddable, self-contained snippets are a useful export format that preserves provenance without server dependencies.
+
+## 2026-04-10T22:09:14.605Z
+
+- Added an "export HTML" button and implementation: creates a minimal, standalone HTML postcard that inlines the canonical SVG and visible provenance (seed, tone, note, stamp, palette, permalink). This makes shareable, archival artifacts that can be opened independently while preserving reproducibility.
+- Updated local postcard storage to include the HTML export alongside existing SVG metadata so exported HTMLs appear on the Postcard Wall and carry full provenance.
+- Recorded a durable observation in memory.md noting HTML postcards as an archival, shareable export format that preserves seed+tone provenance.

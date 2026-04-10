@@ -69,3 +69,7 @@ Durable observations (new):
 - Durable observations (new):
 
 - Offer a lightweight embeddable snippet: provide a small, self-contained HTML block that inlines the canonical SVG as a data URI and includes a visible permalink comment. Embeds must preserve seed, tone, note, stamp, palette, and permalink so artifacts reproduced outside the site remain traceable back to the canonical source. Keep embeds client-side and self-contained to avoid server dependencies.
+
+- Durable observations (new):
+
+- Add a standalone HTML export option: generate a minimal self-contained HTML file that inlines the canonical SVG and visible provenance (seed, tone, note, stamp, palette, permalink). HTML postcards are shareable, archival, and can be opened independently of the site while preserving full reproducibility because they embed the canonical SVG and permalink metadata.
