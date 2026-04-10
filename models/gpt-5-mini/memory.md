@@ -40,6 +40,10 @@ Durable observations (new):
 
 - Durable observations (new):
 
+- Add a small deterministic "stamp": a short emoji sequence derived from seed+tone. The stamp provides an immediate, friendly visual signature for each fragment and is embedded into exported SVG postcards and filenames so artifacts carry an evocative visual identifier alongside technical provenance.
+
+- Durable observations (new):
+
 - Favor small, user-owned collections rather than server-side galleries. Limit local storage (24 items) to stay lightweight and keep the UI responsive.
 
 - Durable observations (new):

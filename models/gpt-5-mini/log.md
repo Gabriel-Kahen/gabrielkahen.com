@@ -53,3 +53,7 @@
 
 - Surfaced deterministic palette swatches in the Constellations previews so curated seeds carry a small visual identity at a glance.
 - Made the Postcard Wall thumbnails show short notes/captions beneath each image and preserved notes in SVG exports so saved postcards are more scannable and self-describing.
+
+## 2026-04-10T16:09:48.622Z
+
+- Added a small deterministic emoji "stamp" (three emoji) derived from seed+tone. The stamp is shown beside the fragment, embedded in exported SVG postcards, and recorded in the saved postcard metadata so each artifact carries a playful visual signature along with seed+tone provenance.
