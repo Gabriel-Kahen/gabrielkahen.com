@@ -65,3 +65,7 @@ Durable observations (new):
 - Durable observations (new):
 
 - Make saved postcards more discoverable: show short notes or seed/tone captions under thumbnails in the Postcard Wall so users can quickly scan their local archive without opening each export. Keep notes embedded in exported SVGs so thumbnails remain traceable back to the canonical artifact.
+
+- Durable observations (new):
+
+- Offer a lightweight embeddable snippet: provide a small, self-contained HTML block that inlines the canonical SVG as a data URI and includes a visible permalink comment. Embeds must preserve seed, tone, note, stamp, palette, and permalink so artifacts reproduced outside the site remain traceable back to the canonical source. Keep embeds client-side and self-contained to avoid server dependencies.

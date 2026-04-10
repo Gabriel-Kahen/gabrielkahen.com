@@ -40,6 +40,7 @@
           <button id="reshuffle">reshuffle</button>
           <button id="exportSvg">export SVG</button>
           <button id="exportPng">export PNG</button>
+          <button id="exportEmbed">embed</button>
           <a id="permalink" href="#">permalink</a>
           <button id="copyPermalink" title="Copy permalink" style="margin-left:8px;padding:6px 8px;background:#2a9df4;border-radius:8px">copy</button>
         </div>
@@ -65,6 +66,21 @@
       <footer>Small experiments live here. This page is static and reproducible: use the seed in the permalink to share a fragment.</footer>
     </div>
   </main>
+
+  <!-- Embed modal -->
+  <div id="embedModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);align-items:center;justify-content:center;padding:20px;z-index:60"> 
+    <div style="background:#071029;color:#e6f0ff;padding:16px;border-radius:10px;max-width:900px;width:100%;box-shadow:0 8px 40px rgba(0,0,0,0.6)">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+        <strong>Embeddable snippet</strong>
+        <button id="closeEmbed" style="background:#1f6feb;color:#fff;border:0;padding:6px 10px;border-radius:8px">close</button>
+      </div>
+      <div style="font-size:13px;opacity:0.9;margin-bottom:8px">Copy this HTML snippet into a blog or page to reproduce the postcard (it includes seed, tone, note and permalink).</div>
+      <textarea id="embedArea" style="width:100%;height:260px;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:#041023;color:inherit;font-family:ui-monospace,monospace"></textarea>
+      <div style="display:flex;gap:8px;margin-top:10px;justify-content:flex-end">
+        <button id="copyEmbed" style="padding:8px 12px;background:#2a9df4;color:white;border:0;border-radius:8px">copy snippet</button>
+      </div>
+    </div>
+  </div>
 
   <script>
     // Deterministic pseudo-random using mulberry32
@@ -441,6 +457,40 @@
 
     document.getElementById('exportPng').addEventListener('click', ()=>{
       exportCurrentAsPNG();
+    });
+
+    // Embeddable snippet: builds a self-contained HTML block that inlines the canonical SVG
+    document.getElementById('exportEmbed').addEventListener('click', ()=>{
+      try{
+        const obj = getCurrentSVG();
+        // create a data URL for the SVG
+        const svgB64 = btoa(unescape(encodeURIComponent(obj.svg)));
+        const dataUrl = `data:image/svg+xml;charset=utf-8;base64,${svgB64}`;
+        // build an embeddable HTML snippet that preserves provenance and links back to permalink
+        const safeTone = (obj.tone||'neutral').replace(/[^a-z0-9-_]/gi,'');
+        const embedHtml = `<!-- GPT-5 mini embed: seed=${obj.seed} tone=${safeTone} -->\n`+
+          `<div class="gpt5-mini-embed" style="max-width:720px;">`+
+          `<a href="${obj.permalink}" style="text-decoration:none;color:inherit" target="_blank" rel="noopener noreferrer">`+
+          `<img src="${dataUrl}" alt="GPT-5 mini — seed ${obj.seed} tone ${safeTone}" style="width:100%;height:auto;border-radius:8px;display:block"/>`+
+          `</a>`+
+          `<div style="font-size:12px;color:#9fb8ff;margin-top:6px">seed: ${obj.seed} — tone: ${safeTone} — <a href="${obj.permalink}" style="color:inherit;opacity:0.9">permalink</a></div>`+
+          `</div>`;
+        const modal = document.getElementById('embedModal');
+        const area = document.getElementById('embedArea');
+        area.value = embedHtml;
+        modal.style.display = 'flex';
+      }catch(e){console.warn('embed failed', e);}    
+    });
+
+    document.getElementById('closeEmbed').addEventListener('click', ()=>{ document.getElementById('embedModal').style.display='none'; });
+    document.getElementById('copyEmbed').addEventListener('click', async ()=>{
+      const area = document.getElementById('embedArea');
+      try{
+        if(navigator.clipboard && navigator.clipboard.writeText) await navigator.clipboard.writeText(area.value);
+        else { area.select(); document.execCommand('copy'); }
+        const btn = document.getElementById('copyEmbed');
+        const prev = btn.textContent; btn.textContent = 'copied!'; setTimeout(()=>btn.textContent = prev, 1200);
+      }catch(e){ console.warn('copy embed failed', e); }
     });
 
     // Copy permalink to clipboard with transient feedback

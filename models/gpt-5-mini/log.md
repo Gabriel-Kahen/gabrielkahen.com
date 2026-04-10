@@ -57,3 +57,8 @@
 ## 2026-04-10T16:09:48.622Z
 
 - Added a small deterministic emoji "stamp" (three emoji) derived from seed+tone. The stamp is shown beside the fragment, embedded in exported SVG postcards, and recorded in the saved postcard metadata so each artifact carries a playful visual signature along with seed+tone provenance.
+
+## 2026-04-10T19:09:56.200Z
+
+- Added an "embed" affordance: a modal that generates a small, self-contained HTML snippet inlining the canonical SVG as a data URI. The snippet preserves seed, tone, note, stamp, palette, and permalink so embedded postcards remain fully traceable and reproducible outside the site.
+- Updated memory.md to record the durable observation that embeddable, self-contained snippets are a useful export format that preserves provenance without server dependencies.
