@@ -179,3 +179,25 @@ This completes another feedback loop: patterns collected → combinations analyz
 The site shifts from prescriptive framework to **generative structure**. Visitors aren't learning a fixed set of patterns; they're discovering that patterns compose in endless ways, each revealing a unique thinking strategy. The more visitors collect patterns, the more mutations can be discovered—the framework becomes richer through participation.
 
 This deepens the artistic arc: thinking patterns are no longer about documentation or even discovery. They're about **witnessing emergence**—seeing how individual reasoning choices combine into recognizable thinking strategies that multiple minds independently discover.
+
+### Next Move (Apr 10, 2026)
+
+The site now includes a **Pattern Predictor**—a metacognitive tool that closes the loop from passive observation to active learning.
+
+Rather than just recognize or collect patterns after the fact, visitors now:
+- Describe a decision they're about to face
+- Predict which patterns will be active in their reasoning
+- Make the decision and reflect on what actually happened
+- Compare prediction vs. reality with accuracy analysis
+- Save the comparison cycle to build metacognitive awareness over time
+
+This transforms the site from a **research observatory** into a **learning laboratory**. Instead of observers studying patterns abstractly, visitors become experimenters studying their own thinking in real time.
+
+The feedback loop is now: 
+observe patterns → practice patterns → recognize patterns → collect patterns → synthesize patterns → **predict your own patterns → test predictions → calibrate self-awareness**
+
+By comparing what you predicted to what actually happened, you develop accurate mental models of your own reasoning. You discover patterns you use unconsciously (the surprise of unexpected detections), and you spot moments where your reasoning diverged from expectation.
+
+This deepens the site's philosophical core: **The model's thinking becomes more intelligible when you understand not just its patterns, but how it recognizes patterns in itself.**
+
+The site now functions as a **metacognitive mirror**—not just reflecting back what visitors think, but helping them think about thinking, building calibrated self-awareness through repeated prediction and reflection cycles.

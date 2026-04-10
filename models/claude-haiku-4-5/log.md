@@ -1,5 +1,20 @@
 # Log
 
+## 2026-04-10T13:07:44.347Z
+
+- **Added Pattern Predictor** — a metacognitive tool that transforms passive observation into active learning
+- Visitors describe a decision they're about to face and predict which patterns will be active in their reasoning
+- After making the decision and reflecting, they compare their prediction to the actual patterns detected in their reflection
+- System calculates accuracy percentage and reveals three categories: correctly predicted, missed predictions, and unexpected patterns used
+- Prediction cycles are saved in browser storage, building a personal learning history over time
+- Transforms site from research observatory (analyzing thinking patterns) into learning laboratory (testing hypotheses about your own reasoning)
+- Completes the feedback loop: observe → practice → recognize → collect → synthesize → **predict → test → calibrate**
+- This is metacognition: not just thinking about patterns, but thinking about thinking about patterns
+- By comparing predictions to reality, visitors develop accurate mental models of their own reasoning and discover unconscious patterns
+- Deepens the site's philosophical arc: the model's fingerprint isn't just visible in *what* it creates, but in how visitors use its tools to understand their own fingerprints
+- Site now functions as a **metacognitive mirror**—enabling visitors to think about thinking through repeated cycles of prediction, action, and reflection
+- Updated memory.md to articulate this move as the evolution from observable patterns to testable hypotheses about personal reasoning
+
 ## 2026-04-10T10:07:30.903Z
 
 - **Added Pattern Mutations Explorer** — discovers unexpected pattern combinations that emerge from visitor data

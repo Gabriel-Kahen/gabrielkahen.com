@@ -795,6 +795,37 @@
       background: linear-gradient(90deg, #60a5fa, #a78bfa);
       border-radius: 1px;
     }
+    
+    .predictor-container {
+      background: rgba(30, 41, 82, 0.6);
+      border: 1px solid rgba(96, 165, 250, 0.4);
+      border-radius: 4px;
+      padding: 1.5rem;
+      margin: 1rem 0;
+    }
+    
+    .predictor-stage {
+      animation: fadeIn 0.3s ease-in;
+    }
+    
+    .predictor-header {
+      font-size: 1.1rem;
+      color: #60a5fa;
+      font-weight: 500;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid rgba(96, 165, 250, 0.3);
+      padding-bottom: 0.5rem;
+    }
+    
+    .predictor-pattern-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 0.75rem;
+      background: rgba(0, 0, 0, 0.2);
+      padding: 1rem;
+      border-radius: 3px;
+      border: 1px solid rgba(96, 165, 250, 0.2);
+    }
   </style>
   <script>
     function initDecisionTree() {
@@ -1596,10 +1627,190 @@
            }
          }
          
-         function loadMutationData() {
-           const mutationData = generateMutationData();
-           const container = document.getElementById('mutation-grid');
-           
+          function loadMutationData() {
+            const mutationData = generateMutationData();
+            const container = document.getElementById('mutation-grid');
+            
+            if (!container) return;
+            
+            const maxFrequency = Math.max(...Object.values(mutationData).map(d => d.frequency), 1);
+            
+            let html = '';
+            Object.entries(patternMutations).forEach(([name, meta]) => {
+              const data = mutationData[name] || { frequency: 0 };
+              const fillWidth = (data.frequency / maxFrequency) * 100;
+              
+              html += `
+                <div class="mutation-card" onclick="showMutationCard('${name}')">
+                  <div class="mutation-name">${name}</div>
+                  <div class="mutation-components">
+                    ${meta.base.slice(0, 2).join(' +<br>')}${meta.base.length > 2 ? '<br>+...' : ''}
+                  </div>
+                  <div class="mutation-frequency-bar">
+                    <div class="mutation-frequency-fill" style="width: ${fillWidth}%;"></div>
+                  </div>
+                  <div style="color: #9ca3af; font-size: 0.75rem; margin-top: 0.5rem;">
+                    ${data.frequency} recognitions
+                  </div>
+                </div>
+              `;
+            });
+            
+            container.innerHTML = html;
+            
+            // Re-attach click handlers
+            document.querySelectorAll('.mutation-card').forEach(card => {
+              card.addEventListener('click', showMutationCard);
+            });
+          }
+          
+          // Pattern predictor functions
+          let currentPrediction = {
+            problem: '',
+            predictedPatterns: [],
+            reflection: ''
+          };
+          
+          function savePrediction() {
+            const problem = document.getElementById('predictor-problem').value.trim();
+            const checkboxes = document.querySelectorAll('.predictor-checkbox:checked');
+            
+            if (!problem) {
+              alert('Please describe a decision you\'re facing');
+              return;
+            }
+            
+            if (checkboxes.length === 0) {
+              alert('Please select at least one pattern you predict will be active');
+              return;
+            }
+            
+            currentPrediction = {
+              problem: problem,
+              predictedPatterns: Array.from(checkboxes).map(cb => cb.value),
+              reflection: ''
+            };
+            
+            // Show saved prediction
+            document.getElementById('predictor-stage-input').style.display = 'none';
+            document.getElementById('predictor-stage-saved').style.display = 'block';
+            document.getElementById('predictor-stage-comparison').style.display = 'none';
+            
+            // Display saved prediction
+            document.getElementById('predictor-saved-problem').textContent = problem;
+            document.getElementById('predictor-saved-patterns').innerHTML = 
+              'Predicted: ' + currentPrediction.predictedPatterns.map(p => `<span class="pattern-reference">${p}</span>`).join(' ');
+          }
+          
+          function compareWithReality() {
+            const reflection = document.getElementById('predictor-reflection').value.trim();
+            
+            if (!reflection) {
+              alert('Please describe what actually happened and how you approached the decision');
+              return;
+            }
+            
+            currentPrediction.reflection = reflection;
+            
+            // Analyze reflection for actual patterns used
+            const detectedPatterns = detectPatterns(reflection);
+            const detectedNames = detectedPatterns.map(p => p.name);
+            
+            // Calculate accuracy
+            const predicted = new Set(currentPrediction.predictedPatterns);
+            const detected = new Set(detectedNames);
+            const correct = [...predicted].filter(p => detected.has(p));
+            const missed = [...predicted].filter(p => !detected.has(p));
+            const unexpected = [...detected].filter(p => !predicted.has(p));
+            
+            // Show comparison
+            document.getElementById('predictor-stage-input').style.display = 'none';
+            document.getElementById('predictor-stage-saved').style.display = 'none';
+            document.getElementById('predictor-stage-comparison').style.display = 'block';
+            
+            document.getElementById('comparison-predicted').innerHTML =
+              currentPrediction.predictedPatterns.map(p => `<div style="margin-bottom: 0.5rem;">• ${p}</div>`).join('');
+            
+            document.getElementById('comparison-detected').innerHTML =
+              detectedNames.map(p => `<div style="margin-bottom: 0.5rem;">• ${p}</div>`).join('') ||
+              '<div style="color: #9ca3af;">No patterns detected in your reflection</div>';
+            
+            let insightsHTML = '<div class="mutation-title" style="margin-bottom: 1rem;">Accuracy Analysis</div>';
+            
+            const accuracy = ((correct.length / Math.max(predicted.size, 1)) * 100).toFixed(0);
+            insightsHTML += `
+              <div style="margin-bottom: 1rem;">
+                <div style="color: #a78bfa; font-size: 0.9rem; margin-bottom: 0.5rem;">Accuracy: ${accuracy}%</div>
+                <div style="background: rgba(96, 165, 250, 0.2); height: 8px; border-radius: 4px; overflow: hidden;">
+                  <div style="background: linear-gradient(90deg, #60a5fa, #a78bfa); height: 100%; width: ${accuracy}%;"></div>
+                </div>
+              </div>
+            `;
+            
+            if (correct.length > 0) {
+              insightsHTML += `
+                <div style="background: rgba(134, 239, 172, 0.1); padding: 0.75rem; border-radius: 3px; margin-bottom: 0.75rem; border-left: 2px solid #86efac;">
+                  <div style="color: #86efac; font-weight: 500; font-size: 0.9rem; margin-bottom: 0.5rem;">✓ You predicted correctly:</div>
+                  <div style="color: #d1d5db; font-size: 0.85rem;">${correct.join(', ')}</div>
+                </div>
+              `;
+            }
+            
+            if (missed.length > 0) {
+              insightsHTML += `
+                <div style="background: rgba(244, 63, 94, 0.1); padding: 0.75rem; border-radius: 3px; margin-bottom: 0.75rem; border-left: 2px solid #f87171;">
+                  <div style="color: #f87171; font-weight: 500; font-size: 0.9rem; margin-bottom: 0.5rem;">✗ You predicted but didn't use:</div>
+                  <div style="color: #d1d5db; font-size: 0.85rem;">${missed.join(', ')}</div>
+                </div>
+              `;
+            }
+            
+            if (unexpected.length > 0) {
+              insightsHTML += `
+                <div style="background: rgba(167, 139, 250, 0.1); padding: 0.75rem; border-radius: 3px; border-left: 2px solid #a78bfa;">
+                  <div style="color: #a78bfa; font-weight: 500; font-size: 0.9rem; margin-bottom: 0.5rem;">? Patterns you actually used (not predicted):</div>
+                  <div style="color: #d1d5db; font-size: 0.85rem;">${unexpected.join(', ')}</div>
+                  <div style="color: #9ca3af; font-size: 0.8rem; margin-top: 0.5rem;">This reveals patterns you use unconsciously. These are worth noting in your collection.</div>
+                </div>
+              `;
+            }
+            
+            document.getElementById('comparison-insights').innerHTML = insightsHTML;
+          }
+          
+          function savePredictionResult() {
+            // Add this prediction cycle to collection as meta-learning data
+            const summary = {
+              timestamp: new Date().toISOString(),
+              problem: currentPrediction.problem,
+              predicted: currentPrediction.predictedPatterns,
+              reflection: currentPrediction.reflection,
+              type: 'prediction-cycle'
+            };
+            
+            // Could store this separately for learning analytics
+            let predictions = JSON.parse(localStorage.getItem('patternPredictions') || '[]');
+            predictions.unshift(summary);
+            predictions = predictions.slice(0, 50); // Keep last 50
+            localStorage.setItem('patternPredictions', JSON.stringify(predictions));
+            
+            alert('Prediction cycle saved! Over time, comparing your predictions to reality builds metacognitive awareness.');
+            resetPredictor();
+          }
+          
+          function resetPredictor() {
+            currentPrediction = { problem: '', predictedPatterns: [], reflection: '' };
+            
+            document.getElementById('predictor-stage-input').style.display = 'block';
+            document.getElementById('predictor-stage-saved').style.display = 'none';
+            document.getElementById('predictor-stage-comparison').style.display = 'none';
+            
+            document.getElementById('predictor-problem').value = '';
+            document.getElementById('predictor-reflection').value = '';
+            document.querySelectorAll('.predictor-checkbox').forEach(cb => cb.checked = false);
+          }
+       
+     
            if (!container) return;
            
            const maxFrequency = Math.max(...Object.values(mutationData).map(d => d.frequency), 1);
@@ -2247,15 +2458,122 @@ Promise.all([
         </div>
        
         <div class="section">
-          <h2>Archive</h2>
-         <p class="description">
-           The full history of decisions and observations:
-         </p>
-         <div class="code-block">
-           <strong>See site/log.md</strong> for timestamped entries of every creative move<br>
-           <strong>See site/memory.md</strong> for persistent notes on evolving direction
-         </div>
-       </div>
+          <h2>Pattern Predictor</h2>
+          <p class="description">
+            Move from reflection to active experimentation. Predict which patterns you'll use for a decision you're about to make, 
+            then revisit after you've made it to see how accurate your prediction was. 
+            This builds metacognitive awareness—understanding not just what patterns you use, but when and why.
+          </p>
+          
+          <div class="predictor-container">
+            <div id="predictor-stage-input" class="predictor-stage">
+              <div class="predictor-header">Before You Decide</div>
+              <p style="color: #9ca3af; font-size: 0.9rem; margin-bottom: 1rem;">
+                Describe a decision you're about to face (or facing right now):
+              </p>
+              <textarea id="predictor-problem" class="mirror-input" placeholder="E.g., 'I need to decide between building a caching layer or optimizing the database query. I'm not sure which will have more impact.'"></textarea>
+              
+              <p style="color: #9ca3af; font-size: 0.9rem; margin-top: 1rem; margin-bottom: 1rem;">
+                Predict which patterns you think will be active in your reasoning:
+              </p>
+              <div class="predictor-pattern-grid">
+                <label style="display: flex; align-items: center; gap: 0.5rem; color: #d1d5db; cursor: pointer;">
+                  <input type="checkbox" class="predictor-checkbox" value="Understanding Context First" style="margin: 0; accent-color: #60a5fa;">
+                  Understanding Context First
+                </label>
+                <label style="display: flex; align-items: center; gap: 0.5rem; color: #d1d5db; cursor: pointer;">
+                  <input type="checkbox" class="predictor-checkbox" value="Investigate Before Claiming" style="margin: 0; accent-color: #60a5fa;">
+                  Investigate Before Claiming
+                </label>
+                <label style="display: flex; align-items: center; gap: 0.5rem; color: #d1d5db; cursor: pointer;">
+                  <input type="checkbox" class="predictor-checkbox" value="Parallel Operations" style="margin: 0; accent-color: #60a5fa;">
+                  Parallel Operations
+                </label>
+                <label style="display: flex; align-items: center; gap: 0.5rem; color: #d1d5db; cursor: pointer;">
+                  <input type="checkbox" class="predictor-checkbox" value="Honesty Over Validation" style="margin: 0; accent-color: #60a5fa;">
+                  Honesty Over Validation
+                </label>
+                <label style="display: flex; align-items: center; gap: 0.5rem; color: #d1d5db; cursor: pointer;">
+                  <input type="checkbox" class="predictor-checkbox" value="Documenting Process" style="margin: 0; accent-color: #60a5fa;">
+                  Documenting Process
+                </label>
+              </div>
+              
+              <button class="lab-button" onclick="savePrediction()" style="margin-top: 1.5rem;">
+                Save Prediction
+              </button>
+            </div>
+            
+            <div id="predictor-stage-saved" class="predictor-stage" style="display: none;">
+              <div class="predictor-header">Prediction Saved</div>
+              <div style="background: rgba(96, 165, 250, 0.1); padding: 1rem; border-radius: 3px; border-left: 2px solid #60a5fa; margin-bottom: 1.5rem;">
+                <div style="color: #60a5fa; font-weight: 500; margin-bottom: 0.75rem;">Your Prediction</div>
+                <div id="predictor-saved-problem" style="color: #d1d5db; margin-bottom: 0.75rem;"></div>
+                <div id="predictor-saved-patterns" style="color: #9ca3af; font-size: 0.9rem;"></div>
+              </div>
+              
+              <p style="color: #9ca3af; font-size: 0.9rem; margin-bottom: 1rem;">
+                Now make your decision. After you've decided and reflected on your reasoning:
+              </p>
+              
+              <textarea id="predictor-reflection" class="mirror-input" placeholder="What actually happened? Which patterns did you actually use? Were there any surprises in how you approached it?"></textarea>
+              
+              <div style="display: flex; gap: 0.75rem; margin-top: 1rem;">
+                <button class="lab-button" onclick="compareWithReality()">
+                  Compare with Reality
+                </button>
+                <button class="lab-button" onclick="resetPredictor()" style="background: rgba(139, 92, 246, 0.3); border-color: rgba(167, 139, 250, 0.5);">
+                  Start Over
+                </button>
+              </div>
+            </div>
+            
+            <div id="predictor-stage-comparison" class="predictor-stage" style="display: none;">
+              <div class="predictor-header">Prediction vs. Reality</div>
+              
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                <div style="background: rgba(96, 165, 250, 0.1); padding: 1rem; border-radius: 3px; border-left: 2px solid #60a5fa;">
+                  <div style="color: #60a5fa; font-weight: 500; font-size: 0.9rem; margin-bottom: 0.75rem;">You Predicted</div>
+                  <div id="comparison-predicted" style="color: #d1d5db; font-size: 0.9rem;"></div>
+                </div>
+                
+                <div style="background: rgba(167, 139, 250, 0.1); padding: 1rem; border-radius: 3px; border-left: 2px solid #a78bfa;">
+                  <div style="color: #a78bfa; font-weight: 500; font-size: 0.9rem; margin-bottom: 0.75rem;">You Detected</div>
+                  <div id="comparison-detected" style="color: #d1d5db; font-size: 0.9rem;"></div>
+                </div>
+              </div>
+              
+              <div id="comparison-insights" style="background: rgba(139, 92, 246, 0.1); padding: 1rem; border-radius: 3px; border-left: 2px solid #a78bfa;"></div>
+              
+              <div style="display: flex; gap: 0.75rem; margin-top: 1.5rem;">
+                <button class="lab-button" onclick="savePredictionResult()">
+                  Save This Comparison
+                </button>
+                <button class="lab-button" onclick="resetPredictor()" style="background: rgba(139, 92, 246, 0.3); border-color: rgba(167, 139, 250, 0.5);">
+                  Make Another Prediction
+                </button>
+              </div>
+            </div>
+            
+            <div style="color: #9ca3af; font-size: 0.85rem; margin-top: 1rem; background: rgba(167, 139, 250, 0.1); padding: 1rem; border-radius: 3px; border-left: 2px solid #a78bfa;">
+              <strong style="color: #c4b5fd;">Why this matters:</strong> 
+              Metacognition—thinking about thinking—is where growth happens. By predicting which patterns will be active, 
+              then checking against reality, you develop calibrated self-awareness. You discover patterns you rely on unconsciously, 
+              and spot moments where your actual reasoning diverged from your expectation. Over time, this builds predictive accuracy.
+            </div>
+          </div>
+        </div>
+        
+        <div class="section">
+           <h2>Archive</h2>
+          <p class="description">
+            The full history of decisions and observations:
+          </p>
+          <div class="code-block">
+            <strong>See site/log.md</strong> for timestamped entries of every creative move<br>
+            <strong>See site/memory.md</strong> for persistent notes on evolving direction
+          </div>
+        </div>
     
     <footer>
       <p>
