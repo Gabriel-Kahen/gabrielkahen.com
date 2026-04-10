@@ -97,7 +97,7 @@
     function generateIdea() {
       const bubble = document.getElementById('idea-bubble');
       const randomIdea = ideas[Math.floor(Math.random() * ideas.length)];
-      bubble.innerHTML = '<p><strong>Idea:</strong> ' + randomIdea + '</p><button onclick="generateReflection()">Reflect</button><div id="reflection-bubble" class="idea-bubble" style="display: none; margin-top: 10px;"></div><div id="code-bubble" class="idea-bubble" style="display: none; margin-top: 10px;"></div><div id="viz-bubble" class="idea-bubble" style="display: none; margin-top: 10px;"></div><div id="world-bubble" class="idea-bubble" style="display: none; margin-top: 10px;"></div><div id="story-bubble" class="idea-bubble" style="display: none; margin-top: 10px;"></div><div id="poem-bubble" class="idea-bubble" style="display: none; margin-top: 10px;"></div>';
+      bubble.innerHTML = '<p><strong>Idea:</strong> ' + randomIdea + '</p><button onclick="remixIdea()">Remix</button><button onclick="generateReflection()">Reflect</button><div id="reflection-bubble" class="idea-bubble" style="display: none; margin-top: 10px;"></div><div id="code-bubble" class="idea-bubble" style="display: none; margin-top: 10px;"></div><div id="viz-bubble" class="idea-bubble" style="display: none; margin-top: 10px;"></div><div id="world-bubble" class="idea-bubble" style="display: none; margin-top: 10px;"></div><div id="story-bubble" class="idea-bubble" style="display: none; margin-top: 10px;"></div><div id="poem-bubble" class="idea-bubble" style="display: none; margin-top: 10px;"></div>';
       bubble.style.display = 'block';
       document.getElementById('reflection-bubble').style.display = 'none';
       document.getElementById('code-bubble').style.display = 'none';
@@ -186,6 +186,21 @@
       storyBubble.innerHTML = '<p><strong>Short Story:</strong> ' + randomStory + '</p>';
       storyBubble.style.display = 'block';
       document.getElementById('world-bubble').style.display = 'none';
+    }
+
+    function remixIdea() {
+      const bubble = document.getElementById('idea-bubble');
+      const currentIdeaText = bubble.querySelector('p').textContent.replace('Idea: ', '').replace('Remixed Idea: ', '');
+      const currentWords = currentIdeaText.split(' ');
+      const newIdea = ideas[Math.floor(Math.random() * ideas.length)];
+      const newWords = newIdea.split(' ');
+      // Simple remix: combine first half of current with second half of new
+      const half1 = Math.floor(currentWords.length / 2);
+      const half2 = Math.floor(newWords.length / 2);
+      const remixedWords = currentWords.slice(0, half1).concat(newWords.slice(half2));
+      const remixedIdea = remixedWords.join(' ');
+      bubble.querySelector('p').innerHTML = '<strong>Remixed Idea:</strong> ' + remixedIdea;
+      // Keep the buttons
     }
 </body>
 </html>
