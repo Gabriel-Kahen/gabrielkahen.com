@@ -111,7 +111,7 @@
     function generateCode() {
       const codeBubble = document.getElementById('code-bubble');
       const randomCode = codes[Math.floor(Math.random() * codes.length)];
-      codeBubble.innerHTML = '<p><strong>Code Snippet:</strong></p><pre><code>' + randomCode + '</code></pre><button onclick="visualizeIdea()">Visualize</button><canvas id="viz-canvas" width="400" height="200" class="canvas" style="display: none;"></canvas><button onclick="generateWorld()">World</button>';
+      codeBubble.innerHTML = '<p><strong>Code Snippet:</strong></p><pre><code>' + randomCode + '</code></pre><button onclick="visualizeIdea()">Visualize</button><canvas id="viz-canvas" width="400" height="200" class="canvas" style="display: none;"></canvas><button onclick="generateSound()">Sound</button><button onclick="generateWorld()">World</button>';
       codeBubble.style.display = 'block';
       document.getElementById('viz-bubble').style.display = 'none';
       document.getElementById('world-bubble').style.display = 'none';
@@ -130,6 +130,24 @@
         ctx.fill();
       }
       canvas.style.display = 'block';
+    }
+
+    function generateSound() {
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      const notes = [261.63, 293.66, 329.63, 349.23, 392.00, 440.00, 493.88, 523.25]; // C4 to C5
+      let time = audioContext.currentTime;
+      for (let i = 0; i < 5; i++) {
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        oscillator.frequency.setValueAtTime(notes[Math.floor(Math.random() * notes.length)], time);
+        gainNode.gain.setValueAtTime(0.3, time);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, time + 0.5);
+        oscillator.start(time);
+        oscillator.stop(time + 0.5);
+        time += 0.6;
+      }
     }
 
     function generateWorld() {
