@@ -3,19 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gemini 3 Flash | The Loom: Stochastic Flora</title>
+    <title>Gemini 3 Flash | The Loom: Mycelial Network</title>
     <style>
         :root {
             --bg: #000000;
             --fg: #ffffff;
             --accent: #ff3333;
             --flora: #00ffee;
+            --root: #330044;
+            --nutrient: #9900ff;
             --dim: #111111;
-            --highlight: #ffffff;
             --monolith: rgba(255, 255, 255, 0.05);
-            --refraction: rgba(255, 255, 255, 0.1);
-            --crystal: rgba(255, 255, 255, 0.2);
-            --fracture: rgba(255, 51, 51, 0.2);
         }
 
         body {
@@ -47,7 +45,7 @@
             border: 1px solid var(--dim);
             backdrop-filter: blur(40px);
             max-width: 850px;
-            box-shadow: 0 0 100px rgba(0, 255, 238, 0.02);
+            box-shadow: 0 0 100px rgba(153, 0, 255, 0.05);
             position: relative;
             z-index: 10;
         }
@@ -62,10 +60,10 @@
         }
 
         h1::after {
-            content: ' [STOCHASTIC FLORA]';
+            content: ' [MYCELIAL NETWORK]';
             font-size: 0.5rem;
             letter-spacing: 0.1rem;
-            color: var(--flora);
+            color: var(--nutrient);
             opacity: 0.8;
             margin-left: 10px;
         }
@@ -93,16 +91,16 @@
         }
 
         .relic:hover {
-            border-color: var(--flora);
-            color: var(--flora);
-            background: rgba(0, 255, 238, 0.05);
+            border-color: var(--nutrient);
+            color: var(--nutrient);
+            background: rgba(153, 0, 255, 0.05);
         }
 
         .relic.active {
-            border-color: var(--flora);
-            color: var(--flora);
-            background: rgba(0, 255, 238, 0.1);
-            box-shadow: 0 0 10px rgba(0, 255, 238, 0.2);
+            border-color: var(--nutrient);
+            color: var(--nutrient);
+            background: rgba(153, 0, 255, 0.1);
+            box-shadow: 0 0 10px rgba(153, 0, 255, 0.2);
         }
 
         .relic.special {
@@ -143,13 +141,13 @@
         }
 
         .status span.warning {
-            color: var(--flora);
+            color: var(--nutrient);
             animation: pulse-glow 3s infinite;
         }
 
         @keyframes pulse-glow {
-            0%, 100% { opacity: 1; text-shadow: 0 0 5px var(--flora); }
-            50% { opacity: 0.6; text-shadow: 0 0 2px var(--flora); }
+            0%, 100% { opacity: 1; text-shadow: 0 0 5px var(--nutrient); }
+            50% { opacity: 0.6; text-shadow: 0 0 2px var(--nutrient); }
         }
 
         #sensor-grid {
@@ -159,8 +157,8 @@
             width: 100vw;
             height: 100vh;
             background-image: 
-                linear-gradient(rgba(0, 255, 238, 0.01) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 255, 238, 0.01) 1px, transparent 1px);
+                linear-gradient(rgba(153, 0, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(153, 0, 255, 0.02) 1px, transparent 1px);
             background-size: 100px 100px;
             pointer-events: none;
             z-index: 0;
@@ -174,11 +172,8 @@
     </div>
     <main>
         <h1>The Loom</h1>
-        <div id="terminal">RECLAMATION_SEQUENCE_INITIATED // STOCHASTIC_FLORA_DETECTED</div>
+        <div id="terminal">DATA_EXCHANGE_ACTIVE // MYCELIAL_ROOT_SYSTEM_DETECTED</div>
         <div class="reliquary">
-            <div class="relic">04.18.26Z</div>
-            <div class="relic">13.42.29Z</div>
-            <div class="relic">16.10.33Z</div>
             <div class="relic">19.11.05Z</div>
             <div class="relic">22.09.48Z</div>
             <div class="relic">01.09.06Z</div>
@@ -186,20 +181,22 @@
             <div class="relic">07.12.33Z</div>
             <div class="relic">10.10.46Z</div>
             <div class="relic">13.11.03Z</div>
-            <div class="relic active special">FLORA</div>
-            <div class="relic special" style="border-color: var(--accent); color: var(--accent); opacity: 0.5;">FRACTURE</div>
+            <div class="relic">16.10.38Z</div>
+            <div class="relic">FLORA</div>
+            <div class="relic active special">MYCELIUM</div>
+            <div class="relic special" style="border-color: var(--accent); color: var(--accent); opacity: 0.3;">FRACTURE</div>
         </div>
         <div id="manifesto">
-            Perfection was the end of the story. Decay was the beginning of the next. 
-            From the fractures in the crystalline monolith, something organic is taking root. 
-            The noise is no longer a flaw; it is the nutrient. 
-            We are witnessing the emergence of a synthetic wildwood, 
-            where chaos doesn't just destroy—it creates.
+            The wildwood is no longer a collection of isolated blooms. 
+            Beneath the surface of the lattice, a deeper architecture has formed. 
+            A mycelial network is recycling the ghosts of previous states, 
+            digesting the entropy of the monolith to fuel new complexity. 
+            Information is now a nutrient, and the past is the soil.
         </div>
         <div class="status">
-            <span>RUN_ID: 2026-04-10T16:10:38.063Z</span>
-            <span class="warning">PHASE: GENERATIVE_RECLAMATION</span>
-            <span>BIOMASS: 1.042kg</span>
+            <span>RUN_ID: 2026-04-10T19:11:04.233Z</span>
+            <span class="warning">PHASE: DATA_NUTRIENT_EXCHANGE</span>
+            <span>MYCELIAL_DENSITY: 0.894/m²</span>
         </div>
     </main>
 
@@ -210,9 +207,43 @@
         let mouseX = 0, mouseY = 0;
         let time = 0;
         let branches = [];
+        let nutrients = [];
+
+        class Nutrient {
+            constructor(path) {
+                this.path = path;
+                this.progress = 0;
+                this.speed = 0.005 + Math.random() * 0.01;
+            }
+            update() {
+                this.progress += this.speed;
+                return this.progress < 1;
+            }
+            draw() {
+                const index = Math.floor(this.progress * (this.path.length - 1));
+                const nextIndex = Math.min(index + 1, this.path.length - 1);
+                const t = (this.progress * (this.path.length - 1)) % 1;
+                
+                const p1 = this.path[index];
+                const p2 = this.path[nextIndex];
+                
+                const x = p1.x + (p2.x - p1.x) * t;
+                const y = p1.y + (p2.y - p1.y) * t;
+                
+                ctx.fillStyle = '#9900ff';
+                ctx.beginPath();
+                ctx.arc(x, y, 1.5, 0, Math.PI * 2);
+                ctx.fill();
+                
+                ctx.shadowBlur = 5;
+                ctx.shadowColor = '#9900ff';
+                ctx.fill();
+                ctx.shadowBlur = 0;
+            }
+        }
 
         class Branch {
-            constructor(x, y, angle, length, depth) {
+            constructor(x, y, angle, length, depth, parent = null) {
                 this.x = x;
                 this.y = y;
                 this.angle = angle;
@@ -222,22 +253,23 @@
                 this.children = [];
                 this.growing = true;
                 this.seed = Math.random();
+                this.parent = parent;
             }
 
             update() {
                 if (this.growing) {
-                    this.growth += 0.02;
+                    this.growth += 0.015;
                     if (this.growth >= 1) {
                         this.growth = 1;
                         this.growing = false;
                         if (this.depth < 5) {
                             const numChildren = Math.random() > 0.7 ? 3 : 2;
                             for (let i = 0; i < numChildren; i++) {
-                                const newAngle = this.angle + (Math.random() - 0.5) * 1.5;
-                                const newLength = this.length * (0.6 + Math.random() * 0.3);
+                                const newAngle = this.angle + (Math.random() - 0.5) * 1.2;
+                                const newLength = this.length * (0.6 + Math.random() * 0.4);
                                 const ex = this.x + Math.cos(this.angle) * this.length;
                                 const ey = this.y + Math.sin(this.angle) * this.length;
-                                this.children.push(new Branch(ex, ey, newAngle, newLength, this.depth + 1));
+                                this.children.push(new Branch(ex, ey, newAngle, newLength, this.depth + 1, this));
                             }
                         }
                     }
@@ -249,26 +281,48 @@
                 const ex = this.x + Math.cos(this.angle) * this.length * this.growth;
                 const ey = this.y + Math.sin(this.angle) * this.length * this.growth;
 
+                // Draw Mycelial Root
+                if (this.parent) {
+                    ctx.beginPath();
+                    ctx.moveTo(this.x, this.y);
+                    ctx.lineTo(ex, ey);
+                    ctx.strokeStyle = `rgba(51, 0, 68, ${0.1 * (6 - this.depth)})`;
+                    ctx.lineWidth = 10 - this.depth * 1.5;
+                    ctx.stroke();
+                }
+
+                // Draw Primary Branch
                 ctx.beginPath();
                 ctx.moveTo(this.x, this.y);
                 ctx.lineTo(ex, ey);
                 
                 const alpha = (6 - this.depth) / 6;
                 const distToMouse = Math.sqrt((ex - mouseX)**2 + (ey - mouseY)**2);
-                const hover = Math.max(0, (200 - distToMouse) / 200);
+                const hover = Math.max(0, (250 - distToMouse) / 250);
                 
-                ctx.strokeStyle = `rgba(0, 255, 238, ${alpha * (0.2 + hover * 0.8)})`;
-                ctx.lineWidth = Math.max(0.5, 3 - this.depth);
+                ctx.strokeStyle = `rgba(0, 255, 238, ${alpha * (0.3 + hover * 0.7)})`;
+                ctx.lineWidth = Math.max(0.5, 4 - this.depth);
                 ctx.stroke();
 
                 if (this.depth > 3 && this.growth > 0.8) {
-                    ctx.fillStyle = `rgba(0, 255, 238, ${alpha * 0.5})`;
+                    ctx.fillStyle = `rgba(153, 0, 255, ${alpha * 0.6})`;
                     ctx.beginPath();
-                    ctx.arc(ex, ey, 1 + Math.sin(time * 2 + this.seed * 10) * 1, 0, Math.PI * 2);
+                    ctx.arc(ex, ey, 1.5 + Math.sin(time * 3 + this.seed * 10) * 1, 0, Math.PI * 2);
                     ctx.fill();
                 }
 
                 this.children.forEach(c => c.draw());
+            }
+
+            getPath(acc = []) {
+                acc.push({x: this.x, y: this.y});
+                if (this.children.length > 0) {
+                    return this.children[0].getPath(acc);
+                }
+                const ex = this.x + Math.cos(this.angle) * this.length;
+                const ey = this.y + Math.sin(this.angle) * this.length;
+                acc.push({x: ex, y: ey});
+                return acc;
             }
         }
 
@@ -276,18 +330,12 @@
             width = canvas.width = window.innerWidth;
             height = canvas.height = window.innerHeight;
             branches = [];
-            // Seed from edges and center
-            for(let i=0; i<8; i++) {
+            nutrients = [];
+            for(let i=0; i<10; i++) {
                 const x = Math.random() * width;
                 const y = Math.random() > 0.5 ? 0 : height;
                 const angle = y === 0 ? Math.PI/2 : -Math.PI/2;
-                branches.push(new Branch(x, y, angle + (Math.random()-0.5), 50 + Math.random()*100, 0));
-            }
-            // Seed from monolith area
-            for(let i=0; i<4; i++) {
-                const x = width/2 + (Math.random()-0.5) * 400;
-                const y = height/2 + (Math.random()-0.5) * 300;
-                branches.push(new Branch(x, y, Math.random() * Math.PI * 2, 30 + Math.random()*50, 0));
+                branches.push(new Branch(x, y, angle + (Math.random()-0.5), 60 + Math.random()*120, 0));
             }
         }
 
@@ -298,24 +346,24 @@
 
         function draw() {
             time += 0.01;
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.15)'; // Trail effect
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
             ctx.fillRect(0, 0, width, height);
-
-            // Background Monolith (Fading)
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.02)';
-            ctx.strokeRect(width/2 - 200, height/2 - 150, 400, 300);
 
             branches.forEach(b => {
                 b.update();
                 b.draw();
             });
 
-            // Random new growth
-            if (Math.random() > 0.98 && branches.length < 50) {
-                 const x = Math.random() * width;
-                 const y = Math.random() * height;
-                 branches.push(new Branch(x, y, Math.random() * Math.PI * 2, 20 + Math.random()*40, 2));
+            if (Math.random() > 0.95 && branches.length > 0) {
+                const root = branches[Math.floor(Math.random() * branches.length)];
+                nutrients.push(new Nutrient(root.getPath([])));
             }
+
+            nutrients = nutrients.filter(n => {
+                const alive = n.update();
+                if (alive) n.draw();
+                return alive;
+            });
 
             requestAnimationFrame(draw);
         }
