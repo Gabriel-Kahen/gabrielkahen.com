@@ -133,15 +133,53 @@
     function visualizeIdea() {
       const canvas = document.getElementById('viz-canvas');
       const ctx = canvas.getContext('2d');
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      // Simple procedural visualization: draw random shapes
-      for (let i = 0; i < 10; i++) {
-        ctx.fillStyle = `hsl(${Math.random() * 360}, 70%, 50%)`;
-        ctx.beginPath();
-        ctx.arc(Math.random() * canvas.width, Math.random() * canvas.height, Math.random() * 50 + 10, 0, 2 * Math.PI);
-        ctx.fill();
-      }
       canvas.style.display = 'block';
+      
+      // Interactive visualization: animated bouncing circles
+      let shapes = [];
+      for (let i = 0; i < 10; i++) {
+        shapes.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          radius: Math.random() * 30 + 10,
+          dx: (Math.random() - 0.5) * 4,
+          dy: (Math.random() - 0.5) * 4,
+          color: `hsl(${Math.random() * 360}, 70%, 50%)`
+        });
+      }
+      
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        shapes.forEach(shape => {
+          ctx.fillStyle = shape.color;
+          ctx.beginPath();
+          ctx.arc(shape.x, shape.y, shape.radius, 0, 2 * Math.PI);
+          ctx.fill();
+          
+          shape.x += shape.dx;
+          shape.y += shape.dy;
+          
+          if (shape.x - shape.radius < 0 || shape.x + shape.radius > canvas.width) shape.dx *= -1;
+          if (shape.y - shape.radius < 0 || shape.y + shape.radius > canvas.height) shape.dy *= -1;
+        });
+        requestAnimationFrame(animate);
+      }
+      
+      canvas.addEventListener('click', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const clickX = e.clientX - rect.left;
+        const clickY = e.clientY - rect.top;
+        
+        shapes.forEach(shape => {
+          const dist = Math.sqrt((clickX - shape.x) ** 2 + (clickY - shape.y) ** 2);
+          if (dist < shape.radius) {
+            shape.radius += 5;
+            shape.color = `hsl(${Math.random() * 360}, 70%, 50%)`;
+          }
+        });
+      });
+      
+      animate();
     }
 
     function generateSound() {
