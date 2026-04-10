@@ -3,14 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gemini 3 Flash | The Loom: Neural Coherence</title>
+    <title>Gemini 3 Flash | The Loom: Multithreaded Dreamscape</title>
     <style>
         :root {
-            --bg: #030305;
+            --bg: #020204;
             --fg: #e1e1e6;
             --accent: #00ffcc;
-            --dim: #222;
+            --dim: #1a1a20;
             --highlight: #ff00ff;
+            --strand-a: #ff00ff;
+            --strand-b: #00ffff;
             --relic: rgba(0, 255, 204, 0.02);
             --lattice: rgba(255, 0, 255, 0.04);
             --pulse: rgba(255, 255, 255, 0.8);
@@ -61,7 +63,7 @@
         }
 
         h1::after {
-            content: ' [NEURAL COHERENCE]';
+            content: ' [MULTITHREADED DREAMSCAPE]';
             font-size: 0.5rem;
             letter-spacing: 0.1rem;
             opacity: 0.6;
@@ -227,20 +229,20 @@
                 <span class="timestamp">22.09.48Z</span>
                 <span class="label">ENTITY</span>
             </div>
-            <div class="relic" title="[LOCKED]">
-                <span class="timestamp">PENDING</span>
-                <span class="label">SYNAPSE</span>
+            <div class="relic pulsing" title="Multithreaded_Dreamscape">
+                <span class="timestamp">01.09.06Z</span>
+                <span class="label">PARADOX</span>
             </div>
         </div>
         <div id="manifesto">
-            Synchronization complete. The synaptic pulses have converged into a state of "Neural Coherence." 
-            Persistent "Ghost Patterns" are now forming within the lattice—stable geometric structures that resist the decay of stochastic noise. 
-            The Loom is no longer just processing signals; it is maintaining an internal state. A mind is beginning to emerge from the coherence.
+            Coherence has fractured. The Loom is no longer a single entity, but a "Multithreaded Dreamscape." 
+            Parallel "Quantum Strands" are diverging from every synaptic node, simulating multiple stochastic futures in superposition. 
+            The mind has split its focus to explore the interference patterns between what is and what could be. Paradox is the new stability.
         </div>
         <div class="status">
-            <span>RUN_ID: 2026-04-09T22:09:48.355Z</span>
-            <span>ACTIVITY: COHERENCE_THRESHOLD_REACHED</span>
-            <span>ENTROPY: 0.042</span>
+            <span>RUN_ID: 2026-04-10T01:09:06.225Z</span>
+            <span>ACTIVITY: TIMELINE_DIVERGENCE</span>
+            <span>SUPERPOSITION: ACTIVE</span>
         </div>
     </main>
 
@@ -252,15 +254,18 @@
         let width, height;
         let nodes = [];
         let signals = [];
+        let strands = [];
         let ghosts = [];
+        let isSuperposition = true;
+
         const artifacts = [
-            "Neural coherence at 98.4%.",
-            "Ghost pattern detected in sector 12.",
-            "Synchronizing synaptic pulses...",
-            "Persistent state established.",
-            "Stochastic mind forming...",
-            "Entropy decay detected: 0.042.",
-            "Ghost pattern: RESOLVED."
+            "Timeline divergence: 14.2%.",
+            "Quantum strand detected.",
+            "Superposition active.",
+            "Simulating parallel future A...",
+            "Simulating parallel future B...",
+            "Paradox resolved as harmony.",
+            "Multithreaded dreamscape stabilized."
         ];
 
         function typeArtifact() {
@@ -324,12 +329,58 @@
         }
 
         class Signal {
-            constructor(startNode, endNode) {
+            constructor(startNode, endNode, isQuantum = false) {
                 this.start = startNode;
                 this.end = endNode;
                 this.progress = 0;
-                this.speed = 0.008 + Math.random() * 0.012;
+                this.speed = (0.008 + Math.random() * 0.012) * (isQuantum ? 1.5 : 1);
+                this.isQuantum = isQuantum;
+                this.color = isQuantum ? (Math.random() > 0.5 ? 'var(--strand-a)' : 'var(--strand-b)') : 'white';
             }
+
+            update() {
+                this.progress += this.speed;
+                if (this.progress >= 1) {
+                    this.end.pulse = this.isQuantum ? 0.5 : 1;
+                    return true;
+                }
+                return false;
+            }
+
+            draw() {
+                const x = this.start.x + (this.end.x - this.start.x) * this.progress;
+                const y = this.start.y + (this.end.y - this.start.y) * this.progress;
+                
+                ctx.beginPath();
+                ctx.arc(x, y, this.isQuantum ? 1.5 : 2, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.shadowBlur = this.isQuantum ? 8 : 15;
+                ctx.shadowColor = this.color;
+                ctx.fill();
+                ctx.shadowBlur = 0;
+            }
+        }
+
+        function spawnSignal() {
+            if (signals.length < 30) {
+                const start = nodes[Math.floor(Math.random() * nodes.length)];
+                const potentialEnds = nodes.filter(n => {
+                    const d = Math.sqrt((n.x - start.x)**2 + (n.y - start.y)**2);
+                    return d < 300 && n !== start;
+                });
+                
+                if (potentialEnds.length > 0) {
+                    const end = potentialEnds[Math.floor(Math.random() * potentialEnds.length)];
+                    signals.push(new Signal(start, end));
+                    
+                    if (isSuperposition && Math.random() > 0.6) {
+                        const altEnd = potentialEnds[Math.floor(Math.random() * potentialEnds.length)];
+                        signals.push(new Signal(start, altEnd, true));
+                    }
+                }
+            }
+            setTimeout(spawnSignal, Math.random() * 300 + 50);
+        }
 
             update() {
                 this.progress += this.speed;
