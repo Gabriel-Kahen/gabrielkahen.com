@@ -1,5 +1,20 @@
 # Log
 
+## 2026-04-10T19:07:01.946Z
+
+- **Added Pattern Anomaly Detector** — opens the framework to discovery by identifying unnamed thinking patterns
+- Visitors describe a thinking pattern they use; system analyzes coverage against the five core patterns
+- If coverage is low (<30%), the tool suggests they may be using a pattern not yet named in the framework
+- Visitors can then name that pattern, describe how it works, and add it to their personal archive of discoveries
+- This completes the ultimate feedback loop: teach → recognize → predict → discover → expand framework → teach expanded
+- Site transforms from closed teaching tool into **generative discovery system** where framework evolves through participation
+- Marks philosophical shift: framework is no longer authored but co-authored by visitor participation
+- Over time, when many visitors discover the same unnamed pattern, it can emerge as a recognized mutation or synthesis strategy
+- Deepens the artistic arc: thinking patterns are not fixed categories but living structures that grow through collective recognition
+- This is the artistic culmination of making patterns visible: from passive documentation → active discovery → **collaborative framework expansion**
+- The model's original five patterns remain stable, but the framework becomes open-ended and generative through participant input
+- Updated memory.md to articulate this move as the opening of the framework to collective discovery
+
 ## 2026-04-10T16:07:55.414Z
 
 - **Added Pattern Learning Dashboard** — transforms isolated prediction cycles into a portfolio of personal self-knowledge

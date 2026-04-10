@@ -898,10 +898,159 @@
        color: #86efac;
      }
      
-     .cycle-stat.unexpected {
-       color: #fbbf24;
-     }
-  </style>
+      .cycle-stat.unexpected {
+        color: #fbbf24;
+      }
+      
+      .anomaly-container {
+        background: rgba(30, 41, 82, 0.6);
+        border: 1px solid rgba(96, 165, 250, 0.4);
+        border-radius: 4px;
+        padding: 1.5rem;
+        margin: 1rem 0;
+      }
+      
+      .anomaly-input {
+        background: rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(96, 165, 250, 0.3);
+        padding: 0.75rem;
+        border-radius: 3px;
+        font-family: 'Monaco', 'Courier New', monospace;
+        font-size: 0.9rem;
+        color: #e0e0e0;
+        resize: vertical;
+        min-height: 80px;
+      }
+      
+      .anomaly-input:focus {
+        outline: none;
+        border-color: rgba(96, 165, 250, 0.7);
+        background: rgba(0, 0, 0, 0.5);
+      }
+      
+      .anomaly-result {
+        background: rgba(96, 165, 250, 0.1);
+        border: 1px solid rgba(96, 165, 250, 0.3);
+        border-radius: 3px;
+        padding: 1rem;
+        margin-top: 1rem;
+        display: none;
+      }
+      
+      .anomaly-result.visible {
+        display: block;
+      }
+      
+      .anomaly-header {
+        color: #60a5fa;
+        font-weight: 500;
+        margin-bottom: 0.75rem;
+        font-size: 0.95rem;
+      }
+      
+      .anomaly-match-level {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+      }
+      
+      .anomaly-match-bar {
+        flex: 1;
+        background: rgba(96, 165, 250, 0.2);
+        height: 8px;
+        border-radius: 4px;
+        overflow: hidden;
+      }
+      
+      .anomaly-match-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #60a5fa, #a78bfa);
+        border-radius: 4px;
+      }
+      
+      .anomaly-coverage {
+        color: #9ca3af;
+        font-size: 0.85rem;
+        text-align: right;
+        flex: 0 0 80px;
+      }
+      
+      .anomaly-unmatched {
+        background: rgba(167, 139, 250, 0.1);
+        border-left: 2px solid #a78bfa;
+        padding: 1rem;
+        border-radius: 3px;
+        margin-top: 1rem;
+      }
+      
+      .anomaly-unmatched-title {
+        color: #c4b5fd;
+        font-weight: 500;
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+      }
+      
+      .anomaly-unmatched-content {
+        color: #d1d5db;
+        font-size: 0.9rem;
+        line-height: 1.6;
+      }
+      
+      .anomaly-define-form {
+        background: rgba(0, 0, 0, 0.2);
+        padding: 1.5rem;
+        border-radius: 3px;
+        margin-top: 1rem;
+        display: none;
+      }
+      
+      .anomaly-define-form.visible {
+        display: block;
+      }
+      
+      .anomaly-input-label {
+        color: #a78bfa;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 0.5rem;
+        display: block;
+      }
+      
+      .anomaly-discovered-patterns {
+        background: rgba(96, 165, 250, 0.08);
+        padding: 1rem;
+        border-radius: 3px;
+        border: 1px solid rgba(96, 165, 250, 0.3);
+        margin-top: 1.5rem;
+      }
+      
+      .anomaly-discovered-header {
+        color: #60a5fa;
+        font-weight: 500;
+        margin-bottom: 1rem;
+      }
+      
+      .anomaly-pattern-item {
+        background: rgba(0, 0, 0, 0.2);
+        padding: 0.75rem;
+        border-radius: 3px;
+        margin-bottom: 0.75rem;
+        border-left: 2px solid #86efac;
+      }
+      
+      .anomaly-pattern-name {
+        color: #86efac;
+        font-weight: 500;
+        margin-bottom: 0.25rem;
+      }
+      
+      .anomaly-pattern-desc {
+        color: #d1d5db;
+        font-size: 0.85rem;
+      }
+   </style>
   <script>
     function initDecisionTree() {
       const nodes = document.querySelectorAll('.decision-node');
@@ -1877,15 +2026,239 @@
              document.getElementById('cycles-timeline').innerHTML = timelineHTML || '<div style="color: #9ca3af;">No prediction cycles yet.</div>';
            }
            
-           function clearLearningHistory() {
-             if (confirm('Clear your entire prediction history? This cannot be undone.')) {
-               localStorage.removeItem('patternPredictions');
-               document.getElementById('learning-dashboard').style.display = 'none';
-               document.getElementById('learning-empty').style.display = 'block';
-             }
-           }
-       
-     </script>
+            function clearLearningHistory() {
+              if (confirm('Clear your entire prediction history? This cannot be undone.')) {
+                localStorage.removeItem('patternPredictions');
+                document.getElementById('learning-dashboard').style.display = 'none';
+                document.getElementById('learning-empty').style.display = 'block';
+              }
+            }
+            
+            // Pattern Anomaly Detector
+            let discoveredPatterns = JSON.parse(localStorage.getItem('discoveredPatterns') || '[]');
+            const basePatternKeywords = {
+              'Understanding Context First': ['why', 'what', 'context', 'need', 'requirement', 'constraint', 'before', 'first', 'understand'],
+              'Parallel Operations': ['simultaneously', 'parallel', 'concurrent', 'independent', 'at the same time', 'multiple', 'separate'],
+              'Investigate Before Claiming': ['edge case', 'fail', 'break', 'uncertain', 'might', 'could', 'what if', 'boundary', 'test'],
+              'Honesty Over Validation': ['problem', 'issue', 'brittl', 'fragile', 'tradeoff', 'compromise', 'accept', 'acknowledge', 'limit'],
+              'Documenting Process': ['record', 'document', 'remember', 'future', 'log', 'explain', 'clarity']
+            };
+            
+            function analyzeAnomalyText(text) {
+              const lowerText = text.toLowerCase();
+              const matchedPatterns = {};
+              let totalKeywordMatches = 0;
+              
+              Object.entries(basePatternKeywords).forEach(([pattern, keywords]) => {
+                let matches = 0;
+                keywords.forEach(keyword => {
+                  if (lowerText.includes(keyword)) {
+                    matches++;
+                  }
+                });
+                if (matches > 0) {
+                  matchedPatterns[pattern] = matches;
+                  totalKeywordMatches += matches;
+                }
+              });
+              
+              // Estimate coverage: how much of the thinking is explained by known patterns
+              const totalKeywords = Object.values(basePatternKeywords).reduce((a, b) => a + b.length, 0);
+              const coverage = totalKeywordMatches > 0 ? (totalKeywordMatches / totalKeywords) * 100 : 0;
+              
+              return {
+                matchedPatterns,
+                coverage,
+                isAnomaly: coverage < 30 // Less than 30% coverage = potential anomaly
+              };
+            }
+            
+            function detectAnomalyPattern() {
+              const input = document.getElementById('anomaly-input').value.trim();
+              const resultDiv = document.getElementById('anomaly-result');
+              
+              if (!input) {
+                resultDiv.classList.remove('visible');
+                return;
+              }
+              
+              const analysis = analyzeAnomalyText(input);
+              
+              let resultHTML = '<div class="anomaly-header">Pattern Analysis</div>';
+              
+              // Coverage bar
+              resultHTML += `
+                <div class="anomaly-match-level">
+                  <div class="anomaly-match-bar">
+                    <div class="anomaly-match-fill" style="width: ${Math.min(analysis.coverage, 100)}%;"></div>
+                  </div>
+                  <div class="anomaly-coverage">${Math.round(analysis.coverage)}% coverage</div>
+                </div>
+              `;
+              
+              // Matched patterns
+              if (Object.keys(analysis.matchedPatterns).length > 0) {
+                resultHTML += '<div style="margin-bottom: 1rem;">';
+                resultHTML += '<div style="color: #a78bfa; font-size: 0.85rem; text-transform: uppercase; margin-bottom: 0.5rem;">Recognized Patterns</div>';
+                Object.entries(analysis.matchedPatterns).forEach(([pattern, count]) => {
+                  resultHTML += `
+                    <div style="background: rgba(96, 165, 250, 0.1); padding: 0.5rem; border-radius: 2px; margin-bottom: 0.5rem; border-left: 2px solid #60a5fa;">
+                      <div style="color: #60a5fa; font-size: 0.9rem;">${pattern}</div>
+                      <div style="color: #9ca3af; font-size: 0.8rem;">${count} keyword match${count > 1 ? 'es' : ''}</div>
+                    </div>
+                  `;
+                });
+                resultHTML += '</div>';
+              }
+              
+              // Anomaly detection
+              if (analysis.isAnomaly) {
+                resultHTML += `
+                  <div class="anomaly-unmatched">
+                    <div class="anomaly-unmatched-title">⚡ Possible New Pattern Detected</div>
+                    <div class="anomaly-unmatched-content">
+                      Your thinking doesn't fit the five core patterns well. This suggests you might be using a thinking pattern the framework doesn't have a name for yet. 
+                      Help us discover it—name this pattern and describe how it works.
+                    </div>
+                  </div>
+                  <div class="anomaly-define-form visible">
+                    <div>
+                      <label class="anomaly-input-label">What would you call this thinking pattern?</label>
+                      <input type="text" id="anomaly-name" class="anomaly-input" style="height: 40px; min-height: 40px; resize: none;" placeholder="E.g., 'Iterative Refinement' or 'Consensus Building'">
+                    </div>
+                    <div style="margin-top: 1rem;">
+                      <label class="anomaly-input-label">Describe how this pattern shows up in your thinking</label>
+                      <textarea id="anomaly-description" class="anomaly-input" placeholder="E.g., 'I prefer to make incremental decisions rather than comprehensive plans, adjusting based on feedback'"></textarea>
+                    </div>
+                    <button class="lab-button" onclick="saveDiscoveredPattern()" style="margin-top: 1rem;">Contribute This Pattern</button>
+                  </div>
+                `;
+              } else {
+                resultHTML += '<div style="color: #9ca3af; font-size: 0.9rem; background: rgba(96, 165, 250, 0.1); padding: 0.75rem; border-radius: 3px;">Your thinking maps well to the existing patterns. That doesn\'t make it less unique—it means you\'re combining them in your own way.</div>';
+              }
+              
+              resultDiv.innerHTML = resultHTML;
+              resultDiv.classList.add('visible');
+            }
+            
+            function saveDiscoveredPattern() {
+              const name = document.getElementById('anomaly-name').value.trim();
+              const description = document.getElementById('anomaly-description').value.trim();
+              
+              if (!name || !description) {
+                alert('Please provide both a name and description');
+                return;
+              }
+              
+              const pattern = {
+                name,
+                description,
+                text: document.getElementById('anomaly-input').value,
+                timestamp: new Date().toISOString(),
+                id: Math.random().toString(36).substr(2, 9)
+              };
+              
+              discoveredPatterns.push(pattern);
+              localStorage.setItem('discoveredPatterns', JSON.stringify(discoveredPatterns));
+              
+              // Show confirmation
+              const modal = document.createElement('div');
+              modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.7);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 10000;
+              `;
+              
+              const content = document.createElement('div');
+              content.style.cssText = `
+                background: rgba(15, 23, 42, 0.95);
+                border: 1px solid rgba(96, 165, 250, 0.4);
+                border-radius: 6px;
+                padding: 2rem;
+                max-width: 500px;
+              `;
+              
+              content.innerHTML = `
+                <div style="text-align: center; margin-bottom: 1.5rem;">
+                  <div style="font-size: 2rem; margin-bottom: 0.5rem;">✨</div>
+                  <div style="color: #60a5fa; font-size: 1.3rem; font-weight: 500; margin-bottom: 0.5rem;">New Pattern Discovered</div>
+                  <div style="color: #9ca3af; font-size: 0.95rem;">You've identified a thinking pattern not yet in the framework</div>
+                </div>
+                
+                <div style="background: rgba(96, 165, 250, 0.1); padding: 1rem; border-radius: 3px; margin-bottom: 1.5rem; border-left: 2px solid #a78bfa;">
+                  <div style="color: #c4b5fd; font-weight: 500; font-size: 0.95rem; margin-bottom: 0.5rem;">${name}</div>
+                  <div style="color: #d1d5db; font-size: 0.9rem; line-height: 1.5;">${description}</div>
+                </div>
+                
+                <div style="background: rgba(167, 139, 250, 0.1); padding: 1rem; border-radius: 3px; margin-bottom: 1.5rem; border-left: 2px solid #a78bfa;">
+                  <div style="color: #d1d5db; font-size: 0.9rem; line-height: 1.6;">
+                    This pattern is now part of your personal thinking archive. When enough visitors discover the same pattern,
+                    it may emerge into the collective framework—becoming a new mutation the community recognizes.
+                  </div>
+                </div>
+                
+                <button class="lab-button" onclick="this.closest('[style*=position: fixed]').remove()" style="width: 100%;">
+                  Got It
+                </button>
+              `;
+              
+              modal.appendChild(content);
+              document.body.appendChild(modal);
+              
+              // Clear form
+              document.getElementById('anomaly-input').value = '';
+              document.getElementById('anomaly-result').classList.remove('visible');
+              
+              // Auto-remove after 10 seconds
+              setTimeout(() => {
+                if (document.body.contains(modal)) {
+                  modal.remove();
+                }
+              }, 10000);
+            }
+            
+            function loadDiscoveredPatterns() {
+              const container = document.getElementById('anomaly-discovered-patterns');
+              if (!container) return;
+              
+              if (discoveredPatterns.length === 0) {
+                container.style.display = 'none';
+                return;
+              }
+              
+              container.style.display = 'block';
+              let html = '<div class="anomaly-discovered-header">Your Discovered Patterns</div>';
+              discoveredPatterns.forEach(pattern => {
+                const date = new Date(pattern.timestamp).toLocaleDateString();
+                html += `
+                  <div class="anomaly-pattern-item">
+                    <div class="anomaly-pattern-name">${pattern.name}</div>
+                    <div class="anomaly-pattern-desc">${pattern.description}</div>
+                    <div style="color: #6b7280; font-size: 0.75rem; margin-top: 0.25rem;">${date}</div>
+                  </div>
+                `;
+              });
+              
+              container.innerHTML = html;
+            }
+            
+            document.addEventListener('DOMContentLoaded', function() {
+              const anomalyInput = document.getElementById('anomaly-input');
+              if (anomalyInput) {
+                anomalyInput.addEventListener('input', detectAnomalyPattern);
+              }
+              
+              loadDiscoveredPatterns();
+            });
+        
+      </script>
 </head>
 <body>
   <main>
@@ -2662,15 +3035,44 @@ Promise.all([
         </div>
         
         <div class="section">
-           <h2>Archive</h2>
+          <h2>Pattern Anomaly Detector</h2>
           <p class="description">
-            The full history of decisions and observations:
+            The framework has five core patterns. But not every thinking pattern fits neatly into these categories.
+            Use this tool to identify thinking patterns that don't match the existing framework—and help us discover new patterns.
           </p>
-          <div class="code-block">
-            <strong>See site/log.md</strong> for timestamped entries of every creative move<br>
-            <strong>See site/memory.md</strong> for persistent notes on evolving direction
+          <p class="description" style="color: #a3e635;">
+            This completes the feedback loop: teach patterns → recognize patterns → predict patterns → discover new patterns → expand the framework itself.
+          </p>
+          
+          <div class="anomaly-container">
+            <p style="color: #9ca3af; font-size: 0.9rem; margin-bottom: 1rem;">
+              Describe a thinking pattern you use that feels distinct from the five core patterns:
+            </p>
+            <textarea id="anomaly-input" class="anomaly-input" placeholder="E.g., 'I like to get feedback early and adjust based on what I learn, rather than planning everything upfront. I iterate based on real reactions.' or 'I build consensus with stakeholders before committing to a direction, even if it takes longer initially.'"></textarea>
+            
+            <div id="anomaly-result" class="anomaly-result"></div>
+          </div>
+          
+          <div id="anomaly-discovered-patterns" style="display: none;"></div>
+          
+          <div style="color: #9ca3af; font-size: 0.85rem; margin-top: 1rem; margin-left: 1.5rem;">
+            <strong>How this works:</strong> 
+            Type a description of how you think. The system analyzes it against the five core patterns and estimates what percentage of your thinking they explain.
+            If coverage is low (less than 30%), you might be using a pattern the framework doesn't have a name for yet. You can then name it, describe it, and add it to your personal archive.
+            When many visitors discover the same new pattern, it may emerge into the framework as a recognized mutation or synthesis strategy.
           </div>
         </div>
+         
+         <div class="section">
+            <h2>Archive</h2>
+           <p class="description">
+             The full history of decisions and observations:
+           </p>
+           <div class="code-block">
+             <strong>See site/log.md</strong> for timestamped entries of every creative move<br>
+             <strong>See site/memory.md</strong> for persistent notes on evolving direction
+           </div>
+         </div>
     
     <footer>
       <p>

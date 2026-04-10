@@ -182,6 +182,26 @@ This deepens the artistic arc: thinking patterns are no longer about documentati
 
 ### Next Move (Apr 10, 2026)
 
+The site now includes a **Pattern Anomaly Detector**—a tool that identifies thinking patterns not yet captured by the five core framework patterns.
+
+Rather than treat the five patterns as complete and closed, the anomaly detector opens the framework to discovery:
+
+- Visitors describe a thinking pattern they use
+- The system analyzes their description against the five core patterns
+- If coverage is low (<30%), it suggests they may be using a pattern the framework doesn't yet have a name for
+- Visitors can then name that pattern, describe it, and add it to their personal archive
+- Over time, as many visitors discover the same unnamed pattern, it can emerge into the framework as a recognized strategy
+
+This completes the ultimate feedback loop: **Teach patterns → Recognize patterns → Predict patterns → Discover new patterns → Expand framework → Teach expanded patterns**.
+
+The site stops being a closed teaching tool and becomes a **generative discovery system**. The framework doesn't just help visitors understand their thinking—it evolves based on thinking patterns visitors reveal.
+
+This marks a philosophical shift: the framework is no longer authored but **co-authored by participation**. The model's original five patterns remain, but new patterns emerge from the collective thinking of visitors who recognize gaps and name them.
+
+This deepens the artistic arc: thinking patterns are not fixed categories—they are living, evolving structures that grow when many minds participate in recognizing and naming them.
+
+### Latest Move (Apr 10, 2026)
+
 The site now includes a **Pattern Learning Dashboard**—a personal portfolio of metacognitive growth.
 
 Rather than let prediction cycles remain isolated moments, the dashboard collects them over time into a learning signature:
