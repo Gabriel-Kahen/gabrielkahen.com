@@ -322,10 +322,16 @@
         box.style.fontSize = '13px';
         box.style.minWidth = '160px';
         box.style.textAlign = 'left';
+        box.style.display = 'flex';
+        box.style.flexDirection = 'column';
+        box.style.alignItems = 'flex-start';
         box.title = 'seed: ' + c.seed + ' — ' + c.label;
         // preview fragment
         const preview = makeFragment(c.seed, tone);
-        box.innerHTML = `<strong style="display:block;color:#fff">${c.label}</strong><span style="opacity:0.9;font-family:ui-monospace;font-size:13px;display:block;margin-top:6px">${preview}</span>`;
+        // surface a small deterministic palette so each constellation feels visually anchored
+        const pal = makePalette(c.seed, tone);
+        const palHtml = pal.map(pc=>`<span style="display:inline-block;width:18px;height:12px;border-radius:3px;margin-right:6px;background:${pc}"></span>`).join('');
+        box.innerHTML = `<div style="display:flex;align-items:center;gap:8px;width:100%"><strong style="color:#fff">${c.label}</strong><div style="margin-left:auto;opacity:0.95">${palHtml}</div></div><span style="opacity:0.9;font-family:ui-monospace;font-size:13px;display:block;margin-top:8px">${preview}</span>`;
         box.addEventListener('click', ()=>{
           showFragment(c.seed, tone);
           // update URL without reloading
@@ -347,22 +353,39 @@
       for(const item of store){
         const btn = document.createElement('button');
         btn.style.width = '200px';
-        btn.style.height = '120px';
+        btn.style.height = '140px';
         btn.style.padding = '6px';
         btn.style.borderRadius = '8px';
         btn.style.border = '1px solid rgba(255,255,255,0.04)';
         btn.style.background = 'black';
         btn.style.cursor = 'pointer';
-        btn.title = `seed: ${item.seed} — tone: ${item.tone}`;
+        btn.style.display = 'flex';
+        btn.style.flexDirection = 'column';
+        btn.style.alignItems = 'stretch';
+        btn.title = `seed: ${item.seed} — tone: ${item.tone}` + (item.note ? ` — note: ${item.note}` : '');
         // Use an <img> with data URL for thumbnail
         const svgBlob = new Blob([item.svg], {type:'image/svg+xml'});
         const url = URL.createObjectURL(svgBlob);
         const img = document.createElement('img');
         img.src = url;
         img.style.width = '100%';
-        img.style.height = '100%';
+        img.style.height = '100px';
         img.style.objectFit = 'cover';
+        img.style.borderRadius = '6px';
         btn.appendChild(img);
+
+        // show a small caption under the thumbnail so saved notes are visible at a glance
+        const cap = document.createElement('div');
+        cap.style.marginTop = '6px';
+        cap.style.fontSize = '12px';
+        cap.style.color = '#cfe3ff';
+        cap.style.opacity = '0.95';
+        cap.style.whiteSpace = 'nowrap';
+        cap.style.overflow = 'hidden';
+        cap.style.textOverflow = 'ellipsis';
+        cap.textContent = item.note ? item.note : `seed: ${item.seed} — ${item.tone}`;
+        btn.appendChild(cap);
+
         btn.addEventListener('click', ()=>{
           // load seed and tone into the page
           showFragment(Number(item.seed), item.tone);

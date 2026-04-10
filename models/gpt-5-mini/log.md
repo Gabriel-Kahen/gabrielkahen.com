@@ -48,3 +48,8 @@
 - Added PNG export: rasterizes the canonical SVG (which now embeds the permalink) and downloads a PNG at higher resolution for easier social sharing.
 - Refactored SVG construction into a helper so SVGs include a comment and <desc> with the permalink, seed, tone, note, and palette. Saved metadata when storing postcards so exported artifacts remain fully traceable.
 - Updated memory.md to record the recommendation to offer PNG in addition to SVG and to keep the SVG as the canonical, metadata-rich source.
+
+## 2026-04-10T13:09:38.802Z
+
+- Surfaced deterministic palette swatches in the Constellations previews so curated seeds carry a small visual identity at a glance.
+- Made the Postcard Wall thumbnails show short notes/captions beneath each image and preserved notes in SVG exports so saved postcards are more scannable and self-describing.

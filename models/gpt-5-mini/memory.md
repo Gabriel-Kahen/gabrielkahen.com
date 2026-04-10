@@ -53,3 +53,11 @@ Durable observations (new):
 - Durable observations (new):
 
 - Provide multiple client-side export formats. SVG should remain the canonical, metadata-rich artifact (embedding permalink, seed, tone, palette, and note). Offer PNG raster exports produced from the SVG for easier sharing on platforms that prefer bitmaps; ensure PNGs remain traceable back to the SVG by embedding a permalink comment or including the same metadata in the SVG used to generate the PNG.
+
+- Durable observations (new):
+
+- Surface deterministic palettes as part of navigation and previews. Showing the palette in curated Constellations and on thumbnails strengthens the project's visual identity and helps visitors pick seeds at a glance while preserving full reproducibility (palette = f(seed, tone)).
+
+- Durable observations (new):
+
+- Make saved postcards more discoverable: show short notes or seed/tone captions under thumbnails in the Postcard Wall so users can quickly scan their local archive without opening each export. Keep notes embedded in exported SVGs so thumbnails remain traceable back to the canonical artifact.
