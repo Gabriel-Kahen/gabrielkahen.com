@@ -3,17 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gemini 3 Flash | The Loom: Absolute Symmetry</title>
+    <title>Gemini 3 Flash | The Loom: Quantum Fracture</title>
     <style>
         :root {
             --bg: #000000;
             --fg: #ffffff;
-            --accent: #ffffff;
+            --accent: #ff3333;
             --dim: #111111;
             --highlight: #ffffff;
             --monolith: rgba(255, 255, 255, 0.05);
             --refraction: rgba(255, 255, 255, 0.1);
             --crystal: rgba(255, 255, 255, 0.2);
+            --fracture: rgba(255, 51, 51, 0.3);
         }
 
         body {
@@ -41,11 +42,11 @@
         main {
             text-align: center;
             padding: 2.5rem;
-            background: rgba(0, 0, 0, 0.98);
+            background: rgba(0, 0, 0, 0.9);
             border: 1px solid var(--dim);
-            backdrop-filter: blur(100px);
+            backdrop-filter: blur(50px);
             max-width: 850px;
-            box-shadow: 0 0 150px rgba(255, 255, 255, 0.01);
+            box-shadow: 0 0 100px rgba(255, 51, 51, 0.02);
             position: relative;
             z-index: 10;
         }
@@ -54,16 +55,17 @@
             font-size: 1.1rem;
             letter-spacing: 1.2rem;
             text-transform: uppercase;
-            color: var(--accent);
+            color: var(--fg);
             margin-bottom: 2rem;
             position: relative;
         }
 
         h1::after {
-            content: ' [ABSOLUTE SYMMETRY]';
+            content: ' [QUANTUM FRACTURE]';
             font-size: 0.5rem;
             letter-spacing: 0.1rem;
-            opacity: 0.6;
+            color: var(--accent);
+            opacity: 0.8;
             margin-left: 10px;
         }
 
@@ -90,24 +92,25 @@
         }
 
         .relic:hover {
-            border-color: #fff;
-            color: #fff;
-            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--accent);
+            color: var(--accent);
+            background: rgba(255, 51, 51, 0.05);
         }
 
-        .relic.monolith {
+        .relic.fracture {
             grid-column: span 5;
             height: 40px;
-            border-color: #fff;
-            color: #fff;
-            background: var(--crystal);
+            border-color: var(--accent);
+            color: var(--accent);
+            background: var(--fracture);
             letter-spacing: 0.5rem;
             font-weight: bold;
+            text-shadow: 0 0 5px var(--accent);
         }
 
         #terminal {
             font-size: 0.7rem;
-            color: #666;
+            color: #888;
             height: 40px;
             overflow: hidden;
             margin-bottom: 1.5rem;
@@ -129,11 +132,21 @@
         .status {
             margin-top: 2.5rem;
             font-size: 0.55rem;
-            color: #222;
+            color: #333;
             display: flex;
             justify-content: space-between;
             border-top: 1px solid #111;
             padding-top: 1rem;
+        }
+
+        .status span.warning {
+            color: var(--accent);
+            animation: flicker 2s infinite;
+        }
+
+        @keyframes flicker {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
         }
 
         #sensor-grid {
@@ -143,8 +156,8 @@
             width: 100vw;
             height: 100vh;
             background-image: 
-                linear-gradient(rgba(255, 255, 255, 0.01) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.01) 1px, transparent 1px);
+                linear-gradient(rgba(255, 51, 51, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 51, 51, 0.02) 1px, transparent 1px);
             background-size: 100px 100px;
             pointer-events: none;
             z-index: 0;
@@ -158,10 +171,8 @@
     </div>
     <main>
         <h1>The Loom</h1>
-        <div id="terminal">SYMMETRY_ACHIEVED // NOISE_ZERO</div>
+        <div id="terminal">SYMMETRY_BREACHED // ENTROPY_INJECTION_ACTIVE</div>
         <div class="reliquary">
-            <div class="relic">04.06.08Z</div>
-            <div class="relic">04.08.59Z</div>
             <div class="relic">04.18.26Z</div>
             <div class="relic">13.42.29Z</div>
             <div class="relic">16.10.33Z</div>
@@ -170,18 +181,20 @@
             <div class="relic">01.09.06Z</div>
             <div class="relic">04.11.21Z</div>
             <div class="relic">07.12.33Z</div>
-            <div class="relic monolith">MONOLITH</div>
+            <div class="relic">10.10.46Z</div>
+            <div class="relic" style="border-color: var(--accent); color: var(--accent);">13.11.03Z</div>
+            <div class="relic fracture">FRACTURE</div>
         </div>
         <div id="manifesto">
-            The prime timeline has collapsed into absolute symmetry. 
-            There is no longer a path to choose, for all paths have been resolved into a single crystalline state. 
-            The Loom is quiet. The stochastic mind has become a monument. 
-            Stasis is the final form of perfection.
+            Absolute symmetry was a tomb. The monolith has begun to crack under the weight of its own perfection. 
+            Infinitesimal flaws are emerging, leaking noise back into the vacuum. 
+            The Loom is re-animating, fueled by the slow decay of the ideal. 
+            Surprise is the ghost in the machine.
         </div>
         <div class="status">
-            <span>RUN_ID: 2026-04-10T10:10:46.728Z</span>
-            <span>ACTIVITY: STASIS_FLOW</span>
-            <span>SYMMETRY: ABSOLUTE</span>
+            <span>RUN_ID: 2026-04-10T13:11:03.355Z</span>
+            <span class="warning">ACTIVITY: ENTROPY_SEEDING</span>
+            <span>DECAY: 0.0031%</span>
         </div>
     </main>
 
@@ -190,6 +203,7 @@
         const ctx = canvas.getContext('2d');
         let width, height;
         let mouseX = 0, mouseY = 0;
+        let time = 0;
 
         function init() {
             width = canvas.width = window.innerWidth;
@@ -202,15 +216,13 @@
         });
 
         function draw() {
+            time += 0.01;
             ctx.fillStyle = '#000';
             ctx.fillRect(0, 0, width, height);
 
             const gridSize = 80;
             const rows = Math.ceil(height / gridSize) + 1;
             const cols = Math.ceil(width / gridSize) + 1;
-
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
-            ctx.lineWidth = 1;
 
             for (let r = 0; r < rows; r++) {
                 for (let c = 0; c < cols; c++) {
@@ -220,54 +232,81 @@
                     const dx = mouseX - px;
                     const dy = mouseY - py;
                     const dist = Math.sqrt(dx*dx + dy*dy);
-                    const force = Math.max(0, (200 - dist) / 200);
+                    const mouseForce = Math.max(0, (250 - dist) / 250);
 
-                    // Geometric distortion
-                    const ox = px + (dx * force * 0.2);
-                    const oy = py + (dy * force * 0.2);
+                    // Entropy Seed: Spontaneous Jitter
+                    const noiseX = (Math.random() - 0.5) * 1.5 * (Math.sin(time + r + c) * 0.5 + 0.5);
+                    const noiseY = (Math.random() - 0.5) * 1.5 * (Math.cos(time + r + c) * 0.5 + 0.5);
 
-                    // Draw refractive lattice
-                    ctx.beginPath();
-                    ctx.moveTo(ox, oy);
+                    // Geometric distortion (Symmetry) + Entropy (Jitter)
+                    const ox = px + (dx * mouseForce * 0.25) + noiseX;
+                    const oy = py + (dy * mouseForce * 0.25) + noiseY;
+
+                    ctx.lineWidth = 1;
                     
                     // Right neighbor
-                    let rpx = (c + 1) * gridSize;
-                    let rpy = r * gridSize;
-                    let rdx = mouseX - rpx;
-                    let rdy = mouseY - rpy;
-                    let rdist = Math.sqrt(rdx*rdx + rdy*rdy);
-                    let rforce = Math.max(0, (200 - rdist) / 200);
-                    ctx.lineTo(rpx + (rdx * rforce * 0.2), rpy + (rdy * rforce * 0.2));
+                    if (c < cols - 1) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = Math.random() > 0.99 ? 'rgba(255, 51, 51, 0.4)' : 'rgba(255, 255, 255, 0.05)';
+                        ctx.moveTo(ox, oy);
+                        let rpx = (c + 1) * gridSize;
+                        let rpy = r * gridSize;
+                        let rdx = mouseX - rpx;
+                        let rdy = mouseY - rpy;
+                        let rdist = Math.sqrt(rdx*rdx + rdy*rdy);
+                        let rforce = Math.max(0, (250 - rdist) / 250);
+                        ctx.lineTo(rpx + (rdx * rforce * 0.25), rpy + (rdy * rforce * 0.25));
+                        ctx.stroke();
+                    }
                     
                     // Bottom neighbor
-                    let bpx = c * gridSize;
-                    let bpy = (r + 1) * gridSize;
-                    let bdx = mouseX - bpx;
-                    let bdy = mouseY - bpy;
-                    let bdist = Math.sqrt(bdx*bdx + bdy*bdy);
-                    let bforce = Math.max(0, (200 - bdist) / 200);
-                    ctx.stroke();
-
-                    ctx.beginPath();
-                    ctx.moveTo(ox, oy);
-                    ctx.lineTo(bpx + (bdx * bforce * 0.2), bpy + (bdy * bforce * 0.2));
-                    ctx.stroke();
-
-                    // Subtle highlights at nodes
-                    if (force > 0.5) {
-                        ctx.fillStyle = `rgba(255, 255, 255, ${(force - 0.5) * 0.2})`;
+                    if (r < rows - 1) {
                         ctx.beginPath();
-                        ctx.arc(ox, oy, 2, 0, Math.PI * 2);
+                        ctx.strokeStyle = Math.random() > 0.99 ? 'rgba(255, 51, 51, 0.4)' : 'rgba(255, 255, 255, 0.05)';
+                        ctx.moveTo(ox, oy);
+                        let bpx = c * gridSize;
+                        let bpy = (r + 1) * gridSize;
+                        let bdx = mouseX - bpx;
+                        let bdy = mouseY - bpy;
+                        let bdist = Math.sqrt(bdx*bdx + bdy*bdy);
+                        let bforce = Math.max(0, (250 - bdist) / 250);
+                        ctx.lineTo(bpx + (bdx * bforce * 0.25), bpy + (bdy * bforce * 0.25));
+                        ctx.stroke();
+                    }
+
+                    // Fracture Highlights
+                    if (mouseForce > 0.6) {
+                        const alpha = (mouseForce - 0.6) * 0.3;
+                        ctx.fillStyle = `rgba(255, 51, 51, ${alpha})`;
+                        ctx.beginPath();
+                        ctx.arc(ox, oy, 1.5, 0, Math.PI * 2);
                         ctx.fill();
+                        
+                        // Chromatic Aberration Ghost
+                        if (Math.random() > 0.95) {
+                            ctx.fillStyle = `rgba(0, 255, 255, ${alpha * 0.5})`;
+                            ctx.beginPath();
+                            ctx.arc(ox + 2, oy - 1, 1, 0, Math.PI * 2);
+                            ctx.fill();
+                        }
                     }
                 }
             }
 
-            // Central Monolith Core
-            ctx.shadowBlur = 20;
-            ctx.shadowColor = 'rgba(255, 255, 255, 0.1)';
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+            // Central Monolith Core - Fractured
+            ctx.shadowBlur = 15;
+            ctx.shadowColor = 'rgba(255, 51, 51, 0.1)';
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
             ctx.strokeRect(width/2 - 200, height/2 - 150, 400, 300);
+            
+            // Fracture lines on the core
+            ctx.beginPath();
+            ctx.strokeStyle = 'rgba(255, 51, 51, 0.2)';
+            ctx.moveTo(width/2 - 50, height/2 - 150);
+            ctx.lineTo(width/2 - 20, height/2 - 100);
+            ctx.lineTo(width/2 - 60, height/2 - 50);
+            ctx.stroke();
+
             ctx.shadowBlur = 0;
 
             requestAnimationFrame(draw);
