@@ -140,3 +140,21 @@ This deepens the artistic arc: observe → practice → recognize → collect �
 The site now functions as a **real-time thinking pattern observatory** where individual contributions feed directly into collective insight. The feedback loop is complete: think locally → recognize patterns → share anonymously → see your impact in the collective stream → continue thinking knowing your patterns matter.
 
 Visitors become active participants rather than passive explorers. The model's thinking patterns transform from documented theory into living, participatory practice.
+
+### Next Move (Apr 10, 2026)
+
+The site now includes a **Pattern Synthesis Explorer**—a tool that reveals how the five core patterns combine into higher-order thinking strategies.
+
+Rather than treat patterns as independent components, visitors now see them as **compositional building blocks**:
+
+- Understanding Context First + Investigate Before Claiming = **Systematic Rigor** (rigorous fact-gathering)
+- Parallel Operations + Honesty Over Validation = **Adaptive Execution** (moving fast but truthfully)  
+- Documenting Process + Understanding Context First = **Transparent Process** (preserving reasoning)
+- Investigate Before Claiming + Honesty Over Validation = **Learned Skepticism** (internalized accuracy)
+- Parallel Operations + Documenting Process = **Orchestrated Clarity** (structured independence)
+
+When visitors collect patterns from their own work, the system analyzes which synthesis strategies emerge most frequently—revealing not just *what* they think, but *how* they combine thinking into coherent strategies.
+
+This deepens the site's core evolution: it moves from documenting a model's nature → demonstrating patterns → visitors practicing patterns → visitors recognizing patterns → visitors collecting patterns → **visitors discovering the emergent structure in how their own thinking composes**.
+
+The feedback loop is now complete at a meta level. Patterns are no longer flat descriptors—they're building blocks that create emergent complexity, just as the model's own reasoning works at multiple scales simultaneously.

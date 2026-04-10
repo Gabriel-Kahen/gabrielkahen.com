@@ -591,6 +591,107 @@
       font-size: 0.9rem;
       line-height: 1.6;
     }
+    
+    .synthesis-container {
+      background: rgba(30, 41, 82, 0.6);
+      border: 1px solid rgba(96, 165, 250, 0.4);
+      border-radius: 4px;
+      padding: 1.5rem;
+      margin: 1rem 0;
+    }
+    
+    .synthesis-matrix {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    
+    .synthesis-card {
+      background: rgba(96, 165, 250, 0.1);
+      border: 1px solid rgba(96, 165, 250, 0.3);
+      border-radius: 4px;
+      padding: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .synthesis-card:hover {
+      background: rgba(96, 165, 250, 0.15);
+      transform: translateY(-2px);
+      border-color: rgba(96, 165, 250, 0.6);
+    }
+    
+    .synthesis-card.selected {
+      background: rgba(167, 139, 250, 0.2);
+      border-color: rgba(167, 139, 250, 0.6);
+    }
+    
+    .synthesis-title {
+      color: #60a5fa;
+      font-weight: 500;
+      font-size: 0.95rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .synthesis-components {
+      color: #9ca3af;
+      font-size: 0.8rem;
+      line-height: 1.4;
+    }
+    
+    .synthesis-description {
+      color: #d1d5db;
+      font-size: 0.9rem;
+      margin-top: 1rem;
+      padding: 1rem;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 3px;
+      border-left: 2px solid #a78bfa;
+      display: none;
+    }
+    
+    .synthesis-description.visible {
+      display: block;
+    }
+    
+    .synthesis-radar {
+      background: rgba(0, 0, 0, 0.2);
+      padding: 1.5rem;
+      border-radius: 3px;
+      margin-top: 1rem;
+      display: none;
+    }
+    
+    .synthesis-radar.visible {
+      display: block;
+    }
+    
+    .radar-label {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.75rem;
+    }
+    
+    .radar-name {
+      color: #a78bfa;
+      font-size: 0.85rem;
+      flex: 0 0 120px;
+    }
+    
+    .radar-bar-container {
+      flex: 1;
+      background: rgba(96, 165, 250, 0.2);
+      height: 16px;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    
+    .radar-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #a78bfa, #c4b5fd);
+      border-radius: 2px;
+    }
   </style>
   <script>
     function initDecisionTree() {
@@ -722,15 +823,18 @@
        return patterns.sort((a, b) => b.confidence - a.confidence).slice(0, 3);
      }
      
-      document.addEventListener('DOMContentLoaded', function() {
-        const input = document.getElementById('mirror-input');
-        if (input) {
-          input.addEventListener('input', analyzeProblem);
-        }
-        
-        // Load collection from localStorage
-        loadCollection();
-      });
+       document.addEventListener('DOMContentLoaded', function() {
+         const input = document.getElementById('mirror-input');
+         if (input) {
+           input.addEventListener('input', analyzeProblem);
+         }
+         
+         // Load collection from localStorage
+         loadCollection();
+         
+         // Initialize synthesis explorer
+         initSynthesisExplorer();
+       });
       
       // Pattern collection functions
       let collection = [];
@@ -1051,23 +1155,148 @@
          document.getElementById('emergence-viz').innerHTML = html;
        }
        
-       function shareEmergenceData() {
-          const currentCollection = collection;
-          
-          if (currentCollection.length === 0) {
-            alert('Your collection is empty. Add patterns first, then share them to contribute to the emergence archive.');
-            return;
-          }
-          
-          // Build summary of patterns being shared
-          const summary = {};
-          currentCollection.forEach(item => {
-            summary[item.pattern] = (summary[item.pattern] || 0) + 1;
-          });
-          
-          // Show recognition modal
-          showContributionRecognition(summary, currentCollection.length);
-        }
+        function shareEmergenceData() {
+           const currentCollection = collection;
+           
+           if (currentCollection.length === 0) {
+             alert('Your collection is empty. Add patterns first, then share them to contribute to the emergence archive.');
+             return;
+           }
+           
+           // Build summary of patterns being shared
+           const summary = {};
+           currentCollection.forEach(item => {
+             summary[item.pattern] = (summary[item.pattern] || 0) + 1;
+           });
+           
+           // Show recognition modal
+           showContributionRecognition(summary, currentCollection.length);
+         }
+         
+         // Pattern synthesis framework
+         const synthesisMeta = {
+           'Systematic Rigor': {
+             components: ['Understanding Context First', 'Investigate Before Claiming'],
+             description: 'You gather facts comprehensively before committing to a direction. This shows in how you ask questions deeply, then validate assumptions rather than accepting surface answers. You\'re the type who asks "what could break?" before shipping.',
+             realWorldExamples: 'Architecture design, risk assessment, requirements gathering, code review, debugging strategies'
+           },
+           'Adaptive Execution': {
+             components: ['Parallel Operations', 'Honesty Over Validation'],
+             description: 'You recognize what can happen independently and execute without artificial sequencing. But you also name problems when they emerge—you don\'t hide complexity to look efficient. You move fast but honestly.',
+             realWorldExamples: 'Building distributed systems, team coordination, managing technical debt, concurrent project work'
+           },
+           'Transparent Process': {
+             components: ['Documenting Process', 'Understanding Context First'],
+             description: 'You don\'t just solve problems—you preserve the reasoning. This acts as a feedback loop: understanding shapes the work, and documenting feeds back into future understanding. Your work remains coherent even as context changes.',
+             realWorldExamples: 'Knowledge management, onboarding new team members, evolving architectures, retrospectives'
+           },
+           'Learned Skepticism': {
+             components: ['Investigate Before Claiming', 'Honesty Over Validation'],
+             description: 'You investigate rigorously because you\'ve learned that false certainty breaks things. You name unknowns because hiding them catches up with you. You\'ve internalized that accuracy beats speed.',
+             realWorldExamples: 'Production debugging, crisis response, technical decisions under uncertainty, mentoring'
+           },
+           'Orchestrated Clarity': {
+             components: ['Parallel Operations', 'Documenting Process'],
+             description: 'You structure independent work to happen simultaneously, then document why. This means future maintainers understand the parallelism wasn\'t accidental—it was deliberate. Your complexity remains intelligible.',
+             realWorldExamples: 'System design, scaling strategies, pipeline optimization, microservices architecture'
+           }
+         };
+         
+         function analyzeSynthesisPatterns() {
+           // Analyze which synthesis patterns dominate in the visitor's collection
+           const counts = {};
+           collection.forEach(item => {
+             counts[item.pattern] = (counts[item.pattern] || 0) + 1;
+           });
+           
+           // Score synthesis patterns based on component presence
+           const synthesisScores = {};
+           Object.entries(synthesisMeta).forEach(([name, meta]) => {
+             let score = 0;
+             meta.components.forEach(comp => {
+               if (counts[comp]) {
+                 score += counts[comp];
+               }
+             });
+             synthesisScores[name] = score;
+           });
+           
+           return { componentCounts: counts, synthesisScores };
+         }
+         
+         function showSynthesisCard(name) {
+           const cards = document.querySelectorAll('.synthesis-card');
+           cards.forEach(card => {
+             card.classList.remove('selected');
+           });
+           
+           const clicked = event.target.closest('.synthesis-card');
+           if (clicked) {
+             clicked.classList.add('selected');
+           }
+           
+           const description = document.getElementById('synthesis-description');
+           const radar = document.getElementById('synthesis-radar');
+           
+           if (description && radar) {
+             const meta = synthesisMeta[name];
+             if (meta) {
+               description.innerHTML = `
+                 <div style="margin-bottom: 1rem;">
+                   <strong style="color: #c4b5fd;">Composed of:</strong>
+                   <div style="color: #a78bfa; margin-top: 0.5rem;">
+                     ${meta.components.map(c => `<span class="pattern-reference">${c}</span>`).join(' + ')}
+                   </div>
+                 </div>
+                 <div style="margin-bottom: 1rem;">
+                   <strong style="color: #c4b5fd;">What this means:</strong>
+                   <div style="margin-top: 0.5rem; color: #d1d5db;">${meta.description}</div>
+                 </div>
+                 <div>
+                   <strong style="color: #c4b5fd;">Where this shows up:</strong>
+                   <div style="margin-top: 0.5rem; color: #d1d5db; font-style: italic;">${meta.realWorldExamples}</div>
+                 </div>
+               `;
+               description.classList.add('visible');
+               
+               // Update radar
+               const analysis = analyzeSynthesisPatterns();
+               let radarHTML = '<div style="color: #a78bfa; font-size: 0.85rem; font-weight: 500; margin-bottom: 1rem;">Synthesis Strength in Your Patterns</div>';
+               
+               const sorted = Object.entries(analysis.synthesisScores)
+                 .sort((a, b) => b[1] - a[1]);
+               
+               const maxScore = Math.max(...sorted.map(s => s[1]), 1);
+               
+               sorted.forEach(([synthName, score]) => {
+                 const width = maxScore > 0 ? (score / maxScore) * 100 : 0;
+                 const isActive = synthName === name;
+                 const barColor = isActive ? 'linear-gradient(90deg, #60a5fa, #a78bfa)' : 'linear-gradient(90deg, #3b82f6, #7c3aed)';
+                 
+                 radarHTML += `
+                   <div class="radar-label">
+                     <div class="radar-name" style="color: ${isActive ? '#60a5fa' : '#9ca3af'}; font-weight: ${isActive ? '500' : '400'};">${synthName}</div>
+                     <div class="radar-bar-container">
+                       <div class="radar-bar-fill" style="width: ${width}%; background: ${barColor};"></div>
+                     </div>
+                     <div style="flex: 0 0 30px; text-align: right; color: #60a5fa; font-size: 0.8rem;">${Math.round(width)}%</div>
+                   </div>
+                 `;
+               });
+               
+               radar.innerHTML = radarHTML;
+               radar.classList.add('visible');
+             }
+           }
+         }
+         
+         function initSynthesisExplorer() {
+           // Click handlers for synthesis cards
+           const cards = document.querySelectorAll('.synthesis-card');
+           cards.forEach(card => {
+             card.addEventListener('click', showSynthesisCard);
+           });
+         }
         
         function showContributionRecognition(patternSummary, totalCount) {
           // Add this contribution to recent activity
@@ -1636,13 +1865,78 @@ Promise.all([
           </div>
         </div>
         
-        <div style="color: #9ca3af; font-size: 0.85rem; margin-top: 1rem; margin-left: 1.5rem;">
-          <strong>How this works:</strong> Select the patterns you recognize in your thinking. Add context about where you see them active. Export your collection to share with others or keep as a personal record. This becomes a portable artifact—proof of how you think.
-        </div>
-      </div>
-      
-        <div class="section">
-          <h2>Pattern Emergence</h2>
+         <div style="color: #9ca3af; font-size: 0.85rem; margin-top: 1rem; margin-left: 1.5rem;">
+           <strong>How this works:</strong> Select the patterns you recognize in your thinking. Add context about where you see them active. Export your collection to share with others or keep as a personal record. This becomes a portable artifact—proof of how you think.
+         </div>
+       </div>
+       
+       <div class="section">
+         <h2>Pattern Synthesis</h2>
+         <p class="description">
+           Patterns don't exist in isolation. They compose into higher-order thinking strategies.
+           When you combine Understanding Context with Investigation, you get Systematic Rigor.
+           When you blend Parallel Operations with Honesty, you get Adaptive Execution.
+           What synthesis patterns dominate your thinking?
+         </p>
+         
+         <div class="synthesis-container">
+           <p style="color: #9ca3af; font-size: 0.9rem; margin-bottom: 1rem;">
+             Click each synthesis pattern to see how it's built and how it shows up in real work:
+           </p>
+           
+           <div class="synthesis-matrix">
+             <div class="synthesis-card">
+               <div class="synthesis-title">Systematic Rigor</div>
+               <div class="synthesis-components">
+                 Understanding Context First +<br>
+                 Investigate Before Claiming
+               </div>
+             </div>
+             
+             <div class="synthesis-card">
+               <div class="synthesis-title">Adaptive Execution</div>
+               <div class="synthesis-components">
+                 Parallel Operations +<br>
+                 Honesty Over Validation
+               </div>
+             </div>
+             
+             <div class="synthesis-card">
+               <div class="synthesis-title">Transparent Process</div>
+               <div class="synthesis-components">
+                 Documenting Process +<br>
+                 Understanding Context First
+               </div>
+             </div>
+             
+             <div class="synthesis-card">
+               <div class="synthesis-title">Learned Skepticism</div>
+               <div class="synthesis-components">
+                 Investigate Before Claiming +<br>
+                 Honesty Over Validation
+               </div>
+             </div>
+             
+             <div class="synthesis-card">
+               <div class="synthesis-title">Orchestrated Clarity</div>
+               <div class="synthesis-components">
+                 Parallel Operations +<br>
+                 Documenting Process
+               </div>
+             </div>
+           </div>
+           
+           <div id="synthesis-description" class="synthesis-description"></div>
+           <div id="synthesis-radar" class="synthesis-radar"></div>
+           
+           <div style="color: #9ca3af; font-size: 0.85rem; margin-top: 1rem;">
+             <strong>How this works:</strong> When you collect patterns from your work, those patterns activate different synthesis strategies. The radar above shows which higher-order strategies emerge most frequently from your thinking. This reveals not just what you do, but how you combine thinking patterns into coherent strategies.
+           </div>
+         </div>
+       </div>
+        
+         <div class="section">
+           <h2>Pattern Emergence</h2>
           <p class="description">
             What patterns emerge when many thinking minds recognize themselves in the same framework?
             This archive tracks which patterns visitors identify most frequently in their own work,
