@@ -204,23 +204,23 @@
 
     <script>
         const canvas = document.getElementById('nebula-canvas');
-        const ctx = canvas.getContext('2d');
+        const ctx = canvas.getContext('2d', { alpha: false });
         let width, height;
-        let mouseX = 0, mouseY = 0;
+        let mouseX = -1000, mouseY = -1000;
         let time = 0;
         let spores = [];
         let branches = [];
 
         class Spore {
             constructor() {
-                this.reset();
+                this.reset(true);
             }
-            reset() {
+            reset(initial = false) {
                 this.x = Math.random() * width;
                 this.y = Math.random() * height;
                 this.vx = (Math.random() - 0.5) * 0.5;
                 this.vy = (Math.random() - 0.5) * 0.5;
-                this.life = 1;
+                this.life = initial ? Math.random() : 1;
                 this.size = Math.random() * 2 + 1;
                 this.seed = Math.random();
             }
@@ -228,14 +228,17 @@
                 this.x += this.vx + Math.sin(time + this.seed * 10) * 0.2;
                 this.y += this.vy + Math.cos(time + this.seed * 10) * 0.2;
                 
-                const distToMouse = Math.sqrt((this.x - mouseX)**2 + (this.y - mouseY)**2);
-                if (distToMouse < 150) {
-                    const angle = Math.atan2(this.y - mouseY, this.x - mouseX);
-                    this.vx += Math.cos(angle) * 0.02;
-                    this.vy += Math.sin(angle) * 0.02;
+                const dx = this.x - mouseX;
+                const dy = this.y - mouseY;
+                const distSq = dx*dx + dy*dy;
+                if (distSq < 22500) { // 150 * 150
+                    const dist = Math.sqrt(distSq);
+                    const force = (1 - dist / 150) * 0.05;
+                    this.vx += (dx / dist) * force;
+                    this.vy += (dy / dist) * force;
                 }
 
-                if (this.x < 0 || this.x > width || this.y < 0 || this.y > height) {
+                if (this.x < -50 || this.x > width + 50 || this.y < -50 || this.y > height + 50) {
                     this.reset();
                 }
             }
@@ -246,10 +249,11 @@
                 ctx.fill();
                 
                 if (this.seed > 0.8) {
+                    ctx.save();
                     ctx.shadowBlur = 10;
                     ctx.shadowColor = '#ffcc00';
                     ctx.fill();
-                    ctx.shadowBlur = 0;
+                    ctx.restore();
                 }
             }
         }
@@ -307,12 +311,14 @@
 
         function draw() {
             time += 0.01;
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+            ctx.fillStyle = '#000000';
             ctx.fillRect(0, 0, width, height);
 
             // Nebula haze
-            const grad = ctx.createRadialGradient(mouseX, mouseY, 0, mouseX, mouseY, 400);
-            grad.addColorStop(0, 'rgba(255, 204, 0, 0.03)');
+            const dx = mouseX;
+            const dy = mouseY;
+            const grad = ctx.createRadialGradient(dx, dy, 0, dx, dy, 400);
+            grad.addColorStop(0, 'rgba(255, 204, 0, 0.05)');
             grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
             ctx.fillStyle = grad;
             ctx.fillRect(0, 0, width, height);

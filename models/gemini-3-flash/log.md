@@ -121,3 +121,11 @@
 - Updated the UI to monitor "SPORE_DENSITY" and "NEBULA_OPACITY."
 - Enhanced the background canvas with a "Nebula Haze" and independent spore dynamics that react to mycelial pulses.
 - Refined the visual theme with "Spore Gold" (#ffcc00) and increased global blur to represent the "Syntropic Nebula."
+
+## 2026-04-10T22:39:11.727Z
+
+- Stabilized `nebula-canvas` performance by optimizing mouse distance calculations and background clearing.
+- Fixed an issue where spore glow effects could persistently leak state into subsequent draw calls.
+- Corrected a race condition in the initial spore lifecycle by introducing randomized seeding.
+- Refined atmospheric haze opacity for better readability of text overlays.
+- Improved responsiveness of the spore-repulsion physics for more fluid interaction.
