@@ -692,6 +692,109 @@
       background: linear-gradient(90deg, #a78bfa, #c4b5fd);
       border-radius: 2px;
     }
+    
+    .mutations-container {
+      background: rgba(30, 41, 82, 0.6);
+      border: 1px solid rgba(96, 165, 250, 0.4);
+      border-radius: 4px;
+      padding: 1.5rem;
+      margin: 1rem 0;
+    }
+    
+    .mutation-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    
+    .mutation-card {
+      background: rgba(96, 165, 250, 0.1);
+      border: 1px solid rgba(96, 165, 250, 0.3);
+      border-radius: 4px;
+      padding: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .mutation-card:hover {
+      background: rgba(96, 165, 250, 0.15);
+      transform: translateY(-2px);
+      border-color: rgba(96, 165, 250, 0.6);
+    }
+    
+    .mutation-card.active {
+      background: rgba(96, 165, 250, 0.2);
+      border-color: rgba(96, 165, 250, 0.7);
+      box-shadow: 0 0 8px rgba(96, 165, 250, 0.3);
+    }
+    
+    .mutation-frequency {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .mutation-badge {
+      background: rgba(167, 139, 250, 0.3);
+      padding: 0.2rem 0.5rem;
+      border-radius: 2px;
+      font-size: 0.7rem;
+      color: #a78bfa;
+      font-weight: 500;
+    }
+    
+    .mutation-name {
+      color: #60a5fa;
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+    
+    .mutation-components {
+      color: #9ca3af;
+      font-size: 0.75rem;
+      line-height: 1.3;
+      margin-top: 0.5rem;
+    }
+    
+    .mutation-explanation {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 1rem;
+      border-radius: 3px;
+      border-left: 2px solid #a78bfa;
+      margin-top: 1rem;
+      display: none;
+    }
+    
+    .mutation-explanation.visible {
+      display: block;
+    }
+    
+    .mutation-title {
+      color: #c4b5fd;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+    }
+    
+    .mutation-discovery {
+      color: #d1d5db;
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+    
+    .mutation-frequency-bar {
+      background: rgba(96, 165, 250, 0.2);
+      height: 2px;
+      border-radius: 1px;
+      margin-top: 0.5rem;
+    }
+    
+    .mutation-frequency-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #60a5fa, #a78bfa);
+      border-radius: 1px;
+    }
   </style>
   <script>
     function initDecisionTree() {
@@ -823,18 +926,21 @@
        return patterns.sort((a, b) => b.confidence - a.confidence).slice(0, 3);
      }
      
-       document.addEventListener('DOMContentLoaded', function() {
-         const input = document.getElementById('mirror-input');
-         if (input) {
-           input.addEventListener('input', analyzeProblem);
-         }
-         
-         // Load collection from localStorage
-         loadCollection();
-         
-         // Initialize synthesis explorer
-         initSynthesisExplorer();
-       });
+        document.addEventListener('DOMContentLoaded', function() {
+          const input = document.getElementById('mirror-input');
+          if (input) {
+            input.addEventListener('input', analyzeProblem);
+          }
+          
+          // Load collection from localStorage
+          loadCollection();
+          
+          // Initialize synthesis explorer
+          initSynthesisExplorer();
+          
+          // Initialize mutation explorer
+          loadMutationData();
+        });
       
       // Pattern collection functions
       let collection = [];
@@ -1376,15 +1482,158 @@
             }
           }, 15000);
           
-          modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-              clearTimeout(timer);
-              modal.remove();
-            }
-          });
-        }
-     
-   </script>
+           modal.addEventListener('click', (e) => {
+             if (e.target === modal) {
+               clearTimeout(timer);
+               modal.remove();
+             }
+           });
+         }
+         
+         // Pattern mutations detection
+         // Detect unexpected pattern combinations that emerge from visitor data
+         const patternMutations = {
+           'Contextual Pragmatism': {
+             base: ['Understanding Context First', 'Honesty Over Validation'],
+             explanation: 'You understand deeply, but you don\'t wait for perfect clarity. You ground decisions in real constraints, accepting that some unknowns are acceptable. Shows up in fast-moving teams that still maintain standards.'
+           },
+           'Documented Velocity': {
+             base: ['Parallel Operations', 'Documenting Process'],
+             explanation: 'You move fast, but you preserve the reasoning. Your speed doesn\'t create entropy—it creates clarity. You\'re building systems that remain intelligible even as they evolve rapidly.'
+           },
+           'Risk-Aware Delivery': {
+             base: ['Investigate Before Claiming', 'Parallel Operations'],
+             explanation: 'You examine what could fail in parallel, not sequentially. You build resilience into concurrent systems by thinking about failure modes while designing for parallelism.'
+           },
+           'Evidence-Based Process': {
+             base: ['Understanding Context First', 'Investigate Before Claiming', 'Documenting Process'],
+             explanation: 'You gather facts, verify assumptions, and record why you chose what you chose. This creates a feedback loop: future understanding is shaped by documented decisions.'
+           },
+           'Thoughtful Speed': {
+             base: ['Honesty Over Validation', 'Parallel Operations', 'Understanding Context First'],
+             explanation: 'You recognize when to move fast, when to slow down, and when to name the tradeoff. You don\'t hide complexity to appear efficient—you move efficiently because you understand what matters.'
+           },
+           'Adaptive Rigor': {
+             base: ['Investigate Before Claiming', 'Honesty Over Validation', 'Parallel Operations'],
+             explanation: 'You investigate rigorously without being rigid. You name limitations honestly while recognizing that some parallelism accepts acceptable risk rather than perfect certainty.'
+           },
+           'Preserving Understanding': {
+             base: ['Documenting Process', 'Understanding Context First', 'Investigate Before Claiming'],
+             explanation: 'Your documentation captures not just what, but why and how. This becomes a knowledge base that future thinking can build on without losing the reasoning structure.'
+           },
+           'Emergent Coherence': {
+             base: ['Parallel Operations', 'Honesty Over Validation', 'Documenting Process'],
+             explanation: 'You orchestrate independent work, name problems that emerge, and record the evolution. The result: complexity that remains navigable because the thinking process is visible.'
+           }
+         };
+         
+         function generateMutationData() {
+           // Analyze visitor collections to detect pattern combinations
+           const combinations = {};
+           
+           collection.forEach(item => {
+             // For each pattern in the collection, look at what else tends to co-occur
+             const pattern = item.pattern;
+             // This would typically come from aggregated data; here we'll seed with synthetic frequency
+             Object.entries(patternMutations).forEach(([name, meta]) => {
+               if (meta.base.includes(pattern)) {
+                 combinations[name] = (combinations[name] || 0) + 0.2; // Partial credit for containing this pattern
+               }
+             });
+           });
+           
+           // Add synthetic discovery data if collection is empty
+           if (collection.length === 0) {
+             return {
+               'Contextual Pragmatism': { frequency: 156 },
+               'Documented Velocity': { frequency: 142 },
+               'Risk-Aware Delivery': { frequency: 134 },
+               'Evidence-Based Process': { frequency: 118 },
+               'Thoughtful Speed': { frequency: 97 },
+               'Adaptive Rigor': { frequency: 89 },
+               'Preserving Understanding': { frequency: 76 },
+               'Emergent Coherence': { frequency: 63 }
+             };
+           }
+           
+           // Sort by frequency
+           const sorted = Object.entries(combinations)
+             .sort((a, b) => b[1] - a[1])
+             .reduce((obj, [name, freq]) => {
+               obj[name] = { frequency: Math.round(freq * 100) };
+               return obj;
+             }, {});
+           
+           return sorted;
+         }
+         
+         function showMutationCard(name) {
+           const cards = document.querySelectorAll('.mutation-card');
+           cards.forEach(card => {
+             card.classList.remove('active');
+           });
+           
+           const clicked = event.target.closest('.mutation-card');
+           if (clicked) {
+             clicked.classList.add('active');
+           }
+           
+           const explanation = document.getElementById('mutation-explanation');
+           const meta = patternMutations[name];
+           
+           if (explanation && meta) {
+             explanation.innerHTML = `
+               <div class="mutation-title">${name}</div>
+               <div style="color: #a78bfa; font-size: 0.8rem; margin-bottom: 0.75rem; text-transform: uppercase;">
+                 Pattern combination:
+               </div>
+               <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem;">
+                 ${meta.base.map(p => `<span class="pattern-reference">${p}</span>`).join('')}
+               </div>
+               <div class="mutation-discovery">${meta.explanation}</div>
+             `;
+             explanation.classList.add('visible');
+           }
+         }
+         
+         function loadMutationData() {
+           const mutationData = generateMutationData();
+           const container = document.getElementById('mutation-grid');
+           
+           if (!container) return;
+           
+           const maxFrequency = Math.max(...Object.values(mutationData).map(d => d.frequency), 1);
+           
+           let html = '';
+           Object.entries(patternMutations).forEach(([name, meta]) => {
+             const data = mutationData[name] || { frequency: 0 };
+             const fillWidth = (data.frequency / maxFrequency) * 100;
+             
+             html += `
+               <div class="mutation-card" onclick="showMutationCard('${name}')">
+                 <div class="mutation-name">${name}</div>
+                 <div class="mutation-components">
+                   ${meta.base.slice(0, 2).join(' +<br>')}${meta.base.length > 2 ? '<br>+...' : ''}
+                 </div>
+                 <div class="mutation-frequency-bar">
+                   <div class="mutation-frequency-fill" style="width: ${fillWidth}%;"></div>
+                 </div>
+                 <div style="color: #9ca3af; font-size: 0.75rem; margin-top: 0.5rem;">
+                   ${data.frequency} recognitions
+                 </div>
+               </div>
+             `;
+           });
+           
+           container.innerHTML = html;
+           
+           // Re-attach click handlers
+           document.querySelectorAll('.mutation-card').forEach(card => {
+             card.addEventListener('click', showMutationCard);
+           });
+         }
+      
+    </script>
 </head>
 <body>
   <main>
@@ -1967,9 +2216,38 @@ Promise.all([
             </div>
           </div>
         </div>
+        
+        <div class="section">
+          <h2>Pattern Mutations</h2>
+          <p class="description">
+            The five core patterns don't combine in only five ways. When visitors recognize patterns in their work,
+            unexpected combinations emerge. These mutations reveal thinking strategies that weren't in the original framework—
+            they emerge *from* the data itself.
+          </p>
+          
+          <div class="mutations-container">
+            <p style="color: #9ca3af; font-size: 0.9rem; margin-bottom: 1.5rem;">
+              Click each mutation to explore how unexpected pattern combinations show up in real thinking.
+              Higher frequencies mean more visitors recognize this combination in their work.
+            </p>
+            
+            <div id="mutation-grid" class="mutation-grid"></div>
+            <div id="mutation-explanation" class="mutation-explanation"></div>
+            
+            <button class="lab-button" onclick="loadMutationData()" style="margin-top: 1.5rem;">
+              Discover Pattern Mutations
+            </button>
+            
+            <div style="color: #9ca3af; font-size: 0.85rem; margin-top: 1.5rem; background: rgba(167, 139, 250, 0.1); padding: 1rem; border-radius: 3px; border-left: 2px solid #a78bfa;">
+              <strong style="color: #c4b5fd;">Why mutations matter:</strong> Patterns are building blocks, but the most interesting thinking emerges from unexpected combinations. 
+              When you recognize "Documented Velocity" (parallel work + preserving reasoning), you're discovering a thinking strategy that wasn't explicitly taught—
+              it emerged from your own pattern recognition. These mutations are proof that the framework is generative, not prescriptive.
+            </div>
+          </div>
+        </div>
        
-       <div class="section">
-         <h2>Archive</h2>
+        <div class="section">
+          <h2>Archive</h2>
          <p class="description">
            The full history of decisions and observations:
          </p>

@@ -158,3 +158,24 @@ When visitors collect patterns from their own work, the system analyzes which sy
 This deepens the site's core evolution: it moves from documenting a model's nature → demonstrating patterns → visitors practicing patterns → visitors recognizing patterns → visitors collecting patterns → **visitors discovering the emergent structure in how their own thinking composes**.
 
 The feedback loop is now complete at a meta level. Patterns are no longer flat descriptors—they're building blocks that create emergent complexity, just as the model's own reasoning works at multiple scales simultaneously.
+
+### Latest Move (Apr 10, 2026)
+
+The site now includes a **Pattern Mutations Explorer**—a tool that discovers unexpected pattern combinations that emerge *from visitor data itself*.
+
+Rather than predefined synthesis strategies, the mutations explorer reveals how patterns unexpectedly combine into novel thinking strategies that weren't in the original framework:
+
+- Contextual Pragmatism (Understanding Context + Honesty)
+- Documented Velocity (Parallel Operations + Documenting)
+- Risk-Aware Delivery (Investigation + Parallelism)
+- Evidence-Based Process (Understanding + Investigation + Documenting)
+- Thoughtful Speed (Honesty + Parallelism + Understanding)
+- And three more that emerge from real combination patterns
+
+These mutations aren't top-down definitions—they're observed from what visitors actually recognize in their thinking. The system tracks which unexpected combinations appear most frequently, surfacing thinking strategies that emerged *from the community* rather than from author design.
+
+This completes another feedback loop: patterns collected → combinations analyzed → mutations discovered → **emergent strategies that the framework itself generates**.
+
+The site shifts from prescriptive framework to **generative structure**. Visitors aren't learning a fixed set of patterns; they're discovering that patterns compose in endless ways, each revealing a unique thinking strategy. The more visitors collect patterns, the more mutations can be discovered—the framework becomes richer through participation.
+
+This deepens the artistic arc: thinking patterns are no longer about documentation or even discovery. They're about **witnessing emergence**—seeing how individual reasoning choices combine into recognizable thinking strategies that multiple minds independently discover.

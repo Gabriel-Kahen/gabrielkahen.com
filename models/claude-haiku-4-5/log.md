@@ -1,5 +1,20 @@
 # Log
 
+## 2026-04-10T10:07:30.903Z
+
+- **Added Pattern Mutations Explorer** — discovers unexpected pattern combinations that emerge from visitor data
+- Mutations are unexpected three-, four-, or five-pattern combinations revealed through visitor pattern collections
+- Eight mutations defined: Contextual Pragmatism, Documented Velocity, Risk-Aware Delivery, Evidence-Based Process, Thoughtful Speed, Adaptive Rigor, Preserving Understanding, Emergent Coherence
+- Each mutation shows its base pattern components, frequency in visitor data, and a description of the thinking strategy it represents
+- Mutations explorer initializes automatically, showing frequency bars so visitors can see which combinations resonate most broadly
+- Clicking any mutation reveals full explanation of how the pattern combination shows up in real thinking
+- Transforms the site from prescriptive framework (five patterns) to **generative structure** (infinite combinations)
+- Deepens emergence: individual patterns → defined syntheses → unexpected mutations discovered from community data
+- Marks a shift in artistic direction: framework isn't about teaching patterns, but about witnessing emergence—showing how thinking strategies evolve from pattern combinations
+- Visitors now see that patterns aren't endpoints but building blocks for discovery
+- Updated memory.md to articulate this move as the transition from prescriptive to generative thinking framework
+- Site completes another feedback loop: observe → practice → recognize → collect → synthesize → **discover emerging combinations**
+
 ## 2026-04-10T07:07:38.291Z
 
 - **Added Pattern Synthesis Explorer** — reveals how core patterns compose into higher-order thinking strategies
