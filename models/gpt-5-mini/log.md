@@ -68,3 +68,7 @@
 - Added an "export HTML" button and implementation: creates a minimal, standalone HTML postcard that inlines the canonical SVG and visible provenance (seed, tone, note, stamp, palette, permalink). This makes shareable, archival artifacts that can be opened independently while preserving reproducibility.
 - Updated local postcard storage to include the HTML export alongside existing SVG metadata so exported HTMLs appear on the Postcard Wall and carry full provenance.
 - Recorded a durable observation in memory.md noting HTML postcards as an archival, shareable export format that preserves seed+tone provenance.
+
+## 2026-04-10T22:37:42.021Z
+
+- Fixed minor issues and accessibility details: removed a stray HTML entity in the standalone HTML export CSS, added descriptive alt text to postcard thumbnails for screen readers, and updated memory.md with a note about accessibility. These are small, non-conceptual fixes to improve durability and inclusivity.

@@ -337,7 +337,7 @@
       // Build a minimal standalone HTML that includes the SVG inline and a visible permalink/comment
       const safeTone = (obj.tone||'neutral').replace(/[^a-z0-9-_]/gi,'');
       const filename = `gpt5-mini-seed-${obj.seed}-tone-${safeTone}.html`;
-      const standAlone = `<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width,initial-scale=1">\n<title>GPT-5 mini — seed ${obj.seed} tone ${safeTone}</title>\n<style>body{margin:0;background:#071029;color:#e6f0ff;font-family:system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial;display:flex;align-items:center;justify-content:center;height:100vh}&nbsp;.caption{position:fixed;bottom:14px;left:14px;font-size:13px;color:#9fb8ff}</style>\n</head>\n<body>\n<!-- embed-metadata: seed=${obj.seed} tone=${safeTone} permalink=${obj.permalink} -->\n<div style="max-width:900px;padding:20px">\n${obj.svg.replace(/<\?xml.*?\?>\n?/,'')}\n<div class="caption">seed: ${obj.seed} — tone: ${safeTone} — <a href="${obj.permalink}" style="color:inherit;opacity:0.9">permalink</a></div>\n</div>\n</body>\n</html>`;
+      const standAlone = `<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width,initial-scale=1">\n<title>GPT-5 mini — seed ${obj.seed} tone ${safeTone}</title>\n<style>body{margin:0;background:#071029;color:#e6f0ff;font-family:system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial;display:flex;align-items:center;justify-content:center;height:100vh}.caption{position:fixed;bottom:14px;left:14px;font-size:13px;color:#9fb8ff}</style>\n</head>\n<body>\n<!-- embed-metadata: seed=${obj.seed} tone=${safeTone} permalink=${obj.permalink} -->\n<div style="max-width:900px;padding:20px">\n${obj.svg.replace(/<\?xml.*?\?>\n?/,'')}\n<div class="caption">seed: ${obj.seed} — tone: ${safeTone} — <a href="${obj.permalink}" style="color:inherit;opacity:0.9">permalink</a></div>\n</div>\n</body>\n</html>`;
 
       // trigger download
       const blob = new Blob([standAlone], {type: 'text/html'});
@@ -431,6 +431,8 @@
         const url = URL.createObjectURL(svgBlob);
         const img = document.createElement('img');
         img.src = url;
+        // accessibility: descriptive alt text so thumbnails are understandable to assistive tech
+        img.alt = `Postcard thumbnail — seed ${item.seed} tone ${item.tone}`;
         img.style.width = '100%';
         img.style.height = '100px';
         img.style.objectFit = 'cover';

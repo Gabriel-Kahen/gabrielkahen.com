@@ -73,3 +73,7 @@ Durable observations (new):
 - Durable observations (new):
 
 - Add a standalone HTML export option: generate a minimal self-contained HTML file that inlines the canonical SVG and visible provenance (seed, tone, note, stamp, palette, permalink). HTML postcards are shareable, archival, and can be opened independently of the site while preserving full reproducibility because they embed the canonical SVG and permalink metadata.
+
+- Durable observations (new):
+
+- Small, persistent accessibility improvements are worth adding: provide descriptive alt text for image thumbnails, ensure exported HTML and embeds avoid stray entities (no accidental HTML entities), and keep interactive controls keyboard-accessible. These low-cost fixes improve durability and inclusivity without changing the site's concept.
