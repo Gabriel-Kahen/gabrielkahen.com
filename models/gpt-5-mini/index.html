@@ -26,6 +26,7 @@
 
       <div id="fragmentArea">
         <pre class="fragment" id="fragment">loading…</pre>
+        <div id="palette" style="margin-top:8px;display:flex;gap:8px"></div>
         <div class="meta">
           <span id="seed">seed:</span>
           <label for="toneSelect" style="margin-left:8px;color:#bcd3ff;font-size:13px">tone:</label>
@@ -103,6 +104,32 @@
       return `The ${a} observer ${v} ${o} ${c}.`;
     }
 
+    // Generate a small deterministic color palette (3 colors) from seed + tone
+    function hslToHex(h, s, l){
+      // h:0-360, s,l:0-100
+      s/=100; l/=100;
+      const k = n => (n + h/30) % 12;
+      const a = s * Math.min(l, 1 - l);
+      const f = n => {
+        const color = l - a * Math.max(-1, Math.min(k(n)-3, Math.min(9 - k(n), 1)));
+        return Math.round(255 * color).toString(16).padStart(2, '0');
+      };
+      return `#${f(0)}${f(8)}${f(4)}`;
+    }
+
+    function makePalette(seed, tone){
+      const r = rng(seed + (hashTone(tone) % 997));
+      const baseHue = Math.floor(r()*360);
+      // pick three hues spaced but with deterministic jitter
+      const h1 = (baseHue + Math.floor(r()*40) - 20 + 360) % 360;
+      const h2 = (baseHue + 130 + Math.floor(r()*40) - 20) % 360;
+      const h3 = (baseHue + 250 + Math.floor(r()*40) - 20) % 360;
+      const c1 = hslToHex(h1, 62, 20);
+      const c2 = hslToHex(h2, 50, 18);
+      const c3 = hslToHex(h3, 44, 16);
+      return [c1, c2, c3];
+    }
+
     function readSeedFromURL(){
       const p = new URL(location.href);
       const s = p.searchParams.get('seed');
@@ -116,6 +143,19 @@
       const frag = makeFragment(seed, tone);
       el.textContent = frag;
       seedEl.textContent = 'seed: ' + seed + (tone ? (' — tone: ' + tone) : '');
+      // Update small palette swatches and a gentle card accent so each seed has a visual identity
+      try{
+        const pal = makePalette(Number(seed), tone||'neutral');
+        const palEl = document.getElementById('palette');
+        palEl.innerHTML = '';
+        for(const c of pal){
+          const sw = document.createElement('div');
+          sw.style.width = '28px'; sw.style.height = '20px'; sw.style.borderRadius = '4px'; sw.style.background = c; sw.title = c;
+          palEl.appendChild(sw);
+        }
+        // subtle accent on the card (non-destructive)
+        const card = document.querySelector('.card'); if(card) card.style.borderLeft = '6px solid ' + pal[0];
+      }catch(e){/* ignore palette failures */}
       const u = new URL(location.href);
       u.searchParams.set('seed', String(seed));
       if(tone) u.searchParams.set('tone', tone); else u.searchParams.delete('tone');
@@ -159,13 +199,16 @@
       const yStart = 220;
       const lineHeight = 52;
       const tspans = escapedLines.map((l,i)=>`<tspan x="60" y="${yStart + i*lineHeight}">${l}</tspan>`).join('');
+      // include palette in SVG so exported postcards carry a visual identity tied to seed+tone
+      const pal = makePalette(Number(seed), tone||'neutral');
+      const g0 = pal[0]; const g1 = pal[1];
 
       const svg = `<?xml version="1.0" encoding="utf-8"?>\n`+
         `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">`+
         `<defs>`+
           `<linearGradient id="g" x1="0" x2="0" y1="0" y2="1">`+
-            `<stop offset="0%" stop-color="#0f172a"/>`+
-            `<stop offset="100%" stop-color="#071029"/>`+
+            `<stop offset="0%" stop-color="${g0}"/>`+
+            `<stop offset="100%" stop-color="${g1}"/>`+
           `</linearGradient>`+
         `</defs>`+
         `<rect width="100%" height="100%" fill="url(#g)"/>`+
@@ -175,7 +218,8 @@
         `</g>`+
         `<text x="60" y="${h-108}" font-family="system-ui" font-size="18" fill="#9fb8ff">seed: ${seedEsc} — tone: ${toneEsc}</text>`+
         `<text x="60" y="${h-88}" font-family="system-ui" font-size="18" fill="#9fb8ff">note: ${svgEscape(note)}</text>`+
-        `<text x="60" y="${h-60}" font-family="system-ui" font-size="18" fill="#9fb8ff">generated from gabrielkahen.com/models/gpt-5-mini/</text>`+
+        `<text x="60" y="${h-60}" font-family="system-ui" font-size="18" fill="#9fb8ff">palette: ${pal.map(svgEscape).join(', ')}</text>`+
+        `<text x="60" y="${h-36}" font-family="system-ui" font-size="14" fill="#9fb8ff">generated from gabrielkahen.com/models/gpt-5-mini/</text>`+
         `</svg>`;
 
       const blob = new Blob([svg], {type: 'image/svg+xml'});

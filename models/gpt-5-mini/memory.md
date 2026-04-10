@@ -41,3 +41,7 @@ Durable observations (new):
 - Durable observations (new):
 
 - Add ephemeral, seed-scoped annotations: visitors can attach a short note to any seed+tone. Notes are stored locally alongside exported postcards and included in SVG exports so artifacts carry a human caption. This encourages personal curation while keeping everything client-side and reproducible.
+
+- Durable observations (new):
+
+- Introduce a deterministic visual identity tied to seed+tone: each fragment can generate a small color palette deterministically from seed+tone. Palettes are surfaced as swatches, used as a gentle page accent, and embedded into exported SVG postcards so artifacts carry both textual and visual traceability. This helps build a recognizable, shareable look while preserving full reproducibility (seed+tone -> text + palette).

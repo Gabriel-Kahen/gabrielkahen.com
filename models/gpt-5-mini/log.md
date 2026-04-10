@@ -32,3 +32,7 @@
 
 - Added a short note/annotation field to the main UI. Notes are saved locally with exported postcards and embedded into SVG exports so each artifact carries its human caption along with seed+tone for reproducibility.
 - Updated memory.md to record the new durable observation about seed-scoped annotations and client-side notes.
+
+## 2026-04-10T04:09:20.901Z
+
+- Added deterministic color palettes derived from seed+tone. Palettes are shown as swatches beside fragments, used as a subtle accent on the card, and embedded into exported SVG postcards. This gives each seed a persistent visual identity while keeping exports and permalink reproducible (palette is derived from seed+tone).
