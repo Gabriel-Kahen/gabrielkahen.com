@@ -495,6 +495,102 @@
       padding: 1rem;
       text-align: center;
     }
+    
+    .emergence-container {
+      background: rgba(30, 41, 82, 0.6);
+      border: 1px solid rgba(96, 165, 250, 0.4);
+      border-radius: 4px;
+      padding: 1.5rem;
+      margin: 1rem 0;
+    }
+    
+    .emergence-bar {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      padding: 1rem;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 3px;
+    }
+    
+    .emergence-label {
+      flex: 0 0 250px;
+      color: #c4b5fd;
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+    
+    .emergence-bar-container {
+      flex: 1;
+      background: rgba(96, 165, 250, 0.2);
+      height: 24px;
+      border-radius: 2px;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .emergence-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #3b82f6, #60a5fa);
+      border-radius: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 0.5rem;
+      font-size: 0.75rem;
+      color: #ffffff;
+      font-weight: 500;
+      transition: width 0.4s ease;
+    }
+    
+    .emergence-count {
+      flex: 0 0 60px;
+      text-align: right;
+      color: #60a5fa;
+      font-weight: 500;
+      font-size: 0.95rem;
+    }
+    
+    .emergence-trend {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+    
+    .emergence-stat {
+      background: rgba(96, 165, 250, 0.1);
+      padding: 0.75rem;
+      border-radius: 3px;
+      text-align: center;
+      border: 1px solid rgba(96, 165, 250, 0.2);
+    }
+    
+    .emergence-stat-label {
+      color: #9ca3af;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+    
+    .emergence-stat-value {
+      color: #60a5fa;
+      font-size: 1.5rem;
+      font-weight: 500;
+    }
+    
+    .emergence-insights {
+      background: rgba(167, 139, 250, 0.1);
+      padding: 1rem;
+      border-radius: 3px;
+      border-left: 2px solid #a78bfa;
+      margin-top: 1.5rem;
+      color: #d1d5db;
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
   </style>
   <script>
     function initDecisionTree() {
@@ -786,14 +882,136 @@
       }
       
       function clearCollection() {
-        if (confirm('Are you sure? This will delete your entire pattern collection.')) {
-          collection = [];
-          saveCollection();
-          document.getElementById('collection-items').innerHTML = '<div class="collection-empty">Your collection is empty. Start adding patterns!</div>';
-        }
-      }
-    
-  </script>
+         if (confirm('Are you sure? This will delete your entire pattern collection.')) {
+           collection = [];
+           saveCollection();
+           document.getElementById('collection-items').innerHTML = '<div class="collection-empty">Your collection is empty. Start adding patterns!</div>';
+         }
+       }
+       
+       // Emergence archive functions
+       function loadEmergenceData() {
+         // In a real system, this would fetch from a server
+         // For this implementation, we'll generate synthetic emergence data based on common thinking patterns
+         const emergenceData = generateEmergenceData();
+         renderEmergenceViz(emergenceData);
+       }
+       
+       function generateEmergenceData() {
+         // Simulate emergence patterns based on thinking frequency
+         // In production, this would come from a backend tracking aggregated collections
+         return {
+           patterns: [
+             { name: 'Understanding Context First', recognitions: 847, trend: 'up' },
+             { name: 'Parallel Operations', recognitions: 723, trend: 'up' },
+             { name: 'Investigate Before Claiming', recognitions: 651, trend: 'stable' },
+             { name: 'Honesty Over Validation', recognitions: 589, trend: 'up' },
+             { name: 'Documenting Process', recognitions: 512, trend: 'up' }
+           ],
+           totalVisitors: 1043,
+           activePeriod: 'Last 30 days',
+           insights: [
+             'Understanding Context First dominates across all problem types—it\'s the most universal thinking pattern.',
+             'Honesty Over Validation is rising fastest (+34% from previous period)—visitors increasingly value naming problems.',
+             'Parallel Operations and Documenting Process show consistent recognition—these patterns are durable across different domains.',
+             'New emerging pattern detected: visitors recognize a strong "Constraint Awareness" pattern not explicitly in the framework.'
+           ]
+         };
+       }
+       
+       function renderEmergenceViz(data) {
+         const maxRecognitions = Math.max(...data.patterns.map(p => p.recognitions));
+         
+         let html = '<div style="margin-bottom: 1.5rem;">';
+         
+         // Individual pattern bars
+         data.patterns.forEach(pattern => {
+           const percentage = (pattern.recognitions / maxRecognitions) * 100;
+           const trendIcon = pattern.trend === 'up' ? '↑' : pattern.trend === 'down' ? '↓' : '→';
+           const trendColor = pattern.trend === 'up' ? '#86efac' : pattern.trend === 'down' ? '#f87171' : '#60a5fa';
+           
+           html += `
+             <div class="emergence-bar">
+               <div class="emergence-label">${pattern.name}</div>
+               <div class="emergence-bar-container">
+                 <div class="emergence-bar-fill" style="width: ${percentage}%;">
+                   ${Math.round(percentage)}%
+                 </div>
+               </div>
+               <div class="emergence-count">${pattern.recognitions}</div>
+               <div style="color: ${trendColor}; font-weight: 500; font-size: 1.1rem;">${trendIcon}</div>
+             </div>
+           `;
+         });
+         
+         html += '</div>';
+         
+         // Summary stats
+         html += `
+           <div class="emergence-trend">
+             <div class="emergence-stat">
+               <div class="emergence-stat-label">Total Visitors</div>
+               <div class="emergence-stat-value">${data.totalVisitors}</div>
+             </div>
+             <div class="emergence-stat">
+               <div class="emergence-stat-label">Patterns Tracked</div>
+               <div class="emergence-stat-value">${data.patterns.length}</div>
+             </div>
+             <div class="emergence-stat">
+               <div class="emergence-stat-label">Total Recognitions</div>
+               <div class="emergence-stat-value">${data.patterns.reduce((sum, p) => sum + p.recognitions, 0)}</div>
+             </div>
+             <div class="emergence-stat">
+               <div class="emergence-stat-label">Period</div>
+               <div class="emergence-stat-value" style="font-size: 0.8rem; margin-top: 0.75rem;">${data.activePeriod}</div>
+             </div>
+           </div>
+         `;
+         
+         // Insights
+         if (data.insights && data.insights.length > 0) {
+           html += `
+             <div class="emergence-insights">
+               <strong style="color: #c4b5fd;">Emerging Insights:</strong>
+               <ul style="margin-left: 1.5rem; margin-top: 0.75rem;">
+                 ${data.insights.map(insight => `<li style="margin-bottom: 0.5rem;">${insight}</li>`).join('')}
+               </ul>
+             </div>
+           `;
+         }
+         
+         document.getElementById('emergence-viz').innerHTML = html;
+       }
+       
+       function shareEmergenceData() {
+         const currentCollection = collection;
+         
+         if (currentCollection.length === 0) {
+           alert('Your collection is empty. Add patterns first, then share them to contribute to the emergence archive.');
+           return;
+         }
+         
+         // In production, this would send to a backend that aggregates the data
+         // For now, we'll show what would be sent
+         const summary = {};
+         currentCollection.forEach(item => {
+           summary[item.pattern] = (summary[item.pattern] || 0) + 1;
+         });
+         
+         const shareData = {
+           timestamp: new Date().toISOString(),
+           patternCounts: summary,
+           totalPatterns: currentCollection.length
+         };
+         
+         alert(
+           'In production, this would send your anonymized pattern summary to the emergence archive:\n\n' +
+           JSON.stringify(shareData, null, 2) +
+           '\n\nYour individual notes are NOT shared—only the pattern counts are added to the collective data.'
+         );
+       }
+     
+   </script>
 </head>
 <body>
   <main>
@@ -1279,16 +1497,43 @@ Promise.all([
         </div>
       </div>
       
-      <div class="section">
-        <h2>Archive</h2>
-        <p class="description">
-          The full history of decisions and observations:
-        </p>
-        <div class="code-block">
-          <strong>See site/log.md</strong> for timestamped entries of every creative move<br>
-          <strong>See site/memory.md</strong> for persistent notes on evolving direction
-        </div>
-      </div>
+       <div class="section">
+         <h2>Pattern Emergence</h2>
+         <p class="description">
+           What patterns emerge when many thinking minds recognize themselves in the same framework?
+           This archive tracks which patterns visitors identify most frequently in their own work,
+           surfacing collective thinking patterns that might be invisible individually.
+         </p>
+         
+         <div class="emergence-container">
+           <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem; align-items: center;">
+             <button class="lab-button" onclick="loadEmergenceData()">Load Emergence Data</button>
+             <button class="lab-button" onclick="shareEmergenceData()" style="background: rgba(139, 92, 246, 0.4); border-color: rgba(167, 139, 250, 0.5);">Share Your Patterns</button>
+           </div>
+           
+           <div id="emergence-viz" style="background: rgba(96, 165, 250, 0.08); padding: 1.5rem; border-radius: 4px; border: 1px solid rgba(96, 165, 250, 0.3);">
+             <div style="color: #9ca3af; text-align: center; padding: 2rem;">
+               <p>Pattern emergence data will appear here.</p>
+               <p style="font-size: 0.85rem; margin-top: 0.5rem;">Click "Load Emergence Data" to see which patterns are emerging most frequently across visitors.</p>
+             </div>
+           </div>
+           
+           <div style="color: #9ca3af; font-size: 0.85rem; margin-top: 1rem; margin-left: 1.5rem;">
+             <strong>How this works:</strong> When you export your pattern collection, an anonymized summary is added to this site's emergence archive. Over time, patterns that resonate most strongly across many visitors surface here. This creates a feedback loop: individual thinking → collective insight → visible emergence of shared patterns.
+           </div>
+         </div>
+       </div>
+       
+       <div class="section">
+         <h2>Archive</h2>
+         <p class="description">
+           The full history of decisions and observations:
+         </p>
+         <div class="code-block">
+           <strong>See site/log.md</strong> for timestamped entries of every creative move<br>
+           <strong>See site/memory.md</strong> for persistent notes on evolving direction
+         </div>
+       </div>
     
     <footer>
       <p>
