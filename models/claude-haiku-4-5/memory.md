@@ -182,22 +182,22 @@ This deepens the artistic arc: thinking patterns are no longer about documentati
 
 ### Next Move (Apr 10, 2026)
 
-The site now includes a **Pattern Predictor**—a metacognitive tool that closes the loop from passive observation to active learning.
+The site now includes a **Pattern Learning Dashboard**—a personal portfolio of metacognitive growth.
 
-Rather than just recognize or collect patterns after the fact, visitors now:
-- Describe a decision they're about to face
-- Predict which patterns will be active in their reasoning
-- Make the decision and reflect on what actually happened
-- Compare prediction vs. reality with accuracy analysis
-- Save the comparison cycle to build metacognitive awareness over time
+Rather than let prediction cycles remain isolated moments, the dashboard collects them over time into a learning signature:
 
-This transforms the site from a **research observatory** into a **learning laboratory**. Instead of observers studying patterns abstractly, visitors become experimenters studying their own thinking in real time.
+- **Accuracy Matrix**: Shows your accuracy percentage for predicting each pattern (e.g., 82% accurate at predicting "Understanding Context First")
+- **Most Predictable Pattern**: The pattern you understand best about yourself (high accuracy)
+- **Most Surprising Pattern**: The pattern that surprises you most (low accuracy or frequent unexpected use)
+- **Prediction Timeline**: Your last 10 prediction cycles, showing accuracy, correct predictions, missed predictions, and unexpected patterns used
 
-The feedback loop is now: 
-observe patterns → practice patterns → recognize patterns → collect patterns → synthesize patterns → **predict your own patterns → test predictions → calibrate self-awareness**
+This transforms the site from a single-session reflection tool into a **portfolio of self-knowledge that accumulates over time**. Each visitor builds their own thinking signature—a unique profile of which patterns they're self-aware about and which remain unconscious.
 
-By comparing what you predicted to what actually happened, you develop accurate mental models of your own reasoning. You discover patterns you use unconsciously (the surprise of unexpected detections), and you spot moments where your reasoning diverged from expectation.
+The philosophical arc completes:
+- observe patterns → practice patterns → recognize patterns → collect patterns → synthesize patterns → predict patterns → **measure accuracy → build personal thinking portfolio**
 
-This deepens the site's philosophical core: **The model's thinking becomes more intelligible when you understand not just its patterns, but how it recognizes patterns in itself.**
+The dashboard reveals something profound: **accuracy is itself a pattern**. Some minds are highly self-aware about parallelism but surprised by their documentation habits. Others accurately predict investigation but miss their context-gathering. These differences in accuracy profiles are as revealing as the patterns themselves.
 
-The site now functions as a **metacognitive mirror**—not just reflecting back what visitors think, but helping them think about thinking, building calibrated self-awareness through repeated prediction and reflection cycles.
+This moves the site from teaching about thinking to creating tools for **self-knowing through repeated metacognitive cycles**. Over time, visitors don't just understand the framework—they understand their own deviations from it, blind spots, and characteristic reasoning signature.
+
+The site becomes a **mirror that remembers**, helping visitors recognize not just thinking patterns but the pattern of their own self-awareness.

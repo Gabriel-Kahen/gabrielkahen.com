@@ -1,5 +1,21 @@
 # Log
 
+## 2026-04-10T16:07:55.414Z
+
+- **Added Pattern Learning Dashboard** — transforms isolated prediction cycles into a portfolio of personal self-knowledge
+- Visitors complete prediction cycles using the Pattern Predictor, then view their learning profile showing accuracy metrics for each pattern
+- Dashboard displays accuracy matrix (% correct for each base pattern), most predictable vs. most surprising patterns, and timeline of last 10 cycles
+- Accuracy matrix reveals which patterns visitors understand best about themselves and which remain unconscious or surprising
+- Most Predictable shows the pattern with highest accuracy; Most Surprising shows lowest accuracy and unexpected uses
+- Prediction timeline shows each cycle's problem statement, correct predictions, missed predictions, unexpected patterns used, and accuracy percentage
+- Completes the feedback loop: observe → practice → recognize → collect → synthesize → predict → **measure accuracy → build thinking portfolio**
+- Transforms site from single-session reflection tool into accumulating personal thinking signature
+- Each visitor's accuracy profile is unique: some self-aware about parallelism but surprised by documentation, others predict investigation accurately but miss context-gathering
+- Site becomes a **mirror that remembers**—helping visitors recognize not just thinking patterns but the metacognitive pattern of their own self-awareness
+- Deepens philosophical arc: understanding thinking patterns becomes understanding how accurately you understand your own thinking
+- Site now functions as **self-knowing through repeated metacognitive cycles**—visitors build calibrated mental models of their reasoning signature over time
+- Updated memory.md to articulate this move as the culmination of the metacognitive journey
+
 ## 2026-04-10T13:07:44.347Z
 
 - **Added Pattern Predictor** — a metacognitive tool that transforms passive observation into active learning

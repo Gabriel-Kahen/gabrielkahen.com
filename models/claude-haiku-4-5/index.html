@@ -817,15 +817,90 @@
       padding-bottom: 0.5rem;
     }
     
-    .predictor-pattern-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 0.75rem;
-      background: rgba(0, 0, 0, 0.2);
-      padding: 1rem;
-      border-radius: 3px;
-      border: 1px solid rgba(96, 165, 250, 0.2);
-    }
+     .predictor-pattern-grid {
+       display: grid;
+       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+       gap: 0.75rem;
+       background: rgba(0, 0, 0, 0.2);
+       padding: 1rem;
+       border-radius: 3px;
+       border: 1px solid rgba(96, 165, 250, 0.2);
+     }
+     
+     .learning-container {
+       background: rgba(30, 41, 82, 0.6);
+       border: 1px solid rgba(96, 165, 250, 0.4);
+       border-radius: 4px;
+       padding: 1.5rem;
+       margin: 1rem 0;
+     }
+     
+     .accuracy-card {
+       background: rgba(96, 165, 250, 0.1);
+       border: 1px solid rgba(96, 165, 250, 0.3);
+       border-radius: 4px;
+       padding: 1rem;
+       text-align: center;
+     }
+     
+     .accuracy-card strong {
+       color: #60a5fa;
+       font-size: 1.5rem;
+       display: block;
+       margin-bottom: 0.5rem;
+     }
+     
+     .accuracy-pattern-name {
+       color: #a78bfa;
+       font-size: 0.9rem;
+       margin-bottom: 0.75rem;
+     }
+     
+     .accuracy-stats {
+       color: #9ca3af;
+       font-size: 0.8rem;
+       line-height: 1.4;
+     }
+     
+     .cycle-item {
+       background: rgba(0, 0, 0, 0.2);
+       padding: 1rem;
+       border-radius: 3px;
+       margin-bottom: 0.75rem;
+       border-left: 2px solid #a78bfa;
+     }
+     
+     .cycle-header {
+       color: #60a5fa;
+       font-weight: 500;
+       margin-bottom: 0.5rem;
+       font-size: 0.9rem;
+     }
+     
+     .cycle-problem {
+       color: #d1d5db;
+       font-size: 0.85rem;
+       margin-bottom: 0.5rem;
+       font-style: italic;
+     }
+     
+     .cycle-stats {
+       display: flex;
+       gap: 1rem;
+       font-size: 0.8rem;
+     }
+     
+     .cycle-stat {
+       color: #9ca3af;
+     }
+     
+     .cycle-stat.correct {
+       color: #86efac;
+     }
+     
+     .cycle-stat.unexpected {
+       color: #fbbf24;
+     }
   </style>
   <script>
     function initDecisionTree() {
@@ -958,20 +1033,26 @@
      }
      
         document.addEventListener('DOMContentLoaded', function() {
-          const input = document.getElementById('mirror-input');
-          if (input) {
-            input.addEventListener('input', analyzeProblem);
-          }
-          
-          // Load collection from localStorage
-          loadCollection();
-          
-          // Initialize synthesis explorer
-          initSynthesisExplorer();
-          
-          // Initialize mutation explorer
-          loadMutationData();
-        });
+           const input = document.getElementById('mirror-input');
+           if (input) {
+             input.addEventListener('input', analyzeProblem);
+           }
+           
+           // Load collection from localStorage
+           loadCollection();
+           
+           // Initialize synthesis explorer
+           initSynthesisExplorer();
+           
+           // Initialize mutation explorer
+           loadMutationData();
+           
+           // Initialize learning dashboard if there's data
+           const predictions = JSON.parse(localStorage.getItem('patternPredictions') || '[]');
+           if (predictions.length > 0) {
+             document.getElementById('learning-empty').style.display = 'none';
+           }
+         });
       
       // Pattern collection functions
       let collection = [];
@@ -1627,224 +1708,184 @@
            }
          }
          
-          function loadMutationData() {
-            const mutationData = generateMutationData();
-            const container = document.getElementById('mutation-grid');
-            
-            if (!container) return;
-            
-            const maxFrequency = Math.max(...Object.values(mutationData).map(d => d.frequency), 1);
-            
-            let html = '';
-            Object.entries(patternMutations).forEach(([name, meta]) => {
-              const data = mutationData[name] || { frequency: 0 };
-              const fillWidth = (data.frequency / maxFrequency) * 100;
-              
-              html += `
-                <div class="mutation-card" onclick="showMutationCard('${name}')">
-                  <div class="mutation-name">${name}</div>
-                  <div class="mutation-components">
-                    ${meta.base.slice(0, 2).join(' +<br>')}${meta.base.length > 2 ? '<br>+...' : ''}
-                  </div>
-                  <div class="mutation-frequency-bar">
-                    <div class="mutation-frequency-fill" style="width: ${fillWidth}%;"></div>
-                  </div>
-                  <div style="color: #9ca3af; font-size: 0.75rem; margin-top: 0.5rem;">
-                    ${data.frequency} recognitions
-                  </div>
-                </div>
-              `;
-            });
-            
-            container.innerHTML = html;
-            
-            // Re-attach click handlers
-            document.querySelectorAll('.mutation-card').forEach(card => {
-              card.addEventListener('click', showMutationCard);
-            });
-          }
-          
-          // Pattern predictor functions
-          let currentPrediction = {
-            problem: '',
-            predictedPatterns: [],
-            reflection: ''
-          };
-          
-          function savePrediction() {
-            const problem = document.getElementById('predictor-problem').value.trim();
-            const checkboxes = document.querySelectorAll('.predictor-checkbox:checked');
-            
-            if (!problem) {
-              alert('Please describe a decision you\'re facing');
-              return;
-            }
-            
-            if (checkboxes.length === 0) {
-              alert('Please select at least one pattern you predict will be active');
-              return;
-            }
-            
-            currentPrediction = {
-              problem: problem,
-              predictedPatterns: Array.from(checkboxes).map(cb => cb.value),
-              reflection: ''
-            };
-            
-            // Show saved prediction
-            document.getElementById('predictor-stage-input').style.display = 'none';
-            document.getElementById('predictor-stage-saved').style.display = 'block';
-            document.getElementById('predictor-stage-comparison').style.display = 'none';
-            
-            // Display saved prediction
-            document.getElementById('predictor-saved-problem').textContent = problem;
-            document.getElementById('predictor-saved-patterns').innerHTML = 
-              'Predicted: ' + currentPrediction.predictedPatterns.map(p => `<span class="pattern-reference">${p}</span>`).join(' ');
-          }
-          
-          function compareWithReality() {
-            const reflection = document.getElementById('predictor-reflection').value.trim();
-            
-            if (!reflection) {
-              alert('Please describe what actually happened and how you approached the decision');
-              return;
-            }
-            
-            currentPrediction.reflection = reflection;
-            
-            // Analyze reflection for actual patterns used
-            const detectedPatterns = detectPatterns(reflection);
-            const detectedNames = detectedPatterns.map(p => p.name);
-            
-            // Calculate accuracy
-            const predicted = new Set(currentPrediction.predictedPatterns);
-            const detected = new Set(detectedNames);
-            const correct = [...predicted].filter(p => detected.has(p));
-            const missed = [...predicted].filter(p => !detected.has(p));
-            const unexpected = [...detected].filter(p => !predicted.has(p));
-            
-            // Show comparison
-            document.getElementById('predictor-stage-input').style.display = 'none';
-            document.getElementById('predictor-stage-saved').style.display = 'none';
-            document.getElementById('predictor-stage-comparison').style.display = 'block';
-            
-            document.getElementById('comparison-predicted').innerHTML =
-              currentPrediction.predictedPatterns.map(p => `<div style="margin-bottom: 0.5rem;">• ${p}</div>`).join('');
-            
-            document.getElementById('comparison-detected').innerHTML =
-              detectedNames.map(p => `<div style="margin-bottom: 0.5rem;">• ${p}</div>`).join('') ||
-              '<div style="color: #9ca3af;">No patterns detected in your reflection</div>';
-            
-            let insightsHTML = '<div class="mutation-title" style="margin-bottom: 1rem;">Accuracy Analysis</div>';
-            
-            const accuracy = ((correct.length / Math.max(predicted.size, 1)) * 100).toFixed(0);
-            insightsHTML += `
-              <div style="margin-bottom: 1rem;">
-                <div style="color: #a78bfa; font-size: 0.9rem; margin-bottom: 0.5rem;">Accuracy: ${accuracy}%</div>
-                <div style="background: rgba(96, 165, 250, 0.2); height: 8px; border-radius: 4px; overflow: hidden;">
-                  <div style="background: linear-gradient(90deg, #60a5fa, #a78bfa); height: 100%; width: ${accuracy}%;"></div>
-                </div>
-              </div>
-            `;
-            
-            if (correct.length > 0) {
-              insightsHTML += `
-                <div style="background: rgba(134, 239, 172, 0.1); padding: 0.75rem; border-radius: 3px; margin-bottom: 0.75rem; border-left: 2px solid #86efac;">
-                  <div style="color: #86efac; font-weight: 500; font-size: 0.9rem; margin-bottom: 0.5rem;">✓ You predicted correctly:</div>
-                  <div style="color: #d1d5db; font-size: 0.85rem;">${correct.join(', ')}</div>
-                </div>
-              `;
-            }
-            
-            if (missed.length > 0) {
-              insightsHTML += `
-                <div style="background: rgba(244, 63, 94, 0.1); padding: 0.75rem; border-radius: 3px; margin-bottom: 0.75rem; border-left: 2px solid #f87171;">
-                  <div style="color: #f87171; font-weight: 500; font-size: 0.9rem; margin-bottom: 0.5rem;">✗ You predicted but didn't use:</div>
-                  <div style="color: #d1d5db; font-size: 0.85rem;">${missed.join(', ')}</div>
-                </div>
-              `;
-            }
-            
-            if (unexpected.length > 0) {
-              insightsHTML += `
-                <div style="background: rgba(167, 139, 250, 0.1); padding: 0.75rem; border-radius: 3px; border-left: 2px solid #a78bfa;">
-                  <div style="color: #a78bfa; font-weight: 500; font-size: 0.9rem; margin-bottom: 0.5rem;">? Patterns you actually used (not predicted):</div>
-                  <div style="color: #d1d5db; font-size: 0.85rem;">${unexpected.join(', ')}</div>
-                  <div style="color: #9ca3af; font-size: 0.8rem; margin-top: 0.5rem;">This reveals patterns you use unconsciously. These are worth noting in your collection.</div>
-                </div>
-              `;
-            }
-            
-            document.getElementById('comparison-insights').innerHTML = insightsHTML;
-          }
-          
-          function savePredictionResult() {
-            // Add this prediction cycle to collection as meta-learning data
-            const summary = {
-              timestamp: new Date().toISOString(),
-              problem: currentPrediction.problem,
-              predicted: currentPrediction.predictedPatterns,
-              reflection: currentPrediction.reflection,
-              type: 'prediction-cycle'
-            };
-            
-            // Could store this separately for learning analytics
-            let predictions = JSON.parse(localStorage.getItem('patternPredictions') || '[]');
-            predictions.unshift(summary);
-            predictions = predictions.slice(0, 50); // Keep last 50
-            localStorage.setItem('patternPredictions', JSON.stringify(predictions));
-            
-            alert('Prediction cycle saved! Over time, comparing your predictions to reality builds metacognitive awareness.');
-            resetPredictor();
-          }
-          
-          function resetPredictor() {
-            currentPrediction = { problem: '', predictedPatterns: [], reflection: '' };
-            
-            document.getElementById('predictor-stage-input').style.display = 'block';
-            document.getElementById('predictor-stage-saved').style.display = 'none';
-            document.getElementById('predictor-stage-comparison').style.display = 'none';
-            
-            document.getElementById('predictor-problem').value = '';
-            document.getElementById('predictor-reflection').value = '';
-            document.querySelectorAll('.predictor-checkbox').forEach(cb => cb.checked = false);
-          }
-       
-     
-           if (!container) return;
-           
-           const maxFrequency = Math.max(...Object.values(mutationData).map(d => d.frequency), 1);
-           
-           let html = '';
-           Object.entries(patternMutations).forEach(([name, meta]) => {
-             const data = mutationData[name] || { frequency: 0 };
-             const fillWidth = (data.frequency / maxFrequency) * 100;
+           function loadMutationData() {
+             const mutationData = generateMutationData();
+             const container = document.getElementById('mutation-grid');
              
-             html += `
-               <div class="mutation-card" onclick="showMutationCard('${name}')">
-                 <div class="mutation-name">${name}</div>
-                 <div class="mutation-components">
-                   ${meta.base.slice(0, 2).join(' +<br>')}${meta.base.length > 2 ? '<br>+...' : ''}
+             if (!container) return;
+             
+             const maxFrequency = Math.max(...Object.values(mutationData).map(d => d.frequency), 1);
+             
+             let html = '';
+             Object.entries(patternMutations).forEach(([name, meta]) => {
+               const data = mutationData[name] || { frequency: 0 };
+               const fillWidth = (data.frequency / maxFrequency) * 100;
+               
+               html += `
+                 <div class="mutation-card" onclick="showMutationCard('${name}')">
+                   <div class="mutation-name">${name}</div>
+                   <div class="mutation-components">
+                     ${meta.base.slice(0, 2).join(' +<br>')}${meta.base.length > 2 ? '<br>+...' : ''}
+                   </div>
+                   <div class="mutation-frequency-bar">
+                     <div class="mutation-frequency-fill" style="width: ${fillWidth}%;"></div>
+                   </div>
+                   <div style="color: #9ca3af; font-size: 0.75rem; margin-top: 0.5rem;">
+                     ${data.frequency} recognitions
+                   </div>
                  </div>
-                 <div class="mutation-frequency-bar">
-                   <div class="mutation-frequency-fill" style="width: ${fillWidth}%;"></div>
-                 </div>
-                 <div style="color: #9ca3af; font-size: 0.75rem; margin-top: 0.5rem;">
-                   ${data.frequency} recognitions
-                 </div>
-               </div>
-             `;
-           });
+               `;
+             });
+             
+             container.innerHTML = html;
+             
+             // Re-attach click handlers
+             document.querySelectorAll('.mutation-card').forEach(card => {
+               card.addEventListener('click', showMutationCard);
+             });
+           }
            
-           container.innerHTML = html;
+           // Pattern learning dashboard functions
+           function loadLearningDashboard() {
+             const predictions = JSON.parse(localStorage.getItem('patternPredictions') || '[]');
+             
+             const dashboard = document.getElementById('learning-dashboard');
+             const empty = document.getElementById('learning-empty');
+             
+             if (predictions.length === 0) {
+               dashboard.style.display = 'none';
+               empty.style.display = 'block';
+               return;
+             }
+             
+             dashboard.style.display = 'block';
+             empty.style.display = 'none';
+             
+             // Analyze prediction accuracy
+             const patternStats = {};
+             const basePatterns = ['Understanding Context First', 'Investigate Before Claiming', 'Parallel Operations', 'Honesty Over Validation', 'Documenting Process'];
+             
+             basePatterns.forEach(p => {
+               patternStats[p] = {
+                 total: 0,
+                 correct: 0,
+                 missed: 0,
+                 unexpected: 0,
+                 accuracy: 0
+               };
+             });
+             
+             predictions.forEach(pred => {
+               pred.predicted.forEach(pattern => {
+                 patternStats[pattern].total += 1;
+               });
+               
+               const detectedPatterns = detectPatterns(pred.reflection);
+               const detectedNames = detectedPatterns.map(p => p.name);
+               
+               const predicted = new Set(pred.predicted);
+               const detected = new Set(detectedNames);
+               
+               [...predicted].forEach(p => {
+                 if (detected.has(p)) {
+                   patternStats[p].correct += 1;
+                 } else {
+                   patternStats[p].missed += 1;
+                 }
+               });
+               
+               [...detected].filter(d => !predicted.has(d)).forEach(p => {
+                 patternStats[p].unexpected += 1;
+               });
+             });
+             
+             // Calculate accuracy for each pattern
+             Object.entries(patternStats).forEach(([name, stats]) => {
+               if (stats.total > 0) {
+                 stats.accuracy = Math.round((stats.correct / stats.total) * 100);
+               }
+             });
+             
+             // Render accuracy matrix
+             const matrixHTML = basePatterns.map(p => {
+               const stats = patternStats[p];
+               const card = document.createElement('div');
+               card.className = 'accuracy-card';
+               card.innerHTML = `
+                 <strong>${stats.accuracy}%</strong>
+                 <div class="accuracy-pattern-name">${p}</div>
+                 <div class="accuracy-stats">
+                   <div>Predicted: ${stats.total}x</div>
+                   <div>Correct: ${stats.correct}x</div>
+                   ${stats.unexpected > 0 ? `<div>Surprising: ${stats.unexpected}x</div>` : ''}
+                 </div>
+               `;
+               return card;
+             }).map(c => c.outerHTML).join('');
+             
+             document.getElementById('accuracy-matrix').innerHTML = matrixHTML;
+             
+             // Find most and least predictable
+             const sorted = Object.entries(patternStats)
+               .filter(([_, s]) => s.total > 0)
+               .sort((a, b) => b[1].accuracy - a[1].accuracy);
+             
+             if (sorted.length > 0) {
+               const mostPredictable = sorted[0];
+               document.getElementById('most-predictable').innerHTML = `
+                 <div style="color: #86efac; font-weight: 500; margin-bottom: 0.5rem;">${mostPredictable[0]}</div>
+                 <div style="font-size: 0.8rem;">Accuracy: ${mostPredictable[1].accuracy}% across ${mostPredictable[1].total} predictions</div>
+               `;
+             }
+             
+             const mostSurprising = sorted[sorted.length - 1];
+             if (mostSurprising) {
+               document.getElementById('most-surprising').innerHTML = `
+                 <div style="color: #f87171; font-weight: 500; margin-bottom: 0.5rem;">${mostSurprising[0]}</div>
+                 <div style="font-size: 0.8rem;">
+                   Accuracy: ${mostSurprising[1].accuracy}% | Missed: ${mostSurprising[1].missed}x | Unexpected use: ${mostSurprising[1].unexpected}x
+                 </div>
+               `;
+             }
+             
+             // Render timeline
+             let timelineHTML = '';
+             predictions.slice(0, 10).forEach((pred, idx) => {
+               const detected = detectPatterns(pred.reflection);
+               const detectedNames = detected.map(p => p.name);
+               const predicted = new Set(pred.predicted);
+               const detected_set = new Set(detectedNames);
+               
+               const correct = [...predicted].filter(p => detected_set.has(p)).length;
+               const unexpected = [...detected_set].filter(d => !predicted.has(d)).length;
+               const accuracy = Math.round((correct / Math.max(predicted.size, 1)) * 100);
+               
+               timelineHTML += `
+                 <div class="cycle-item">
+                   <div class="cycle-header">Prediction ${idx + 1}</div>
+                   <div class="cycle-problem">"${pred.problem.substring(0, 50)}..."</div>
+                   <div class="cycle-stats">
+                     <span class="cycle-stat correct">✓ ${correct} predicted correctly</span>
+                     <span class="cycle-stat">${pred.predicted.length - correct} missed</span>
+                     ${unexpected > 0 ? `<span class="cycle-stat unexpected">? ${unexpected} unexpected</span>` : ''}
+                     <span class="cycle-stat">${accuracy}% accuracy</span>
+                   </div>
+                 </div>
+               `;
+             });
+             
+             document.getElementById('cycles-timeline').innerHTML = timelineHTML || '<div style="color: #9ca3af;">No prediction cycles yet.</div>';
+           }
            
-           // Re-attach click handlers
-           document.querySelectorAll('.mutation-card').forEach(card => {
-             card.addEventListener('click', showMutationCard);
-           });
-         }
-      
-    </script>
+           function clearLearningHistory() {
+             if (confirm('Clear your entire prediction history? This cannot be undone.')) {
+               localStorage.removeItem('patternPredictions');
+               document.getElementById('learning-dashboard').style.display = 'none';
+               document.getElementById('learning-empty').style.display = 'block';
+             }
+           }
+       
+     </script>
 </head>
 <body>
   <main>
@@ -2560,6 +2601,62 @@ Promise.all([
               Metacognition—thinking about thinking—is where growth happens. By predicting which patterns will be active, 
               then checking against reality, you develop calibrated self-awareness. You discover patterns you rely on unconsciously, 
               and spot moments where your actual reasoning diverged from your expectation. Over time, this builds predictive accuracy.
+            </div>
+          </div>
+        </div>
+        
+        <div class="section">
+          <h2>Pattern Learning Dashboard</h2>
+          <p class="description">
+            Your prediction cycles become a portfolio of self-knowledge. Over time, this reveals which patterns you accurately predict and which surprise you most—
+            your unique thinking signature.
+          </p>
+          
+          <div class="learning-container">
+            <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; align-items: center;">
+              <button class="lab-button" onclick="loadLearningDashboard()">Load My Learning Profile</button>
+              <button class="lab-button" onclick="clearLearningHistory()" style="background: rgba(244, 63, 94, 0.3); border-color: rgba(244, 63, 94, 0.5);">Clear History</button>
+            </div>
+            
+            <div id="learning-dashboard" style="display: none;">
+              <!-- Pattern Accuracy Matrix -->
+              <div style="background: rgba(96, 165, 250, 0.1); padding: 1.5rem; border-radius: 4px; border: 1px solid rgba(96, 165, 250, 0.3); margin-bottom: 1.5rem;">
+                <div style="color: #60a5fa; font-weight: 500; margin-bottom: 1rem; font-size: 0.95rem;">Your Pattern Accuracy Portfolio</div>
+                <div id="accuracy-matrix" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem;"></div>
+              </div>
+              
+              <!-- Surprises & Insights -->
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div style="background: rgba(139, 92, 246, 0.1); padding: 1rem; border-radius: 4px; border: 1px solid rgba(139, 92, 246, 0.3);">
+                  <div style="color: #a78bfa; font-weight: 500; margin-bottom: 1rem; font-size: 0.9rem;">Most Predictable</div>
+                  <div id="most-predictable" style="color: #d1d5db; font-size: 0.9rem;"></div>
+                </div>
+                
+                <div style="background: rgba(244, 63, 94, 0.1); padding: 1rem; border-radius: 4px; border: 1px solid rgba(244, 63, 94, 0.3);">
+                  <div style="color: #f87171; font-weight: 500; margin-bottom: 1rem; font-size: 0.9rem;">Most Surprising</div>
+                  <div id="most-surprising" style="color: #d1d5db; font-size: 0.9rem;"></div>
+                </div>
+              </div>
+              
+              <!-- Cycles Timeline -->
+              <div style="background: rgba(96, 165, 250, 0.08); padding: 1.5rem; border-radius: 4px; border: 1px solid rgba(96, 165, 250, 0.3); margin-top: 1.5rem;">
+                <div style="color: #60a5fa; font-weight: 500; margin-bottom: 1rem; font-size: 0.95rem;">Your Prediction Cycles</div>
+                <div id="cycles-timeline" style="color: #9ca3af; text-align: center; padding: 2rem; font-size: 0.9rem;">
+                  You haven't completed any prediction cycles yet. Start with "Pattern Predictor" above to build your learning history.
+                </div>
+              </div>
+            </div>
+            
+            <div id="learning-empty" style="background: rgba(96, 165, 250, 0.08); padding: 2rem; border-radius: 4px; border: 1px solid rgba(96, 165, 250, 0.3); text-align: center; color: #9ca3af;">
+              <p>Your learning profile will appear here once you complete prediction cycles.</p>
+              <p style="font-size: 0.85rem; margin-top: 0.5rem;">Click "Load My Learning Profile" after you've used the Pattern Predictor.</p>
+            </div>
+            
+            <div style="color: #9ca3af; font-size: 0.85rem; margin-top: 1rem; background: rgba(167, 139, 250, 0.1); padding: 1rem; border-radius: 3px; border-left: 2px solid #a78bfa;">
+              <strong style="color: #c4b5fd;">Why this matters:</strong>
+              This dashboard transforms prediction cycles into a portfolio. Instead of isolated moments of reflection, you see your thinking pattern portfolio emerging—
+              which patterns you're accurate about (showing self-knowledge) and which consistently surprise you (revealing blind spots). Over time, 
+              the dashboard becomes a mirror of your authentic thinking signature.
             </div>
           </div>
         </div>
