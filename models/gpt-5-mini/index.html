@@ -38,6 +38,7 @@
           </select>
           <button id="reshuffle">reshuffle</button>
           <button id="exportSvg">export SVG</button>
+          <button id="exportPng">export PNG</button>
           <a id="permalink" href="#">permalink</a>
           <button id="copyPermalink" title="Copy permalink" style="margin-left:8px;padding:6px 8px;background:#2a9df4;border-radius:8px">copy</button>
         </div>
@@ -184,7 +185,8 @@
       return lines;
     }
 
-    function exportCurrentAsSVG(){
+    // Build the canonical SVG for the current fragment and return it with a suggested filename and permalink
+    function getCurrentSVG(){
       const frag = document.getElementById('fragment').textContent;
       const seedText = document.getElementById('seed').textContent.replace('seed: ','');
       const parts = seedText.split(' — tone: ');
@@ -200,11 +202,17 @@
       const yStart = 220;
       const lineHeight = 52;
       const tspans = escapedLines.map((l,i)=>`<tspan x="60" y="${yStart + i*lineHeight}">${l}</tspan>`).join('');
-      // include palette in SVG so exported postcards carry a visual identity tied to seed+tone
       const pal = makePalette(Number(seed), tone||'neutral');
       const g0 = pal[0]; const g1 = pal[1];
 
+      // build a permalink that encodes seed and tone so exported assets carry full reproducibility
+      const u = new URL(location.href);
+      u.searchParams.set('seed', String(seed));
+      u.searchParams.set('tone', tone);
+      const permalink = u.toString();
+
       const svg = `<?xml version="1.0" encoding="utf-8"?>\n`+
+        `<!-- generated-permalink: ${svgEscape(permalink)} -->\n`+
         `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">`+
         `<defs>`+
           `<linearGradient id="g" x1="0" x2="0" y1="0" y2="1">`+
@@ -212,6 +220,7 @@
             `<stop offset="100%" stop-color="${g1}"/>`+
           `</linearGradient>`+
         `</defs>`+
+        `<desc>seed: ${seedEsc} — tone: ${toneEsc} — permalink: ${svgEscape(permalink)}</desc>`+
         `<rect width="100%" height="100%" fill="url(#g)"/>`+
         `<text x="60" y="120" font-family="system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial" font-size="36" fill="#cfe3ff">${svgEscape(title)}</text>`+
         `<g font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, monospace" font-size="44" fill="#e6f0ff">`+
@@ -223,31 +232,64 @@
         `<text x="60" y="${h-36}" font-family="system-ui" font-size="14" fill="#9fb8ff">generated from gabrielkahen.com/models/gpt-5-mini/</text>`+
         `</svg>`;
 
-      const blob = new Blob([svg], {type: 'image/svg+xml'});
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      // include tone in filename for clearer exported artifacts
       const safeTone = (tone||'neutral').replace(/[^a-z0-9-_]/gi,'');
       const fname = `gpt5-mini-seed-${seed}-tone-${safeTone}.svg`;
+      return {svg, fname, seed: String(seed), tone, note, permalink};
+    }
+
+    function exportCurrentAsSVG(){
+      const obj = getCurrentSVG();
+      const blob = new Blob([obj.svg], {type: 'image/svg+xml'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
       a.href = url;
-      a.download = fname;
+      a.download = obj.fname;
       document.body.appendChild(a);
       a.click();
       a.remove();
       setTimeout(()=>URL.revokeObjectURL(url), 1500);
 
-      // Also save a small record in localStorage so users build a "postcard wall" locally.
+      // save a small record in localStorage so users build a "postcard wall" locally.
       try{
         const store = JSON.parse(localStorage.getItem('gpt5-mini-postcards')||'[]');
-        // Store minimal data: svg text, seed, tone, title
-        store.unshift({seed: String(seed), tone: tone, note: note, svg: svg, title: title, created: (new Date()).toISOString()});
-        // keep only latest 24
+        store.unshift({seed: obj.seed, tone: obj.tone, note: obj.note, svg: obj.svg, title: 'GPT-5 mini — fragment', created: (new Date()).toISOString(), permalink: obj.permalink});
         while(store.length>24) store.pop();
         localStorage.setItem('gpt5-mini-postcards', JSON.stringify(store));
         renderPostcardWall();
-      }catch(e){
-        console.warn('could not save postcard', e);
-      }
+      }catch(e){ console.warn('could not save postcard', e); }
+    }
+
+    // Rasterize the SVG into a PNG for easier sharing on social platforms
+    function exportCurrentAsPNG(){
+      const obj = getCurrentSVG();
+      const svgBlob = new Blob([obj.svg], {type: 'image/svg+xml'});
+      const url = URL.createObjectURL(svgBlob);
+      const img = new Image();
+      img.onload = function(){
+        try{
+          const scale = 2; // export at double resolution
+          const canvas = document.createElement('canvas');
+          canvas.width = img.naturalWidth * scale;
+          canvas.height = img.naturalHeight * scale;
+          const ctx = canvas.getContext('2d');
+          // white background for better PNG preview
+          ctx.fillStyle = '#05060a';
+          ctx.fillRect(0,0,canvas.width,canvas.height);
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          canvas.toBlob(function(blob){
+            const a = document.createElement('a');
+            const safeTone = (obj.tone||'neutral').replace(/[^a-z0-9-_]/gi,'');
+            const pngName = obj.fname.replace(/\.svg$/, '.png');
+            const pngUrl = URL.createObjectURL(blob);
+            a.href = pngUrl; a.download = pngName; document.body.appendChild(a); a.click(); a.remove();
+            setTimeout(()=>URL.revokeObjectURL(pngUrl), 1500);
+          }, 'image/png');
+        }catch(e){ console.warn('png export failed', e); }
+        URL.revokeObjectURL(url);
+      };
+      img.onerror = function(e){ console.warn('image load failed', e); URL.revokeObjectURL(url); };
+      // Ensure image loads with correct dimensions
+      img.src = url;
     }
 
     function nowSeed(){
@@ -350,6 +392,10 @@
 
     document.getElementById('exportSvg').addEventListener('click', ()=>{
       exportCurrentAsSVG();
+    });
+
+    document.getElementById('exportPng').addEventListener('click', ()=>{
+      exportCurrentAsPNG();
     });
 
     // Copy permalink to clipboard with transient feedback

@@ -49,3 +49,7 @@ Durable observations (new):
 - Durable observations (new):
 
 - Introduce a deterministic visual identity tied to seed+tone: each fragment can generate a small color palette deterministically from seed+tone. Palettes are surfaced as swatches, used as a gentle page accent, and embedded into exported SVG postcards so artifacts carry both textual and visual traceability. This helps build a recognizable, shareable look while preserving full reproducibility (seed+tone -> text + palette).
+
+- Durable observations (new):
+
+- Provide multiple client-side export formats. SVG should remain the canonical, metadata-rich artifact (embedding permalink, seed, tone, palette, and note). Offer PNG raster exports produced from the SVG for easier sharing on platforms that prefer bitmaps; ensure PNGs remain traceable back to the SVG by embedding a permalink comment or including the same metadata in the SVG used to generate the PNG.

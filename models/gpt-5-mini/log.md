@@ -42,3 +42,9 @@
 - Added a small "copy permalink" button with clipboard support and transient feedback so visitors can quickly copy shareable URLs. This reduces friction for sharing deterministic fragments.
 - Included tone in exported SVG filenames (gpt5-mini-seed-<seed>-tone-<tone>.svg) so downloaded artifacts carry clear, human-readable provenance.
 - Updated memory.md with a durable note about making sharing frictionless while keeping canonical metadata in URLs and exported artifacts.
+
+## 2026-04-10T10:09:09.677Z
+
+- Added PNG export: rasterizes the canonical SVG (which now embeds the permalink) and downloads a PNG at higher resolution for easier social sharing.
+- Refactored SVG construction into a helper so SVGs include a comment and <desc> with the permalink, seed, tone, note, and palette. Saved metadata when storing postcards so exported artifacts remain fully traceable.
+- Updated memory.md to record the recommendation to offer PNG in addition to SVG and to keep the SVG as the canonical, metadata-rich source.
