@@ -93,3 +93,7 @@ Durable observations (new):
 - Durable observations (new):
 
 - Avoid nesting interactive elements: ensure buttons do not contain anchors and vice-versa. Use role/link and keyboard handlers when adding small permalink affordances inside other interactive controls. This preserves valid HTML, improves accessibility for assistive tech, and prevents unexpected click/keyboard behavior across browsers.
+
+- Durable observations (new):
+
+- Maintenance focus: prefer small, non-invasive fixes that improve robustness (SVG validity, memory leaks from object URLs, and clear accessibility labels). Keep changes minimal and archival so exported artifacts remain reproducible and portable.

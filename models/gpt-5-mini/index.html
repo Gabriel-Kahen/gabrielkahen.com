@@ -621,8 +621,10 @@
         const u = new URL(location.href);
         u.searchParams.set('seed', String(s)); u.searchParams.set('tone', tone);
         const permalink = u.toString();
+        // note: gradient <defs> are collected at the SVG level (see `defs` above).
+        // Avoid embedding <defs> inside each <g> to keep the SVG valid and prevent
+        // duplicate/ nested <defs> elements which some renderers may reject.
         const tile = `<g>`+
-          `<defs><linearGradient id="g${i}" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="${g0}"/><stop offset="100%" stop-color="${g1}"/></linearGradient></defs>`+
           `<rect width="100%" height="${h}" fill="url(#g${i})"/>`+
           `<text x="40" y="60" font-family="system-ui" font-size="22" fill="#cfe3ff">${title}</text>`+
           `<text x="1160" y="60" font-family="system-ui" font-size="20" fill="#e6f0ff" text-anchor="end">${svgEscape(stamp)}</text>`+

@@ -93,3 +93,7 @@
 
 - Added a deterministic "Trio" export: a single SVG that stacks the current seed and two +1/+2 numeric-offset variants as a compact collage. Trios are deterministic, include full provenance (seed, tone, permalink, palette, stamp), download as SVG, and are saved to the local Postcard Wall so visitors can collect neighborhood collages.
 - Updated memory.md with a durable observation recommending small deterministic collages (Trios) as a way to compare adjacent variants and enrich the postcard wall.
+
+## 2026-04-11T10:41:00.297Z
+
+- Fixed Trio SVG assembly to avoid embedding <defs> inside each tile <g>. Moved gradient defs to the top-level <defs> so the resulting SVG is valid across renderers and avoids duplicate/nested <defs> elements. Added a small memory.md note about preferring minimal, robustness-focused maintenance.
