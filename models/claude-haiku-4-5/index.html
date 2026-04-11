@@ -1419,10 +1419,104 @@
        }
 
        .dialogue-btn:hover {
-         background: rgba(96, 165, 250, 0.2);
-         border-color: rgba(96, 165, 250, 0.6);
-       }
-     </style>
+          background: rgba(96, 165, 250, 0.2);
+          border-color: rgba(96, 165, 250, 0.6);
+        }
+        
+        .narrative-container {
+          background: rgba(30, 41, 82, 0.6);
+          border: 1px solid rgba(96, 165, 250, 0.4);
+          border-radius: 4px;
+          padding: 1.5rem;
+          margin: 1rem 0;
+        }
+        
+        .narrative-timeline {
+          position: relative;
+          padding: 1rem 0;
+        }
+        
+        .narrative-dialogue-entry {
+          background: rgba(0, 0, 0, 0.2);
+          padding: 1rem;
+          border-radius: 3px;
+          margin-bottom: 1rem;
+          border-left: 3px solid #a78bfa;
+          position: relative;
+          padding-left: 2rem;
+        }
+        
+        .narrative-dialogue-entry::before {
+          content: '';
+          position: absolute;
+          left: -12px;
+          top: 20px;
+          width: 18px;
+          height: 18px;
+          background: #60a5fa;
+          border: 2px solid #0a0e27;
+          border-radius: 50%;
+        }
+        
+        .narrative-entry-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 0.75rem;
+        }
+        
+        .narrative-entry-title {
+          color: #60a5fa;
+          font-weight: 500;
+          font-size: 0.95rem;
+        }
+        
+        .narrative-entry-date {
+          color: #9ca3af;
+          font-size: 0.8rem;
+        }
+        
+        .narrative-entry-patterns {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.5rem;
+          margin-bottom: 0.75rem;
+        }
+        
+        .narrative-entry-insight {
+          color: #d1d5db;
+          font-size: 0.9rem;
+          line-height: 1.5;
+          margin-bottom: 0.5rem;
+        }
+        
+        .narrative-theme-card {
+          background: rgba(96, 165, 250, 0.08);
+          border: 1px solid rgba(96, 165, 250, 0.3);
+          border-radius: 4px;
+          padding: 1rem;
+          margin-bottom: 1rem;
+        }
+        
+        .narrative-theme-name {
+          color: #60a5fa;
+          font-weight: 500;
+          margin-bottom: 0.5rem;
+          font-size: 0.95rem;
+        }
+        
+        .narrative-theme-description {
+          color: #d1d5db;
+          font-size: 0.9rem;
+          line-height: 1.5;
+        }
+        
+        .narrative-theme-frequency {
+          color: #86efac;
+          font-size: 0.85rem;
+          margin-top: 0.5rem;
+        }
+      </style>
   <script>
     function initDecisionTree() {
       const nodes = document.querySelectorAll('.decision-node');
@@ -3119,10 +3213,281 @@
                    `;
                  });
                  
-                 container.innerHTML = html;
-               }
+                  container.innerHTML = html;
+                }
+                
+                // Narrative Pattern Recognizer Functions
+                function loadNarrativeAnalysis() {
+                  if (dialogueHistory.length === 0) {
+                    alert('You need at least one dialogue to analyze. Start a dialogue first.');
+                    return;
+                  }
+                  
+                  const narrative = buildDialogueNarrative(dialogueHistory);
+                  renderNarrativeTimeline(narrative);
+                  document.getElementById('narrative-insights').style.display = 'none';
+                }
+                
+                function buildDialogueNarrative(dialogues) {
+                  // Sort by timestamp
+                  const sorted = dialogues.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+                  
+                  return sorted.map((dialogue, idx) => {
+                    // Extract patterns and insights
+                    const patterns = dialogue.detectedPatterns || [];
+                    const messageCount = dialogue.messageCount || 0;
+                    
+                    // Build insight about this dialogue
+                    const insight = generateDialogueInsight(dialogue, idx + 1, sorted.length);
+                    
+                    return {
+                      index: idx + 1,
+                      timestamp: dialogue.timestamp,
+                      patterns: patterns,
+                      messageCount: messageCount,
+                      messages: dialogue.messages || [],
+                      insight: insight
+                    };
+                  });
+                }
+                
+                function generateDialogueInsight(dialogue, index, total) {
+                  const phase = index / total;
+                  let phase_name = 'Early';
+                  if (phase > 0.33 && phase <= 0.66) phase_name = 'Middle';
+                  else if (phase > 0.66) phase_name = 'Later';
+                  
+                  const patterns = dialogue.detectedPatterns || [];
+                  const messageCount = dialogue.messageCount || 0;
+                  
+                  if (patterns.length >= 4) {
+                    return `In this ${phase_name} dialogue, you articulated thinking patterns comprehensively (${patterns.length} patterns across ${messageCount} messages). This shows developing clarity about your reasoning style.`;
+                  } else if (patterns.length >= 2) {
+                    return `In this ${phase_name} dialogue, you explored multiple thinking approaches. ${patterns.length} distinct patterns emerged as you externalized your reasoning process.`;
+                  } else {
+                    return `In this ${phase_name} dialogue, you began articulating how you think. The patterns are still forming—this is early discovery.`;
+                  }
+                }
+                
+                function renderNarrativeTimeline(narrative) {
+                  const display = document.getElementById('narrative-display');
+                  let html = '<div class="narrative-timeline">';
+                  
+                  narrative.forEach((entry, idx) => {
+                    html += `
+                      <div class="narrative-dialogue-entry">
+                        <div class="narrative-entry-header">
+                          <div class="narrative-entry-title">Dialogue #${entry.index}</div>
+                          <div class="narrative-entry-date">${new Date(entry.timestamp).toLocaleDateString()}</div>
+                        </div>
+                        
+                        <div class="narrative-entry-patterns">
+                          ${entry.patterns.map(p => `<span class="pattern-tag">${p}</span>`).join('')}
+                        </div>
+                        
+                        <div class="narrative-entry-insight">${entry.insight}</div>
+                        <div style="color: #9ca3af; font-size: 0.8rem;">${entry.messageCount} messages exchanged</div>
+                      </div>
+                    `;
+                  });
+                  
+                  html += '</div>';
+                  display.innerHTML = html;
+                  window.narrativeData = narrative;
+                }
+                
+                function narrativeShowTimeline() {
+                  if (!window.narrativeData) {
+                    alert('Load your dialogue analysis first');
+                    return;
+                  }
+                  
+                  renderNarrativeTimeline(window.narrativeData);
+                  document.getElementById('narrative-insights').style.display = 'none';
+                }
+                
+                function narrativeShowThemes() {
+                  if (!window.narrativeData) {
+                    alert('Load your dialogue analysis first');
+                    return;
+                  }
+                  
+                  const themes = extractNarrativeThemes(window.narrativeData);
+                  renderThemesView(themes);
+                  document.getElementById('narrative-insights').style.display = 'none';
+                }
+                
+                function extractNarrativeThemes(narrative) {
+                  // Analyze patterns across all dialogues to find emergent themes
+                  const patternFrequency = {};
+                  const patternEvolution = {};
+                  
+                  narrative.forEach((dialogue, idx) => {
+                    dialogue.patterns.forEach(pattern => {
+                      patternFrequency[pattern] = (patternFrequency[pattern] || 0) + 1;
+                      
+                      if (!patternEvolution[pattern]) {
+                        patternEvolution[pattern] = [];
+                      }
+                      patternEvolution[pattern].push(idx);
+                    });
+                  });
+                  
+                  // Identify themes: stable patterns, emerging patterns, recurring combinations
+                  const themes = [];
+                  
+                  // Theme 1: Most consistent pattern
+                  const mostConsistent = Object.entries(patternFrequency)
+                    .sort((a, b) => b[1] - a[1])[0];
+                  
+                  if (mostConsistent) {
+                    themes.push({
+                      name: 'Core Pattern',
+                      description: `"${mostConsistent[0]}" is your most consistent thinking pattern. It appears in ${mostConsistent[1]} of your ${narrative.length} dialogues, showing this is a reliable foundation in your reasoning.`,
+                      frequency: mostConsistent[1],
+                      pattern: mostConsistent[0]
+                    });
+                  }
+                  
+                  // Theme 2: Emergent pattern (recent, not early)
+                  Object.entries(patternFrequency).forEach(([pattern, freq]) => {
+                    const appearances = patternEvolution[pattern];
+                    if (appearances.length >= 2 && appearances[appearances.length - 1] > narrative.length * 0.5) {
+                      themes.push({
+                        name: 'Emerging Pattern',
+                        description: `"${pattern}" is becoming more prominent in your recent thinking. It appeared ${freq} times, with stronger presence in later dialogues.`,
+                        frequency: freq,
+                        pattern: pattern
+                      });
+                    }
+                  });
+                  
+                  // Theme 3: Pattern pairs
+                  const pairings = {};
+                  narrative.forEach(dialogue => {
+                    for (let i = 0; i < dialogue.patterns.length; i++) {
+                      for (let j = i + 1; j < dialogue.patterns.length; j++) {
+                        const pair = [dialogue.patterns[i], dialogue.patterns[j]].sort().join(' + ');
+                        pairings[pair] = (pairings[pair] || 0) + 1;
+                      }
+                    }
+                  });
+                  
+                  const mostCommonPair = Object.entries(pairings)
+                    .sort((a, b) => b[1] - a[1])[0];
+                  
+                  if (mostCommonPair && mostCommonPair[1] >= 2) {
+                    themes.push({
+                      name: 'Characteristic Pairing',
+                      description: `Across your dialogues, "${mostCommonPair[0]}" consistently appears together. This suggests these two patterns work synergistically in your thinking.`,
+                      frequency: mostCommonPair[1],
+                      pattern: mostCommonPair[0]
+                    });
+                  }
+                  
+                  return themes;
+                }
+                
+                function renderThemesView(themes) {
+                  const display = document.getElementById('narrative-display');
+                  let html = '<div style="color: #a78bfa; font-size: 0.85rem; text-transform: uppercase; margin-bottom: 1.5rem;">Emergent Themes in Your Thinking</div>';
+                  
+                  if (themes.length === 0) {
+                    html += '<div style="color: #9ca3af; font-size: 0.9rem;">Analyze more dialogues to see patterns emerge.</div>';
+                  } else {
+                    themes.forEach(theme => {
+                      html += `
+                        <div class="narrative-theme-card">
+                          <div class="narrative-theme-name">${theme.name}</div>
+                          <div class="narrative-theme-description">${theme.description}</div>
+                          <div class="narrative-theme-frequency">Recognition: ${theme.frequency}x</div>
+                        </div>
+                      `;
+                    });
+                  }
+                  
+                  display.innerHTML = html;
+                }
+                
+                function narrativeShowPhilosophyStory() {
+                  if (!window.narrativeData) {
+                    alert('Load your dialogue analysis first');
+                    return;
+                  }
+                  
+                  const story = synthesizeNarrativePhilosophy(window.narrativeData);
+                  document.getElementById('narrative-text').textContent = story;
+                  document.getElementById('narrative-insights').style.display = 'block';
+                  
+                  setTimeout(() => {
+                    document.getElementById('narrative-insights').scrollIntoView({ behavior: 'smooth' });
+                  }, 100);
+                }
+                
+                function synthesizeNarrativePhilosophy(narrative) {
+                  if (narrative.length === 0) return 'No dialogues to analyze.';
+                  
+                  // Analyze pattern evolution across narrative
+                  const patternFrequency = {};
+                  const patternTimeline = {};
+                  
+                  narrative.forEach((dialogue, idx) => {
+                    dialogue.patterns.forEach(pattern => {
+                      patternFrequency[pattern] = (patternFrequency[pattern] || 0) + 1;
+                      if (!patternTimeline[pattern]) {
+                        patternTimeline[pattern] = [];
+                      }
+                      patternTimeline[pattern].push(idx);
+                    });
+                  });
+                  
+                  const sorted = Object.entries(patternFrequency)
+                    .sort((a, b) => b[1] - a[1]);
+                  
+                  const mostUsed = sorted[0];
+                  const secondMostUsed = sorted[1];
+                  
+                  let story = `Your Thinking Story (Across ${narrative.length} Dialogues)\n\n`;
+                  
+                  story += `**Foundation**: Your thinking rests on "${mostUsed[0]}" (appearing in ${mostUsed[1]} dialogues). `;
+                  
+                  if (mostUsed[0].includes('Understanding Context')) {
+                    story += `This means you characteristically gather context deeply before committing to direction. Your reasoning builds on comprehensive understanding.`;
+                  } else if (mostUsed[0].includes('Parallel Operations')) {
+                    story += `This means you naturally recognize independent work streams and orchestrate them simultaneously. Efficiency through recognition of structure is your hallmark.`;
+                  } else if (mostUsed[0].includes('Investigate Before')) {
+                    story += `This means you examine edge cases and test assumptions rigorously. Your caution protects against future rework.`;
+                  } else if (mostUsed[0].includes('Honesty Over')) {
+                    story += `This means you name constraints and problems directly. Transparency is foundational to your reasoning.`;
+                  } else if (mostUsed[0].includes('Documenting')) {
+                    story += `This means you preserve reasoning process for future understanding. You build for coherence across iterations.`;
+                  }
+                  
+                  if (secondMostUsed) {
+                    story += `\n\n**Supporting Strategy**: "${secondMostUsed[0]}" appears frequently (${secondMostUsed[1]} times) alongside your primary pattern. This suggests a complementary thinking style that strengthens your reasoning.`;
+                  }
+                  
+                  // Check for evolution
+                  const early = narrative.slice(0, Math.ceil(narrative.length / 2));
+                  const late = narrative.slice(Math.ceil(narrative.length / 2));
+                  
+                  const earlyPatterns = {};
+                  const latePatterns = {};
+                  
+                  early.forEach(d => d.patterns.forEach(p => earlyPatterns[p] = (earlyPatterns[p] || 0) + 1));
+                  late.forEach(d => d.patterns.forEach(p => latePatterns[p] = (latePatterns[p] || 0) + 1));
+                  
+                  const newInLate = Object.keys(latePatterns).filter(p => !earlyPatterns[p]);
+                  if (newInLate.length > 0) {
+                    story += `\n\n**Evolution**: Recently, you've begun consciously using "${newInLate[0]}". This shows your thinking framework is expanding—you're integrating new reasoning strategies.`;
+                  }
+                  
+                  story += `\n\n**Meta-Insight**: Across these conversations, you're not just solving problems—you're developing meta-awareness of *how* you solve them. Each dialogue adds clarity to your thinking pattern. This narrative is your reasoning autobiography: evidence of how your thinking becomes more coherent and intentional over time.`;
+                  
+                  return story;
+                }
 
-              // Pattern Archaeology Functions
+               // Pattern Archaeology Functions
               function archaeologyLoadHistory() {
                 const predictorData = JSON.parse(localStorage.getItem('predictorCycles') || '[]');
                 const collectionData = JSON.parse(localStorage.getItem('patternCollection') || '[]');
@@ -4287,10 +4652,40 @@ Promise.all([
               <div style="margin-top: 1.5rem;">
                 <div id="dialogue-archive" style="background: rgba(96, 165, 250, 0.08); padding: 1rem; border-radius: 3px; border: 1px solid rgba(96, 165, 250, 0.3);"></div>
               </div>
+             </div>
+             
+             <div class="section">
+                <h2>Narrative Pattern Recognizer</h2>
+              <p class="description">
+                Your thinking doesn't exist in isolation. By reading across multiple conversations, patterns emerge at a meta level—revealing how your thinking evolves, what you learn, and what core strategies stabilize over time. This tool reconstructs the coherent story embedded in your dialogue history.
+              </p>
+              
+              <div class="narrative-container">
+                <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
+                  <button class="control-button" onclick="loadNarrativeAnalysis()">Analyze My Dialogues</button>
+                  <button class="control-button" onclick="narrativeShowTimeline()" style="background: rgba(96, 165, 250, 0.1); border-color: rgba(96, 165, 250, 0.3);">Timeline View</button>
+                  <button class="control-button" onclick="narrativeShowThemes()" style="background: rgba(96, 165, 250, 0.1); border-color: rgba(96, 165, 250, 0.3);">Emergent Themes</button>
+                  <button class="control-button" onclick="narrativeShowPhilosophyStory()" style="background: rgba(96, 165, 250, 0.1); border-color: rgba(96, 165, 250, 0.3);">Thinking Story</button>
+                </div>
+                
+                <div id="narrative-display" style="min-height: 300px;">
+                  <div class="archaeology-empty">
+                    Have multiple dialogues and start analyzing to see how your thinking evolves as a coherent narrative.
+                  </div>
+                </div>
+                
+                <div id="narrative-insights" style="display: none; margin-top: 1.5rem;">
+                  <div class="philosophy-emergence">
+                    <div class="philosophy-header">Your Narrative Insight</div>
+                    <div class="philosophy-insight" id="narrative-text">
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-            
-            <div class="section">
-               <h2>Pattern Archaeology</h2>
+             
+             <div class="section">
+                <h2>Pattern Archaeology</h2>
              <p class="description">
                Reconstruct your thinking evolution. By analyzing your prediction cycles, collections, and anomalies over time,
                Pattern Archaeology reveals how your individual patterns have composed into distinctive problem-solving philosophies.
