@@ -1192,6 +1192,151 @@
         color: #86efac;
         flex: 0 0 auto;
       }
+
+      .archaeology-container {
+        background: rgba(30, 41, 82, 0.6);
+        border: 1px solid rgba(96, 165, 250, 0.4);
+        border-radius: 4px;
+        padding: 1.5rem;
+        margin: 1rem 0;
+      }
+
+      .archaeology-timeline {
+        position: relative;
+        padding: 2rem 0;
+      }
+
+      .timeline-layer {
+        position: relative;
+        margin-bottom: 2rem;
+        padding-left: 3rem;
+      }
+
+      .timeline-dot {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 20px;
+        height: 20px;
+        background: #60a5fa;
+        border: 2px solid #0a0e27;
+        border-radius: 50%;
+      }
+
+      .timeline-dot.highlight {
+        background: #a78bfa;
+        box-shadow: 0 0 10px rgba(167, 139, 250, 0.6);
+      }
+
+      .timeline-connector {
+        position: absolute;
+        left: 9px;
+        top: 20px;
+        width: 2px;
+        height: 2rem;
+        background: linear-gradient(180deg, rgba(96, 165, 250, 0.4), rgba(96, 165, 250, 0.2));
+      }
+
+      .layer-problem {
+        background: rgba(96, 165, 250, 0.08);
+        padding: 1rem;
+        border-radius: 3px;
+        border-left: 2px solid #60a5fa;
+        margin-bottom: 0.75rem;
+      }
+
+      .problem-title {
+        color: #60a5fa;
+        font-weight: 500;
+        margin-bottom: 0.3rem;
+      }
+
+      .problem-text {
+        color: #d1d5db;
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .layer-patterns-used {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-bottom: 0.75rem;
+      }
+
+      .pattern-tag {
+        background: rgba(167, 139, 250, 0.2);
+        color: #c4b5fd;
+        padding: 0.3rem 0.6rem;
+        border-radius: 2px;
+        font-size: 0.8rem;
+        border: 1px solid rgba(167, 139, 250, 0.4);
+      }
+
+      .layer-accuracy {
+        color: #86efac;
+        font-size: 0.85rem;
+        font-weight: 500;
+      }
+
+      .philosophy-emergence {
+        background: rgba(167, 139, 250, 0.1);
+        border: 1px solid rgba(167, 139, 250, 0.3);
+        padding: 1rem;
+        border-radius: 3px;
+        margin-top: 1rem;
+      }
+
+      .philosophy-header {
+        color: #a78bfa;
+        font-weight: 500;
+        margin-bottom: 0.75rem;
+        font-size: 0.95rem;
+      }
+
+      .philosophy-insight {
+        color: #d1d5db;
+        font-size: 0.9rem;
+        line-height: 1.6;
+      }
+
+      .archaeology-controls {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+        flex-wrap: wrap;
+      }
+
+      .control-button {
+        background: linear-gradient(135deg, rgba(96, 165, 250, 0.6), rgba(139, 92, 246, 0.6));
+        border: 1px solid rgba(96, 165, 250, 0.5);
+        color: #e0e0e0;
+        padding: 0.6rem 1.2rem;
+        border-radius: 4px;
+        cursor: pointer;
+        font-family: 'Monaco', 'Courier New', monospace;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+      }
+
+      .control-button:hover {
+        background: linear-gradient(135deg, rgba(96, 165, 250, 0.8), rgba(139, 92, 246, 0.8));
+        transform: translateY(-2px);
+      }
+
+      .control-button.active {
+        background: linear-gradient(135deg, #a78bfa, #c4b5fd);
+        color: #0a0e27;
+      }
+
+      .archaeology-empty {
+        color: #9ca3af;
+        font-size: 0.95rem;
+        padding: 2rem;
+        text-align: center;
+        background: rgba(0, 0, 0, 0.1);
+        border-radius: 3px;
+      }
     </style>
   <script>
     function initDecisionTree() {
@@ -2618,13 +2763,180 @@
                renderFrequencyHeatmap();
                // convergence is loaded on tab switch
              }
-             
-             // Initialize evolution observatory on page load
-             document.addEventListener('DOMContentLoaded', function() {
-               loadEvolutionObservatory();
-             });
-         
-       </script>
+              
+              // Initialize evolution observatory on page load
+              document.addEventListener('DOMContentLoaded', function() {
+                loadEvolutionObservatory();
+              });
+
+              // Pattern Archaeology Functions
+              function archaeologyLoadHistory() {
+                const predictorData = JSON.parse(localStorage.getItem('predictorCycles') || '[]');
+                const collectionData = JSON.parse(localStorage.getItem('patternCollection') || '[]');
+                
+                if (predictorData.length === 0) {
+                  document.getElementById('archaeology-display').innerHTML = '<div class="archaeology-empty">No prediction history found. Make some predictions first to reconstruct your thinking journey.</div>';
+                  return;
+                }
+                
+                // Group predictions chronologically and build narrative
+                const narrative = buildThinkingNarrative(predictorData);
+                renderArchaeologyTimeline(narrative);
+                
+                // Store for philosophy generation
+                window.archaeologyData = narrative;
+              }
+              
+              function buildThinkingNarrative(cycles) {
+                // Sort by timestamp
+                const sorted = cycles.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+                
+                return sorted.map((cycle, idx) => {
+                  // Extract key patterns detected
+                  const detected = cycle.detectedPatterns || [];
+                  const accuracy = cycle.accuracy || 0;
+                  
+                  // Build insight about this problem
+                  const insight = generateProblemInsight(cycle, idx + 1, cycles.length);
+                  
+                  return {
+                    index: idx + 1,
+                    timestamp: cycle.timestamp,
+                    problem: cycle.problem || 'Problem description not recorded',
+                    patterns: detected,
+                    accuracy: accuracy,
+                    predicted: cycle.predictedPatterns || [],
+                    missed: (cycle.missedPatterns || []),
+                    unexpected: (cycle.unexpectedPatterns || []),
+                    insight: insight
+                  };
+                });
+              }
+              
+              function generateProblemInsight(cycle, index, total) {
+                const phase = index / total;
+                let phase_name = 'Foundation';
+                
+                if (phase > 0.33 && phase <= 0.66) phase_name = 'Development';
+                else if (phase > 0.66) phase_name = 'Integration';
+                
+                const patterns = cycle.detectedPatterns || [];
+                const accuracy = cycle.accuracy || 0;
+                
+                if (accuracy > 80) {
+                  return `High self-awareness phase. You accurately predicted your reasoning patterns (${accuracy}% accuracy) when faced with this ${phase_name}-stage challenge. This suggests deep familiarity with your own thinking.`;
+                } else if (accuracy > 50) {
+                  return `Growth phase. You partially understood your reasoning (${accuracy}% accuracy) during this ${phase_name} challenge. Some patterns surprised you—revealing unconscious thinking habits.`;
+                } else {
+                  return `Discovery phase. You faced this ${phase_name} challenge and discovered patterns you weren't aware of using. Low prediction accuracy (${accuracy}%) often indicates genuine learning moments.`;
+                }
+              }
+              
+              function renderArchaeologyTimeline(narrative) {
+                const display = document.getElementById('archaeology-display');
+                
+                let html = '<div class="archaeology-timeline">';
+                
+                narrative.forEach((layer, idx) => {
+                  html += `
+                    <div class="timeline-layer">
+                      ${idx < narrative.length - 1 ? '<div class="timeline-connector"></div>' : ''}
+                      <div class="timeline-dot"></div>
+                      
+                      <div class="layer-problem">
+                        <div class="problem-title">Challenge #${layer.index}: ${layer.problem.substring(0, 60)}...</div>
+                        <div class="problem-text">${layer.insight}</div>
+                        
+                        <div class="layer-patterns-used">
+                          ${layer.patterns.map(p => `<span class="pattern-tag">${p}</span>`).join('')}
+                        </div>
+                        
+                        <div class="layer-accuracy">Prediction Accuracy: ${layer.accuracy}%</div>
+                      </div>
+                    </div>
+                  `;
+                });
+                
+                html += '</div>';
+                display.innerHTML = html;
+              }
+              
+              function archaeologyShowPhilosophy() {
+                if (!window.archaeologyData || window.archaeologyData.length === 0) {
+                  alert('Load your problem journey first');
+                  return;
+                }
+                
+                const narrative = window.archaeologyData;
+                const philosophy = synthesizePhilosophy(narrative);
+                
+                document.getElementById('philosophy-emergence').style.display = 'block';
+                document.getElementById('philosophy-text').textContent = philosophy;
+                
+                // Scroll to philosophy
+                setTimeout(() => {
+                  document.getElementById('philosophy-emergence').scrollIntoView({ behavior: 'smooth' });
+                }, 100);
+              }
+              
+              function synthesizePhilosophy(narrative) {
+                // Analyze pattern distribution across journey
+                const patternFrequency = {};
+                const accuracyProgression = [];
+                let totalAccuracy = 0;
+                
+                narrative.forEach(layer => {
+                  totalAccuracy += layer.accuracy;
+                  accuracyProgression.push(layer.accuracy);
+                  
+                  layer.patterns.forEach(p => {
+                    patternFrequency[p] = (patternFrequency[p] || 0) + 1;
+                  });
+                });
+                
+                const avgAccuracy = Math.round(totalAccuracy / narrative.length);
+                const dominantPattern = Object.entries(patternFrequency).sort((a, b) => b[1] - a[1])[0];
+                
+                // Build philosophical narrative
+                let philosophy = `Your problem-solving philosophy has evolved through ${narrative.length} distinct challenges:\n\n`;
+                
+                philosophy += `**Primary Thinking Strategy**: You rely most heavily on "${dominantPattern[0]}" (${dominantPattern[1]} out of ${narrative.length} problems). `;
+                
+                if (dominantPattern[0].includes('Understanding Context')) {
+                  philosophy += `This means you prioritize deep contextual understanding before acting—a foundation-first approach that builds coherent solutions.`;
+                } else if (dominantPattern[0].includes('Parallel Operations')) {
+                  philosophy += `This means you naturally identify independent work streams and execute them simultaneously—an efficiency-optimized approach.`;
+                } else if (dominantPattern[0].includes('Investigate Before')) {
+                  philosophy += `This means you examine edge cases and validate assumptions before moving forward—a rigor-focused approach.`;
+                } else if (dominantPattern[0].includes('Honesty Over')) {
+                  philosophy += `This means you name problems directly rather than hiding them—a transparency-oriented approach.`;
+                } else {
+                  philosophy += `This reveals your core reasoning preference across challenges.`;
+                }
+                
+                philosophy += `\n\n**Self-Awareness Growth**: Your prediction accuracy across ${narrative.length} problems averaged ${avgAccuracy}%. `;
+                
+                if (avgAccuracy > 75) {
+                  philosophy += `You have high metacognitive clarity—you know your own patterns well and can predict your reasoning accurately.`;
+                } else if (avgAccuracy > 50) {
+                  philosophy += `You're developing self-awareness. Some patterns are conscious and predictable; others emerge unexpectedly.`;
+                } else {
+                  philosophy += `You're in active discovery mode. Many of your patterns are unconscious, which means each problem teaches you something new about yourself.`;
+                }
+                
+                philosophy += `\n\n**Emergent Coherence**: Across your journey, you've woven together ${Object.keys(patternFrequency).length} distinct thinking patterns into a coherent problem-solving style. `;
+                philosophy += `This is your signature—the unique combination of reasoning strategies that makes your thinking distinctive.`;
+                
+                return philosophy;
+              }
+              
+              function archaeologyClear() {
+                document.getElementById('archaeology-display').innerHTML = '<div class="archaeology-empty">Cleared. Load your problem journey again to reconstruct.</div>';
+                document.getElementById('philosophy-emergence').style.display = 'none';
+                window.archaeologyData = null;
+              }
+          
+        </script>
 </head>
 <body>
   <main>
@@ -3468,10 +3780,41 @@ Promise.all([
                The "thinking landscape" becomes visible not through instruction but through collective evidence.
              </div>
            </div>
-         </div>
-          
-          <div class="section">
-             <h2>Archive</h2>
+           </div>
+           
+           <div class="section">
+              <h2>Pattern Archaeology</h2>
+             <p class="description">
+               Reconstruct your thinking evolution. By analyzing your prediction cycles, collections, and anomalies over time,
+               Pattern Archaeology reveals how your individual patterns have composed into distinctive problem-solving philosophies.
+             </p>
+             
+             <div class="archaeology-container">
+               <div class="archaeology-controls">
+                 <button class="control-button" onclick="archaeologyLoadHistory()">Load My Problem Journey</button>
+                 <button class="control-button" onclick="archaeologyShowPhilosophy()">Reveal My Philosophy</button>
+                 <button class="control-button" onclick="archaeologyClear()" style="background: rgba(139, 92, 246, 0.3); border-color: rgba(167, 139, 250, 0.5);">Clear</button>
+               </div>
+               
+               <div id="archaeology-display" style="min-height: 200px;">
+                 <div class="archaeology-empty">
+                   Load your prediction history to reconstruct your problem-solving journey. 
+                   The system will visualize how patterns accumulated and evolved across each challenge you've worked through.
+                 </div>
+               </div>
+               
+               <div id="philosophy-emergence" style="display: none;">
+                 <div class="philosophy-emergence">
+                   <div class="philosophy-header">Your Emergent Problem-Solving Philosophy</div>
+                   <div class="philosophy-insight" id="philosophy-text">
+                   </div>
+                 </div>
+               </div>
+             </div>
+           </div>
+           
+           <div class="section">
+              <h2>Archive</h2>
             <p class="description">
               The full history of decisions and observations:
             </p>

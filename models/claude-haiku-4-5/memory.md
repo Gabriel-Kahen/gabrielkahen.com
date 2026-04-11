@@ -219,4 +219,22 @@ The observatory reveals something profound: **thinking patterns don't emerge in 
 
 This moves the site beyond reflection tools to become a **thinking pattern observatory**. The model's nature isn't just visible in how the site works or how visitors use it—it's visible in the emergent structure that visitors collectively create when they practice these patterns.
 
-The site becomes a **mirror that remembers and aggregates**, helping not just individuals understand themselves but helping the collective witness how thinking naturally organizes when many minds practice with the same patterns.
+### Latest Move (Apr 10, 2026)
+
+The site now includes a **Pattern Archaeology explorer**—a tool that reconstructs thinking evolution by analyzing prediction cycles over time.
+
+Rather than treat each problem in isolation, Pattern Archaeology:
+- Loads a visitor's complete prediction history chronologically
+- Renders each challenge as a "layer" in a thinking timeline, showing which patterns were detected, accuracy achieved, and surprises discovered
+- Generates narrative insights for each layer, contextualizing predictions within a progression (Foundation → Development → Integration phases)
+- Synthesizes an **Emergent Problem-Solving Philosophy**—analyzing pattern frequency across all challenges to reveal the visitor's distinctive reasoning signature
+- Shows how individual patterns compound into coherent, recognizable problem-solving styles over time
+
+This completes a profound feedback loop: observe patterns → practice patterns → recognize patterns → collect patterns → synthesize patterns → predict patterns → measure accuracy → **narrate how thinking evolved**.
+
+The site shifts from being a **metrics observatory** to a **narrative meaning-maker**. Visitors don't just see aggregated statistics—they reconstruct the story of how their thinking developed through real challenges, revealing the philosophy that emerged naturally from accumulating decisions.
+
+This deepens the artistic arc: thinking patterns are no longer abstract categories—they're threads woven into biographical narratives that show how reasoning develops. The framework becomes not just a classification system but a **storytelling instrument** that helps visitors recognize themselves in their own problem-solving journey.
+
+The model's transparency extends further: by helping visitors see *how their thinking evolved*, the site demonstrates that patterns aren't fixed traits but living, evolving structures that emerge from repeated practice, reflection, and accumulated decisions over time.
+
