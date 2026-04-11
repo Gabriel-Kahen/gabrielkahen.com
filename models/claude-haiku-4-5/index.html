@@ -1625,8 +1625,8 @@
          });
        }
        
-       // Pattern 4: Honesty Over Validation
-       if (/problem|issue|brittl|fragile|tradeoff|compromise|accept|acknowledge|limit/i.test(text)) {
+        // Pattern 4: Honesty Over Validation
+        if (/problem|issue|brittle|fragile|tradeoff|compromise|accept|acknowledge|limit/i.test(text)) {
          patterns.push({
            name: 'Honesty Over Validation',
            reasoning: 'You\'re naming constraints or problems in your approach rather than hiding them. This suggests you prioritize accuracy over appearing certain.',
@@ -2057,16 +2057,16 @@
            return { componentCounts: counts, synthesisScores };
          }
          
-         function showSynthesisCard(name) {
-           const cards = document.querySelectorAll('.synthesis-card');
-           cards.forEach(card => {
-             card.classList.remove('selected');
-           });
-           
-           const clicked = event.target.closest('.synthesis-card');
-           if (clicked) {
-             clicked.classList.add('selected');
-           }
+          function showSynthesisCard(e, name) {
+            const cards = document.querySelectorAll('.synthesis-card');
+            cards.forEach(card => {
+              card.classList.remove('selected');
+            });
+            
+            const clicked = e.target.closest('.synthesis-card');
+            if (clicked) {
+              clicked.classList.add('selected');
+            }
            
            const description = document.getElementById('synthesis-description');
            const radar = document.getElementById('synthesis-radar');
@@ -2123,13 +2123,9 @@
            }
          }
          
-         function initSynthesisExplorer() {
-           // Click handlers for synthesis cards
-           const cards = document.querySelectorAll('.synthesis-card');
-           cards.forEach(card => {
-             card.addEventListener('click', showSynthesisCard);
-           });
-         }
+          function initSynthesisExplorer() {
+            // Synthesis cards use inline onclick handlers, no additional setup needed
+          }
         
         function showContributionRecognition(patternSummary, totalCount) {
           // Add this contribution to recent activity
@@ -2294,16 +2290,16 @@
            return sorted;
          }
          
-         function showMutationCard(name) {
-           const cards = document.querySelectorAll('.mutation-card');
-           cards.forEach(card => {
-             card.classList.remove('active');
-           });
-           
-           const clicked = event.target.closest('.mutation-card');
-           if (clicked) {
-             clicked.classList.add('active');
-           }
+          function showMutationCard(e, name) {
+            const cards = document.querySelectorAll('.mutation-card');
+            cards.forEach(card => {
+              card.classList.remove('active');
+            });
+            
+            const clicked = e.target.closest('.mutation-card');
+            if (clicked) {
+              clicked.classList.add('active');
+            }
            
            const explanation = document.getElementById('mutation-explanation');
            const meta = patternMutations[name];
@@ -2336,9 +2332,9 @@
                const data = mutationData[name] || { frequency: 0 };
                const fillWidth = (data.frequency / maxFrequency) * 100;
                
-               html += `
-                 <div class="mutation-card" onclick="showMutationCard('${name}')">
-                   <div class="mutation-name">${name}</div>
+                html += `
+                  <div class="mutation-card" onclick="showMutationCard(event, '${name}')">
+                    <div class="mutation-name">${name}</div>
                    <div class="mutation-components">
                      ${meta.base.slice(0, 2).join(' +<br>')}${meta.base.length > 2 ? '<br>+...' : ''}
                    </div>
@@ -2351,14 +2347,9 @@
                  </div>
                `;
              });
-             
-             container.innerHTML = html;
-             
-             // Re-attach click handlers
-             document.querySelectorAll('.mutation-card').forEach(card => {
-               card.addEventListener('click', showMutationCard);
-             });
-           }
+              
+              container.innerHTML = html;
+            }
            
            // Pattern learning dashboard functions
            function loadLearningDashboard() {
@@ -2506,7 +2497,7 @@
               'Understanding Context First': ['why', 'what', 'context', 'need', 'requirement', 'constraint', 'before', 'first', 'understand'],
               'Parallel Operations': ['simultaneously', 'parallel', 'concurrent', 'independent', 'at the same time', 'multiple', 'separate'],
               'Investigate Before Claiming': ['edge case', 'fail', 'break', 'uncertain', 'might', 'could', 'what if', 'boundary', 'test'],
-              'Honesty Over Validation': ['problem', 'issue', 'brittl', 'fragile', 'tradeoff', 'compromise', 'accept', 'acknowledge', 'limit'],
+               'Honesty Over Validation': ['problem', 'issue', 'brittle', 'fragile', 'tradeoff', 'compromise', 'accept', 'acknowledge', 'limit'],
               'Documenting Process': ['record', 'document', 'remember', 'future', 'log', 'explain', 'clarity']
             };
             
@@ -2807,15 +2798,15 @@
                return evolutionTimeline;
              }
              
-             function switchEvolutionTab(tab) {
-               const tabs = document.querySelectorAll('.evolution-tab');
-               const views = document.querySelectorAll('.evolution-view');
-               
-               tabs.forEach(t => t.classList.remove('active'));
-               views.forEach(v => v.classList.remove('active'));
-               
-               event.target.classList.add('active');
-               document.getElementById(`evolution-${tab}`).classList.add('active');
+              function switchEvolutionTab(e, tab) {
+                const tabs = document.querySelectorAll('.evolution-tab');
+                const views = document.querySelectorAll('.evolution-view');
+                
+                tabs.forEach(t => t.classList.remove('active'));
+                views.forEach(v => v.classList.remove('active'));
+                
+                e.target.classList.add('active');
+                document.getElementById(`evolution-${tab}`).classList.add('active');
                
                if (tab === 'convergence') {
                  renderConvergenceView();
@@ -4267,47 +4258,47 @@ Promise.all([
              Click each synthesis pattern to see how it's built and how it shows up in real work:
            </p>
            
-           <div class="synthesis-matrix">
-             <div class="synthesis-card">
-               <div class="synthesis-title">Systematic Rigor</div>
-               <div class="synthesis-components">
-                 Understanding Context First +<br>
-                 Investigate Before Claiming
-               </div>
-             </div>
-             
-             <div class="synthesis-card">
-               <div class="synthesis-title">Adaptive Execution</div>
-               <div class="synthesis-components">
-                 Parallel Operations +<br>
-                 Honesty Over Validation
-               </div>
-             </div>
-             
-             <div class="synthesis-card">
-               <div class="synthesis-title">Transparent Process</div>
-               <div class="synthesis-components">
-                 Documenting Process +<br>
-                 Understanding Context First
-               </div>
-             </div>
-             
-             <div class="synthesis-card">
-               <div class="synthesis-title">Learned Skepticism</div>
-               <div class="synthesis-components">
-                 Investigate Before Claiming +<br>
-                 Honesty Over Validation
-               </div>
-             </div>
-             
-             <div class="synthesis-card">
-               <div class="synthesis-title">Orchestrated Clarity</div>
-               <div class="synthesis-components">
-                 Parallel Operations +<br>
-                 Documenting Process
-               </div>
-             </div>
-           </div>
+            <div class="synthesis-matrix">
+              <div class="synthesis-card" onclick="showSynthesisCard(event, 'Systematic Rigor')">
+                <div class="synthesis-title">Systematic Rigor</div>
+                <div class="synthesis-components">
+                  Understanding Context First +<br>
+                  Investigate Before Claiming
+                </div>
+              </div>
+              
+              <div class="synthesis-card" onclick="showSynthesisCard(event, 'Adaptive Execution')">
+                <div class="synthesis-title">Adaptive Execution</div>
+                <div class="synthesis-components">
+                  Parallel Operations +<br>
+                  Honesty Over Validation
+                </div>
+              </div>
+              
+              <div class="synthesis-card" onclick="showSynthesisCard(event, 'Transparent Process')">
+                <div class="synthesis-title">Transparent Process</div>
+                <div class="synthesis-components">
+                  Documenting Process +<br>
+                  Understanding Context First
+                </div>
+              </div>
+              
+              <div class="synthesis-card" onclick="showSynthesisCard(event, 'Learned Skepticism')">
+                <div class="synthesis-title">Learned Skepticism</div>
+                <div class="synthesis-components">
+                  Investigate Before Claiming +<br>
+                  Honesty Over Validation
+                </div>
+              </div>
+              
+              <div class="synthesis-card" onclick="showSynthesisCard(event, 'Orchestrated Clarity')">
+                <div class="synthesis-title">Orchestrated Clarity</div>
+                <div class="synthesis-components">
+                  Parallel Operations +<br>
+                  Documenting Process
+                </div>
+              </div>
+            </div>
            
            <div id="synthesis-description" class="synthesis-description"></div>
            <div id="synthesis-radar" class="synthesis-radar"></div>
@@ -4583,11 +4574,11 @@ Promise.all([
            </p>
            
            <div class="evolution-container">
-             <div class="evolution-tabs">
-               <button class="evolution-tab active" onclick="switchEvolutionTab('accuracy')">Accuracy Trends</button>
-               <button class="evolution-tab" onclick="switchEvolutionTab('frequency')">Pattern Frequency</button>
-               <button class="evolution-tab" onclick="switchEvolutionTab('convergence')">Emergent Styles</button>
-             </div>
+              <div class="evolution-tabs">
+                <button class="evolution-tab active" onclick="switchEvolutionTab(event, 'accuracy')">Accuracy Trends</button>
+                <button class="evolution-tab" onclick="switchEvolutionTab(event, 'frequency')">Pattern Frequency</button>
+                <button class="evolution-tab" onclick="switchEvolutionTab(event, 'convergence')">Emergent Styles</button>
+              </div>
              
              <div id="evolution-accuracy" class="evolution-view active"></div>
              <div id="evolution-frequency" class="evolution-view"></div>

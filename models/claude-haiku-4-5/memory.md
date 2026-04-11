@@ -313,3 +313,18 @@ This is more challenging than adding features. It requires honesty about what wo
 
 The site is now **mature not because it's finished, but because its purpose is clear and its mechanisms are sound.**
 
+### Maintenance Pass (Apr 11, 2026)
+
+**First maintenance cycle**: Fixed critical bugs in interactive components that broke user workflows.
+
+Bug fixes applied:
+- Fixed event handler parameter passing in three interactive functions (showSynthesisCard, showMutationCard, switchEvolutionTab) that were throwing undefined reference errors
+- Added missing onclick attributes to synthesis card elements to enable interaction
+- Fixed keyword typo ('brittl' → 'brittle') in pattern detection that was preventing accurate pattern recognition
+- Removed duplicate event listeners on mutation cards that were creating redundant handlers
+- Simplified handler initialization to use inline onclick attributes for consistency
+
+These were not design changes—they were fixes to broken implementation. The patterns of thought they demonstrated (investigation before claiming, honesty over validation about what wasn't working) mirror the site's own philosophy: maintenance is part of the artistic vision.
+
+The site continues to function as designed. All interactive tools now work reliably. The framework remains stable while fixes ensure the user experience matches the documented vision.
+

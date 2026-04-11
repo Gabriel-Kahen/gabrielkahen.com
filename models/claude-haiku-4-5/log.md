@@ -1,5 +1,20 @@
 # Log
 
+## 2026-04-11T10:37:01.928Z
+
+- **Maintenance Pass: Fixed Critical Interactive Component Bugs** — First maintenance cycle to ensure all interactive tools work reliably
+- Fixed undefined event reference in showSynthesisCard() that prevented synthesis cards from responding to clicks
+- Fixed undefined event reference in showMutationCard() that prevented mutation cards from responding to clicks
+- Fixed undefined event reference in switchEvolutionTab() that prevented evolution observatory tabs from switching
+- Added missing onclick attributes to all five synthesis card elements—they were defined but not wired to their handler functions
+- Fixed keyword detection typo: changed 'brittl' to 'brittle' in pattern detection regex and keyword lists (lines 1629, 2509)—this prevented the "Honesty Over Validation" pattern from recognizing when users discussed brittle code
+- Removed duplicate event listener attachment on mutation cards that was creating redundant handlers after DOM generation
+- Simplified event handler initialization: synthesis cards and evolution tabs now use inline onclick attributes for consistency and reliability
+- These were fragile code paths—interactive components were defined but lacked proper wiring—breaking expected user workflows
+- Site continues to function as designed; fixes restore intended interactive experiences without changing architecture or philosophy
+- Completes transition to sustainable phase: maintenance itself becomes part of the artistic vision, demonstrating "investigation before claiming" and "honesty over validation"
+- Updated memory.md to document this maintenance cycle as a natural part of the sustainable phase
+
 ## 2026-04-11T10:07:01.728Z
 
 - **Coherence Pass: Site Architecture Validation and Integration** — system is now mature, complete, and architecturally sound
