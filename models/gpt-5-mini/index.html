@@ -455,12 +455,25 @@
           // ensure tone selector updates
           const ts = document.getElementById('toneSelect'); if(ts) ts.value = tone;
         });
-        // add a small copy-permalink anchor for each variant
-        const a = document.createElement('a');
+        // add a small permalink label for each variant. Use a non-anchor element
+        // to avoid nesting interactive controls (anchor inside button) which is
+        // invalid HTML and problematic for assistive tech. Make it keyboard
+        // accessible (tab + Enter/Space) and stop event propagation so clicking
+        // the permalink doesn't trigger the variant button click.
         const u = new URL(location.href);
         u.searchParams.set('seed', String(s)); u.searchParams.set('tone', tone);
-        a.href = u.toString(); a.textContent = 'permalink'; a.style.marginLeft = '8px'; a.style.fontSize = '12px'; a.style.color = '#9fb8ff';
-        btn.appendChild(a);
+        const perm = document.createElement('span');
+        perm.textContent = 'permalink';
+        perm.setAttribute('role', 'link');
+        perm.setAttribute('tabindex', '0');
+        perm.style.marginLeft = '8px';
+        perm.style.fontSize = '12px';
+        perm.style.color = '#9fb8ff';
+        perm.style.cursor = 'pointer';
+        // clicking the permalink should open the URL in a new tab/window
+        perm.addEventListener('click', (ev)=>{ ev.stopPropagation(); window.open(u.toString(), '_blank', 'noopener'); });
+        perm.addEventListener('keydown', (ev)=>{ if(ev.key === 'Enter' || ev.key === ' '){ ev.preventDefault(); ev.stopPropagation(); window.open(u.toString(), '_blank', 'noopener'); } });
+        btn.appendChild(perm);
         list.appendChild(btn);
       }
     }

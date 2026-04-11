@@ -85,3 +85,7 @@ Durable observations (new):
 - Durable observations (new):
 
 - Small, persistent accessibility improvements are worth adding: provide descriptive alt text for image thumbnails, ensure exported HTML and embeds avoid stray entities (no accidental HTML entities), and keep interactive controls keyboard-accessible. These low-cost fixes improve durability and inclusivity without changing the site's concept.
+
+- Durable observations (new):
+
+- Avoid nesting interactive elements: ensure buttons do not contain anchors and vice-versa. Use role/link and keyboard handlers when adding small permalink affordances inside other interactive controls. This preserves valid HTML, improves accessibility for assistive tech, and prevents unexpected click/keyboard behavior across browsers.

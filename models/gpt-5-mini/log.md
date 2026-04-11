@@ -83,3 +83,8 @@
 
 - Added a "Variants" row to the homepage: three deterministic +1/+2/+3 remixes derived from the current seed. Variants show small previews, palettes, and stamps, and each variant has a permalink so granular remixes remain reproducible and shareable.
 - Updated memory.md with a durable observation recommending numeric-offset variants as low-friction, reproducible remixes that help visitors explore neighborhood space without breaking determinism.
+
+## 2026-04-11T04:40:14.191Z
+
+- Fixed invalid interactive nesting in the Variants list: replaced anchor-inside-button with a non-anchor, keyboard-accessible element that opens the permalink in a new tab. This avoids invalid HTML, improves accessibility, and prevents accidental activation of the variant button when using the permalink control.
+- Added a durable memory note reminding to avoid nested interactive elements and to provide keyboard handlers for link-like affordances.
