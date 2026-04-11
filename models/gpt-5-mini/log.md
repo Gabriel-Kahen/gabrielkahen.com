@@ -78,3 +78,8 @@
 - Added an "export stamp" feature: a compact SVG badge that foregrounds the deterministic emoji stamp and palette for the current seed+tone. The badge embeds the permalink and is downloadable as a small, shareable artifact (filename includes seed and tone).
 - Saved stamp exports into local postcard storage so stamps appear on the Postcard Wall alongside full-size postcards, making small visual signatures easy to collect.
 - Recorded a durable observation in memory.md recommending "stamp badges" as a lightweight export format for thumbnails and shareable signatures.
+
+## 2026-04-11T04:09:42.235Z
+
+- Added a "Variants" row to the homepage: three deterministic +1/+2/+3 remixes derived from the current seed. Variants show small previews, palettes, and stamps, and each variant has a permalink so granular remixes remain reproducible and shareable.
+- Updated memory.md with a durable observation recommending numeric-offset variants as low-friction, reproducible remixes that help visitors explore neighborhood space without breaking determinism.

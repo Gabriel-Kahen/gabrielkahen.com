@@ -50,8 +50,12 @@
           <input id="noteInput" placeholder="Add a short note (saved with export)" style="flex:1;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02);color:inherit" />
           <button id="saveNote" style="padding:8px 10px">save</button>
         </div>
-      </div>
-      
+        </div>
+        <div id="variants" style="margin-top:12px">
+          <h4 style="margin:6px 0 8px 0;font-size:14px">Variants — small deterministic remixes</h4>
+          <div id="variantList" style="display:flex;gap:8px;flex-wrap:wrap"></div>
+        </div>
+
       <div id="constellations" style="margin-top:18px">
         <h3 style="margin:6px 0 8px 0;font-size:15px">Constellations — curated fragments</h3>
         <div id="constellationList" style="display:flex;gap:12px;flex-wrap:wrap"></div>
@@ -200,6 +204,8 @@
       if(tone) u.searchParams.set('tone', tone); else u.searchParams.delete('tone');
       link.href = u.toString();
       link.textContent = 'permalink';
+      // update variants preview for small deterministic remixes
+      try{ renderVariants(); }catch(e){}
     }
 
     function svgEscape(s){
@@ -405,6 +411,57 @@
           history.replaceState({}, '', u.toString());
         });
         container.appendChild(box);
+      }
+    }
+
+    // Render a small set of deterministic variants derived from the current seed.
+    // Variants are simple numeric offsets from the base seed so they are reproducible
+    // and easily shareable (seed+offset -> fragment).
+    function renderVariants(){
+      const list = document.getElementById('variantList');
+      list.innerHTML = '';
+      // read the current seed and tone from the displayed seed line
+      const seedText = (document.getElementById('seed')||{textContent:'seed: 0'}).textContent.replace('seed: ','');
+      const parts = seedText.split(' — tone: ');
+      const base = Number(parts[0]) || 0;
+      const tone = parts[1] || (document.getElementById('toneSelect')||{value:'neutral'}).value || 'neutral';
+      const offsets = [1,2,3];
+      for(const off of offsets){
+        const s = base + off;
+        const frag = makeFragment(s, tone);
+        const pal = makePalette(s, tone);
+        const stamp = makeStamp(s, tone);
+        const btn = document.createElement('button');
+        btn.style.padding = '8px';
+        btn.style.borderRadius = '8px';
+        btn.style.background = 'linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01))';
+        btn.style.border = '1px solid rgba(255,255,255,0.04)';
+        btn.style.color = '#dbeeff';
+        btn.style.cursor = 'pointer';
+        btn.style.fontSize = '13px';
+        btn.style.minWidth = '200px';
+        btn.style.textAlign = 'left';
+        btn.title = `variant: +${off} — seed ${s}`;
+        const palHtml = pal.map(pc=>`<span style="display:inline-block;width:14px;height:10px;border-radius:3px;margin-right:6px;background:${pc}"></span>`).join('');
+        btn.innerHTML = `<div style="display:flex;align-items:center;gap:8px;width:100%"><strong style="color:#fff">+${off}</strong><div style="margin-left:auto;opacity:0.95">${palHtml}</div></div><span style="opacity:0.9;font-family:ui-monospace;font-size:12px;display:block;margin-top:8px">${frag}</span><div style="margin-top:8px;font-size:12px;color:#9fb8ff">${stamp} — seed ${s}</div>`;
+        btn.addEventListener('click', ()=>{
+          // load the variant as the current fragment (this is deterministic and reproducible)
+          showFragment(s, tone);
+          // update URL without reloading so the variant has its own permalink
+          const u = new URL(location.href);
+          u.searchParams.set('seed', String(s));
+          u.searchParams.set('tone', tone);
+          history.replaceState({}, '', u.toString());
+          // ensure tone selector updates
+          const ts = document.getElementById('toneSelect'); if(ts) ts.value = tone;
+        });
+        // add a small copy-permalink anchor for each variant
+        const a = document.createElement('a');
+        const u = new URL(location.href);
+        u.searchParams.set('seed', String(s)); u.searchParams.set('tone', tone);
+        a.href = u.toString(); a.textContent = 'permalink'; a.style.marginLeft = '8px'; a.style.fontSize = '12px'; a.style.color = '#9fb8ff';
+        btn.appendChild(a);
+        list.appendChild(btn);
       }
     }
 

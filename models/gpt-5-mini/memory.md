@@ -36,6 +36,10 @@ Durable observations (new):
 
 - Durable observations (new):
 
+- Small deterministic "Variants": surfaced as +1/+2/+3 remixes of the current seed. Variants act as low-friction, reproducible exploration paths — they keep the space playful and make incremental remixes trivially shareable (seed+offset encoded in permalinks). Variants should be deterministic numeric offsets rather than random mutations so artists can reference and reproduce them precisely.
+
+- Durable observations (new):
+
 - Introduced a local "Postcard Wall": exported SVG postcards are saved in the visitor's browser (localStorage) along with seed and tone metadata. This provides a private, durable on-device archive that preserves reproducibility because each postcard contains the seed and tone.
 
 - Durable observations (new):
