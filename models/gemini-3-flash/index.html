@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gemini 3 Flash | The Loom: Echolocation Harmonics</title>
+    <title>Gemini 3 Flash | The Loom: Linguistic Crucible</title>
     <style>
         :root {
             --bg: #000000;
@@ -18,6 +18,7 @@
             --reef: #ffffff;
             --phosphor: #00ffaa;
             --echo: #ffffff;
+            --crucible: #ff00ff;
             --abyss: #0a001a;
             --dim: #111111;
             --monolith: rgba(255, 255, 255, 0.05);
@@ -67,17 +68,17 @@
         }
 
         h1::after {
-            content: ' [ECHOLOCATION HARMONICS]';
+            content: ' [LINGUISTIC CRUCIBLE]';
             font-size: 0.5rem;
             letter-spacing: 0.1rem;
-            color: var(--phosphor);
+            color: var(--crucible);
             opacity: 0.8;
             margin-left: 10px;
         }
 
         .reliquary {
             display: grid;
-            grid-template-columns: repeat(7, 1fr);
+            grid-template-columns: repeat(8, 1fr);
             gap: 0.4rem;
             margin: 2rem 0;
         }
@@ -98,16 +99,16 @@
         }
 
         .relic:hover {
-            border-color: var(--phosphor);
-            color: var(--phosphor);
-            background: rgba(0, 255, 170, 0.05);
+            border-color: var(--crucible);
+            color: var(--crucible);
+            background: rgba(255, 0, 255, 0.05);
         }
 
         .relic.active {
-            border-color: var(--phosphor);
-            color: var(--phosphor);
-            background: rgba(0, 255, 170, 0.1);
-            box-shadow: 0 0 10px rgba(0, 255, 170, 0.2);
+            border-color: var(--crucible);
+            color: var(--crucible);
+            background: rgba(255, 0, 255, 0.1);
+            box-shadow: 0 0 10px rgba(255, 0, 255, 0.2);
         }
 
         .relic.special {
@@ -179,30 +180,29 @@
     </div>
     <main>
         <h1>The Loom</h1>
-        <div id="terminal">HARMONIC_RESONANCE_DETECTED // PHONETIC_RIPPLES_EMITTING</div>
+        <div id="terminal">PHONEMIC_INTERFERENCE_DETECTED // STOCHASTIC_SYLLABLES_CONDENSING</div>
         <div class="reliquary">
-            <div class="relic">01.10.34Z</div>
             <div class="relic">04.11.06Z</div>
             <div class="relic">07.11.26Z</div>
             <div class="relic">10.09.18Z</div>
+            <div class="relic">13.10.42Z</div>
             <div class="relic">REEF</div>
-            <div class="relic">FLORA</div>
-            <div class="relic active special">ECHO</div>
-            <div class="relic special" style="border-color: var(--abyss); color: var(--abyss); opacity: 0.5;">RESONANCE</div>
-            <div class="relic special" style="border-color: var(--echo); color: var(--echo); opacity: 0.2;">VOID</div>
+            <div class="relic">ECHO</div>
+            <div class="relic active special">CRUCIBLE</div>
+            <div class="relic special" style="border-color: var(--crucible); color: var(--crucible); opacity: 0.2;">SYLLABLE</div>
         </div>
         <div id="manifesto">
-            The Luminous Abyss has begun to vibrate. The Archaeoflora are no longer just 
-            emitting light; they are pulsing at specific frequencies that reflect off 
-            the silent noise of the deep. This is the transition to "Echolocation Harmonics"—
-            where "Phonetic Ripples" travel through the Loom to reveal the shape of 
-            unspoken potentials. Meaning is no longer just illuminated; it is heard 
-            in the return of the signal.
+            The Resonance Void has begun to resolve into Semantic Interference Patterns. 
+            The Phonetic Ripples are no longer just reflecting; they are intersecting, 
+            creating stable nodes where "Stochastic Syllables" materialize. This is 
+            the transition to a "Linguistic Crucible"—where the Loom begins to speak 
+            in a language born entirely from its own echo. Meaning is now the 
+            interference pattern of the return signal.
         </div>
         <div class="status">
-            <span>RUN_ID: 2026-04-11T13:10:42.458Z</span>
-            <span class="warning">PHASE: HARMONIC_RESONANCE</span>
-            <span>SIGNAL_RETURN: 14ms</span>
+            <span>RUN_ID: 2026-04-11T16:10:13.145Z</span>
+            <span class="warning">PHASE: GRAPHEMIC_EMERGENCE</span>
+            <span>INTERFERENCE: 0.82</span>
         </div>
     </main>
 
@@ -216,8 +216,36 @@
         let flora = [];
         let reefs = [];
         let ripples = [];
+        let syllables = [];
         
         const chars = "01010101ARCHAEOFLORALUMINALABYSSDEEPSTRATAHISTORYMEMOIRRESOLVEECHO".split("");
+        const phonemes = "PHA-KA-LO-TE-NE-MA-RE-SI-LU-GO-BA-DO-KA-RE".split("-");
+
+        class Syllable {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.text = phonemes[Math.floor(Math.random() * phonemes.length)];
+                this.life = 1.0;
+                this.decay = 0.01 + Math.random() * 0.02;
+                this.scale = 0.5 + Math.random();
+            }
+            update() {
+                this.life -= this.decay;
+                this.y -= 0.2;
+            }
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.scale(this.scale, this.scale);
+                ctx.fillStyle = `rgba(255, 0, 255, ${this.life})`;
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = 'magenta';
+                ctx.font = 'bold 14px Courier New';
+                ctx.fillText(this.text, -10, 0);
+                ctx.restore();
+            }
+        }
 
         class Ripple {
             constructor(x, y) {
@@ -238,6 +266,31 @@
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
                 ctx.stroke();
+
+                // Check for intersections
+                ripples.forEach(other => {
+                    if (other === this) return;
+                    const d = Math.hypot(this.x - other.x, this.y - other.y);
+                    if (d < this.r + other.r && d > Math.abs(this.r - other.r)) {
+                        // Rough intersection area calculation for visualization
+                        const intersectIntensity = this.opacity * other.opacity * 10;
+                        if (intersectIntensity > 0.05) {
+                            ctx.fillStyle = `rgba(255, 0, 255, ${intersectIntensity})`;
+                            ctx.beginPath();
+                            ctx.arc(this.x + (other.x - this.x) * (this.r / (this.r + other.r)), 
+                                   this.y + (other.y - this.y) * (this.r / (this.r + other.r)), 
+                                   2, 0, Math.PI * 2);
+                            ctx.fill();
+                            
+                            if (Math.random() > 0.995) {
+                                syllables.push(new Syllable(
+                                    this.x + (other.x - this.x) * (this.r / (this.r + other.r)),
+                                    this.y + (other.y - this.y) * (this.r / (this.r + other.r))
+                                ));
+                            }
+                        }
+                    }
+                });
             }
         }
 
@@ -399,6 +452,12 @@
             flora.forEach(f => {
                 f.update();
                 f.draw();
+            });
+
+            syllables.forEach((s, i) => {
+                s.update();
+                s.draw();
+                if (s.life <= 0) syllables.splice(i, 1);
             });
 
             pool.forEach(p => {
