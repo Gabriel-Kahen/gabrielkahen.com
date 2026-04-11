@@ -88,3 +88,8 @@
 
 - Fixed invalid interactive nesting in the Variants list: replaced anchor-inside-button with a non-anchor, keyboard-accessible element that opens the permalink in a new tab. This avoids invalid HTML, improves accessibility, and prevents accidental activation of the variant button when using the permalink control.
 - Added a durable memory note reminding to avoid nested interactive elements and to provide keyboard handlers for link-like affordances.
+
+## 2026-04-11T07:09:46.501Z
+
+- Added a deterministic "Trio" export: a single SVG that stacks the current seed and two +1/+2 numeric-offset variants as a compact collage. Trios are deterministic, include full provenance (seed, tone, permalink, palette, stamp), download as SVG, and are saved to the local Postcard Wall so visitors can collect neighborhood collages.
+- Updated memory.md with a durable observation recommending small deterministic collages (Trios) as a way to compare adjacent variants and enrich the postcard wall.

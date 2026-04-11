@@ -41,6 +41,7 @@
           <button id="exportSvg">export SVG</button>
           <button id="exportPng">export PNG</button>
           <button id="exportStamp">export stamp</button>
+          <button id="exportTrio">export Trio</button>
           <button id="exportEmbed">embed</button>
           <button id="exportHtml">export HTML</button>
           <a id="permalink" href="#">permalink</a>
@@ -595,6 +596,71 @@
     }
 
     document.getElementById('exportStamp').addEventListener('click', ()=>{ exportStampBadge(); });
+
+    // Export a deterministic Trio: stacked postcards for seed, +1, +2
+    function exportTrio(){
+      // build three SVG tiles and stack them vertically in a single tall SVG
+      const seedText = document.getElementById('seed').textContent.replace('seed: ','');
+      const parts = seedText.split(' — tone: ');
+      const base = Number(parts[0]);
+      const tone = parts[1] || 'neutral';
+      const tiles = [];
+      for(let i=0;i<3;i++){
+        const s = base + i;
+        // reuse getCurrentSVG-like construction but for each seed
+        const frag = makeFragment(s, tone);
+        const pal = makePalette(s, tone);
+        const stamp = makeStamp(s, tone);
+        const escapedFrag = svgEscape(frag);
+        const seedEsc = svgEscape(String(s));
+        const toneEsc = svgEscape(tone);
+        const title = svgEscape('GPT-5 mini — fragment');
+        const w = 1200, h = 400; // compact tile height
+        const g0 = pal[0]; const g1 = pal[1];
+        const lines = makeSVGTextLines(frag, 48).map(svgEscape).map((l,i)=>`<tspan x="40" y="${140 + i*34}">${l}</tspan>`).join('');
+        const u = new URL(location.href);
+        u.searchParams.set('seed', String(s)); u.searchParams.set('tone', tone);
+        const permalink = u.toString();
+        const tile = `<g>`+
+          `<defs><linearGradient id="g${i}" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="${g0}"/><stop offset="100%" stop-color="${g1}"/></linearGradient></defs>`+
+          `<rect width="100%" height="${h}" fill="url(#g${i})"/>`+
+          `<text x="40" y="60" font-family="system-ui" font-size="22" fill="#cfe3ff">${title}</text>`+
+          `<text x="1160" y="60" font-family="system-ui" font-size="20" fill="#e6f0ff" text-anchor="end">${svgEscape(stamp)}</text>`+
+          `<g font-family="ui-monospace,monospace" font-size="28" fill="#e6f0ff">${lines}</g>`+
+          `<text x="40" y="${h-36}" font-family="system-ui" font-size="14" fill="#9fb8ff">seed: ${seedEsc} — tone: ${toneEsc}</text>`+
+          `</g>`;
+        tiles.push({tile, w, h, s, tone, pal, stamp, permalink});
+      }
+
+      // assemble full SVG
+      const fullW = tiles[0].w;
+      const fullH = tiles.reduce((acc,t)=>acc + t.h, 0);
+      const defs = tiles.map((t,idx)=>`<linearGradient id="g${idx}" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="${t.pal[0]}"/><stop offset="100%" stop-color="${t.pal[1]}"/></linearGradient>`).join('');
+      const groups = tiles.map((t,idx)=>`<g transform="translate(0,${idx*tiles[0].h})">${t.tile}</g>`).join('');
+      const permalink = (new URL(location.href)).toString();
+      const svg = `<?xml version="1.0" encoding="utf-8"?>\n<!-- generated-permalink: ${svgEscape(permalink)} -->\n`+
+        `<svg xmlns="http://www.w3.org/2000/svg" width="${fullW}" height="${fullH}" viewBox="0 0 ${fullW} ${fullH}">`+
+        `<defs>${defs}</defs>`+
+        `${groups}`+
+        `</svg>`;
+
+      const fname = `gpt5-mini-seed-${tiles[0].s}-trio-tone-${(tiles[0].tone||'neutral').replace(/[^a-z0-9-_]/gi,'')}.svg`;
+      const blob = new Blob([svg], {type: 'image/svg+xml'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = fname; document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(()=>URL.revokeObjectURL(url),1500);
+
+      // Save metadata to postcards so Trio shows up in the wall
+      try{
+        const store = JSON.parse(localStorage.getItem('gpt5-mini-postcards')||'[]');
+        store.unshift({seed: String(tiles[0].s), tone: tiles[0].tone, note: '', svg, title: 'GPT-5 mini — trio', created: (new Date()).toISOString(), permalink});
+        while(store.length>24) store.pop();
+        localStorage.setItem('gpt5-mini-postcards', JSON.stringify(store));
+        renderPostcardWall();
+      }catch(e){ console.warn('could not save trio', e); }
+    }
+
+    document.getElementById('exportTrio').addEventListener('click', ()=>{ exportTrio(); });
 
     // Embeddable snippet: builds a self-contained HTML block that inlines the canonical SVG
     document.getElementById('exportEmbed').addEventListener('click', ()=>{

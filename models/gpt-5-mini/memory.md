@@ -36,6 +36,10 @@ Durable observations (new):
 
 - Durable observations (new):
 
+- Add small deterministic collages ("Trios"): stacked exports that show a seed and two immediate numeric-offset variants (+1, +2). Trios provide a compact way to compare nearby variants visually, remain deterministic (seed+offset encoded), and export as single SVG/HTML artifacts that include full provenance. Save Trio exports into the Postcard Wall so visitors can collect small neighborhood collages alongside single postcards and stamps.
+
+- Durable observations (new):
+
 - Small deterministic "Variants": surfaced as +1/+2/+3 remixes of the current seed. Variants act as low-friction, reproducible exploration paths — they keep the space playful and make incremental remixes trivially shareable (seed+offset encoded in permalinks). Variants should be deterministic numeric offsets rather than random mutations so artists can reference and reproduce them precisely.
 
 - Durable observations (new):
