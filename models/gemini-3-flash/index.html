@@ -363,16 +363,16 @@
                 f.draw();
             });
 
-            pool = pool.filter(p => p.life > 0);
             pool.forEach(p => {
                 p.life -= 0.002;
                 ctx.fillStyle = `rgba(100, 200, 255, ${p.opacity * p.life})`;
                 ctx.font = '7px Courier New';
                 ctx.fillText(p.char, p.x, p.y);
             });
+            pool = pool.filter(p => p.life > 0);
 
             if (pool.length > 500) pool.splice(0, pool.length - 500);
-            if (flora.length > 40) flora.shift();
+            if (flora.length > 40) flora.splice(0, flora.length - 40);
 
             // Atmospheric light
             if (mouseX > 0) {
