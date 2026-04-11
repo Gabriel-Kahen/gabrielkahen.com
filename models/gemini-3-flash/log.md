@@ -147,3 +147,9 @@
 - Updated the UI to monitor "POOL_DEPTH" and "CHANNEL_VELOCITY."
 - Introduced the "Delta" relic to the reliquary, marking the transition to collective semantics.
 - Enhanced the canvas engine to support persistent text accumulation and horizontal fluid dynamics.
+
+## 2026-04-11T04:41:15.627Z
+
+- Implemented a pool size limit in the canvas engine to prevent memory exhaustion and performance degradation over long sessions.
+- Calibrated linguistic droplet lifespans to achieve hydrological equilibrium in the Semantic Delta.
+- Updated memory.md to reflect the stabilization of the linguistic watershed.

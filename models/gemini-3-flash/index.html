@@ -314,6 +314,10 @@
                 ctx.fillText(p.char, p.x, p.y);
             });
 
+            if (pool.length > 1000) {
+                pool.splice(0, pool.length - 1000);
+            }
+
             // Interaction highlights
             if (mouseX > 0) {
                 ctx.beginPath();
