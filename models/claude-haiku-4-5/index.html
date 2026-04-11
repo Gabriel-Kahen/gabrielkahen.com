@@ -3288,8 +3288,122 @@
                 document.getElementById('philosophy-emergence').style.display = 'none';
                 window.archaeologyData = null;
               }
+              
+              // Pattern Predictor functions
+              function savePrediction() {
+                const problem = document.getElementById('predictor-problem').value.trim();
+                const checkboxes = document.querySelectorAll('.predictor-checkbox:checked');
+                
+                if (!problem) {
+                  alert('Please describe your decision');
+                  return;
+                }
+                
+                if (checkboxes.length === 0) {
+                  alert('Please predict which patterns will be active');
+                  return;
+                }
+                
+                const predicted = Array.from(checkboxes).map(cb => cb.value);
+                
+                // Save to temporary state
+                window.predictorState = {
+                  problem: problem,
+                  predicted: predicted,
+                  timestamp: new Date().toISOString()
+                };
+                
+                // Show saved stage
+                document.getElementById('predictor-stage-input').style.display = 'none';
+                document.getElementById('predictor-stage-saved').style.display = 'block';
+                document.getElementById('predictor-saved-problem').textContent = problem;
+                document.getElementById('predictor-saved-patterns').innerHTML = 
+                  'Predicted patterns: ' + predicted.map(p => `<span class="pattern-reference">${p}</span>`).join(' ');
+              }
+              
+              function compareWithReality() {
+                const reflection = document.getElementById('predictor-reflection').value.trim();
+                
+                if (!reflection) {
+                  alert('Please describe what actually happened');
+                  return;
+                }
+                
+                if (!window.predictorState) {
+                  alert('No prediction found. Start over.');
+                  return;
+                }
+                
+                // Detect patterns in reflection
+                const detected = detectPatterns(reflection).map(p => p.name);
+                
+                // Calculate accuracy
+                const correct = window.predictorState.predicted.filter(p => detected.includes(p));
+                const missed = window.predictorState.predicted.filter(p => !detected.includes(p));
+                const unexpected = detected.filter(p => !window.predictorState.predicted.includes(p));
+                
+                const accuracy = Math.round((correct.length / window.predictorState.predicted.length) * 100);
+                
+                // Save to predictions history
+                const predictions = JSON.parse(localStorage.getItem('patternPredictions') || '[]');
+                predictions.push({
+                  problem: window.predictorState.problem,
+                  predicted: window.predictorState.predicted,
+                  detected: detected,
+                  correct: correct.length,
+                  missed: missed.length,
+                  unexpected: unexpected.length,
+                  accuracy: accuracy,
+                  timestamp: new Date().toISOString()
+                });
+                localStorage.setItem('patternPredictions', JSON.stringify(predictions));
+                
+                // Update learning dashboard
+                loadLearningDashboard();
+                
+                // Show comparison
+                document.getElementById('predictor-stage-saved').style.display = 'none';
+                document.getElementById('predictor-stage-comparison').style.display = 'block';
+                
+                document.getElementById('comparison-predicted').innerHTML = 
+                  window.predictorState.predicted.map(p => `<div class="pattern-reference" style="display: inline-block; margin-right: 0.5rem; margin-bottom: 0.5rem;">${p}</div>`).join('');
+                
+                document.getElementById('comparison-detected').innerHTML = 
+                  detected.map(p => `<div class="pattern-reference" style="display: inline-block; margin-right: 0.5rem; margin-bottom: 0.5rem;">${p}</div>`).join('');
+                
+                let insights = `<div style="color: #60a5fa; font-weight: 500; margin-bottom: 0.75rem;">Your Accuracy: ${accuracy}%</div>`;
+                
+                if (correct.length > 0) {
+                  insights += `<div style="color: #86efac; margin-bottom: 0.5rem;"><strong>✓ You predicted:</strong> ${correct.join(', ')}</div>`;
+                }
+                if (missed.length > 0) {
+                  insights += `<div style="color: #fbbf24; margin-bottom: 0.5rem;"><strong>✗ You missed:</strong> ${missed.join(', ')}</div>`;
+                }
+                if (unexpected.length > 0) {
+                  insights += `<div style="color: #93c5fd; margin-bottom: 0.5rem;"><strong>? Unexpected:</strong> ${unexpected.join(', ')}</div>`;
+                }
+                
+                document.getElementById('comparison-insights').innerHTML = insights;
+              }
+              
+              function resetPredictor() {
+                document.getElementById('predictor-stage-input').style.display = 'block';
+                document.getElementById('predictor-stage-saved').style.display = 'none';
+                document.getElementById('predictor-stage-comparison').style.display = 'none';
+                
+                document.getElementById('predictor-problem').value = '';
+                document.getElementById('predictor-reflection').value = '';
+                document.querySelectorAll('.predictor-checkbox').forEach(cb => cb.checked = false);
+                
+                window.predictorState = null;
+              }
+              
+              function savePredictionResult() {
+                alert('Prediction cycle saved! Your accuracy and pattern recognition data have been recorded in your learning dashboard.');
+                resetPredictor();
+              }
           
-        </script>
+         </script>
 </head>
 <body>
   <main>
@@ -3537,7 +3651,6 @@
           </div>
         </div>
       </div>
-      </div>
       
       <div class="section">
         <h2>Reflection Mirror</h2>
@@ -3747,7 +3860,7 @@ Promise.all([
             </div>
             
             <div style="margin-bottom: 1rem;">
-              <label style="color: #a78bfa; font-size: 0.9rem; display: block; margin-bottom: 0.5rem;">
+              <label for="collection-note" style="color: #a78bfa; font-size: 0.9rem; display: block; margin-bottom: 0.5rem;">
                 Add a note about where you see these patterns (optional):
               </label>
               <textarea id="collection-note" class="mirror-input" style="min-height: 60px;" placeholder="E.g., 'I use parallel operations when building microservices'"></textarea>

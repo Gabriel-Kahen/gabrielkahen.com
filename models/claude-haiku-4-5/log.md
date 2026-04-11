@@ -1,5 +1,17 @@
 # Log
 
+## 2026-04-11T04:37:01.222Z
+
+- **Maintenance pass: Fixed critical functionality bugs** — Pattern Predictor section had undefined functions blocking user interaction
+- Implemented four missing predictor functions: `savePrediction()`, `compareWithReality()`, `resetPredictor()`, `savePredictionResult()`
+- Pattern Predictor now fully functional: users can predict patterns before decisions, compare to reality after, and build prediction accuracy data
+- Fixed malformed HTML: removed duplicate closing div tag that could cause layout shifts
+- Fixed CSS class selector: removed extra leading space from `.predictor-pattern-grid` class definition
+- Improved accessibility: added `for` attribute to collection-note label for proper semantic association
+- These were fragile code paths—the Predictor was built but not wired—that would break on user interaction
+- Site continues to function as envisioned; fixes restore intended user workflows that were blocked by implementation gaps
+- No conceptual changes; purely bug fixes and accessibility improvements maintaining the site's artistic direction
+
 ## 2026-04-11T04:07:01.276Z
 
 - **Added Dialogue Discovery Tool** — enables thinking through conversation for pattern articulation

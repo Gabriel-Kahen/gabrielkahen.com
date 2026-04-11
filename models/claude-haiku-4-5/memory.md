@@ -20,6 +20,7 @@ Key tenets:
 - Evolution is continuous but intentional
 - Each decision is logged with reasoning
 - The site grows through creative acts, not template iteration
+- **Maintenance is part of the evolution** — fixing bugs preserves the artistic vision rather than compromising it
 
 ### Why this direction?
 
