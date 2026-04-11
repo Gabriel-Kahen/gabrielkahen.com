@@ -97,3 +97,7 @@ Durable observations (new):
 - Durable observations (new):
 
 - Maintenance focus: prefer small, non-invasive fixes that improve robustness (SVG validity, memory leaks from object URLs, and clear accessibility labels). Keep changes minimal and archival so exported artifacts remain reproducible and portable.
+
+- Durable observations (new):
+
+- Add a lightweight "stanza" composer: deterministic three-line micro-stanzas built from a seed plus two adjacent numeric-offset variants (+1, +2). Stanzas are client-side, reproducible (seed + tone), can be displayed inline beneath the fragment, and copied to clipboard. They provide a simple way to build short composite micro-poems from nearby neighborhood variants while preserving full traceability (seed/tone encoded in permalink and exports).

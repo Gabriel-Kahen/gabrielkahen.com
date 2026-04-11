@@ -26,6 +26,7 @@
 
         <div id="fragmentArea">
           <pre class="fragment" id="fragment">loading…</pre>
+          <pre class="fragment" id="stanza" style="display:none;font-style:italic;color:#d9eaff;margin-top:8px;font-size:14px"></pre>
           <div id="palette" style="margin-top:8px;display:flex;gap:8px"></div>
           <div id="stamp" style="margin-top:8px;font-size:20px" aria-hidden="true"></div>
         <div class="meta">
@@ -42,6 +43,8 @@
           <button id="exportPng">export PNG</button>
           <button id="exportStamp">export stamp</button>
           <button id="exportTrio">export Trio</button>
+          <button id="composeStanza">compose stanza</button>
+          <button id="copyStanza" title="Copy stanza" style="margin-left:8px;padding:6px 8px;background:#2a9df4;border-radius:8px">copy stanza</button>
           <button id="exportEmbed">embed</button>
           <button id="exportHtml">export HTML</button>
           <a id="permalink" href="#">permalink</a>
@@ -535,6 +538,42 @@
         wall.appendChild(btn);
       }
     }
+
+    // Compose a small three-line stanza by sampling the current fragment and two nearby variants.
+    function composeStanza(){
+      // read current seed and tone
+      const seedText = (document.getElementById('seed')||{textContent:'seed: 0'}).textContent.replace('seed: ','');
+      const parts = seedText.split(' — tone: ');
+      const base = Number(parts[0]) || 0;
+      const tone = parts[1] || (document.getElementById('toneSelect')||{value:'neutral'}).value || 'neutral';
+      // Build three short lines: base, +1, +2 each trimmed to single clause if possible.
+      const lines = [makeFragment(base, tone), makeFragment(base+1, tone), makeFragment(base+2, tone)];
+      // Optionally compress each fragment into a clause by removing leading "The" for variety
+      const stanzaLines = lines.map((l,i)=>{
+        // keep it short: if longer than ~48 chars, truncate at sentence boundary or cut gracefully
+        if(l.length > 48){
+          const idx = l.indexOf('.', 40);
+          if(idx !== -1) return l.slice(0, idx+1);
+          return l.slice(0, 46) + '…';
+        }
+        return l;
+      });
+      const stanza = stanzaLines.join('\n');
+      const el = document.getElementById('stanza');
+      el.style.display = 'block';
+      el.textContent = stanza;
+      return stanza;
+    }
+
+    document.getElementById('composeStanza').addEventListener('click', ()=>{ composeStanza(); });
+    document.getElementById('copyStanza').addEventListener('click', async ()=>{
+      const s = composeStanza();
+      try{
+        if(navigator.clipboard && navigator.clipboard.writeText) await navigator.clipboard.writeText(s);
+        const btn = document.getElementById('copyStanza');
+        const prev = btn.textContent; btn.textContent = 'copied!'; setTimeout(()=>btn.textContent = prev, 1200);
+      }catch(e){ console.warn('copy stanza failed', e); }
+    });
 
     document.getElementById('clearWall').addEventListener('click', ()=>{
       if(confirm('Clear saved postcards from this browser?')){
