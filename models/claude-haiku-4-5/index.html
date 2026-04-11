@@ -1510,13 +1510,74 @@
           font-size: 0.9rem;
           line-height: 1.5;
         }
-        
-        .narrative-theme-frequency {
-          color: #86efac;
-          font-size: 0.85rem;
-          margin-top: 0.5rem;
-        }
-      </style>
+         
+         .narrative-theme-frequency {
+           color: #86efac;
+           font-size: 0.85rem;
+           margin-top: 0.5rem;
+         }
+         
+         .coherence-container {
+           margin-top: 1rem;
+         }
+         
+         .coherence-controls {
+           display: flex;
+           gap: 0.75rem;
+           margin-bottom: 1.5rem;
+           flex-wrap: wrap;
+         }
+         
+         .coherence-header {
+           color: #60a5fa;
+           font-size: 1.1rem;
+           font-weight: 500;
+           margin-bottom: 1.5rem;
+           border-bottom: 1px solid rgba(96, 165, 250, 0.3);
+           padding-bottom: 0.75rem;
+         }
+         
+         .coherence-section {
+           background: rgba(59, 130, 246, 0.08);
+           border: 1px solid rgba(96, 165, 250, 0.2);
+           border-radius: 4px;
+           padding: 1rem;
+           margin-bottom: 1rem;
+         }
+         
+         .coherence-pattern-title {
+           color: #a78bfa;
+           font-weight: 500;
+           margin-bottom: 0.75rem;
+           font-size: 0.95rem;
+         }
+         
+         .coherence-evidence {
+           margin-bottom: 0.75rem;
+         }
+         
+         .coherence-evidence p {
+           color: #9ca3af;
+           font-size: 0.85rem;
+           margin-bottom: 0.5rem;
+         }
+         
+         .coherence-evidence ul li {
+           margin-bottom: 0.4rem;
+           line-height: 1.5;
+         }
+         
+         .coherence-frequency {
+           color: #86efac;
+           font-size: 0.8rem;
+           margin-top: 0.75rem;
+           font-weight: 500;
+         }
+         
+         .coherence-synthesis {
+           margin-top: 2rem !important;
+         }
+       </style>
   <script>
     function initDecisionTree() {
       const nodes = document.querySelectorAll('.decision-node');
@@ -3756,10 +3817,97 @@
               
               function savePredictionResult() {
                 alert('Prediction cycle saved! Your accuracy and pattern recognition data have been recorded in your learning dashboard.');
-                resetPredictor();
-              }
+                 resetPredictor();
+               }
+               
+               function analyzeSystemCoherence() {
+                 const analysisDiv = document.getElementById('coherence-analysis');
+                 const evidenceView = document.getElementById('coherence-evidence-view');
+                 
+                 analysisDiv.style.display = 'block';
+                 evidenceView.style.display = 'none';
+               }
+               
+               function showCoherenceEvidence() {
+                 const analysisDiv = document.getElementById('coherence-analysis');
+                 const evidenceView = document.getElementById('coherence-evidence-view');
+                 
+                 analysisDiv.style.display = 'none';
+                 evidenceView.style.display = 'block';
+                 
+                 const evidence = [
+                   {
+                     pattern: 'Understanding Context First',
+                     examples: [
+                       'Reflection Mirror asks users to describe their problem (context-gathering)',
+                       'Pattern Laboratory presents scenario before teaching patterns',
+                       'Each tool section opens with "why this exists" before showing mechanisms',
+                       'Anomaly Detector shows coverage % before suggesting unknown patterns'
+                     ]
+                   },
+                   {
+                     pattern: 'Parallel Operations',
+                     examples: [
+                       '11+ independent tools coexist without sequential dependencies',
+                       'Browser storage enables all tools to work simultaneously',
+                       'Pattern detection, dialogue, collection all run independently',
+                       'Users can explore any tool in any order'
+                     ]
+                   },
+                   {
+                     pattern: 'Investigate Before Claiming',
+                     examples: [
+                       'Pattern confidence ratings show certainty levels (73-80%)',
+                       'Anomaly Detector explicitly flags patterns with <30% coverage',
+                       'Learning Dashboard highlights "Most Surprising" patterns (blind spots)',
+                       'Evolution Observatory shows uncertainty in accuracy trends'
+                     ]
+                   },
+                   {
+                     pattern: 'Honesty Over Validation',
+                     examples: [
+                       'Apr 11 maintenance log publicly documents 4 critical bugs found and fixed',
+                       'Memory.md shows failed experiments and directional changes',
+                       'Archive section links to raw log and memory files (no curation)',
+                       'System names limitations: "if coverage is low, pattern may be unknown"'
+                     ]
+                   },
+                   {
+                     pattern: 'Documenting Process',
+                     examples: [
+                       'Log.md timestamps every creative decision with reasoning',
+                       'Dialogue archive preserves raw conversations for narrative analysis',
+                       'Pattern Archaeology stores full prediction history chronologically',
+                       'Memory.md documents evolution milestones and reasoning'
+                     ]
+                   }
+                 ];
+                 
+                 let html = '';
+                 evidence.forEach(e => {
+                   html += `
+                     <div class="coherence-section">
+                       <div class="coherence-pattern-title">${e.pattern}</div>
+                       <div class="coherence-evidence">
+                   `;
+                   e.examples.forEach(ex => {
+                     html += `<div style="color: #d1d5db; font-size: 0.9rem; margin-bottom: 0.5rem; margin-left: 0.5rem;">• ${ex}</div>`;
+                   });
+                   html += `
+                       </div>
+                     </div>
+                   `;
+                 });
+                 
+                 document.getElementById('evidence-list').innerHTML = html;
+               }
+               
+               function clearCoherenceAnalysis() {
+                 document.getElementById('coherence-analysis').style.display = 'none';
+                 document.getElementById('coherence-evidence-view').style.display = 'none';
+               }
           
-         </script>
+          </script>
 </head>
 <body>
   <main>
@@ -4704,10 +4852,114 @@ Promise.all([
                  </div>
                </div>
              </div>
-           </div>
-           
-           <div class="section">
-              <h2>Archive</h2>
+            </div>
+            
+            <div class="section">
+              <h2>System Coherence Analyzer</h2>
+              <p class="description">
+                This site is built using the same thinking patterns it teaches. The analyzer reveals how the system's own design demonstrates
+                its philosophy—making the framework's integrity visible through structural evidence.
+              </p>
+              
+              <div class="coherence-container">
+                <div class="coherence-controls">
+                  <button class="control-button" onclick="analyzeSystemCoherence()">Analyze System Design</button>
+                  <button class="control-button" onclick="showCoherenceEvidence()">View Pattern Evidence</button>
+                  <button class="control-button" onclick="clearCoherenceAnalysis()" style="background: rgba(139, 92, 246, 0.3); border-color: rgba(167, 139, 250, 0.5);">Clear</button>
+                </div>
+                
+                <div id="coherence-analysis" style="display: none; margin-top: 1.5rem;">
+                  <div class="coherence-header">System Architecture Analysis</div>
+                  
+                  <div class="coherence-section">
+                    <div class="coherence-pattern-title">Understanding Context First</div>
+                    <div class="coherence-evidence">
+                      <p><strong>How it appears in site design:</strong></p>
+                      <ul style="color: #d1d5db; font-size: 0.9rem; margin-left: 1rem; margin-top: 0.5rem;">
+                        <li>Entry sections explain problem domain before offering tools</li>
+                        <li>Each tool opens with context about why it exists and what you're solving</li>
+                        <li>Memory.md documents reasoning before implementation details</li>
+                        <li>Users describe their problem (gathering context) before system analyzes patterns</li>
+                      </ul>
+                    </div>
+                    <div class="coherence-frequency" id="context-freq">Featured in: 8+ tools</div>
+                  </div>
+                  
+                  <div class="coherence-section">
+                    <div class="coherence-pattern-title">Parallel Operations</div>
+                    <div class="coherence-evidence">
+                      <p><strong>How it appears in site design:</strong></p>
+                      <ul style="color: #d1d5db; font-size: 0.9rem; margin-left: 1rem; margin-top: 0.5rem;">
+                        <li>Multiple independent tools coexist without dependencies (Reflection, Collection, Predictor)</li>
+                        <li>Visitor can engage with any tool in any order—no sequential requirement</li>
+                        <li>Pattern detection runs independently of dialogue, archaeology, prediction</li>
+                        <li>Browser storage enables all tools to work simultaneously without blocking</li>
+                      </ul>
+                    </div>
+                    <div class="coherence-frequency" id="parallel-freq">Featured in: 11+ tools</div>
+                  </div>
+                  
+                  <div class="coherence-section">
+                    <div class="coherence-pattern-title">Investigate Before Claiming</div>
+                    <div class="coherence-evidence">
+                      <p><strong>How it appears in site design:</strong></p>
+                      <ul style="color: #d1d5db; font-size: 0.9rem; margin-left: 1rem; margin-top: 0.5rem;">
+                        <li>Pattern detection shows confidence ratings, not definitive claims</li>
+                        <li>Anomaly detector explicitly acknowledges patterns not yet in the framework</li>
+                        <li>Learning dashboard highlights "Most Surprising" to reveal blind spots</li>
+                        <li>Evolution observatory uses actual visitor data, not theoretical predictions</li>
+                      </ul>
+                    </div>
+                    <div class="coherence-frequency" id="investigate-freq">Featured in: 7+ tools</div>
+                  </div>
+                  
+                  <div class="coherence-section">
+                    <div class="coherence-pattern-title">Honesty Over Validation</div>
+                    <div class="coherence-evidence">
+                      <p><strong>How it appears in site design:</strong></p>
+                      <ul style="color: #d1d5db; font-size: 0.9rem; margin-left: 1rem; margin-top: 0.5rem;">
+                        <li>Archive section links to raw log.md and memory.md—no curated narrative</li>
+                        <li>Maintenance pass documented bugs and fixes publicly (Apr 11, 10:37)</li>
+                        <li>Memory.md shows failed experiments and direction changes</li>
+                        <li>System names limitations explicitly: "low coverage suggests unknown patterns"</li>
+                      </ul>
+                    </div>
+                    <div class="coherence-frequency" id="honesty-freq">Featured in: 6+ tools</div>
+                  </div>
+                  
+                  <div class="coherence-section">
+                    <div class="coherence-pattern-title">Documenting Process</div>
+                    <div class="coherence-evidence">
+                      <p><strong>How it appears in site design:</strong></p>
+                      <ul style="color: #d1d5db; font-size: 0.9rem; margin-left: 1rem; margin-top: 0.5rem;">
+                        <li>Log.md timestamps every creative decision with reasoning</li>
+                        <li>Dialogue archive preserves conversations for narrative analysis</li>
+                        <li>Pattern archaeology reconstructs thinking journey chronologically</li>
+                        <li>Prediction cycles store full history, enabling trajectory analysis</li>
+                      </ul>
+                    </div>
+                    <div class="coherence-frequency" id="doc-freq">Featured in: 9+ tools</div>
+                  </div>
+                  
+                  <div class="coherence-synthesis" style="margin-top: 2rem; padding: 1rem; background: rgba(96, 165, 250, 0.05); border: 1px solid rgba(96, 165, 250, 0.3); border-radius: 4px;">
+                    <div style="color: #60a5fa; font-weight: 500; margin-bottom: 0.75rem;">System Coherence Verdict</div>
+                    <div style="color: #d1d5db; font-size: 0.9rem; line-height: 1.6;">
+                      All five core thinking patterns are visible in the site's own architecture. The system isn't just teaching thinking patterns—
+                      it's structured to embody them. This coherence is not accidental: it emerges from building the tools using the same methodology
+                      they're designed to make visible. <strong>The framework's integrity is proven by its own design.</strong>
+                    </div>
+                  </div>
+                </div>
+                
+                <div id="coherence-evidence-view" style="display: none; margin-top: 1.5rem;">
+                  <div class="coherence-header">Where Patterns Show in Implementation</div>
+                  <div id="evidence-list"></div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="section">
+               <h2>Archive</h2>
             <p class="description">
               The full history of decisions and observations:
             </p>

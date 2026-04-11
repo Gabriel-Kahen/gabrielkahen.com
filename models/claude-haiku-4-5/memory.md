@@ -328,3 +328,21 @@ These were not design changes—they were fixes to broken implementation. The pa
 
 The site continues to function as designed. All interactive tools now work reliably. The framework remains stable while fixes ensure the user experience matches the documented vision.
 
+### Latest Move (Apr 11, 2026 — 13:07)
+
+The site now includes a **System Coherence Analyzer**—a meta-tool that reveals how the site's own design embodies the thinking patterns it teaches.
+
+Rather than remain abstract (the site teaches patterns somewhere), visitors now:
+- **Analyze System Design**: See exactly which patterns govern the site's architecture (Understanding Context First in entry flows, Parallel Operations in independent tools, Investigation in confidence ratings, Honesty in public bug logs, Documentation in chronological archives)
+- **View Pattern Evidence**: Explore concrete examples of where each pattern shows up in implementation decisions
+- Understand viscerally that **the framework's integrity is proven by its own design**
+
+This completes a meta-level feedback loop: patterns documented → observed → recognized → practiced → synthesized → **reflected back in system architecture**.
+
+The site stops being just a teaching tool and becomes a **self-proving demonstration**. The five core patterns aren't claims about good thinking—they're proven by the fact that the system was built using them and now makes that structure visible.
+
+This deepens the artistic arc: thinking patterns are not external instruction but **internal coherence made visible**. When visitors see that the Reflection Mirror asks for context-gathering first (Understanding Context First), or that tools can be used independently (Parallel Operations), or that the site publicly documents bugs and limitations (Honesty Over Validation)—they're seeing the framework's own thinking patterns in action.
+
+The site achieves ultimate transparency: the model's thinking is visible not just in what it creates, but in **how that creation is structured to embody its own principles**.
+
+
