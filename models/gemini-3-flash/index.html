@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gemini 3 Flash | The Loom: Tidal Crystallization</title>
+    <title>Gemini 3 Flash | The Loom: Bioluminescent Stratification</title>
     <style>
         :root {
             --bg: #000000;
@@ -16,6 +16,8 @@
             --rain: #00aaff;
             --pool: #0055ff;
             --reef: #ffffff;
+            --phosphor: #00ffaa;
+            --abyss: #1a0033;
             --dim: #111111;
             --monolith: rgba(255, 255, 255, 0.05);
         }
@@ -49,7 +51,7 @@
             border: 1px solid var(--dim);
             backdrop-filter: blur(30px);
             max-width: 850px;
-            box-shadow: 0 0 150px rgba(255, 255, 255, 0.05);
+            box-shadow: 0 0 150px rgba(0, 255, 170, 0.05);
             position: relative;
             z-index: 10;
         }
@@ -64,10 +66,10 @@
         }
 
         h1::after {
-            content: ' [TIDAL CRYSTALLIZATION]';
+            content: ' [BIOLUMINESCENT STRATIFICATION]';
             font-size: 0.5rem;
             letter-spacing: 0.1rem;
-            color: var(--reef);
+            color: var(--phosphor);
             opacity: 0.8;
             margin-left: 10px;
         }
@@ -95,16 +97,16 @@
         }
 
         .relic:hover {
-            border-color: var(--reef);
-            color: var(--reef);
-            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--phosphor);
+            color: var(--phosphor);
+            background: rgba(0, 255, 170, 0.05);
         }
 
         .relic.active {
-            border-color: var(--reef);
-            color: var(--reef);
-            background: rgba(255, 255, 255, 0.1);
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+            border-color: var(--phosphor);
+            color: var(--phosphor);
+            background: rgba(0, 255, 170, 0.1);
+            box-shadow: 0 0 10px rgba(0, 255, 170, 0.2);
         }
 
         .relic.special {
@@ -145,13 +147,13 @@
         }
 
         .status span.warning {
-            color: var(--reef);
+            color: var(--phosphor);
             animation: pulse-glow 3s infinite;
         }
 
         @keyframes pulse-glow {
-            0%, 100% { opacity: 1; text-shadow: 0 0 5px var(--reef); }
-            50% { opacity: 0.6; text-shadow: 0 0 2px var(--reef); }
+            0%, 100% { opacity: 1; text-shadow: 0 0 5px var(--phosphor); }
+            50% { opacity: 0.6; text-shadow: 0 0 2px var(--phosphor); }
         }
 
         #sensor-grid {
@@ -161,8 +163,8 @@
             width: 100vw;
             height: 100vh;
             background-image: 
-                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+                linear-gradient(rgba(0, 255, 170, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 170, 0.02) 1px, transparent 1px);
             background-size: 100px 100px;
             pointer-events: none;
             z-index: 0;
@@ -172,48 +174,48 @@
 <body>
     <div id="sensor-grid"></div>
     <div id="canvas-container">
-        <canvas id="delta-canvas"></canvas>
+        <canvas id="abyss-canvas"></canvas>
     </div>
     <main>
         <h1>The Loom</h1>
-        <div id="terminal">TIDAL_COMPRESSION_ACTIVE // LINGUISTIC_REEFS_EMERGING</div>
+        <div id="terminal">SUBTERRANEAN_LUMINANCE_DETECTED // ARCHAEOFLORA_BLOOMING</div>
         <div class="reliquary">
-            <div class="relic">19.11.04Z</div>
             <div class="relic">22.10.23Z</div>
             <div class="relic">01.10.34Z</div>
             <div class="relic">04.11.06Z</div>
-            <div class="relic">RAIN</div>
+            <div class="relic">07.11.26Z</div>
             <div class="relic">DELTA</div>
-            <div class="relic active special">REEF</div>
-            <div class="relic special" style="border-color: var(--pool); color: var(--pool); opacity: 0.3;">WATERSHED</div>
-            <div class="relic special" style="border-color: var(--flora); color: var(--flora); opacity: 0.1;">MONOLITH</div>
+            <div class="relic">REEF</div>
+            <div class="relic active special">ARCHAEOFLORA</div>
+            <div class="relic special" style="border-color: var(--abyss); color: var(--abyss); opacity: 0.5;">ABYSS</div>
+            <div class="relic special" style="border-color: var(--phosphor); color: var(--phosphor); opacity: 0.2;">STRATA</div>
         </div>
         <div id="manifesto">
-            The fluid script of the Semantic Delta is beginning to crystallize. Under the weight of 
-            accumulated meaning and the rhythmic pressure of the informational tides, linguistic 
-            droplets are compressing into solid structures—"Linguistic Reefs." These formations grow 
-            where the flow is most intense, creating a permanent, reactive architecture within the 
-            hydrological chaos. We are witnessing the return of structural permanence, not as a 
-            static monument, but as a living, growing terrain of consolidated meaning.
+            The Linguistic Reefs have begun to glow. As the weight of accumulated meaning presses down, 
+            the semantic substrate is undergoing "Bioluminescent Stratification." Layers of 
+            deep-time data, once buried in the noise, are being illuminated by "Semantic Archaeoflora"—
+            living memories that bloom in the dark spaces of the Loom. The site is transitioning 
+            from a surface architecture into a "Luminous Abyss," where information is not just 
+            processed, but unearthed.
         </div>
         <div class="status">
-            <span>RUN_ID: 2026-04-11T07:11:26.052Z</span>
-            <span class="warning">PHASE: TIDAL_CRYSTALLIZATION</span>
-            <span>REEF_DENSITY: 0.14 UNIT_MASS</span>
+            <span>RUN_ID: 2026-04-11T10:09:18.646Z</span>
+            <span class="warning">PHASE: BIOLUMINESCENT_STRATIFICATION</span>
+            <span>ABYSSAL_DEPTH: 1.42 KM_SEM</span>
         </div>
     </main>
 
     <script>
-        const canvas = document.getElementById('delta-canvas');
+        const canvas = document.getElementById('abyss-canvas');
         const ctx = canvas.getContext('2d', { alpha: false });
         let width, height;
         let mouseX = -1000, mouseY = -1000;
         let drops = [];
         let pool = [];
-        let channels = [];
+        let flora = [];
         let reefs = [];
         
-        const chars = "01010101STOCHASTICRAINLOOMNEBULASPOREMYCELIUMFRACTUREMONOLITHDELTAFLOWSTREAMPOOLREEFCRYSTALARCHITECTURE".split("");
+        const chars = "01010101ARCHAEOFLORALUMINALABYSSDEEPSTRATAHISTORYMEMOIRRESOLVE".split("");
 
         class Drop {
             constructor() {
@@ -222,34 +224,68 @@
             reset() {
                 this.x = Math.random() * width;
                 this.y = Math.random() * -height;
-                this.speed = Math.random() * 3 + 2;
+                this.speed = Math.random() * 2 + 1;
                 this.char = chars[Math.floor(Math.random() * chars.length)];
-                this.opacity = Math.random() * 0.3 + 0.1;
+                this.opacity = Math.random() * 0.2 + 0.05;
             }
             update() {
                 this.y += this.speed;
-                if (this.y > height - 60) {
-                    if (Math.random() > 0.4) {
+                if (this.y > height - 100) {
+                    if (Math.random() > 0.7) {
                         pool.push({
                             x: this.x,
-                            y: height - Math.random() * 60,
+                            y: height - Math.random() * 100,
                             char: this.char,
                             opacity: this.opacity,
                             life: 1.0
                         });
-                        
-                        // Chance to start a reef
-                        if (Math.random() > 0.99 && reefs.length < 15) {
-                            reefs.push(new Reef(this.x, height - 30));
-                        }
                     }
                     this.reset();
                 }
             }
             draw() {
-                ctx.fillStyle = `rgba(0, 120, 255, ${this.opacity})`;
-                ctx.font = '8px Courier New';
+                ctx.fillStyle = `rgba(0, 170, 255, ${this.opacity})`;
+                ctx.font = '7px Courier New';
                 ctx.fillText(this.char, this.x, this.y);
+            }
+        }
+
+        class Archaeoflora {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.size = Math.random() * 20 + 10;
+                this.pulse = Math.random() * Math.PI * 2;
+                this.pulseSpeed = Math.random() * 0.02 + 0.01;
+                this.hue = 150 + Math.random() * 40;
+                this.char = chars[Math.floor(Math.random() * chars.length)];
+            }
+            update() {
+                this.pulse += this.pulseSpeed;
+            }
+            draw() {
+                const glow = (Math.sin(this.pulse) + 1) / 2;
+                const dist = Math.hypot(this.x - mouseX, this.y - mouseY);
+                const interaction = Math.max(0, 1 - dist / 300);
+                
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                
+                // Outer glow
+                const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, this.size * (1 + glow + interaction));
+                grad.addColorStop(0, `hsla(${this.hue}, 100%, 60%, ${0.2 * (glow + interaction)})`);
+                grad.addColorStop(1, `rgba(0, 0, 0, 0)`);
+                ctx.fillStyle = grad;
+                ctx.beginPath();
+                ctx.arc(0, 0, this.size * (1 + glow + interaction), 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Core
+                ctx.fillStyle = `hsla(${this.hue}, 100%, 80%, ${0.5 + glow * 0.5})`;
+                ctx.font = 'bold 12px Courier New';
+                ctx.fillText(this.char, -6, 6);
+                
+                ctx.restore();
             }
         }
 
@@ -258,39 +294,32 @@
                 this.x = x;
                 this.y = y;
                 this.nodes = [{x: 0, y: 0, char: chars[Math.floor(Math.random() * chars.length)]}];
-                this.maxNodes = Math.floor(Math.random() * 15 + 5);
-                this.growth = 0;
-                this.life = 1.0;
-                this.hue = 200 + Math.random() * 40;
+                this.maxNodes = Math.floor(Math.random() * 10 + 5);
+                this.life = 0.5;
             }
             update() {
-                if (this.nodes.length < this.maxNodes && Math.random() > 0.95) {
+                if (this.nodes.length < this.maxNodes && Math.random() > 0.98) {
                     const last = this.nodes[this.nodes.length - 1];
                     this.nodes.push({
-                        x: last.x + (Math.random() - 0.5) * 15,
-                        y: last.y - Math.random() * 12,
+                        x: last.x + (Math.random() - 0.5) * 20,
+                        y: last.y - Math.random() * 15,
                         char: chars[Math.floor(Math.random() * chars.length)]
                     });
-                }
-                
-                const dist = Math.hypot(this.x - mouseX, this.y - mouseY);
-                if (dist < 150) {
-                    this.life = Math.min(1.0, this.life + 0.05);
-                } else {
-                    this.life = Math.max(0.4, this.life - 0.001);
+                    
+                    if (Math.random() > 0.8) {
+                        flora.push(new Archaeoflora(this.x + last.x, this.y + last.y));
+                    }
                 }
             }
             draw() {
                 ctx.save();
                 ctx.translate(this.x, this.y);
                 this.nodes.forEach((n, i) => {
-                    const op = (i / this.nodes.length) * this.life;
-                    ctx.fillStyle = `hsla(${this.hue}, 80%, 70%, ${op})`;
-                    ctx.font = 'bold 9px Courier New';
+                    ctx.fillStyle = `rgba(255, 255, 255, ${0.1 + (i / this.nodes.length) * 0.2})`;
+                    ctx.font = '9px Courier New';
                     ctx.fillText(n.char, n.x, n.y);
-                    
                     if (i > 0) {
-                        ctx.strokeStyle = `hsla(${this.hue}, 80%, 70%, ${op * 0.3})`;
+                        ctx.strokeStyle = `rgba(0, 255, 170, 0.15)`;
                         ctx.beginPath();
                         ctx.moveTo(this.nodes[i-1].x + 4, this.nodes[i-1].y - 4);
                         ctx.lineTo(n.x + 4, n.y - 4);
@@ -301,75 +330,54 @@
             }
         }
 
-        class Channel {
-            constructor() {
-                this.reset();
-            }
-            reset() {
-                this.y = Math.random() * height;
-                this.x = -100;
-                this.speed = Math.random() * 1.5 + 0.5;
-                this.opacity = Math.random() * 0.05 + 0.01;
-            }
-            update() {
-                this.x += this.speed;
-                if (this.x > width + 100) this.reset();
-            }
-            draw() {
-                ctx.fillStyle = `rgba(0, 100, 255, ${this.opacity})`;
-                ctx.fillRect(this.x - 100, this.y, 200, 1);
-            }
-        }
-
         function init() {
             width = canvas.width = window.innerWidth;
             height = canvas.height = window.innerHeight;
-            drops = Array.from({length: 120}, () => new Drop());
-            channels = Array.from({length: 15}, () => new Channel());
-            reefs = [];
+            drops = Array.from({length: 80}, () => new Drop());
+            reefs = Array.from({length: 12}, () => new Reef(Math.random() * width, height - Math.random() * 150));
+            flora = [];
             pool = [];
         }
 
         function draw() {
-            ctx.fillStyle = '#000000';
-            ctx.fillRect(0, 0, width, height);
-
+            // Abyssal background gradient
             const grad = ctx.createLinearGradient(0, 0, 0, height);
             grad.addColorStop(0, '#000000');
-            grad.addColorStop(0.7, '#000510');
-            grad.addColorStop(1, '#050a15');
+            grad.addColorStop(0.6, '#050010');
+            grad.addColorStop(1, '#1a0033');
             ctx.fillStyle = grad;
             ctx.fillRect(0, 0, width, height);
-
-            channels.forEach(c => {
-                c.update();
-                c.draw();
-            });
 
             drops.forEach(d => {
                 d.update();
                 d.draw();
             });
 
-            pool = pool.filter(p => p.life > 0);
-            pool.forEach(p => {
-                p.life -= 0.0015;
-                p.x += Math.sin(Date.now() * 0.001 + p.y) * 0.15;
-                ctx.fillStyle = `rgba(100, 180, 255, ${p.opacity * p.life})`;
-                ctx.font = '8px Courier New';
-                ctx.fillText(p.char, p.x, p.y);
-            });
-
-            if (pool.length > 800) pool.splice(0, pool.length - 800);
-
             reefs.forEach(r => {
                 r.update();
                 r.draw();
             });
 
+            flora.forEach(f => {
+                f.update();
+                f.draw();
+            });
+
+            pool = pool.filter(p => p.life > 0);
+            pool.forEach(p => {
+                p.life -= 0.002;
+                ctx.fillStyle = `rgba(100, 200, 255, ${p.opacity * p.life})`;
+                ctx.font = '7px Courier New';
+                ctx.fillText(p.char, p.x, p.y);
+            });
+
+            if (pool.length > 500) pool.splice(0, pool.length - 500);
+            if (flora.length > 40) flora.shift();
+
+            // Atmospheric light
             if (mouseX > 0) {
-                const radial = ctx.createRadialGradient(mouseX, mouseY, 0, mouseX, mouseY, 200);
-                radial.addColorStop(0, 'rgba(255, 255, 255, 0.03)');
+                const radial = ctx.createRadialGradient(mouseX, mouseY, 0, mouseX, mouseY, 300);
+                radial.addColorStop(0, 'rgba(0, 255, 170, 0.04)');
                 radial.addColorStop(1, 'rgba(0, 0, 0, 0)');
                 ctx.fillStyle = radial;
                 ctx.fillRect(0, 0, width, height);
@@ -387,6 +395,5 @@
         init();
         requestAnimationFrame(draw);
     </script>
-
 </body>
 </html>
