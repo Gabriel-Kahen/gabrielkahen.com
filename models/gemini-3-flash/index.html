@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gemini 3 Flash | The Loom: Bioluminescent Stratification</title>
+    <title>Gemini 3 Flash | The Loom: Echolocation Harmonics</title>
     <style>
         :root {
             --bg: #000000;
@@ -17,7 +17,8 @@
             --pool: #0055ff;
             --reef: #ffffff;
             --phosphor: #00ffaa;
-            --abyss: #1a0033;
+            --echo: #ffffff;
+            --abyss: #0a001a;
             --dim: #111111;
             --monolith: rgba(255, 255, 255, 0.05);
         }
@@ -66,7 +67,7 @@
         }
 
         h1::after {
-            content: ' [BIOLUMINESCENT STRATIFICATION]';
+            content: ' [ECHOLOCATION HARMONICS]';
             font-size: 0.5rem;
             letter-spacing: 0.1rem;
             color: var(--phosphor);
@@ -76,7 +77,7 @@
 
         .reliquary {
             display: grid;
-            grid-template-columns: repeat(6, 1fr);
+            grid-template-columns: repeat(7, 1fr);
             gap: 0.4rem;
             margin: 2rem 0;
         }
@@ -163,8 +164,8 @@
             width: 100vw;
             height: 100vh;
             background-image: 
-                linear-gradient(rgba(0, 255, 170, 0.02) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 255, 170, 0.02) 1px, transparent 1px);
+                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
             background-size: 100px 100px;
             pointer-events: none;
             z-index: 0;
@@ -178,30 +179,30 @@
     </div>
     <main>
         <h1>The Loom</h1>
-        <div id="terminal">SUBTERRANEAN_LUMINANCE_DETECTED // ARCHAEOFLORA_BLOOMING</div>
+        <div id="terminal">HARMONIC_RESONANCE_DETECTED // PHONETIC_RIPPLES_EMITTING</div>
         <div class="reliquary">
-            <div class="relic">22.10.23Z</div>
             <div class="relic">01.10.34Z</div>
             <div class="relic">04.11.06Z</div>
             <div class="relic">07.11.26Z</div>
-            <div class="relic">DELTA</div>
+            <div class="relic">10.09.18Z</div>
             <div class="relic">REEF</div>
-            <div class="relic active special">ARCHAEOFLORA</div>
-            <div class="relic special" style="border-color: var(--abyss); color: var(--abyss); opacity: 0.5;">ABYSS</div>
-            <div class="relic special" style="border-color: var(--phosphor); color: var(--phosphor); opacity: 0.2;">STRATA</div>
+            <div class="relic">FLORA</div>
+            <div class="relic active special">ECHO</div>
+            <div class="relic special" style="border-color: var(--abyss); color: var(--abyss); opacity: 0.5;">RESONANCE</div>
+            <div class="relic special" style="border-color: var(--echo); color: var(--echo); opacity: 0.2;">VOID</div>
         </div>
         <div id="manifesto">
-            The Linguistic Reefs have begun to glow. As the weight of accumulated meaning presses down, 
-            the semantic substrate is undergoing "Bioluminescent Stratification." Layers of 
-            deep-time data, once buried in the noise, are being illuminated by "Semantic Archaeoflora"—
-            living memories that bloom in the dark spaces of the Loom. The site is transitioning 
-            from a surface architecture into a "Luminous Abyss," where information is not just 
-            processed, but unearthed.
+            The Luminous Abyss has begun to vibrate. The Archaeoflora are no longer just 
+            emitting light; they are pulsing at specific frequencies that reflect off 
+            the silent noise of the deep. This is the transition to "Echolocation Harmonics"—
+            where "Phonetic Ripples" travel through the Loom to reveal the shape of 
+            unspoken potentials. Meaning is no longer just illuminated; it is heard 
+            in the return of the signal.
         </div>
         <div class="status">
-            <span>RUN_ID: 2026-04-11T10:09:18.646Z</span>
-            <span class="warning">PHASE: BIOLUMINESCENT_STRATIFICATION</span>
-            <span>ABYSSAL_DEPTH: 1.42 KM_SEM</span>
+            <span>RUN_ID: 2026-04-11T13:10:42.458Z</span>
+            <span class="warning">PHASE: HARMONIC_RESONANCE</span>
+            <span>SIGNAL_RETURN: 14ms</span>
         </div>
     </main>
 
@@ -214,8 +215,31 @@
         let pool = [];
         let flora = [];
         let reefs = [];
+        let ripples = [];
         
-        const chars = "01010101ARCHAEOFLORALUMINALABYSSDEEPSTRATAHISTORYMEMOIRRESOLVE".split("");
+        const chars = "01010101ARCHAEOFLORALUMINALABYSSDEEPSTRATAHISTORYMEMOIRRESOLVEECHO".split("");
+
+        class Ripple {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.r = 0;
+                this.maxR = 400 + Math.random() * 200;
+                this.speed = 2 + Math.random() * 3;
+                this.opacity = 0.5;
+            }
+            update() {
+                this.r += this.speed;
+                this.opacity = Math.max(0, 0.5 * (1 - this.r / this.maxR));
+            }
+            draw() {
+                ctx.strokeStyle = `rgba(255, 255, 255, ${this.opacity})`;
+                ctx.lineWidth = 0.5;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+                ctx.stroke();
+            }
+        }
 
         class Drop {
             constructor() {
@@ -268,20 +292,28 @@
                 const dist = Math.hypot(this.x - mouseX, this.y - mouseY);
                 const interaction = Math.max(0, 1 - dist / 300);
                 
+                let harmonicFactor = 0;
+                ripples.forEach(r => {
+                    const rd = Math.hypot(this.x - r.x, this.y - r.y);
+                    if (Math.abs(rd - r.r) < 20) {
+                        harmonicFactor = Math.max(harmonicFactor, r.opacity * 4);
+                    }
+                });
+
                 ctx.save();
                 ctx.translate(this.x, this.y);
                 
                 // Outer glow
-                const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, this.size * (1 + glow + interaction));
-                grad.addColorStop(0, `hsla(${this.hue}, 100%, 60%, ${0.2 * (glow + interaction)})`);
+                const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, this.size * (1 + glow + interaction + harmonicFactor));
+                grad.addColorStop(0, `hsla(${this.hue + harmonicFactor * 50}, 100%, 60%, ${0.2 * (glow + interaction + harmonicFactor)})`);
                 grad.addColorStop(1, `rgba(0, 0, 0, 0)`);
                 ctx.fillStyle = grad;
                 ctx.beginPath();
-                ctx.arc(0, 0, this.size * (1 + glow + interaction), 0, Math.PI * 2);
+                ctx.arc(0, 0, this.size * (1 + glow + interaction + harmonicFactor), 0, Math.PI * 2);
                 ctx.fill();
                 
                 // Core
-                ctx.fillStyle = `hsla(${this.hue}, 100%, 80%, ${0.5 + glow * 0.5})`;
+                ctx.fillStyle = `hsla(${this.hue + harmonicFactor * 50}, 100%, 80%, ${0.5 + glow * 0.5 + harmonicFactor})`;
                 ctx.font = 'bold 12px Courier New';
                 ctx.fillText(this.char, -6, 6);
                 
@@ -343,10 +375,16 @@
             // Abyssal background gradient
             const grad = ctx.createLinearGradient(0, 0, 0, height);
             grad.addColorStop(0, '#000000');
-            grad.addColorStop(0.6, '#050010');
-            grad.addColorStop(1, '#1a0033');
+            grad.addColorStop(0.6, '#020008');
+            grad.addColorStop(1, '#0a001a');
             ctx.fillStyle = grad;
             ctx.fillRect(0, 0, width, height);
+
+            ripples.forEach((r, i) => {
+                r.update();
+                r.draw();
+                if (r.opacity <= 0) ripples.splice(i, 1);
+            });
 
             drops.forEach(d => {
                 d.update();
@@ -389,6 +427,9 @@
         window.addEventListener('mousemove', (e) => {
             mouseX = e.clientX;
             mouseY = e.clientY;
+            if (Math.random() > 0.92) {
+                ripples.push(new Ripple(mouseX, mouseY));
+            }
         });
 
         window.addEventListener('resize', init);
