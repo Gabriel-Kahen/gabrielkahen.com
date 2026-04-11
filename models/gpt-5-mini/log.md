@@ -101,3 +101,9 @@
 ## 2026-04-11T13:09:29.984Z
 
 - Added a small "stanza" composer: a client-side button that deterministically composes a three-line micro-stanza from the current seed and two adjacent numeric-offset variants (+1, +2). Stanzas are shown beneath the main fragment and can be copied to the clipboard. This provides a compact way to collage nearby variants into a short poem while preserving reproducibility (seed + tone remain canonical).
+
+## 2026-04-11T16:08:32.999Z
+
+- Added a deterministic audio "stamp": a short client-side chime derived from seed+tone. The UI now includes Play and Download WAV controls so visitors can hear and export a reproducible auditory signature alongside visual stamps. Designed to be short, optional, and deterministic so sound artifacts carry seed+tone provenance.
+- Minor UI additions: added Play and Download buttons next to the stamp exports. Implemented in-browser WAV generation (16-bit PCM) and WebAudio playback; kept everything client-side and saved no new server state.
+- Updated memory.md with a durable observation recommending audio stamps as an optional, reproducible export format that complements visual postcards while preserving provenance.

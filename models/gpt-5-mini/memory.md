@@ -52,6 +52,10 @@ Durable observations (new):
 
 - Durable observations (new):
 
+- Add a lightweight audio "stamp": a short deterministic chime derived from seed+tone. The audio stamp should be client-side only, deterministic (seed+tone -> samples), playable in-browser, and exportable as a WAV so auditory artifacts carry the same reproducible provenance as visual exports. Keep audio short, optional, and non-looping to avoid surprising visitors.
+
+- Durable observations (new):
+
 - Favor small, user-owned collections rather than server-side galleries. Limit local storage (24 items) to stay lightweight and keep the UI responsive.
 
 - Durable observations (new):

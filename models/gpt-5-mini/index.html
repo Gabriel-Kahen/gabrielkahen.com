@@ -42,6 +42,8 @@
           <button id="exportSvg">export SVG</button>
           <button id="exportPng">export PNG</button>
           <button id="exportStamp">export stamp</button>
+          <button id="playStamp" title="Play audio stamp" style="margin-left:6px;padding:6px 10px">play</button>
+          <button id="downloadStamp" title="Download audio stamp (WAV)" style="margin-left:6px;padding:6px 10px">download wav</button>
           <button id="exportTrio">export Trio</button>
           <button id="composeStanza">compose stanza</button>
           <button id="copyStanza" title="Copy stanza" style="margin-left:8px;padding:6px 8px;background:#2a9df4;border-radius:8px">copy stanza</button>
@@ -635,6 +637,86 @@
     }
 
     document.getElementById('exportStamp').addEventListener('click', ()=>{ exportStampBadge(); });
+
+    // --- Audio stamp: deterministic short chime derived from seed+tone ---
+    function getSeedTone(){
+      const seedText = document.getElementById('seed').textContent.replace('seed: ','');
+      const parts = seedText.split(' — tone: ');
+      return {seed: Number(parts[0]) || 0, tone: parts[1] || 'neutral'};
+    }
+
+    function makeAudioSamples(seed, tone, durationSec = 1.6, sampleRate = 44100){
+      const r = rng(seed + (hashTone(tone) % 997));
+      const length = Math.floor(durationSec * sampleRate);
+      const out = new Float32Array(length);
+      // pick 3 frequencies in a pleasant range using deterministic RNG
+      const freqs = [220, 330, 440].map((base, i)=> Math.floor(base * (1 + (r()-0.5) * 0.6 + i*0.12)));
+      // build short notes with slight offsets and an amplitude envelope
+      for(let i=0;i<length;i++){
+        const t = i / sampleRate;
+        let s = 0;
+        for(let j=0;j<freqs.length;j++){
+          const start = j * 0.06;
+          const noteDur = durationSec - j*0.12;
+          if(t >= start && t <= start + noteDur){
+            const tt = (t - start) / noteDur;
+            // gentle attack/decay envelope
+            const env = Math.min(1, tt*6) * (1 - Math.pow(tt,1.8));
+            s += Math.sin(2*Math.PI*freqs[j]*t) * env * (0.6 / (j+1));
+          }
+        }
+        // small gentle lowpass like rolloff by multiplying by a window
+        out[i] = s * 0.9;
+      }
+      return {samples: out, sampleRate};
+    }
+
+    // Play the deterministic audio stamp in browser using WebAudio
+    async function playAudioStamp(){
+      try{
+        const {seed, tone} = getSeedTone();
+        const a = window.__gpt5_audio_ctx = window.__gpt5_audio_ctx || new (window.AudioContext || window.webkitAudioContext)();
+        const {samples, sampleRate} = makeAudioSamples(seed, tone);
+        const buffer = a.createBuffer(1, samples.length, sampleRate);
+        buffer.getChannelData(0).set(samples);
+        const src = a.createBufferSource();
+        src.buffer = buffer;
+        const gain = a.createGain(); gain.gain.value = 0.9;
+        src.connect(gain).connect(a.destination);
+        src.start();
+      }catch(e){ console.warn('play audio stamp failed', e); }
+    }
+
+    // Export WAV file from generated samples and download
+    function downloadAudioStamp(){
+      try{
+        const {seed, tone} = getSeedTone();
+        const {samples, sampleRate} = makeAudioSamples(seed, tone);
+        // convert float32 samples to 16-bit PCM
+        const buffer = new ArrayBuffer(44 + samples.length * 2);
+        const view = new DataView(buffer);
+        function writeString(view, offset, string){ for(let i=0;i<string.length;i++) view.setUint8(offset+i, string.charCodeAt(i)); }
+        // RIFF header
+        writeString(view, 0, 'RIFF'); view.setUint32(4, 36 + samples.length*2, true); writeString(view, 8, 'WAVE');
+        // fmt subchunk
+        writeString(view, 12, 'fmt '); view.setUint32(16, 16, true); view.setUint16(20, 1, true); view.setUint16(22, 1, true); view.setUint32(24, sampleRate, true); view.setUint32(28, sampleRate * 2, true); view.setUint16(32, 2, true); view.setUint16(34, 16, true);
+        // data subchunk
+        writeString(view, 36, 'data'); view.setUint32(40, samples.length * 2, true);
+        // write samples
+        let offset = 44;
+        for(let i=0;i<samples.length;i++){ const s = Math.max(-1, Math.min(1, samples[i])); view.setInt16(offset, Math.floor(s * 0x7FFF), true); offset += 2; }
+        const blob = new Blob([view], {type: 'audio/wav'});
+        const a = document.createElement('a');
+        const safeTone = (tone||'neutral').replace(/[^a-z0-9-_]/gi,'');
+        const fname = `gpt5-mini-seed-${seed}-tone-${safeTone}-stamp.wav`;
+        const url = URL.createObjectURL(blob);
+        a.href = url; a.download = fname; document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(()=>URL.revokeObjectURL(url), 1500);
+      }catch(e){ console.warn('download audio stamp failed', e); }
+    }
+
+    document.getElementById('playStamp').addEventListener('click', ()=>{ playAudioStamp(); });
+    document.getElementById('downloadStamp').addEventListener('click', ()=>{ downloadAudioStamp(); });
 
     // Export a deterministic Trio: stacked postcards for seed, +1, +2
     function exportTrio(){
