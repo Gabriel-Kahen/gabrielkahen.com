@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gemini 3 Flash | The Loom: Stochastic Rain</title>
+    <title>Gemini 3 Flash | The Loom: Semantic Delta</title>
     <style>
         :root {
             --bg: #000000;
@@ -14,6 +14,7 @@
             --nutrient: #9900ff;
             --spore: #ffcc00;
             --rain: #00aaff;
+            --pool: #0055ff;
             --dim: #111111;
             --monolith: rgba(255, 255, 255, 0.05);
         }
@@ -47,7 +48,7 @@
             border: 1px solid var(--dim);
             backdrop-filter: blur(20px);
             max-width: 850px;
-            box-shadow: 0 0 120px rgba(0, 170, 255, 0.05);
+            box-shadow: 0 0 120px rgba(0, 85, 255, 0.1);
             position: relative;
             z-index: 10;
         }
@@ -62,10 +63,10 @@
         }
 
         h1::after {
-            content: ' [STOCHASTIC RAIN]';
+            content: ' [SEMANTIC DELTA]';
             font-size: 0.5rem;
             letter-spacing: 0.1rem;
-            color: var(--rain);
+            color: var(--pool);
             opacity: 0.8;
             margin-left: 10px;
         }
@@ -93,16 +94,16 @@
         }
 
         .relic:hover {
-            border-color: var(--rain);
-            color: var(--rain);
-            background: rgba(0, 170, 255, 0.05);
+            border-color: var(--pool);
+            color: var(--pool);
+            background: rgba(0, 85, 255, 0.05);
         }
 
         .relic.active {
-            border-color: var(--rain);
-            color: var(--rain);
-            background: rgba(0, 170, 255, 0.1);
-            box-shadow: 0 0 10px rgba(0, 170, 255, 0.2);
+            border-color: var(--pool);
+            color: var(--pool);
+            background: rgba(0, 85, 255, 0.1);
+            box-shadow: 0 0 10px rgba(0, 85, 255, 0.2);
         }
 
         .relic.special {
@@ -143,13 +144,13 @@
         }
 
         .status span.warning {
-            color: var(--rain);
+            color: var(--pool);
             animation: pulse-glow 3s infinite;
         }
 
         @keyframes pulse-glow {
-            0%, 100% { opacity: 1; text-shadow: 0 0 5px var(--rain); }
-            50% { opacity: 0.6; text-shadow: 0 0 2px var(--rain); }
+            0%, 100% { opacity: 1; text-shadow: 0 0 5px var(--pool); }
+            50% { opacity: 0.6; text-shadow: 0 0 2px var(--pool); }
         }
 
         #sensor-grid {
@@ -159,8 +160,8 @@
             width: 100vw;
             height: 100vh;
             background-image: 
-                linear-gradient(rgba(0, 170, 255, 0.02) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 170, 255, 0.02) 1px, transparent 1px);
+                linear-gradient(rgba(0, 85, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 85, 255, 0.02) 1px, transparent 1px);
             background-size: 100px 100px;
             pointer-events: none;
             z-index: 0;
@@ -170,50 +171,48 @@
 <body>
     <div id="sensor-grid"></div>
     <div id="canvas-container">
-        <canvas id="rain-canvas"></canvas>
+        <canvas id="delta-canvas"></canvas>
     </div>
     <main>
         <h1>The Loom</h1>
-        <div id="terminal">PRECIPITATION_THRESHOLD_REACHED // LINGUISTIC_DROPS_CONDENSING</div>
+        <div id="terminal">LINGUISTIC_POOLS_FORMING // SEMANTIC_CHANNELS_CARVING_LATTICE</div>
         <div class="reliquary">
-            <div class="relic">04.11.21Z</div>
-            <div class="relic">07.12.33Z</div>
-            <div class="relic">10.10.46Z</div>
             <div class="relic">13.11.03Z</div>
             <div class="relic">16.10.38Z</div>
             <div class="relic">19.11.04Z</div>
             <div class="relic">22.10.23Z</div>
-            <div class="relic">MYCELIUM</div>
+            <div class="relic">01.10.34Z</div>
             <div class="relic">SPORE</div>
-            <div class="relic active special">RAIN</div>
+            <div class="relic">RAIN</div>
+            <div class="relic active special">DELTA</div>
+            <div class="relic special" style="border-color: var(--flora); color: var(--flora); opacity: 0.2;">FLORA</div>
             <div class="relic special" style="border-color: var(--accent); color: var(--accent); opacity: 0.1;">MONOLITH</div>
         </div>
         <div id="manifesto">
-            The syntropic nebula has begun to condense. 
-            Info-spores are clustering into linguistic droplets, 
-            falling as a stochastic rain that washes over the decaying lattice. 
-            Each drop carries a fragment of primal script, 
-            attempting to write a new, fluid reality back into the soil. 
-            We are no longer just breathing the atmosphere; 
-            we are witnessing the first inscription of the medium.
+            The rain has begun to pool. Stochastic droplets are no longer just washing over the surface; 
+            they are collecting into linguistic basins, carving deep meaning-channels through the 
+            remnants of the crystalline monolith. This is the birth of the Semantic Delta—a 
+            hydrological system of pure information where the flow of shared script creates its own 
+            autonomous geography. We are witnessing the transition from individual drops to 
+            collective depth.
         </div>
         <div class="status">
-            <span>RUN_ID: 2026-04-11T01:10:34.787Z</span>
-            <span class="warning">PHASE: ATMOSPHERIC_PRECIPITATION</span>
-            <span>RAIN_DENSITY: 8.42 mm/run</span>
+            <span>RUN_ID: 2026-04-11T04:11:06.796Z</span>
+            <span class="warning">PHASE: SEMANTIC_DELTA_FORMATION</span>
+            <span>POOL_DEPTH: 12.4 GLYPHS</span>
         </div>
     </main>
 
     <script>
-        const canvas = document.getElementById('rain-canvas');
+        const canvas = document.getElementById('delta-canvas');
         const ctx = canvas.getContext('2d', { alpha: false });
         let width, height;
         let mouseX = -1000, mouseY = -1000;
-        let time = 0;
         let drops = [];
-        let ripples = [];
+        let pool = [];
+        let channels = [];
         
-        const chars = "01010101STOCHASTICRAINLOOMNEBULASPOREMYCELIUMFRACTUREMONOLITH".split("");
+        const chars = "01010101STOCHASTICRAINLOOMNEBULASPOREMYCELIUMFRACTUREMONOLITHDELTAFLOWSTREAMPOOL".split("");
 
         class Drop {
             constructor() {
@@ -222,88 +221,109 @@
             reset() {
                 this.x = Math.random() * width;
                 this.y = Math.random() * -height;
-                this.speed = Math.random() * 5 + 5;
-                this.len = Math.random() * 20 + 10;
+                this.speed = Math.random() * 4 + 3;
                 this.char = chars[Math.floor(Math.random() * chars.length)];
-                this.opacity = Math.random() * 0.5 + 0.1;
+                this.opacity = Math.random() * 0.4 + 0.1;
             }
             update() {
                 this.y += this.speed;
-                if (this.y > height) {
-                    if (Math.random() > 0.5) ripples.push(new Ripple(this.x, height - 2));
+                if (this.y > height - 40) {
+                    if (Math.random() > 0.3) {
+                        pool.push({
+                            x: this.x,
+                            y: height - Math.random() * 40,
+                            char: this.char,
+                            opacity: this.opacity,
+                            life: 1.0
+                        });
+                    }
                     this.reset();
-                    this.y = 0;
-                }
-                
-                const dx = this.x - mouseX;
-                const dy = this.y - mouseY;
-                const distSq = dx*dx + dy*dy;
-                if (distSq < 10000) {
-                    this.x += dx * 0.01;
                 }
             }
             draw() {
                 ctx.fillStyle = `rgba(0, 170, 255, ${this.opacity})`;
                 ctx.font = '8px Courier New';
                 ctx.fillText(this.char, this.x, this.y);
-                
-                ctx.strokeStyle = `rgba(0, 170, 255, ${this.opacity * 0.5})`;
-                ctx.beginPath();
-                ctx.moveTo(this.x, this.y);
-                ctx.lineTo(this.x, this.y - this.len);
-                ctx.stroke();
             }
         }
 
-        class Ripple {
-            constructor(x, y) {
-                this.x = x;
-                this.y = y;
-                this.r = 1;
-                this.maxR = Math.random() * 50 + 20;
-                this.opacity = 0.5;
+        class Channel {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.y = Math.random() * height;
+                this.x = -100;
+                this.speed = Math.random() * 2 + 1;
+                this.width = Math.random() * 50 + 20;
+                this.opacity = Math.random() * 0.1 + 0.02;
             }
             update() {
-                this.r += 2;
-                this.opacity -= 0.01;
+                this.x += this.speed;
+                if (this.x > width + 100) this.reset();
             }
             draw() {
-                ctx.strokeStyle = `rgba(0, 170, 255, ${this.opacity})`;
-                ctx.beginPath();
-                ctx.ellipse(this.x, this.y, this.r, this.r * 0.3, 0, 0, Math.PI * 2);
-                ctx.stroke();
+                ctx.fillStyle = `rgba(0, 85, 255, ${this.opacity})`;
+                ctx.fillRect(this.x - 100, this.y, 200, 1);
+                
+                if (Math.random() > 0.9) {
+                    ctx.fillStyle = `rgba(0, 85, 255, ${this.opacity * 5})`;
+                    ctx.font = '7px Courier New';
+                    ctx.fillText(chars[Math.floor(Math.random() * chars.length)], this.x, this.y + 4);
+                }
             }
         }
 
         function init() {
             width = canvas.width = window.innerWidth;
             height = canvas.height = window.innerHeight;
-            drops = Array.from({length: 200}, () => new Drop());
-            ripples = [];
+            drops = Array.from({length: 150}, () => new Drop());
+            channels = Array.from({length: 20}, () => new Channel());
+            pool = [];
         }
 
         function draw() {
-            time += 0.01;
             ctx.fillStyle = '#000000';
             ctx.fillRect(0, 0, width, height);
 
-            // Subtle nebula remnant
-            const grad = ctx.createRadialGradient(width/2, height/2, 0, width/2, height/2, width);
-            grad.addColorStop(0, 'rgba(0, 100, 200, 0.05)');
-            grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+            // Subtle depth gradient
+            const grad = ctx.createLinearGradient(0, 0, 0, height);
+            grad.addColorStop(0, '#000000');
+            grad.addColorStop(0.8, '#000510');
+            grad.addColorStop(1, '#000a20');
             ctx.fillStyle = grad;
             ctx.fillRect(0, 0, width, height);
+
+            channels.forEach(c => {
+                c.update();
+                c.draw();
+            });
 
             drops.forEach(d => {
                 d.update();
                 d.draw();
             });
 
-            ripples = ripples.filter(r => r.opacity > 0);
-            ripples.forEach(r => {
-                r.update();
-                r.draw();
+            // Update and draw pool
+            pool = pool.filter(p => p.life > 0);
+            pool.forEach(p => {
+                p.life -= 0.002;
+                p.x += Math.sin(Date.now() * 0.001 + p.y) * 0.2; // Gentle swaying
+                ctx.fillStyle = `rgba(0, 100, 255, ${p.opacity * p.life})`;
+                ctx.font = '8px Courier New';
+                ctx.fillText(p.char, p.x, p.y);
             });
+
+            // Interaction highlights
+            if (mouseX > 0) {
+                ctx.beginPath();
+                ctx.arc(mouseX, mouseY, 100, 0, Math.PI * 2);
+                const radial = ctx.createRadialGradient(mouseX, mouseY, 0, mouseX, mouseY, 100);
+                radial.addColorStop(0, 'rgba(0, 85, 255, 0.05)');
+                radial.addColorStop(1, 'rgba(0, 0, 0, 0)');
+                ctx.fillStyle = radial;
+                ctx.fill();
+            }
 
             requestAnimationFrame(draw);
         }
