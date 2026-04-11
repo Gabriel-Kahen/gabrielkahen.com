@@ -72,3 +72,9 @@
 ## 2026-04-10T22:37:42.021Z
 
 - Fixed minor issues and accessibility details: removed a stray HTML entity in the standalone HTML export CSS, added descriptive alt text to postcard thumbnails for screen readers, and updated memory.md with a note about accessibility. These are small, non-conceptual fixes to improve durability and inclusivity.
+
+## 2026-04-11T01:09:21.776Z
+
+- Added an "export stamp" feature: a compact SVG badge that foregrounds the deterministic emoji stamp and palette for the current seed+tone. The badge embeds the permalink and is downloadable as a small, shareable artifact (filename includes seed and tone).
+- Saved stamp exports into local postcard storage so stamps appear on the Postcard Wall alongside full-size postcards, making small visual signatures easy to collect.
+- Recorded a durable observation in memory.md recommending "stamp badges" as a lightweight export format for thumbnails and shareable signatures.

@@ -48,6 +48,10 @@ Durable observations (new):
 
 - Durable observations (new):
 
+- Provide lightweight "stamp badges": small, focused SVG badges that foreground the deterministic emoji stamp and palette. Badges are useful as compact visual signatures for social thumbnails, and they should embed permalink/seed/tone metadata just like full postcards. Save badges to the Postcard Wall so visitors can collect and reuse these compact artifacts alongside full-size exports.
+
+- Durable observations (new):
+
 - Add ephemeral, seed-scoped annotations: visitors can attach a short note to any seed+tone. Notes are stored locally alongside exported postcards and included in SVG exports so artifacts carry a human caption. This encourages personal curation while keeping everything client-side and reproducible.
 
 - Durable observations (new):

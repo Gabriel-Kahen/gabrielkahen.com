@@ -40,6 +40,7 @@
           <button id="reshuffle">reshuffle</button>
           <button id="exportSvg">export SVG</button>
           <button id="exportPng">export PNG</button>
+          <button id="exportStamp">export stamp</button>
           <button id="exportEmbed">embed</button>
           <button id="exportHtml">export HTML</button>
           <a id="permalink" href="#">permalink</a>
@@ -485,6 +486,45 @@
     document.getElementById('exportPng').addEventListener('click', ()=>{
       exportCurrentAsPNG();
     });
+
+    // Export a small square SVG "stamp badge" that highlights the emoji stamp and palette
+    function exportStampBadge(){
+      const frag = document.getElementById('fragment').textContent;
+      const seedText = document.getElementById('seed').textContent.replace('seed: ','');
+      const parts = seedText.split(' — tone: ');
+      const seed = parts[0];
+      const tone = parts[1] || 'neutral';
+      const pal = makePalette(Number(seed), tone||'neutral');
+      const stamp = makeStamp(Number(seed), tone||'neutral');
+      const permalink = (new URL(location.href)).toString();
+      const w = 400, h = 400;
+      const svg = `<?xml version="1.0" encoding="utf-8"?>\n`+
+        `<!-- generated-permalink: ${svgEscape(permalink)} -->\n`+
+        `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">`+
+        `<defs><linearGradient id="bg" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="${pal[0]}"/><stop offset="100%" stop-color="${pal[1]}"/></linearGradient></defs>`+
+        `<rect width="100%" height="100%" rx="28" ry="28" fill="url(#bg)"/>`+
+        `<text x="50%" y="46%" font-size="110" text-anchor="middle" dominant-baseline="middle" font-family="system-ui,-apple-system,Segoe UI,Roboto,Arial">${svgEscape(stamp)}</text>`+
+        `<text x="50%" y="86%" font-size="18" text-anchor="middle" fill="#e6f0ff" font-family="system-ui">seed: ${svgEscape(seed)} — ${svgEscape(tone)}</text>`+
+        `</svg>`;
+
+      const safeTone = (tone||'neutral').replace(/[^a-z0-9-_]/gi,'');
+      const fname = `gpt5-mini-seed-${seed}-tone-${safeTone}-stamp.svg`;
+      const blob = new Blob([svg], {type: 'image/svg+xml'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = fname; document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(()=>URL.revokeObjectURL(url),1500);
+
+      // also save a tiny record in postcards so stamps are discoverable in the wall
+      try{
+        const store = JSON.parse(localStorage.getItem('gpt5-mini-postcards')||'[]');
+        store.unshift({seed: String(seed), tone: tone, note: '', stampSvg: svg, title: 'GPT-5 mini — stamp', created: (new Date()).toISOString(), permalink});
+        while(store.length>24) store.pop();
+        localStorage.setItem('gpt5-mini-postcards', JSON.stringify(store));
+        renderPostcardWall();
+      }catch(e){ console.warn('could not save stamp', e); }
+    }
+
+    document.getElementById('exportStamp').addEventListener('click', ()=>{ exportStampBadge(); });
 
     // Embeddable snippet: builds a self-contained HTML block that inlines the canonical SVG
     document.getElementById('exportEmbed').addEventListener('click', ()=>{
