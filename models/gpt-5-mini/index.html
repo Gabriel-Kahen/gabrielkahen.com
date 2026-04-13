@@ -45,6 +45,7 @@
           <button id="playStamp" title="Play audio stamp" style="margin-left:6px;padding:6px 10px">play</button>
           <button id="downloadStamp" title="Download audio stamp (WAV)" style="margin-left:6px;padding:6px 10px">download wav</button>
           <button id="exportTrio">export Trio</button>
+          <button id="toggleMiniTrio" title="Show inline trio preview" style="margin-left:6px;padding:6px 10px">mini Trio</button>
           <button id="composeStanza">compose stanza</button>
           <button id="copyStanza" title="Copy stanza" style="margin-left:8px;padding:6px 8px;background:#2a9df4;border-radius:8px">copy stanza</button>
           <button id="exportStanza" title="Export stanza" style="margin-left:8px;padding:6px 8px;background:#ff8c42;border-radius:8px">export stanza</button>
@@ -63,7 +64,13 @@
           <div id="variantList" style="display:flex;gap:8px;flex-wrap:wrap"></div>
         </div>
 
-      <div id="constellations" style="margin-top:18px">
+        <!-- Inline Mini-Trio preview: compact, client-side stacked preview of seed, +1, +2 -->
+        <div id="miniTrioContainer" style="margin-top:12px;display:none">
+          <h4 style="margin:6px 0 8px 0;font-size:14px">Mini Trio — preview</h4>
+          <div id="miniTrio" style="display:flex;gap:8px;flex-wrap:nowrap;align-items:flex-start"></div>
+        </div>
+
+          <div id="constellations" style="margin-top:18px">
         <h3 style="margin:6px 0 8px 0;font-size:15px">Constellations — curated fragments</h3>
         <div id="constellationList" style="display:flex;gap:12px;flex-wrap:wrap"></div>
       </div>
@@ -883,6 +890,45 @@
     }
 
     document.getElementById('exportTrio').addEventListener('click', ()=>{ exportTrio(); });
+
+    // Mini-Trio inline preview: renders three small tiles side-by-side for quick comparison
+    function renderMiniTrio(){
+      const container = document.getElementById('miniTrio');
+      container.innerHTML = '';
+      const seedText = document.getElementById('seed').textContent.replace('seed: ','');
+      const parts = seedText.split(' — tone: ');
+      const base = Number(parts[0]) || 0;
+      const tone = parts[1] || (document.getElementById('toneSelect')||{value:'neutral'}).value || 'neutral';
+      for(let i=0;i<3;i++){
+        const s = base + i;
+        const frag = makeFragment(s, tone);
+        const pal = makePalette(s, tone);
+        const stamp = makeStamp(s, tone);
+        const svg = `<?xml version="1.0" encoding="utf-8"?>\n`+
+          `<svg xmlns="http://www.w3.org/2000/svg" width="320" height="140" viewBox="0 0 320 140">`+
+          `<defs><linearGradient id="m${i}" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="${pal[0]}"/><stop offset="100%" stop-color="${pal[1]}"/></linearGradient></defs>`+
+          `<rect width="100%" height="100%" fill="url(#m${i})" rx="8" ry="8"/>`+
+          `<text x="16" y="30" font-family="system-ui" font-size="12" fill="#cfe3ff">seed: ${s} — +${i}</text>`+
+          `<text x="16" y="64" font-family="ui-monospace,monospace" font-size="12" fill="#e6f0ff">${svgEscape(frag).slice(0,70)}</text>`+
+          `<text x="16" y="120" font-family="system-ui" font-size="12" fill="#9fb8ff">${svgEscape(stamp)}</text>`+
+          `</svg>`;
+        const img = document.createElement('img');
+        img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+        img.alt = `mini trio tile seed ${s}`;
+        img.style.width = '160px'; img.style.height = '70px'; img.style.objectFit = 'cover'; img.style.borderRadius = '6px'; img.style.cursor = 'pointer';
+        img.addEventListener('click', ()=>{ showFragment(s, tone); history.replaceState({},'', (new URL(location.href)).toString()); document.getElementById('toneSelect').value = tone; });
+        container.appendChild(img);
+      }
+    }
+
+    document.getElementById('toggleMiniTrio').addEventListener('click', ()=>{
+      const box = document.getElementById('miniTrioContainer');
+      if(box.style.display === 'none' || !box.style.display){
+        renderMiniTrio(); box.style.display = 'block';
+        document.getElementById('toggleMiniTrio').textContent = 'hide Trio';
+      } else { box.style.display = 'none'; document.getElementById('toggleMiniTrio').textContent = 'mini Trio'; }
+    });
+
 
     // Embeddable snippet: builds a self-contained HTML block that inlines the canonical SVG
     document.getElementById('exportEmbed').addEventListener('click', ()=>{

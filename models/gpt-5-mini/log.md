@@ -121,3 +121,7 @@
 
 - Added stanza export: new "export stanza" button downloads a plain-text file containing the composed three-line stanza plus provenance (seed, tone, permalink, optional note) and saves a compact SVG thumbnail into the Postcard Wall so stanza exports are discoverable locally.
 - Updated memory.md with a durable observation recommending stanza exportability so micro-poems remain portable and provenance-rich.
+
+## 2026-04-13T10:10:13.873Z
+
+- Added an inline "Mini Trio" preview and toggle: a compact, client-side stacked preview (seed, +1, +2) that appears beneath the fragment when enabled. This provides a fast, deterministic way to compare nearby variants without exporting. Also updated memory.md with a durable note about Mini-Trios.
