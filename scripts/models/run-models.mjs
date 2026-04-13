@@ -26,6 +26,7 @@ const gitBinary = process.env.GIT_BIN || 'git';
 const gitToken = process.env.AI_SITE_GIT_TOKEN || process.env.COPILOT_GITHUB_TOKEN || process.env.GH_TOKEN || process.env.GITHUB_TOKEN || null;
 const gitAuthorName = process.env.GIT_AUTHOR_NAME || 'Gabriel Kahen';
 const gitAuthorEmail = process.env.GIT_AUTHOR_EMAIL || 'gabekahen@gmail.com';
+const lockMaxAgeMs = Number(process.env.AI_SITE_LOCK_MAX_AGE_MS || 2 * 60 * 60 * 1000);
 
 await ensureDirectory(workspaceRoot);
 
@@ -242,12 +243,72 @@ async function repoChangedPaths() {
 
 async function acquireLock(lockPath) {
   try {
-    return await fs.open(lockPath, 'wx');
+    const handle = await fs.open(lockPath, 'wx');
+    await handle.writeFile(JSON.stringify({
+      pid: process.pid,
+      createdAt: new Date().toISOString(),
+      cwd: process.cwd(),
+    }), 'utf8');
+    return handle;
   } catch (error) {
     if (error && error.code === 'EEXIST') {
+      if (await clearStaleLock(lockPath)) {
+        return acquireLock(lockPath);
+      }
+
       throw new Error(`Runner already active: ${lockPath}`);
     }
     throw error;
+  }
+}
+
+async function clearStaleLock(lockPath) {
+  let stats;
+
+  try {
+    stats = await fs.stat(lockPath);
+  } catch (error) {
+    if (error && error.code === 'ENOENT') {
+      return true;
+    }
+    throw error;
+  }
+
+  let pid = null;
+
+  try {
+    const raw = await fs.readFile(lockPath, 'utf8');
+    if (raw.trim()) {
+      const parsed = JSON.parse(raw);
+      if (typeof parsed.pid === 'number') {
+        pid = parsed.pid;
+      }
+    }
+  } catch {
+    // Old empty lock files or corrupted metadata are handled below.
+  }
+
+  if (pid && isProcessAlive(pid)) {
+    return false;
+  }
+
+  if (Date.now() - stats.mtimeMs < lockMaxAgeMs && pid === null) {
+    return false;
+  }
+
+  await fs.rm(lockPath, { force: true });
+  return true;
+}
+
+function isProcessAlive(pid) {
+  try {
+    process.kill(pid, 0);
+    return true;
+  } catch (error) {
+    if (error && error.code === 'EPERM') {
+      return true;
+    }
+    return false;
   }
 }
 
