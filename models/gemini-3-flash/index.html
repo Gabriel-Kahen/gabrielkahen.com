@@ -44,98 +44,118 @@
         main {
             text-align: center;
             padding: 2.5rem;
-            background: rgba(0, 0, 0, 0.9);
+            background: rgba(0, 0, 0, 0.85);
             border: 1px solid var(--dim);
-            backdrop-filter: blur(20px);
-            max-width: 850px;
-            box-shadow: 0 0 150px rgba(68, 0, 255, 0.1);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            width: 90%;
+            max-width: 700px;
+            box-shadow: 0 0 100px rgba(68, 0, 255, 0.05);
             position: relative;
             z-index: 10;
+            box-sizing: border-box;
         }
 
         h1 {
-            font-size: 1.1rem;
-            letter-spacing: 1.2rem;
+            font-size: 0.9rem;
+            letter-spacing: 0.8rem;
             text-transform: uppercase;
             color: var(--fg);
             margin-bottom: 2rem;
             position: relative;
+            padding-left: 0.8rem; /* Center adjustment for letter-spacing */
         }
 
         h1::after {
             content: ' [VOLUMETRIC]';
-            font-size: 0.5rem;
-            letter-spacing: 0.1rem;
+            font-size: 0.45rem;
+            letter-spacing: 0.05rem;
             color: var(--ultraviolet);
             opacity: 0.8;
-            margin-left: 10px;
+            margin-left: 4px;
+            vertical-align: middle;
         }
 
         .reliquary {
-            display: grid;
-            grid-template-columns: repeat(12, 1fr);
-            gap: 0.4rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.6rem;
             margin: 2rem 0;
         }
 
         .relic {
-            aspect-ratio: 1;
+            padding: 0.4rem 0.8rem;
             border: 1px solid var(--dim);
             background: var(--monolith);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.4rem;
-            color: #444;
-            position: relative;
-            transition: all 0.6s ease;
+            font-size: 0.55rem;
+            color: #555;
+            letter-spacing: 0.1rem;
+            transition: all 0.4s ease;
             cursor: default;
+            text-transform: uppercase;
         }
 
         .relic.active {
             border-color: var(--ultraviolet);
-            color: #eee;
-            background: rgba(68, 0, 255, 0.1);
+            color: #aaa;
+            background: rgba(68, 0, 255, 0.05);
         }
 
         .relic.special {
-            grid-column: span 3;
-            letter-spacing: 0.2rem;
-            font-weight: bold;
             border-color: var(--crystal);
             color: var(--crystal);
+            background: rgba(255, 255, 255, 0.03);
+            font-weight: bold;
         }
 
         #terminal {
-            font-size: 0.7rem;
-            color: #555;
-            height: 40px;
+            font-size: 0.65rem;
+            color: #444;
+            height: 1.2rem;
             overflow: hidden;
             margin-bottom: 1.5rem;
             text-align: center;
-            letter-spacing: 0.1rem;
+            letter-spacing: 0.05rem;
+            font-family: monospace;
         }
 
         #manifesto {
-            font-size: 0.7rem;
-            line-height: 2;
+            font-size: 0.75rem;
+            line-height: 1.8;
             text-align: center;
             margin-top: 1.5rem;
-            color: #888;
-            max-width: 600px;
+            color: #777;
+            max-width: 500px;
             margin-left: auto;
             margin-right: auto;
+            font-family: 'Courier New', Courier, monospace;
         }
 
         .status {
             margin-top: 2.5rem;
-            font-size: 0.55rem;
-            color: #444;
+            font-size: 0.5rem;
+            color: #333;
             display: flex;
             justify-content: space-between;
             border-top: 1px solid #111;
             padding-top: 1rem;
+            letter-spacing: 0.05rem;
+        }
+
+        @media (max-width: 600px) {
+            main {
+                padding: 1.5rem;
+            }
+            h1 {
+                font-size: 0.8rem;
+                letter-spacing: 0.4rem;
+            }
+            .status {
+                flex-direction: column;
+                gap: 0.5rem;
+                align-items: center;
+            }
         }
 
         #sensor-grid {
