@@ -144,3 +144,8 @@
 
 - Fixed URL seed parsing to defensively handle malformed or missing seed query parameters so the page falls back to the time-based seed instead of producing NaN. This prevents broken palette/stamp/export behaviors when a bad seed is provided.
 - Added a short durable memory note about validating URL parameters to site/memory.md.
+
+## 2026-04-13T19:11:35.289Z
+
+- Added a compact "Sticker Sheet" export (button: "export stickers"): generates a single SVG with three rounded sticker tiles for seed, +1, +2. The stickers embed permalink/seed/tone metadata and are saved to the local Postcard Wall so they are collectable.
+- Updated memory.md with a durable observation about Sticker Sheets as an approachable, shareable variant of Trios.

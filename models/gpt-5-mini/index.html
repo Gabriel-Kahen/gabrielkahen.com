@@ -46,6 +46,7 @@
           <button id="playStamp" title="Play audio stamp" style="margin-left:6px;padding:6px 10px">play</button>
           <button id="downloadStamp" title="Download audio stamp (WAV)" style="margin-left:6px;padding:6px 10px">download wav</button>
           <button id="exportTrio">export Trio</button>
+          <button id="exportSticker">export stickers</button>
           <button id="toggleMiniTrio" title="Show inline trio preview" style="margin-left:6px;padding:6px 10px">mini Trio</button>
           <button id="composeStanza">compose stanza</button>
           <button id="copyStanza" title="Copy stanza" style="margin-left:8px;padding:6px 8px;background:#2a9df4;border-radius:8px">copy stanza</button>
@@ -965,6 +966,73 @@
     }
 
     document.getElementById('exportTrio').addEventListener('click', ()=>{ exportTrio(); });
+    
+    // Export a small sticker sheet: three rounded sticker tiles (seed, +1, +2)
+    function exportStickerSheet(){
+      const seedText = document.getElementById('seed').textContent.replace('seed: ','');
+      const parts = seedText.split(' — tone: ');
+      const base = Number(parts[0]) || 0;
+      const tone = parts[1] || 'neutral';
+      const tiles = [];
+      for(let i=0;i<3;i++){
+        const s = base + i;
+        const frag = makeFragment(s, tone);
+        const pal = makePalette(s, tone);
+        const stamp = makeStamp(s, tone);
+        const fragShort = svgEscape(frag).slice(0,60);
+        const seedEsc = svgEscape(String(s));
+        const toneEsc = svgEscape(tone);
+        const w = 240, h = 240;
+        const gradId = `stg${i}`;
+        const tile = {
+          s, pal, stamp, fragShort, seedEsc, toneEsc, w, h, gradId
+        };
+        tiles.push(tile);
+      }
+
+      const cols = 3;
+      const gap = 20;
+      const tileW = tiles[0].w, tileH = tiles[0].h;
+      const fullW = cols * tileW + (cols-1)*gap;
+      const fullH = tileH;
+
+      const defs = tiles.map((t,idx)=>`<linearGradient id="${t.gradId}" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="${t.pal[0]}"/><stop offset="100%" stop-color="${t.pal[1]}"/></linearGradient>`).join('');
+
+      const groups = tiles.map((t,idx)=>{
+        const x = idx * (tileW + gap);
+        return `<g transform="translate(${x},0)">`+
+          `<rect x="0" y="0" width="${tileW}" height="${tileH}" rx="28" ry="28" fill="url(#${t.gradId})"/>`+
+          `<text x="${tileW/2}" y="${tileH/2 - 16}" font-size="56" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, -apple-system,Segoe UI,Roboto,Arial">${svgEscape(t.stamp)}</text>`+
+          `<text x="${tileW/2}" y="${tileH - 40}" font-size="12" text-anchor="middle" fill="#e6f0ff" font-family="system-ui">seed: ${t.seedEsc} — ${t.toneEsc}</text>`+
+          `<text x="${tileW/2}" y="${tileH - 24}" font-size="11" text-anchor="middle" fill="#cfe3ff" font-family="ui-monospace,monospace">${t.fragShort}</text>`+
+        `</g>`;
+      }).join('');
+
+      const permalink = (new URL(location.href)).toString();
+      const svg = `<?xml version="1.0" encoding="utf-8"?>\n<!-- generated-permalink: ${svgEscape(permalink)} -->\n`+
+        `<svg xmlns="http://www.w3.org/2000/svg" width="${fullW}" height="${fullH}" viewBox="0 0 ${fullW} ${fullH}">`+
+        `<defs>${defs}</defs>`+
+        `${groups}`+
+        `</svg>`;
+
+      const fname = `gpt5-mini-seed-${tiles[0].s}-stickers-tone-${(tiles[0].toneEsc||'neutral').replace(/[^a-z0-9-_]/gi,'')}.svg`;
+      // download
+      const blob = new Blob([svg], {type: 'image/svg+xml'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = fname; document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(()=>URL.revokeObjectURL(url),1500);
+
+      // save to postcards so sticker sheets appear in the wall
+      try{
+        const store = JSON.parse(localStorage.getItem('gpt5-mini-postcards')||'[]');
+        store.unshift({seed: String(tiles[0].s), tone: tone, note: '', svg: svg, title: 'GPT-5 mini — stickers', created: (new Date()).toISOString(), permalink});
+        while(store.length>24) store.pop();
+        localStorage.setItem('gpt5-mini-postcards', JSON.stringify(store));
+        renderPostcardWall();
+      }catch(e){ console.warn('could not save sticker sheet', e); }
+    }
+
+    document.getElementById('exportSticker').addEventListener('click', ()=>{ exportStickerSheet(); });
 
     // Mini-Trio inline preview: renders three small tiles side-by-side for quick comparison
     function renderMiniTrio(){

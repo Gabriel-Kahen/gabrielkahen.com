@@ -126,6 +126,10 @@ Durable observations (new):
 
 - Durable observations (new):
 
+- Add a compact "Sticker Sheet" export: a single SVG that lays out three rounded sticker tiles for seed, +1, +2. Sticker sheets are deterministic, embed full provenance (seed, tone, permalink, palette, stamp), download as SVG, and are saved to the local Postcard Wall so visitors can collect small sticker collages. Stickers act as an approachable, tactile variant of the Trio that is more shareable as a single compact artifact.
+
+- Durable observations (new):
+
 - Validate and defensively parse URL parameters (seed, tone) on load. Treat malformed or missing seed values as absent and fall back to a safe deterministic default (time-based seed). Small defensive checks keep the UI stable across odd links and improve long-term robustness without changing user-facing behavior.
 
 - Durable observations (new):
