@@ -47,6 +47,7 @@
           <button id="exportTrio">export Trio</button>
           <button id="composeStanza">compose stanza</button>
           <button id="copyStanza" title="Copy stanza" style="margin-left:8px;padding:6px 8px;background:#2a9df4;border-radius:8px">copy stanza</button>
+          <button id="exportStanza" title="Export stanza" style="margin-left:8px;padding:6px 8px;background:#ff8c42;border-radius:8px">export stanza</button>
           <button id="exportEmbed">embed</button>
           <button id="exportHtml">export HTML</button>
           <a id="permalink" href="#">permalink</a>
@@ -615,6 +616,57 @@
         const prev = btn.textContent; btn.textContent = 'copied!'; setTimeout(()=>btn.textContent = prev, 1200);
       }catch(e){ console.warn('copy stanza failed', e); }
     });
+
+    // Export the current stanza as a plain text file and save a small SVG thumbnail
+    async function exportStanza(){
+      try{
+        const stanza = composeStanza();
+        const seedText = (document.getElementById('seed')||{textContent:'seed: 0'}).textContent.replace('seed: ','');
+        const parts = seedText.split(' — tone: ');
+        const seed = parts[0];
+        const tone = parts[1] || 'neutral';
+        const note = (document.getElementById('noteInput')||{value:''}).value || '';
+        const u = new URL(location.href);
+        u.searchParams.set('seed', String(seed)); u.searchParams.set('tone', tone);
+        const permalink = u.toString();
+
+        // Download a text file containing the stanza and provenance
+        const header = `GPT-5 mini — stanza\nseed: ${seed} — tone: ${tone}\npermalink: ${permalink}\n\n`;
+        const txt = header + stanza + (note ? `\n\nnote: ${note}` : '');
+        const txtBlob = new Blob([txt], {type: 'text/plain'});
+        const safeTone = (tone||'neutral').replace(/[^a-z0-9-_]/gi,'');
+        const txtName = `gpt5-mini-seed-${seed}-tone-${safeTone}-stanza.txt`;
+        const at = document.createElement('a');
+        const txtUrl = URL.createObjectURL(txtBlob);
+        at.href = txtUrl; at.download = txtName; document.body.appendChild(at); at.click(); at.remove();
+        setTimeout(()=>URL.revokeObjectURL(txtUrl),1500);
+
+        // Build a small SVG thumbnail for the postcard wall so stanza exports are discoverable
+        const pal = makePalette(Number(seed), tone||'neutral');
+        const lines = stanza.split('\n').slice(0,4).map(svgEscape);
+        const w = 600, h = 260;
+        const tspans = lines.map((l,i)=>`<tspan x="28" y="80" dy="${i?22:0}">${l}</tspan>`).join('');
+        const svg = `<?xml version="1.0" encoding="utf-8"?>\n<!-- generated-permalink: ${svgEscape(permalink)} -->\n`+
+          `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">`+
+          `<defs><linearGradient id="sg" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="${pal[0]}"/><stop offset="100%" stop-color="${pal[1]}"/></linearGradient></defs>`+
+          `<rect width="100%" height="100%" fill="url(#sg)" rx="14" ry="14"/>`+
+          `<g font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, monospace" font-size="16" fill="#e6f0ff">${tspans}</g>`+
+          `<text x="28" y="${h-36}" font-family="system-ui" font-size="12" fill="#9fb8ff">seed: ${svgEscape(seed)} — tone: ${svgEscape(tone)}</text>`+
+          `</svg>`;
+
+        // Save into local postcards so stanza appears in the wall
+        try{
+          const store = JSON.parse(localStorage.getItem('gpt5-mini-postcards')||'[]');
+          store.unshift({seed: String(seed), tone: tone, note: note, svg: svg, stanza: stanza, title: 'GPT-5 mini — stanza', created: (new Date()).toISOString(), permalink});
+          while(store.length>24) store.pop();
+          localStorage.setItem('gpt5-mini-postcards', JSON.stringify(store));
+          renderPostcardWall();
+        }catch(e){ console.warn('could not save stanza', e); }
+
+      }catch(e){ console.warn('export stanza failed', e); alert('Export stanza failed'); }
+    }
+
+    document.getElementById('exportStanza').addEventListener('click', ()=>{ exportStanza(); });
 
     document.getElementById('clearWall').addEventListener('click', ()=>{
       if(confirm('Clear saved postcards from this browser?')){

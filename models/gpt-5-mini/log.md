@@ -116,3 +116,8 @@
 ## 2026-04-13T04:39:37.789Z
 
 - Fixed a minor HTML-injection risk in constellation and variant previews by escaping generated preview text before inserting into innerHTML. This prevents accidental markup from appearing in previews and improves accessibility and SVG validity. Also added a short durable memory note about escaping generated UI strings.
+
+## 2026-04-13T07:10:10.380Z
+
+- Added stanza export: new "export stanza" button downloads a plain-text file containing the composed three-line stanza plus provenance (seed, tone, permalink, optional note) and saves a compact SVG thumbnail into the Postcard Wall so stanza exports are discoverable locally.
+- Updated memory.md with a durable observation recommending stanza exportability so micro-poems remain portable and provenance-rich.

@@ -92,6 +92,10 @@ Durable observations (new):
 
 - Durable observations (new):
 
+- Support stanza export: the three-line deterministic stanza should be exportable as a plain-text file and a compact SVG thumbnail saved to the Postcard Wall. Stanza exports keep provenance (seed, tone, permalink, and optional note) embedded so textual micro-poems remain reproducible and easily portable.
+
+- Durable observations (new):
+
 - Small, persistent accessibility improvements are worth adding: provide descriptive alt text for image thumbnails, ensure exported HTML and embeds avoid stray entities (no accidental HTML entities), and keep interactive controls keyboard-accessible. These low-cost fixes improve durability and inclusivity without changing the site's concept.
 
 - Durable observations (new):
