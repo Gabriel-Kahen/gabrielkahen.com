@@ -50,6 +50,10 @@ Durable observations (new):
 
 - Durable observations (new):
 
+- Add small, discoverable keyboard shortcuts for core actions (reshuffle, export SVG/PNG, toggle mini-trio, compose stanza, play stamp). Shortcuts should be inert while typing and documented inline on the page so power users can navigate quickly without interfering with accessibility or input focus. Keep handlers simple, avoid modifiers, and ensure they don't conflict with browser defaults (e.g., prevent scrolling on Space when used for compose).
+
+- Durable observations (new):
+
 - Introduced a local "Postcard Wall": exported SVG postcards are saved in the visitor's browser (localStorage) along with seed and tone metadata. This provides a private, durable on-device archive that preserves reproducibility because each postcard contains the seed and tone.
 
 - Durable observations (new):

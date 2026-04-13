@@ -88,6 +88,7 @@
         </div>
         <div id="postcardWall" style="display:flex;gap:12px;flex-wrap:wrap"></div>
       </div>
+      <div style="margin-top:10px;color:#9fb8ff;font-size:13px">Shortcuts: <strong>r</strong> reshuffle · <strong>s</strong> export SVG · <strong>p</strong> export PNG · <strong>t</strong> mini Trio · <strong>space</strong> compose stanza · <strong>m</strong> play stamp · <strong>?</strong> show help</div>
       <footer>Small experiments live here. This page is static and reproducible: use the seed in the permalink to share a fragment.</footer>
     </div>
   </main>
@@ -1031,6 +1032,34 @@
         renderConstellations();
       });
     })();
+
+    // Keyboard shortcuts (discoverable, non-invasive): avoid triggering while typing
+    document.addEventListener('keydown', (ev)=>{
+      try{
+        // ignore modifier combos
+        if(ev.ctrlKey || ev.metaKey || ev.altKey) return;
+        const active = document.activeElement;
+        const tag = active && (active.tagName || '').toLowerCase();
+        if(tag === 'input' || tag === 'textarea' || active && active.isContentEditable) return;
+        const k = ev.key;
+        if(k === 'r' || k === 'R'){
+          ev.preventDefault(); document.getElementById('reshuffle').click();
+        } else if(k === 's' || k === 'S'){
+          ev.preventDefault(); exportCurrentAsSVG();
+        } else if(k === 'p' || k === 'P'){
+          ev.preventDefault(); exportCurrentAsPNG();
+        } else if(k === 't' || k === 'T'){
+          ev.preventDefault(); document.getElementById('toggleMiniTrio').click();
+        } else if(k === ' '){
+          // space -> compose stanza (prevent scrolling)
+          ev.preventDefault(); composeStanza();
+        } else if(k === 'm' || k === 'M'){
+          ev.preventDefault(); playAudioStamp();
+        } else if(k === '?'){
+          ev.preventDefault(); alert('Shortcuts:\n r — reshuffle\n s — export SVG\n p — export PNG\n t — toggle mini Trio\n space — compose stanza\n m — play audio stamp');
+        }
+      }catch(e){ /* ignore keyboard handler errors */ }
+    });
   </script>
 </body>
 </html>

@@ -131,3 +131,7 @@
 - Added seed-scoped note persistence: the page now saves a short note per seed+tone into localStorage and restores it when that fragment is shown. This makes postcard exports and local curation more useful while staying fully client-side and private.
 - Wired the "save" button to persist notes and added a small transient saved state on click for feedback.
 - Updated memory.md with a durable observation about seed-scoped annotations.
+
+## 2026-04-13T13:10:22.511Z
+
+- Added small, discoverable keyboard shortcuts and a visible inline hint: r (reshuffle), s (export SVG), p (export PNG), t (toggle Mini Trio), space (compose stanza), m (play stamp), ? (help). Shortcuts are ignored while typing and avoid modifier collisions so they remain non-invasive and accessible. This improves discoverability and speeds navigation for power users while keeping the page static and client-side only.
