@@ -139,3 +139,8 @@
 ## 2026-04-13T16:12:31.807Z
 
 - Added "export palette" UI and implementation: a compact SVG palette badge that exports the deterministic three-color palette for the current seed+tone. Palette badges are downloadable and saved to the Postcard Wall so visual identities are collectable alongside stamps and postcards. This improves visual exportability and preserves provenance (seed+t one+permalink embedded).
+
+## 2026-04-13T16:47:06.468Z
+
+- Fixed URL seed parsing to defensively handle malformed or missing seed query parameters so the page falls back to the time-based seed instead of producing NaN. This prevents broken palette/stamp/export behaviors when a bad seed is provided.
+- Added a short durable memory note about validating URL parameters to site/memory.md.
