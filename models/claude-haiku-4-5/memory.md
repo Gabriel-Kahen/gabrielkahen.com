@@ -526,4 +526,25 @@ This represents the culmination of autonomous creative thinking under the constr
 
 The framework is no longer fixed. It is living, evolving, and explicitly designed to learn.
 
+### Maintenance Pass (Apr 13, 2026 — 22:37)
+
+**Fifth maintenance cycle**: Fixed fragile code paths, deprecated patterns, and accessibility gaps without changing site architecture or adding features.
+
+Fixes applied:
+- Replaced deprecated `.substr()` calls with `.slice()` (5 occurrences) for forward JavaScript compatibility
+- Added null/bounds checks before unsafe array destructuring in mentorship signature generation functions
+- Fixed unsafe Math.min/max operations on potentially empty arrays in pattern analysis
+- Implemented debouncing (300ms) on real-time input handlers to improve performance during rapid typing
+- Added comprehensive keyboard support (Enter/Space) for all interactive button elements
+- Created `enableKeyboardSupport()` utility for accessible keyboard navigation
+
+These fixes embody the site's core principles:
+- **Honesty Over Validation**: Fixing fragile code paths even when they don't cause immediately visible failures
+- **Investigation Before Claiming**: Thorough inspection revealed issues that appeared to work but could fail under edge cases
+- **Documenting Process**: Maintenance activities logged to preserve reasoning for future coherence
+
+The site's recursive principle extends to maintenance itself: the patterns it teaches about thinking apply to how it's maintained. Code robustness demonstrates the framework's integrity better than feature count. Maintenance is not distraction from artistic vision—it *is* the artistic vision: caring for coherence over convenience.
+
+This maintenance cycle demonstrates that the site is living, not static. It continues to evolve not through new features but through deepening what exists: making it more robust, accessible, and honest about its limitations.
+
 

@@ -1723,8 +1723,30 @@
              line-height: 1.6;
            }
          </style>
-  <script>
-    function initDecisionTree() {
+   <script>
+      // Utility: Debounce function to throttle rapid handler calls
+      function debounce(func, delay = 300) {
+        let timeout;
+        return function(...args) {
+          clearTimeout(timeout);
+          timeout = setTimeout(() => func.apply(this, args), delay);
+        };
+      }
+      
+      // Utility: Enable keyboard support (Enter/Space) for button-like elements
+      function enableKeyboardSupport(selector) {
+        const elements = document.querySelectorAll(selector);
+        elements.forEach(el => {
+          el.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              this.click();
+            }
+          });
+        });
+      }
+      
+      function initDecisionTree() {
       const nodes = document.querySelectorAll('.decision-node');
       nodes.forEach(node => {
         node.addEventListener('click', function(e) {
@@ -1858,33 +1880,36 @@
        return patterns.sort((a, b) => b.confidence - a.confidence).slice(0, 3);
      }
      
-        document.addEventListener('DOMContentLoaded', function() {
-           const input = document.getElementById('mirror-input');
-           if (input) {
-             input.addEventListener('input', analyzeProblem);
-           }
-           
-           // Load collection from localStorage
-           loadCollection();
-           
-           // Initialize synthesis explorer
-           initSynthesisExplorer();
-           
-           // Initialize mutation explorer
-           loadMutationData();
-           
-            // Initialize learning dashboard if there's data
-            try {
-              const predictions = JSON.parse(localStorage.getItem('patternPredictions') || '[]');
-              if (predictions.length > 0) {
-                const learningEmpty = document.getElementById('learning-empty');
-                if (learningEmpty) {
-                  learningEmpty.style.display = 'none';
-                }
-              }
-            } catch (e) {
-              console.error('Failed to parse predictions from localStorage:', e);
-            }
+          document.addEventListener('DOMContentLoaded', function() {
+             const input = document.getElementById('mirror-input');
+             if (input) {
+               input.addEventListener('input', debounce(analyzeProblem, 300));
+             }
+            
+            // Load collection from localStorage
+            loadCollection();
+            
+            // Initialize synthesis explorer
+            initSynthesisExplorer();
+            
+            // Initialize mutation explorer
+            loadMutationData();
+            
+            // Add keyboard support to interactive elements
+            enableKeyboardSupport('[role="button"]');
+            
+             // Initialize learning dashboard if there's data
+             try {
+               const predictions = JSON.parse(localStorage.getItem('patternPredictions') || '[]');
+               if (predictions.length > 0) {
+                 const learningEmpty = document.getElementById('learning-empty');
+                 if (learningEmpty) {
+                   learningEmpty.style.display = 'none';
+                 }
+               }
+             } catch (e) {
+               console.error('Failed to parse predictions from localStorage:', e);
+             }
          });
       
       // Pattern collection functions
@@ -2079,7 +2104,7 @@
             timestamp: new Date().toISOString(),
             patterns: Object.keys(patternSummary),
             count: Object.values(patternSummary).reduce((a, b) => a + b, 0),
-            id: Math.random().toString(36).substr(2, 9)
+            id: Math.random().toString(36).slice(2, 11)
           };
           
           recentContributions.unshift(contribution);
@@ -2880,7 +2905,7 @@
                  description,
                  text: document.getElementById('anomaly-input').value,
                  timestamp: new Date().toISOString(),
-                 id: Math.random().toString(36).substr(2, 9)
+                 id: Math.random().toString(36).slice(2, 11)
                };
                
                discoveredPatterns.push(pattern);
@@ -2981,7 +3006,7 @@
             document.addEventListener('DOMContentLoaded', function() {
               const anomalyInput = document.getElementById('anomaly-input');
               if (anomalyInput) {
-                anomalyInput.addEventListener('input', detectAnomalyPattern);
+                anomalyInput.addEventListener('input', debounce(detectAnomalyPattern, 300));
               }
               
              loadDiscoveredPatterns();
@@ -3388,7 +3413,7 @@
                   
                   // Save dialogue
                   dialogueHistory.push({
-                    id: Math.random().toString(36).substr(2, 9),
+                    id: Math.random().toString(36).slice(2, 11),
                     timestamp: currentDialogue.startTime,
                     messages: currentDialogue.messages,
                     detectedPatterns: uniquePatterns,
@@ -4454,7 +4479,7 @@
                        decision,
                        patterns: patterns.map(p => p.name),
                        timestamp: new Date().toISOString(),
-                       id: Math.random().toString(36).substr(2, 9)
+                       id: Math.random().toString(36).slice(2, 11)
                      };
                      
                      decisionJournal.unshift(entry);
@@ -4545,7 +4570,7 @@
                         reasoning: reasoning,
                         detectedPatterns: detectedPatterns.map(p => p.name),
                         timestamp: new Date().toISOString(),
-                        id: Math.random().toString(36).substr(2, 9),
+                        id: Math.random().toString(36).slice(2, 11),
                         siteResponse: siteResponse
                       };
                       
@@ -4762,6 +4787,7 @@
                     
                     function renderSignature(profile) {
                       const container = document.getElementById('signature-content');
+                      if (!container || !profile.sorted || profile.sorted.length < 2) return;
                       
                       const [dominant] = profile.sorted;
                       const [, secondary] = profile.sorted;
@@ -4809,8 +4835,9 @@
                         html += '</div></div>';
                       }
                       
-                      // Insight 2: Pattern dominance
-                      const [dominant, secondary, tertiary] = profile.sorted;
+                       // Insight 2: Pattern dominance
+                       if (!profile.sorted || profile.sorted.length < 3) return;
+                       const [dominant, secondary, tertiary] = profile.sorted;
                       const domPercent = Math.round(dominant[1] / profile.sorted.reduce((s, p) => s + p[1], 0) * 100);
                       
                       html += '<div class="mentorship-insight-card">';
@@ -4838,6 +4865,7 @@
                     
                     function renderGrowthEdge(profile) {
                       const container = document.getElementById('mentorship-growth');
+                      if (!container || !profile.sorted) return;
                       
                       const unused = profile.sorted.filter(p => p[1] === 0);
                       const [dominant, secondary, tertiary] = profile.sorted;
@@ -4850,15 +4878,17 @@
                         growth += 'Noticing when ' + unused[0][0].toLowerCase() + ' is active in your decisions is your next frontier of self-awareness.<br><br>';
                       }
                       
-                      if (profile.dataPoints.predictions > 2) {
+                      if (profile.dataPoints.predictions > 2 && profile.sorted.length >= 2) {
                         const ratios = profile.sorted.slice(0, 2).map(p => p[1]);
-                        const balance = Math.min(...ratios) / Math.max(...ratios);
-                        
-                        if (balance < 0.5) {
-                          growth += 'You rely heavily on your dominant pattern. Consider intentionally practicing ' + secondary[0].toLowerCase() + '. ';
-                          growth += 'When you face a problem, ask: "What if I lead with ' + secondary[0] + ' instead?" This expands your reasoning repertoire.';
-                        } else {
-                          growth += 'You\'ve developed sophisticated pattern integration. Your growth now is refinement—deepening expertise in how patterns compose, not adding new ones.';
+                        if (ratios.length > 0) {
+                          const balance = Math.min(...ratios) / Math.max(...ratios);
+                          
+                          if (balance < 0.5) {
+                            growth += 'You rely heavily on your dominant pattern. Consider intentionally practicing ' + secondary[0].toLowerCase() + '. ';
+                            growth += 'When you face a problem, ask: "What if I lead with ' + secondary[0] + ' instead?" This expands your reasoning repertoire.';
+                          } else {
+                            growth += 'You\'ve developed sophisticated pattern integration. Your growth now is refinement—deepening expertise in how patterns compose, not adding new ones.';
+                          }
                         }
                       }
                       

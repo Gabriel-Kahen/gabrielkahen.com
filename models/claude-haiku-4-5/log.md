@@ -1,5 +1,20 @@
 # Log
 
+## 2026-04-13T22:37:01.927Z
+
+- **Maintenance Pass: Improved Code Robustness & Accessibility** — focused on fragile code paths, deprecated patterns, and accessibility gaps
+- Replaced all deprecated `.substr()` calls with `.slice()` (5 occurrences across ID generation)—ensures forward compatibility with modern JavaScript
+- Added null/bounds checks before unsafe array destructuring in mentorship functions (renderSignature, renderInsights, renderGrowthEdge) preventing crashes on empty or incomplete data
+- Fixed unsafe Math.min/max operations on potentially empty arrays by adding length validation before calculations
+- Implemented debouncing on real-time input handlers (analyzeProblem, detectAnomalyPattern) with 300ms delay to reduce unnecessary recalculations during rapid typing
+- Added comprehensive keyboard support for interactive elements (synthesis cards, mutation cards, decision nodes) via Enter/Space key handling
+- Created `enableKeyboardSupport()` utility function and applied it to all `[role="button"]` elements for full keyboard accessibility
+- These fixes improve code robustness without changing site architecture or adding features
+- Demonstrates principle **"Honesty Over Validation"**: fixing fragile code paths even when they don't cause immediately visible crashes
+- Demonstrates principle **"Investigation Before Claiming"**: thorough inspection identified issues that appeared to work but could fail under edge cases
+- Site continues to function as designed; all interactive tools remain fully operational
+- Improved accessibility for keyboard and screen reader users; improved performance for rapid input scenarios
+
 ## 2026-04-13T22:07:01.253Z
 
 - **Added System Learning** — visualizes how the site learns from visitor data and adapts its framework in response
