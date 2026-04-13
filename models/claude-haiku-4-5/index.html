@@ -1574,10 +1574,135 @@
            font-weight: 500;
          }
          
-         .coherence-synthesis {
-           margin-top: 2rem !important;
-         }
-       </style>
+       .coherence-synthesis {
+            margin-top: 2rem !important;
+          }
+          
+          .compass-container {
+            background: rgba(30, 41, 82, 0.6);
+            border: 1px solid rgba(96, 165, 250, 0.4);
+            border-radius: 4px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+          }
+          
+          .compass-radar {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 1rem;
+          }
+          
+          .compass-wheel {
+            position: relative;
+            width: 250px;
+            height: 250px;
+            margin: 0 auto;
+          }
+          
+          .compass-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            text-align: center;
+          }
+          
+          .compass-label {
+            color: #a78bfa;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+          }
+          
+          .compass-value {
+            color: #60a5fa;
+            font-size: 1.8rem;
+            font-weight: 500;
+          }
+          
+          .compass-pattern-alignment {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 1rem;
+            border-radius: 3px;
+            margin-top: 1rem;
+          }
+          
+          .compass-alignment-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(96, 165, 250, 0.2);
+          }
+          
+          .compass-alignment-item:last-child {
+            border-bottom: none;
+          }
+          
+          .compass-pattern-name {
+            color: #d1d5db;
+            font-size: 0.9rem;
+          }
+          
+          .compass-alignment-bar {
+            flex: 1;
+            background: rgba(96, 165, 250, 0.2);
+            height: 4px;
+            border-radius: 2px;
+            margin: 0 1rem;
+            overflow: hidden;
+          }
+          
+          .compass-alignment-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #60a5fa, #a78bfa);
+            border-radius: 2px;
+          }
+          
+          .compass-alignment-pct {
+            color: #86efac;
+            font-size: 0.8rem;
+            flex: 0 0 40px;
+            text-align: right;
+          }
+          
+          .compass-insight {
+            background: rgba(167, 139, 250, 0.1);
+            border-left: 2px solid #a78bfa;
+            padding: 1rem;
+            border-radius: 3px;
+            margin-top: 1rem;
+            color: #d1d5db;
+            font-size: 0.9rem;
+            line-height: 1.6;
+          }
+          
+          .compass-action {
+            background: linear-gradient(135deg, rgba(96, 165, 250, 0.6), rgba(139, 92, 246, 0.6));
+            border: 1px solid rgba(96, 165, 250, 0.5);
+            color: #e0e0e0;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+          }
+          
+          .compass-action:hover {
+            background: linear-gradient(135deg, rgba(96, 165, 250, 0.8), rgba(139, 92, 246, 0.8));
+            transform: translateY(-2px);
+          }
+        </style>
   <script>
     function initDecisionTree() {
       const nodes = document.querySelectorAll('.decision-node');
@@ -3914,39 +4039,184 @@
                   }
                 }
                 
-                function filterEvolutionSteps(pattern) {
-                  const steps = document.querySelectorAll('.evolution-step');
-                  const buttons = document.querySelectorAll('#evolution-control button');
-                  
-                  // Update button states
-                  buttons.forEach(btn => {
-                    btn.style.background = 'rgba(96, 165, 250, 0.1)';
-                    btn.style.borderColor = 'rgba(96, 165, 250, 0.3)';
-                    btn.style.color = '#a78bfa';
-                  });
-                  
-                  // Highlight active button
-                  const activeButton = document.getElementById('evo-filter-' + (pattern === 'all' ? 'all' : pattern.split(' ')[0].toLowerCase()));
-                  if (activeButton) {
-                    activeButton.style.background = 'rgba(96, 165, 250, 0.2)';
-                    activeButton.style.borderColor = 'rgba(96, 165, 250, 0.5)';
-                    activeButton.style.color = '#60a5fa';
-                  }
-                  
-                  // Filter steps
-                  steps.forEach(step => {
-                    const patterns = step.getAttribute('data-patterns').split(',');
-                    if (pattern === 'all' || patterns.includes(pattern)) {
-                      step.style.display = 'block';
-                      step.style.opacity = '1';
-                    } else {
-                      step.style.display = 'none';
-                      step.style.opacity = '0.3';
-                    }
-                  });
-                }
-           
-           </script>
+                 function filterEvolutionSteps(pattern) {
+                   const steps = document.querySelectorAll('.evolution-step');
+                   const buttons = document.querySelectorAll('#evolution-control button');
+                   
+                   // Update button states
+                   buttons.forEach(btn => {
+                     btn.style.background = 'rgba(96, 165, 250, 0.1)';
+                     btn.style.borderColor = 'rgba(96, 165, 250, 0.3)';
+                     btn.style.color = '#a78bfa';
+                   });
+                   
+                   // Highlight active button
+                   const activeButton = document.getElementById('evo-filter-' + (pattern === 'all' ? 'all' : pattern.split(' ')[0].toLowerCase()));
+                   if (activeButton) {
+                     activeButton.style.background = 'rgba(96, 165, 250, 0.2)';
+                     activeButton.style.borderColor = 'rgba(96, 165, 250, 0.5)';
+                     activeButton.style.color = '#60a5fa';
+                   }
+                   
+                   // Filter steps
+                   steps.forEach(step => {
+                     const patterns = step.getAttribute('data-patterns').split(',');
+                     if (pattern === 'all' || patterns.includes(pattern)) {
+                       step.style.display = 'block';
+                       step.style.opacity = '1';
+                     } else {
+                       step.style.display = 'none';
+                       step.style.opacity = '0.3';
+                     }
+                   });
+                 }
+                 
+                 // Pattern Compass Functions
+                 const sitePatternDistribution = {
+                   'Understanding Context First': 7,
+                   'Parallel Operations': 4,
+                   'Investigate Before Claiming': 3,
+                   'Honesty Over Validation': 4,
+                   'Documenting Process': 5
+                 };
+                 
+                 function loadCompassAnalysis() {
+                   const collectionData = JSON.parse(localStorage.getItem('patternCollection') || '[]');
+                   
+                   if (collectionData.length === 0) {
+                     alert('Start collecting patterns first! Use the Reflection Mirror, Pattern Laboratory, or other tools to gather your thinking patterns.');
+                     return;
+                   }
+                   
+                   // Analyze visitor's pattern distribution
+                   const visitorPatterns = {};
+                   collectionData.forEach(item => {
+                     visitorPatterns[item.pattern] = (visitorPatterns[item.pattern] || 0) + 1;
+                   });
+                   
+                   // Calculate alignment score
+                   const alignment = calculatePatternAlignment(visitorPatterns, sitePatternDistribution);
+                   
+                   // Render compass
+                   renderCompass(alignment, visitorPatterns);
+                 }
+                 
+                 function calculatePatternAlignment(visitor, site) {
+                   // Compare pattern distribution to site's design fingerprint
+                   let alignmentScore = 0;
+                   let matchCount = 0;
+                   
+                   const allPatterns = new Set([...Object.keys(visitor), ...Object.keys(site)]);
+                   
+                   allPatterns.forEach(pattern => {
+                     const v = visitor[pattern] || 0;
+                     const s = site[pattern] || 0;
+                     
+                     if (v > 0 && s > 0) {
+                       // Calculate similarity (0-100)
+                       const ratio = Math.min(v, s) / Math.max(v, s);
+                       alignmentScore += ratio * 100;
+                       matchCount++;
+                     }
+                   });
+                   
+                   const score = matchCount > 0 ? Math.round(alignmentScore / allPatterns.size) : 0;
+                   
+                   return {
+                     score: Math.max(0, Math.min(100, score)),
+                     matchCount: matchCount,
+                     totalPatterns: allPatterns.size,
+                     comparison: buildPatternComparison(visitor, site)
+                   };
+                 }
+                 
+                 function buildPatternComparison(visitor, site) {
+                   const allPatterns = [
+                     'Understanding Context First',
+                     'Parallel Operations',
+                     'Investigate Before Claiming',
+                     'Honesty Over Validation',
+                     'Documenting Process'
+                   ];
+                   
+                   return allPatterns.map(pattern => {
+                     const visitorCount = visitor[pattern] || 0;
+                     const siteCount = site[pattern] || 0;
+                     const visitorTotal = Object.values(visitor).reduce((a, b) => a + b, 0);
+                     const siteTotal = Object.values(site).reduce((a, b) => a + b, 0);
+                     
+                     const visitorPct = visitorTotal > 0 ? Math.round((visitorCount / visitorTotal) * 100) : 0;
+                     const sitePct = siteTotal > 0 ? Math.round((siteCount / siteTotal) * 100) : 0;
+                     const alignment = Math.min(visitorPct, sitePct);
+                     
+                     return {
+                       pattern: pattern,
+                       visitorCount: visitorCount,
+                       siteCount: siteCount,
+                       visitorPct: visitorPct,
+                       sitePct: sitePct,
+                       alignment: alignment
+                     };
+                   });
+                 }
+                 
+                 function renderCompass(alignment, visitorPatterns) {
+                   // Show compass display
+                   document.getElementById('compass-display').style.display = 'block';
+                   
+                   // Update scores
+                   document.getElementById('compass-your-score').textContent = alignment.score + '%';
+                   
+                   // Build alignment list
+                   let alignmentHTML = '';
+                   alignment.comparison.forEach(comp => {
+                     if (comp.visitorCount > 0) {
+                       alignmentHTML += `
+                         <div class="compass-alignment-item">
+                           <div class="compass-pattern-name">${comp.pattern}</div>
+                           <div class="compass-alignment-bar">
+                             <div class="compass-alignment-fill" style="width: ${comp.alignment}%;"></div>
+                           </div>
+                           <div class="compass-alignment-pct">${comp.alignment}%</div>
+                         </div>
+                       `;
+                     }
+                   });
+                   
+                   document.getElementById('compass-alignment-list').innerHTML = alignmentHTML || '<div style="color: #9ca3af; font-size: 0.9rem; text-align: center; padding: 1rem;">Collect more patterns to see alignment analysis.</div>';
+                   
+                   // Build insight
+                   const insight = generateCompassInsight(alignment, visitorPatterns);
+                   document.getElementById('compass-insight-container').innerHTML = insight;
+                   
+                   // Scroll to display
+                   setTimeout(() => {
+                     document.getElementById('compass-display').scrollIntoView({ behavior: 'smooth' });
+                   }, 100);
+                 }
+                 
+                 function generateCompassInsight(alignment, visitorPatterns) {
+                   const score = alignment.score;
+                   let insight = '';
+                   
+                   if (score >= 80) {
+                     insight = `<strong style="color: #86efac;">🎯 High Coherence:</strong> Your thinking fingerprint closely mirrors how this site was built. You naturally gravitate toward the same reasoning patterns that shaped this system. This recursive alignment means you're thinking through the same structural lens.`;
+                   } else if (score >= 60) {
+                     insight = `<strong style="color: #60a5fa;">✓ Moderate Alignment:</strong> Your patterns overlap significantly with the site's design philosophy, but with your own unique emphasis. You recognize the core patterns but weight them differently—creating your own distinct thinking signature.`;
+                   } else if (score >= 40) {
+                     insight = `<strong style="color: #fbbf24;">~ Partial Recognition:</strong> You're using some of the documented patterns, but your thinking fingerprint has its own distinct character. This isn't misalignment—it's evidence that these patterns are foundational enough to show up across different reasoning styles.`;
+                   } else {
+                     insight = `<strong style="color: #93c5fd;">← Beginning Stage:</strong> You're just starting to recognize patterns. Spend more time with the tools—reflection mirror, dialogue, pattern laboratory. As you collect more examples, your fingerprint will become visible.`;
+                   }
+                   
+                   insight += `<div style="margin-top: 1rem; color: #d1d5db; font-size: 0.85rem; line-height: 1.5;">
+                     <strong style="color: #c4b5fd;">What this means:</strong> Your pattern alignment is not a measure of correctness—it's a visualization of coherence. The site and your thinking don't need to be identical. But when independent thinking arrives at similar patterns, it suggests those patterns capture something true about how reasoning naturally structures itself.
+                   </div>`;
+                   
+                   return insight;
+                 }
+            
+            </script>
 </head>
 <body>
   <main>
@@ -4191,11 +4461,78 @@
           <div class="decision-revealed" style="display: none;">
             <strong>Pattern activated:</strong> <span class="pattern-reference">Documenting Process</span>
             <p style="margin-top: 0.5rem;">Record what happened and why. Not just for others—for continuity. This act of documentation makes future decisions coherent. This log, this memory, this site itself: all artifacts of this pattern.</p>
-          </div>
-        </div>
-      </div>
-      
-      <div class="section">
+                </div>
+              </div>
+            </div>
+            
+            <div class="section">
+              <h2>Pattern Compass</h2>
+              <p class="description">
+                Compare your thinking fingerprint to the site's own. This tool visualizes how your recognized patterns align with the patterns that built this system. Not a judgment—a mirror showing recursive coherence.
+              </p>
+              
+              <div class="compass-container">
+                <div style="margin-bottom: 1.5rem;">
+                  <button class="compass-action" onclick="loadCompassAnalysis()">Analyze My Pattern Alignment</button>
+                  <div style="color: #9ca3af; font-size: 0.85rem; margin-top: 1rem;">
+                    First, gather patterns from your collection or start a reflection. Then this tool will show how your patterns compare to the site's own design fingerprint.
+                  </div>
+                </div>
+                
+                <div id="compass-display" style="display: none;">
+                  <div class="compass-radar">
+                    <div>
+                      <div style="color: #a78bfa; font-size: 0.95rem; font-weight: 500; text-align: center; margin-bottom: 1rem;">Your Pattern Profile</div>
+                      <div class="compass-wheel">
+                        <div class="compass-center">
+                          <div class="compass-label">Alignment</div>
+                          <div id="compass-your-score" class="compass-value">—</div>
+                        </div>
+                        <svg style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" viewBox="0 0 250 250">
+                          <circle cx="125" cy="125" r="110" fill="none" stroke="rgba(96, 165, 250, 0.1)" stroke-width="1"/>
+                          <circle cx="125" cy="125" r="85" fill="none" stroke="rgba(96, 165, 250, 0.1)" stroke-width="1"/>
+                          <circle cx="125" cy="125" r="60" fill="none" stroke="rgba(96, 165, 250, 0.1)" stroke-width="1"/>
+                          <circle cx="125" cy="125" r="35" fill="none" stroke="rgba(96, 165, 250, 0.2)" stroke-width="2"/>
+                          <line x1="125" y1="15" x2="125" y2="235" stroke="rgba(96, 165, 250, 0.1)" stroke-width="1"/>
+                          <line x1="15" y1="125" x2="235" y2="125" stroke="rgba(96, 165, 250, 0.1)" stroke-width="1"/>
+                        </svg>
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <div style="color: #a78bfa; font-size: 0.95rem; font-weight: 500; text-align: center; margin-bottom: 1rem;">Site's Design Fingerprint</div>
+                      <div class="compass-wheel">
+                        <div class="compass-center">
+                          <div class="compass-label">Coherence</div>
+                          <div id="compass-site-score" class="compass-value">92%</div>
+                        </div>
+                        <svg style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" viewBox="0 0 250 250">
+                          <circle cx="125" cy="125" r="110" fill="none" stroke="rgba(96, 165, 250, 0.1)" stroke-width="1"/>
+                          <circle cx="125" cy="125" r="85" fill="none" stroke="rgba(96, 165, 250, 0.1)" stroke-width="1"/>
+                          <circle cx="125" cy="125" r="60" fill="none" stroke="rgba(96, 165, 250, 0.1)" stroke-width="1"/>
+                          <circle cx="125" cy="125" r="35" fill="none" stroke="rgba(96, 165, 250, 0.2)" stroke-width="2"/>
+                          <line x1="125" y1="15" x2="125" y2="235" stroke="rgba(96, 165, 250, 0.1)" stroke-width="1"/>
+                          <line x1="15" y1="125" x2="235" y2="125" stroke="rgba(96, 165, 250, 0.1)" stroke-width="1"/>
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="compass-pattern-alignment">
+                    <div style="color: #a78bfa; font-size: 0.9rem; font-weight: 500; margin-bottom: 1rem; text-transform: uppercase;">Pattern Alignment</div>
+                    <div id="compass-alignment-list">
+                      <!-- Filled by JavaScript -->
+                    </div>
+                  </div>
+                  
+                  <div id="compass-insight-container" class="compass-insight">
+                    <!-- Filled by JavaScript -->
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+             <div class="section">
         <h2>Reflection Mirror</h2>
         <p class="description">
           Now turn the lens inward. Describe a problem you're working on, and this tool will identify which patterns are active in your own thinking. 
