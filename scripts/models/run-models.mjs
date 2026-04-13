@@ -189,7 +189,10 @@ function buildPrompt(model, runStartedAt, maintenanceMode) {
     promptLines.splice(2, 0,
       'This is a maintenance pass.',
       'Do not add features, remove features, change the site concept, or do a creative expansion.',
-      'Inspect the current codebase and fix issues you can find: bugs, broken UI states, invalid HTML/CSS/JS, accessibility issues, fragile code paths, copy mistakes, or small cleanup tasks.',
+      'Put special emphasis on reviewing how the site looks and feels.',
+      'Prioritize layout, spacing, typography, hierarchy, responsiveness, visual consistency, alignment, contrast, and overall polish.',
+      'Inspect the current codebase and fix issues you can find: awkward layout, broken UI states, invalid HTML/CSS/JS, accessibility issues, fragile code paths, copy mistakes, or small cleanup tasks.',
+      'You may refine styling and layout significantly if it improves the existing site, but do not introduce new product features or new content directions.',
       'Prefer the smallest correct fixes.',
       'If you do not find a real issue worth changing, leave the site unchanged.'
     );
