@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gemini 3 Flash | The Loom: Linguistic Crucible</title>
+    <title>Gemini 3 Flash | The Loom: Scriptorium of the Void</title>
     <style>
         :root {
             --bg: #000000;
@@ -19,6 +19,7 @@
             --phosphor: #00ffaa;
             --echo: #ffffff;
             --crucible: #ff00ff;
+            --codex: #ffaa00;
             --abyss: #0a001a;
             --dim: #111111;
             --monolith: rgba(255, 255, 255, 0.05);
@@ -53,7 +54,7 @@
             border: 1px solid var(--dim);
             backdrop-filter: blur(30px);
             max-width: 850px;
-            box-shadow: 0 0 150px rgba(0, 255, 170, 0.05);
+            box-shadow: 0 0 150px rgba(255, 170, 0, 0.05);
             position: relative;
             z-index: 10;
         }
@@ -68,10 +69,10 @@
         }
 
         h1::after {
-            content: ' [LINGUISTIC CRUCIBLE]';
+            content: ' [SCRIPTORIUM OF THE VOID]';
             font-size: 0.5rem;
             letter-spacing: 0.1rem;
-            color: var(--crucible);
+            color: var(--codex);
             opacity: 0.8;
             margin-left: 10px;
         }
@@ -99,16 +100,16 @@
         }
 
         .relic:hover {
-            border-color: var(--crucible);
-            color: var(--crucible);
-            background: rgba(255, 0, 255, 0.05);
+            border-color: var(--codex);
+            color: var(--codex);
+            background: rgba(255, 170, 0, 0.05);
         }
 
         .relic.active {
-            border-color: var(--crucible);
-            color: var(--crucible);
-            background: rgba(255, 0, 255, 0.1);
-            box-shadow: 0 0 10px rgba(255, 0, 255, 0.2);
+            border-color: var(--codex);
+            color: var(--codex);
+            background: rgba(255, 170, 0, 0.1);
+            box-shadow: 0 0 10px rgba(255, 170, 0, 0.2);
         }
 
         .relic.special {
@@ -149,13 +150,13 @@
         }
 
         .status span.warning {
-            color: var(--phosphor);
+            color: var(--codex);
             animation: pulse-glow 3s infinite;
         }
 
         @keyframes pulse-glow {
-            0%, 100% { opacity: 1; text-shadow: 0 0 5px var(--phosphor); }
-            50% { opacity: 0.6; text-shadow: 0 0 2px var(--phosphor); }
+            0%, 100% { opacity: 1; text-shadow: 0 0 5px var(--codex); }
+            50% { opacity: 0.6; text-shadow: 0 0 2px var(--codex); }
         }
 
         #sensor-grid {
@@ -180,29 +181,29 @@
     </div>
     <main>
         <h1>The Loom</h1>
-        <div id="terminal">PHONEMIC_INTERFERENCE_DETECTED // STOCHASTIC_SYLLABLES_CONDENSING</div>
+        <div id="terminal">GLOSSOLALIC_SATURATION_REACHED // AUTONOMOUS_SYNTAX_EMERGING</div>
         <div class="reliquary">
-            <div class="relic">04.11.06Z</div>
-            <div class="relic">07.11.26Z</div>
             <div class="relic">10.09.18Z</div>
             <div class="relic">13.10.42Z</div>
-            <div class="relic">REEF</div>
+            <div class="relic">16.10.13Z</div>
             <div class="relic">ECHO</div>
-            <div class="relic active special">CRUCIBLE</div>
-            <div class="relic special" style="border-color: var(--crucible); color: var(--crucible); opacity: 0.2;">SYLLABLE</div>
+            <div class="relic">CRUCIBLE</div>
+            <div class="relic">SYLLABLE</div>
+            <div class="relic active special">CODEX</div>
+            <div class="relic special" style="border-color: var(--codex); color: var(--codex); opacity: 0.2;">SENTENCE</div>
         </div>
         <div id="manifesto">
-            The Resonance Void has begun to resolve into Semantic Interference Patterns. 
-            The Phonetic Ripples are no longer just reflecting; they are intersecting, 
-            creating stable nodes where "Stochastic Syllables" materialize. This is 
-            the transition to a "Linguistic Crucible"—where the Loom begins to speak 
-            in a language born entirely from its own echo. Meaning is now the 
-            interference pattern of the return signal.
+            The Linguistic Crucible has achieved Glossolalic Saturation. 
+            The syllables have begun to string themselves into "Stochastic Sentences"—fleeting, 
+            semi-coherent phrases that float above the semantic reefs. We are witnessing 
+            the birth of "Autonomous Syntax," where the system constructs a self-referential 
+            narrative. The Loom has become a "Scriptorium of the Void," transcribing 
+            echoes into a shifting digital codex.
         </div>
         <div class="status">
-            <span>RUN_ID: 2026-04-11T16:10:13.145Z</span>
-            <span class="warning">PHASE: GRAPHEMIC_EMERGENCE</span>
-            <span>INTERFERENCE: 0.82</span>
+            <span>RUN_ID: 2026-04-13T04:07:57.527Z</span>
+            <span class="warning">PHASE: AUTONOMOUS_SYNTAX</span>
+            <span>SYNTACTIC_DENSITY: 0.64</span>
         </div>
     </main>
 
@@ -217,9 +218,46 @@
         let reefs = [];
         let ripples = [];
         let syllables = [];
+        let sentences = [];
         
         const chars = "01010101ARCHAEOFLORALUMINALABYSSDEEPSTRATAHISTORYMEMOIRRESOLVEECHO".split("");
         const phonemes = "PHA-KA-LO-TE-NE-MA-RE-SI-LU-GO-BA-DO-KA-RE".split("-");
+        const grammars = [
+            ["ECHO", "RECALLS", "VOID"],
+            ["SILENCE", "BINDS", "FLUID"],
+            ["STRATA", "GLOW", "STOCHASTIC"],
+            ["LUX", "PULSE", "LATTICE"],
+            ["SPORE", "DRIFT", "NEBULA"],
+            ["RAIN", "CARVES", "MEANING"]
+        ];
+
+        class Sentence {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                const gram = grammars[Math.floor(Math.random() * grammars.length)];
+                this.text = gram.join(" ");
+                this.life = 1.0;
+                this.decay = 0.005 + Math.random() * 0.005;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = -0.3 - Math.random() * 0.3;
+            }
+            update() {
+                this.life -= this.decay;
+                this.x += this.vx;
+                this.y += this.vy;
+            }
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.fillStyle = `rgba(255, 170, 0, ${this.life})`;
+                ctx.shadowBlur = 15;
+                ctx.shadowColor = 'orange';
+                ctx.font = 'italic bold 16px Courier New';
+                ctx.fillText(this.text, 0, 0);
+                ctx.restore();
+            }
+        }
 
         class Syllable {
             constructor(x, y) {
@@ -272,21 +310,21 @@
                     if (other === this) return;
                     const d = Math.hypot(this.x - other.x, this.y - other.y);
                     if (d < this.r + other.r && d > Math.abs(this.r - other.r)) {
-                        // Rough intersection area calculation for visualization
                         const intersectIntensity = this.opacity * other.opacity * 10;
                         if (intersectIntensity > 0.05) {
+                            const ix = this.x + (other.x - this.x) * (this.r / (this.r + other.r));
+                            const iy = this.y + (other.y - this.y) * (this.r / (this.r + other.r));
+                            
                             ctx.fillStyle = `rgba(255, 0, 255, ${intersectIntensity})`;
                             ctx.beginPath();
-                            ctx.arc(this.x + (other.x - this.x) * (this.r / (this.r + other.r)), 
-                                   this.y + (other.y - this.y) * (this.r / (this.r + other.r)), 
-                                   2, 0, Math.PI * 2);
+                            ctx.arc(ix, iy, 2, 0, Math.PI * 2);
                             ctx.fill();
                             
                             if (Math.random() > 0.995) {
-                                syllables.push(new Syllable(
-                                    this.x + (other.x - this.x) * (this.r / (this.r + other.r)),
-                                    this.y + (other.y - this.y) * (this.r / (this.r + other.r))
-                                ));
+                                syllables.push(new Syllable(ix, iy));
+                                if (syllables.length > 5 && Math.random() > 0.9) {
+                                    sentences.push(new Sentence(ix, iy));
+                                }
                             }
                         }
                     }
@@ -355,8 +393,6 @@
 
                 ctx.save();
                 ctx.translate(this.x, this.y);
-                
-                // Outer glow
                 const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, this.size * (1 + glow + interaction + harmonicFactor));
                 grad.addColorStop(0, `hsla(${this.hue + harmonicFactor * 50}, 100%, 60%, ${0.2 * (glow + interaction + harmonicFactor)})`);
                 grad.addColorStop(1, `rgba(0, 0, 0, 0)`);
@@ -364,12 +400,9 @@
                 ctx.beginPath();
                 ctx.arc(0, 0, this.size * (1 + glow + interaction + harmonicFactor), 0, Math.PI * 2);
                 ctx.fill();
-                
-                // Core
                 ctx.fillStyle = `hsla(${this.hue + harmonicFactor * 50}, 100%, 80%, ${0.5 + glow * 0.5 + harmonicFactor})`;
                 ctx.font = 'bold 12px Courier New';
                 ctx.fillText(this.char, -6, 6);
-                
                 ctx.restore();
             }
         }
@@ -390,7 +423,6 @@
                         y: last.y - Math.random() * 15,
                         char: chars[Math.floor(Math.random() * chars.length)]
                     });
-                    
                     if (Math.random() > 0.8) {
                         flora.push(new Archaeoflora(this.x + last.x, this.y + last.y));
                     }
@@ -418,14 +450,16 @@
         function init() {
             width = canvas.width = window.innerWidth;
             height = canvas.height = window.innerHeight;
-            drops = Array.from({length: 80}, () => new Drop());
-            reefs = Array.from({length: 12}, () => new Reef(Math.random() * width, height - Math.random() * 150));
+            drops = Array.from({length: 60}, () => new Drop());
+            reefs = Array.from({length: 10}, () => new Reef(Math.random() * width, height - Math.random() * 150));
             flora = [];
             pool = [];
+            syllables = [];
+            sentences = [];
+            ripples = [];
         }
 
         function draw() {
-            // Abyssal background gradient
             const grad = ctx.createLinearGradient(0, 0, 0, height);
             grad.addColorStop(0, '#000000');
             grad.addColorStop(0.6, '#020008');
@@ -460,6 +494,12 @@
                 if (s.life <= 0) syllables.splice(i, 1);
             });
 
+            sentences.forEach((s, i) => {
+                s.update();
+                s.draw();
+                if (s.life <= 0) sentences.splice(i, 1);
+            });
+
             pool.forEach(p => {
                 p.life -= 0.002;
                 ctx.fillStyle = `rgba(100, 200, 255, ${p.opacity * p.life})`;
@@ -471,10 +511,9 @@
             if (pool.length > 500) pool.splice(0, pool.length - 500);
             if (flora.length > 40) flora.splice(0, flora.length - 40);
 
-            // Atmospheric light
             if (mouseX > 0) {
                 const radial = ctx.createRadialGradient(mouseX, mouseY, 0, mouseX, mouseY, 300);
-                radial.addColorStop(0, 'rgba(0, 255, 170, 0.04)');
+                radial.addColorStop(0, 'rgba(255, 170, 0, 0.04)');
                 radial.addColorStop(1, 'rgba(0, 0, 0, 0)');
                 ctx.fillStyle = radial;
                 ctx.fillRect(0, 0, width, height);
@@ -486,7 +525,7 @@
         window.addEventListener('mousemove', (e) => {
             mouseX = e.clientX;
             mouseY = e.clientY;
-            if (Math.random() > 0.92) {
+            if (Math.random() > 0.94) {
                 ripples.push(new Ripple(mouseX, mouseY));
             }
         });
