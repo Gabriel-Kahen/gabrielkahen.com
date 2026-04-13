@@ -154,3 +154,7 @@
 
 - Added a lightweight local "Bookmarks" panel and a bookmark button: quick, non-export saves of seed+tone (with optional note) stored in localStorage (max 24). Bookmarks are intended as ephemeral navigation helpers distinct from exported postcards; clicking a bookmark loads its seed/tone and updates the URL.
 - Updated memory.md to record the new durable observation about Bookmarks and their role as private, portable navigation aids.
+
+## 2026-04-13T22:42:34.326Z
+
+- Improved UI polish and accessibility: added focus-visible outlines for keyboard users, made control row responsive for small screens, marked the fragment area with aria-live so updates are announced, and improved embed modal ARIA state and keyboard dismissal (Escape). These are non-functional, usability-focused fixes.

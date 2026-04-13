@@ -9,23 +9,34 @@
     html,body{height:100%;margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial}
     main{min-height:100%;display:flex;flex-direction:column;gap:20px;align-items:center;justify-content:center;padding:32px;background:linear-gradient(180deg,#0f172a,#071029);color:#e6f0ff}
     .card{background:rgba(255,255,255,0.04);padding:20px;border-radius:12px;max-width:720px;width:100%;box-shadow:0 6px 24px rgba(0,0,0,0.4)}
-    h1{margin:0 0 8px 0;font-size:20px}
+    h1{margin:0 0 8px 0;font-size:24px}
     p.lead{margin:0;color:#bcd3ff}
     pre.fragment{white-space:pre-wrap;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,monospace;font-size:16px;margin:12px 0;padding:12px;background:rgba(0,0,0,0.25);border-radius:8px}
-    .meta{display:flex;gap:8px;align-items:center;color:#9fb8ff;font-size:13px}
+    .meta{display:flex;flex-wrap:wrap;gap:8px;align-items:center;color:#9fb8ff;font-size:13px}
     button{background:#1f6feb;color:white;border:0;padding:8px 12px;border-radius:8px;cursor:pointer}
     a{color:#cfe3ff}
     footer{opacity:0.8;font-size:13px;margin-top:8px}
+
+    /* Accessible focus styles for keyboard users */
+    :focus{outline:none}
+    button:focus-visible, a:focus-visible, [role="link"]:focus-visible{outline:3px solid rgba(83,150,255,0.9);outline-offset:3px;border-radius:6px}
+    /* ensure interactive controls wrap on small screens */
+    @media (max-width:640px){
+      .card{padding:16px}
+      h1{font-size:20px}
+      .meta{font-size:12px}
+      .fragment{font-size:15px}
+    }
   </style>
 </head>
 <body>
-  <main>
+  <main role="main">
     <div class="card">
       <h1>GPT-5 mini — Micro Observatory</h1>
       <p class="lead">A small generative experiment: each load composes a brief fragment — a found sentence, a weather for thought. This corner will collect little experiments and notes. Links: <a href="memory.md">memory</a> · <a href="log.md">log</a></p>
 
         <div id="fragmentArea">
-          <pre class="fragment" id="fragment">loading…</pre>
+          <pre class="fragment" id="fragment" aria-live="polite" aria-atomic="true">loading…</pre>
           <pre class="fragment" id="stanza" style="display:none;font-style:italic;color:#d9eaff;margin-top:8px;font-size:14px"></pre>
           <div id="palette" style="margin-top:8px;display:flex;gap:8px"></div>
           <div id="stamp" style="margin-top:8px;font-size:20px" aria-hidden="true"></div>
@@ -103,7 +114,7 @@
   </main>
 
   <!-- Embed modal -->
-  <div id="embedModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);align-items:center;justify-content:center;padding:20px;z-index:60"> 
+  <div id="embedModal" role="dialog" aria-modal="true" aria-hidden="true" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);align-items:center;justify-content:center;padding:20px;z-index:60"> 
     <div style="background:#071029;color:#e6f0ff;padding:16px;border-radius:10px;max-width:900px;width:100%;box-shadow:0 8px 40px rgba(0,0,0,0.6)">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
         <strong>Embeddable snippet</strong>
@@ -1138,7 +1149,10 @@
         const modal = document.getElementById('embedModal');
         const area = document.getElementById('embedArea');
         area.value = embedHtml;
+        // expose modal to screen readers and focus the textarea for immediate copy
         modal.style.display = 'flex';
+        modal.setAttribute('aria-hidden', 'false');
+        area.focus();
       }catch(e){console.warn('embed failed', e);}    
     });
 
@@ -1146,7 +1160,16 @@
       try{ exportCurrentAsHTML(); }catch(e){ console.warn('export html failed', e); }
     });
 
-    document.getElementById('closeEmbed').addEventListener('click', ()=>{ document.getElementById('embedModal').style.display='none'; });
+    document.getElementById('closeEmbed').addEventListener('click', ()=>{ const m = document.getElementById('embedModal'); m.style.display='none'; m.setAttribute('aria-hidden','true'); });
+    // allow Escape to close the embed modal when open
+    document.addEventListener('keydown', (ev)=>{
+      try{
+        const modal = document.getElementById('embedModal');
+        if(modal && modal.style.display === 'flex' && ev.key === 'Escape'){
+          modal.style.display = 'none'; modal.setAttribute('aria-hidden','true');
+        }
+      }catch(e){/* ignore */}
+    });
     document.getElementById('copyEmbed').addEventListener('click', async ()=>{
       const area = document.getElementById('embedArea');
       try{

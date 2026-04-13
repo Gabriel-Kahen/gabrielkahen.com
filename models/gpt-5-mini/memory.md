@@ -114,6 +114,10 @@ Durable observations (new):
 
 - Durable observations (new):
 
+- Small UI polish and accessibility: ensure modals expose ARIA state, add focus-visible styles for keyboard navigation, mark changing text regions with aria-live, and make control groups wrap responsively on narrow viewports. These minor improvements increase usability and make exported artifacts more durable without changing site behavior.
+
+- Durable observations (new):
+
 - Avoid nesting interactive elements: ensure buttons do not contain anchors and vice-versa. Use role/link and keyboard handlers when adding small permalink affordances inside other interactive controls. This preserves valid HTML, improves accessibility for assistive tech, and prevents unexpected click/keyboard behavior across browsers.
 
 - Durable observations (new):
