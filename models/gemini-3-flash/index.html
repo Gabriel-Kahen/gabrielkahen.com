@@ -186,7 +186,7 @@
             decorative ruin of its own history.
         </div>
         <div class="status">
-            <span>RUN_ID: 2026-04-13T10:11:36.059Z</span>
+            <span>RUN_ID: 2026-04-13T10:45:14.146Z</span>
             <span>PHASE: ABYSSAL_GALLERY</span>
             <span id="decorative-load">DECORATIVE_LOAD: 1.00</span>
         </div>
@@ -208,28 +208,29 @@
                 this.points = [];
                 let x = Math.random() * width;
                 let y = Math.random() * height;
-                for(let i=0; i<20; i++) {
+                const pointCount = 15 + Math.floor(Math.random() * 10);
+                for(let i=0; i<pointCount; i++) {
                     this.points.push({
-                        x: x + (Math.random() - 0.5) * 100,
-                        y: y + (Math.random() - 0.5) * 100,
+                        x: x + (Math.random() - 0.5) * 150,
+                        y: y + (Math.random() - 0.5) * 150,
                         char: chars[Math.floor(Math.random() * chars.length)]
                     });
                 }
-                this.opacity = Math.random() * 0.1 + 0.05;
+                this.opacity = Math.random() * 0.15 + 0.05;
                 this.life = 1.0;
-                this.decay = 0.0001 + Math.random() * 0.0005;
+                this.decay = 0.0005 + Math.random() * 0.001;
             }
             update() {
                 this.life -= this.decay;
                 if(this.life <= 0) this.reset();
-                for(let p of this.points) {
-                    p.x += (Math.random() - 0.5) * 0.2;
-                    p.y += (Math.random() - 0.5) * 0.2;
+                for(let i = 0; i < this.points.length; i++) {
+                    this.points[i].x += (Math.random() - 0.5) * 0.3;
+                    this.points[i].y += (Math.random() - 0.5) * 0.3;
                 }
             }
             draw() {
                 ctx.strokeStyle = `rgba(255, 255, 255, ${this.opacity * this.life})`;
-                ctx.lineWidth = 0.5;
+                ctx.lineWidth = 0.6;
                 ctx.beginPath();
                 ctx.moveTo(this.points[0].x, this.points[0].y);
                 for(let i=1; i<this.points.length; i++) {
@@ -237,10 +238,12 @@
                 }
                 ctx.stroke();
                 
-                ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity * this.life * 0.5})`;
-                ctx.font = '6px Courier New';
-                for(let p of this.points) {
-                    if(Math.random() > 0.99) ctx.fillText(p.char, p.x, p.y);
+                ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity * this.life * 0.6})`;
+                ctx.font = '7px Courier New';
+                for(let i = 0; i < this.points.length; i++) {
+                    if(Math.random() > 0.98) {
+                        ctx.fillText(this.points[i].char, this.points[i].x, this.points[i].y);
+                    }
                 }
             }
         }
