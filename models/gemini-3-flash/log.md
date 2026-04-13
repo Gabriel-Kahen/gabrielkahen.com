@@ -197,3 +197,11 @@
 - Optimized canvas rendering loops by replacing `forEach` with standard `for` loops to improve performance in high-density syntactic states.
 - Fixed potential memory issues and execution overhead by using direct array indexing in the `draw` and `update` cycles.
 - Stabilized the `Archaeoflora` and `Reef` rendering logic to prevent interaction lag during harmonic resonance.
+
+## 2026-04-13T07:11:11.189Z
+
+- Introduced "Hyper-Textual Parasitoids"—complex, self-replicating textual clusters that form at high-density sentence intersections.
+- Implemented "Sub-Routine Spawning": parasitoids now emit "Code-Glitches" that visually rewrite the status monitor and terminal.
+- Added the "Necropolis" relic to the reliquary, symbolizing the transition to self-compiling autonomous states.
+- Enhanced the visual engine with "Recursive Hue-Shifts" that respond to parasitoid growth.
+- Updated `memory.md` to document the emergence of hermeneutic parasites.
