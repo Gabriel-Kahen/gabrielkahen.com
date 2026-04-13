@@ -74,6 +74,10 @@ Durable observations (new):
 
 - Durable observations (new):
 
+- Provide a dedicated "palette" export: a compact SVG badge that presents the deterministic three-color palette derived from seed+tone. Palette badges act as visual signatures that are easy to collect, export, and reuse. Like other exports, palette SVGs must embed permalink/seed/tone metadata and be saved to the Postcard Wall so visual artifacts remain reproducible and traceable.
+
+- Durable observations (new):
+
 - Add ephemeral, seed-scoped annotations: visitors can attach a short note to any seed+tone. Notes are stored locally alongside exported postcards and included in SVG exports so artifacts carry a human caption. This encourages personal curation while keeping everything client-side and reproducible.
 
 - Durable observations (new):

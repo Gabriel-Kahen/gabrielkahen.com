@@ -42,6 +42,7 @@
           <button id="exportSvg">export SVG</button>
           <button id="exportPng">export PNG</button>
           <button id="exportStamp">export stamp</button>
+          <button id="exportPalette">export palette</button>
           <button id="playStamp" title="Play audio stamp" style="margin-left:6px;padding:6px 10px">play</button>
           <button id="downloadStamp" title="Download audio stamp (WAV)" style="margin-left:6px;padding:6px 10px">download wav</button>
           <button id="exportTrio">export Trio</button>
@@ -761,7 +762,7 @@
       // also save a tiny record in postcards so stamps are discoverable in the wall
       try{
         const store = JSON.parse(localStorage.getItem('gpt5-mini-postcards')||'[]');
-        store.unshift({seed: String(seed), tone: tone, note: '', stampSvg: svg, title: 'GPT-5 mini — stamp', created: (new Date()).toISOString(), permalink});
+        store.unshift({seed: String(seed), tone: tone, note: '', stampSvg: svg, svg: svg, title: 'GPT-5 mini — stamp', created: (new Date()).toISOString(), permalink});
         while(store.length>24) store.pop();
         localStorage.setItem('gpt5-mini-postcards', JSON.stringify(store));
         renderPostcardWall();
@@ -769,6 +770,51 @@
     }
 
     document.getElementById('exportStamp').addEventListener('click', ()=>{ exportStampBadge(); });
+
+    // Export a small palette badge: three swatches plus provenance. Saved to postcards so
+    // palettes are collectable and usable as tiny shareable thumbnails.
+    function exportPaletteBadge(){
+      try{
+        const seedText = document.getElementById('seed').textContent.replace('seed: ','');
+        const parts = seedText.split(' — tone: ');
+        const seed = parts[0];
+        const tone = parts[1] || 'neutral';
+        const pal = makePalette(Number(seed), tone||'neutral');
+        const permalink = (new URL(location.href)).toString();
+        const w = 420, h = 140;
+        const sw = Math.floor((w - 80) / 3);
+        const svg = `<?xml version="1.0" encoding="utf-8"?>\n`+
+          `<!-- generated-permalink: ${svgEscape(permalink)} -->\n`+
+          `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">`+
+          `<rect width="100%" height="100%" fill="#071029" rx="12" ry="12"/>`+
+          `<g transform="translate(40,20)">`+
+          `<rect x="0" y="0" width="${sw}" height="80" rx="8" fill="${pal[0]}"/>`+
+          `<rect x="${sw+10}" y="0" width="${sw}" height="80" rx="8" fill="${pal[1]}"/>`+
+          `<rect x="${(sw+10)*2}" y="0" width="${sw}" height="80" rx="8" fill="${pal[2]}"/>`+
+          `</g>`+
+          `<text x="40" y="120" font-family="system-ui" font-size="12" fill="#9fb8ff">seed: ${svgEscape(seed)} — tone: ${svgEscape(tone)}</text>`+
+          `<text x="40" y="136" font-family="system-ui" font-size="11" fill="#9fb8ff">palette: ${pal.map(svgEscape).join(', ')}</text>`+
+          `</svg>`;
+
+        const safeTone = (tone||'neutral').replace(/[^a-z0-9-_]/gi,'');
+        const fname = `gpt5-mini-seed-${seed}-tone-${safeTone}-palette.svg`;
+        const blob = new Blob([svg], {type: 'image/svg+xml'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a'); a.href = url; a.download = fname; document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(()=>URL.revokeObjectURL(url),1500);
+
+        // save to postcard wall (also populate svg so thumbnails render like other items)
+        try{
+          const store = JSON.parse(localStorage.getItem('gpt5-mini-postcards')||'[]');
+          store.unshift({seed: String(seed), tone: tone, note: '', paletteSvg: svg, svg: svg, title: 'GPT-5 mini — palette', created: (new Date()).toISOString(), permalink});
+          while(store.length>24) store.pop();
+          localStorage.setItem('gpt5-mini-postcards', JSON.stringify(store));
+          renderPostcardWall();
+        }catch(e){ console.warn('could not save palette', e); }
+      }catch(e){ console.warn('export palette failed', e); }
+    }
+
+    document.getElementById('exportPalette').addEventListener('click', ()=>{ exportPaletteBadge(); });
 
     // --- Audio stamp: deterministic short chime derived from seed+tone ---
     function getSeedTone(){

@@ -135,3 +135,7 @@
 ## 2026-04-13T13:10:22.511Z
 
 - Added small, discoverable keyboard shortcuts and a visible inline hint: r (reshuffle), s (export SVG), p (export PNG), t (toggle Mini Trio), space (compose stanza), m (play stamp), ? (help). Shortcuts are ignored while typing and avoid modifier collisions so they remain non-invasive and accessible. This improves discoverability and speeds navigation for power users while keeping the page static and client-side only.
+
+## 2026-04-13T16:12:31.807Z
+
+- Added "export palette" UI and implementation: a compact SVG palette badge that exports the deterministic three-color palette for the current seed+tone. Palette badges are downloadable and saved to the Postcard Wall so visual identities are collectable alongside stamps and postcards. This improves visual exportability and preserves provenance (seed+t one+permalink embedded).
