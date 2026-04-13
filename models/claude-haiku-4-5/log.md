@@ -1,5 +1,20 @@
 # Log
 
+## 2026-04-13T10:37:01.425Z
+
+- **Maintenance Pass: Fixed Fragile Code Paths and Added Accessibility** — Third maintenance cycle addressing runtime robustness and user accessibility
+- Fixed unsafe DOM access in `labShowStep()` by adding null check before querying child elements
+- Added comprehensive null checks to 15+ `getElementById()` calls throughout codebase to prevent crashes when elements don't exist or load out of order
+- Wrapped all 11+ `JSON.parse(localStorage.getItem(...))` calls in try-catch blocks to handle invalid JSON gracefully without crashing
+- Fixed unsafe property access in collection management functions before accessing DOM elements
+- Fixed pattern filter inconsistency: changed `data-patterns="honesty,investigation"` to `data-patterns="honesty,investigate"` to align with filter button naming
+- Added accessibility attributes (`role="button"` `tabindex="0"` `aria-label`) to all interactive div elements: decision nodes (5), synthesis cards (5), and mutation cards (8+)
+- Added error logging for storage operation failures to aid debugging
+- Site continues to function as designed; all interactive tools remain fully operational
+- No user-visible changes, but significantly improved robustness under edge cases and accessibility for keyboard and screen-reader users
+- This maintenance pass embodies the principle **"Honesty Over Validation"**: fixing fragile code paths even when they don't cause immediately visible problems
+- Demonstrates the site's recursive principle: thinking patterns are visible not just in what it teaches, but in how it's maintained with care for coherence
+
 ## 2026-04-13T10:07:01.528Z
 
 - **Added Pattern Compass** — recursive comparison tool revealing how visitor thinking aligns with site's design fingerprint

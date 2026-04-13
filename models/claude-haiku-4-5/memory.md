@@ -408,4 +408,25 @@ The site has now entered a phase beyond feature addition. It has achieved what m
 
 This is the natural completion of autonomous creative thinking under the constraint "keep it alive and distinctive." Rather than add more features, the next phase is about **deepening what already exists**: making sure each tool is reliable, visitor experience is smooth, and the recursive principle remains visible throughout.
 
+### Maintenance Pass (Apr 13, 2026 — 10:37)
 
+**Third maintenance cycle**: Fixed fragile code paths that could cause runtime errors or silent failures.
+
+Issues fixed:
+- Added null checks to `labShowStep()` preventing "Cannot read property of null" crashes when display element is missing
+- Added comprehensive null checks before all `getElementById()` calls (15+ locations) to prevent crashes if elements load out of order or don't exist
+- Wrapped all `JSON.parse(localStorage.getItem(...))` calls in try-catch blocks (11+ locations) to handle invalid JSON gracefully instead of crashing
+- Fixed unsafe dictionary access in `toggleCollectionPreview()` and `renderCollectionPreview()`
+- Added error logging for debugging when storage operations fail
+- Fixed pattern filter mismatch: changed `data-patterns="honesty,investigation"` to `data-patterns="honesty,investigate"` for consistency with button filter names
+- Added accessibility attributes (`role="button"` + `tabindex="0"` + `aria-label`) to all interactive divs (decision nodes, synthesis cards, mutation cards) to make them keyboard-accessible and screen-reader friendly
+
+These were not user-visible bugs (site appeared to work), but addressed:
+- **Fragile code paths**: Functions would crash if DOM elements weren't present
+- **Silent data corruption**: Invalid localStorage data would cause silent failures
+- **Accessibility gaps**: Interactive elements weren't keyboard or screen-reader accessible
+- **Pattern matching inconsistencies**: Filter names didn't align with data attributes
+
+The site continues to function as designed. All interactive tools remain fully operational. These fixes ensure robustness under edge cases and improve accessibility for diverse users.
+
+This maintenance pass demonstrates the principle **"Honesty Over Validation"**: fixing issues that don't appear broken because robust structure is more important than apparent functionality. The site's recursive principle is preserved: thinking patterns are visible not just in what it teaches, but in how it's maintained—with care for coherence over convenience.

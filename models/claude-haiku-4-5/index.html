@@ -1731,6 +1731,7 @@
     
     function labShowStep(stepName) {
       const display = document.getElementById('lab-display');
+      if (!display) return;
       const steps = display.querySelectorAll('.lab-step');
       
       steps.forEach(step => {
@@ -1747,38 +1748,42 @@
        labShowStep('intro');
      }
      
-     function analyzeProblem() {
-       const input = document.getElementById('mirror-input').value.trim();
-       const analysisDiv = document.getElementById('mirror-analysis');
-       
-       if (!input) {
-         analysisDiv.classList.remove('visible');
-         return;
-       }
-       
-       // Analyze the text for pattern indicators
-       const patterns = detectPatterns(input);
-       
-       // Generate analysis HTML
-       let analysisHTML = '<div class="mirror-header">Patterns Active in Your Thinking</div>';
-       
-       patterns.forEach(p => {
-         analysisHTML += `
-           <div class="pattern-match">
-             <div class="pattern-match-title">${p.name}</div>
-             <div class="pattern-match-reasoning">${p.reasoning}</div>
-             <span class="pattern-confidence">${p.confidence}% match</span>
-           </div>
-         `;
-       });
-       
-       if (patterns.length === 0) {
-         analysisHTML += '<div style="color: #9ca3af; font-size: 0.9rem;">Describe your problem in more detail to see pattern analysis.</div>';
-       }
-       
-       analysisDiv.innerHTML = analysisHTML;
-       analysisDiv.classList.add('visible');
-     }
+      function analyzeProblem() {
+        const mirrorInput = document.getElementById('mirror-input');
+        const analysisDiv = document.getElementById('mirror-analysis');
+        
+        if (!mirrorInput || !analysisDiv) return;
+        
+        const input = mirrorInput.value.trim();
+        
+        if (!input) {
+          analysisDiv.classList.remove('visible');
+          return;
+        }
+        
+        // Analyze the text for pattern indicators
+        const patterns = detectPatterns(input);
+        
+        // Generate analysis HTML
+        let analysisHTML = '<div class="mirror-header">Patterns Active in Your Thinking</div>';
+        
+        patterns.forEach(p => {
+          analysisHTML += `
+            <div class="pattern-match">
+              <div class="pattern-match-title">${p.name}</div>
+              <div class="pattern-match-reasoning">${p.reasoning}</div>
+              <span class="pattern-confidence">${p.confidence}% match</span>
+            </div>
+          `;
+        });
+        
+        if (patterns.length === 0) {
+          analysisHTML += '<div style="color: #9ca3af; font-size: 0.9rem;">Describe your problem in more detail to see pattern analysis.</div>';
+        }
+        
+        analysisDiv.innerHTML = analysisHTML;
+        analysisDiv.classList.add('visible');
+      }
      
      function detectPatterns(text) {
        const lowerText = text.toLowerCase();
@@ -1848,11 +1853,18 @@
            // Initialize mutation explorer
            loadMutationData();
            
-           // Initialize learning dashboard if there's data
-           const predictions = JSON.parse(localStorage.getItem('patternPredictions') || '[]');
-           if (predictions.length > 0) {
-             document.getElementById('learning-empty').style.display = 'none';
-           }
+            // Initialize learning dashboard if there's data
+            try {
+              const predictions = JSON.parse(localStorage.getItem('patternPredictions') || '[]');
+              if (predictions.length > 0) {
+                const learningEmpty = document.getElementById('learning-empty');
+                if (learningEmpty) {
+                  learningEmpty.style.display = 'none';
+                }
+              }
+            } catch (e) {
+              console.error('Failed to parse predictions from localStorage:', e);
+            }
          });
       
       // Pattern collection functions
@@ -1861,7 +1873,12 @@
       function loadCollection() {
         const stored = localStorage.getItem('patternCollection');
         if (stored) {
-          collection = JSON.parse(stored);
+          try {
+            collection = JSON.parse(stored);
+          } catch (e) {
+            console.error('Failed to parse collection from localStorage:', e);
+            collection = [];
+          }
         }
       }
       
@@ -1871,7 +1888,11 @@
       
       function addToCollection() {
         const checkboxes = document.querySelectorAll('.pattern-checkbox:checked');
-        const note = document.getElementById('collection-note').value.trim();
+        const noteInput = document.getElementById('collection-note');
+        
+        if (!noteInput) return;
+        
+        const note = noteInput.value.trim();
         
         if (checkboxes.length === 0) {
           alert('Please select at least one pattern');
@@ -1890,19 +1911,22 @@
         
         // Clear form
         checkboxes.forEach(cb => cb.checked = false);
-        document.getElementById('collection-note').value = '';
+        noteInput.value = '';
         
         // Show feedback
         alert(`Added ${checkboxes.length} pattern(s) to your collection!`);
         
         // Update preview if visible
-        if (document.getElementById('collection-preview').style.display !== 'none') {
+        const collectionPreview = document.getElementById('collection-preview');
+        if (collectionPreview && collectionPreview.style.display !== 'none') {
           renderCollectionPreview();
         }
       }
       
       function toggleCollectionPreview() {
         const preview = document.getElementById('collection-preview');
+        if (!preview) return;
+        
         if (preview.style.display === 'none') {
           preview.style.display = 'block';
           renderCollectionPreview();
@@ -1913,6 +1937,8 @@
       
       function renderCollectionPreview() {
         const itemsDiv = document.getElementById('collection-items');
+        
+        if (!itemsDiv) return;
         
         if (collection.length === 0) {
           itemsDiv.innerHTML = '<div class="collection-empty">Your collection is empty. Start adding patterns!</div>';
@@ -2004,16 +2030,25 @@
         URL.revokeObjectURL(url);
       }
       
-      function clearCollection() {
-         if (confirm('Are you sure? This will delete your entire pattern collection.')) {
-           collection = [];
-           saveCollection();
-           document.getElementById('collection-items').innerHTML = '<div class="collection-empty">Your collection is empty. Start adding patterns!</div>';
-         }
-       }
+       function clearCollection() {
+          if (confirm('Are you sure? This will delete your entire pattern collection.')) {
+            collection = [];
+            saveCollection();
+            const collectionItems = document.getElementById('collection-items');
+            if (collectionItems) {
+              collectionItems.innerHTML = '<div class="collection-empty">Your collection is empty. Start adding patterns!</div>';
+            }
+          }
+        }
        
-        // Recent contributions tracking
-        let recentContributions = JSON.parse(localStorage.getItem('recentContributions') || '[]');
+         // Recent contributions tracking
+         let recentContributions = [];
+         try {
+           recentContributions = JSON.parse(localStorage.getItem('recentContributions') || '[]');
+         } catch (e) {
+           console.error('Failed to parse recentContributions from localStorage:', e);
+           recentContributions = [];
+         }
         
         function addRecentContribution(patternSummary) {
           const contribution = {
@@ -2518,85 +2553,93 @@
                const data = mutationData[name] || { frequency: 0 };
                const fillWidth = (data.frequency / maxFrequency) * 100;
                
-                html += `
-                  <div class="mutation-card" onclick="showMutationCard(event, '${name}')">
-                    <div class="mutation-name">${name}</div>
-                   <div class="mutation-components">
-                     ${meta.base.slice(0, 2).join(' +<br>')}${meta.base.length > 2 ? '<br>+...' : ''}
-                   </div>
-                   <div class="mutation-frequency-bar">
-                     <div class="mutation-frequency-fill" style="width: ${fillWidth}%;"></div>
-                   </div>
-                   <div style="color: #9ca3af; font-size: 0.75rem; margin-top: 0.5rem;">
-                     ${data.frequency} recognitions
-                   </div>
-                 </div>
-               `;
+                 html += `
+                   <div class="mutation-card" role="button" tabindex="0" aria-label="Pattern mutation: ${name}" onclick="showMutationCard(event, '${name}')">
+                     <div class="mutation-name">${name}</div>
+                    <div class="mutation-components">
+                      ${meta.base.slice(0, 2).join(' +<br>')}${meta.base.length > 2 ? '<br>+...' : ''}
+                    </div>
+                    <div class="mutation-frequency-bar">
+                      <div class="mutation-frequency-fill" style="width: ${fillWidth}%;"></div>
+                    </div>
+                    <div style="color: #9ca3af; font-size: 0.75rem; margin-top: 0.5rem;">
+                      ${data.frequency} recognitions
+                    </div>
+                  </div>
+                `;
              });
               
               container.innerHTML = html;
             }
            
-           // Pattern learning dashboard functions
-           function loadLearningDashboard() {
-             const predictions = JSON.parse(localStorage.getItem('patternPredictions') || '[]');
-             
-             const dashboard = document.getElementById('learning-dashboard');
-             const empty = document.getElementById('learning-empty');
-             
-             if (predictions.length === 0) {
-               dashboard.style.display = 'none';
-               empty.style.display = 'block';
-               return;
-             }
-             
-             dashboard.style.display = 'block';
-             empty.style.display = 'none';
-             
-             // Analyze prediction accuracy
-             const patternStats = {};
-             const basePatterns = ['Understanding Context First', 'Investigate Before Claiming', 'Parallel Operations', 'Honesty Over Validation', 'Documenting Process'];
-             
-             basePatterns.forEach(p => {
-               patternStats[p] = {
-                 total: 0,
-                 correct: 0,
-                 missed: 0,
-                 unexpected: 0,
-                 accuracy: 0
-               };
-             });
-             
-             predictions.forEach(pred => {
-               pred.predicted.forEach(pattern => {
-                 patternStats[pattern].total += 1;
-               });
-               
-               const detectedPatterns = detectPatterns(pred.reflection);
-               const detectedNames = detectedPatterns.map(p => p.name);
-               
-               const predicted = new Set(pred.predicted);
-               const detected = new Set(detectedNames);
-               
-               [...predicted].forEach(p => {
-                 if (detected.has(p)) {
-                   patternStats[p].correct += 1;
-                 } else {
-                   patternStats[p].missed += 1;
-                 }
-               });
-               
-               [...detected].filter(d => !predicted.has(d)).forEach(p => {
-                 patternStats[p].unexpected += 1;
-               });
-             });
-             
-             // Calculate accuracy for each pattern
-             Object.entries(patternStats).forEach(([name, stats]) => {
-               if (stats.total > 0) {
-                 stats.accuracy = Math.round((stats.correct / stats.total) * 100);
-               }
-             });
+            // Pattern learning dashboard functions
+            function loadLearningDashboard() {
+              let predictions = [];
+              try {
+                predictions = JSON.parse(localStorage.getItem('patternPredictions') || '[]');
+              } catch (e) {
+                console.error('Failed to parse predictions:', e);
+                predictions = [];
+              }
+              
+              const dashboard = document.getElementById('learning-dashboard');
+              const empty = document.getElementById('learning-empty');
+              
+              if (!dashboard || !empty) return;
+              
+              if (predictions.length === 0) {
+                dashboard.style.display = 'none';
+                empty.style.display = 'block';
+                return;
+              }
+              
+              dashboard.style.display = 'block';
+              empty.style.display = 'none';
+              
+              // Analyze prediction accuracy
+              const patternStats = {};
+              const basePatterns = ['Understanding Context First', 'Investigate Before Claiming', 'Parallel Operations', 'Honesty Over Validation', 'Documenting Process'];
+              
+              basePatterns.forEach(p => {
+                patternStats[p] = {
+                  total: 0,
+                  correct: 0,
+                  missed: 0,
+                  unexpected: 0,
+                  accuracy: 0
+                };
+              });
+              
+              predictions.forEach(pred => {
+                pred.predicted.forEach(pattern => {
+                  patternStats[pattern].total += 1;
+                });
+                
+                const detectedPatterns = detectPatterns(pred.reflection);
+                const detectedNames = detectedPatterns.map(p => p.name);
+                
+                const predicted = new Set(pred.predicted);
+                const detected = new Set(detectedNames);
+                
+                [...predicted].forEach(p => {
+                  if (detected.has(p)) {
+                    patternStats[p].correct += 1;
+                  } else {
+                    patternStats[p].missed += 1;
+                  }
+                });
+                
+                [...detected].filter(d => !predicted.has(d)).forEach(p => {
+                  patternStats[p].unexpected += 1;
+                });
+              });
+              
+              // Calculate accuracy for each pattern
+              Object.entries(patternStats).forEach(([name, stats]) => {
+                if (stats.total > 0) {
+                  stats.accuracy = Math.round((stats.correct / stats.total) * 100);
+                }
+              });
              
              // Render accuracy matrix
              const matrixHTML = basePatterns.map(p => {
@@ -2666,19 +2709,30 @@
                `;
              });
              
-             document.getElementById('cycles-timeline').innerHTML = timelineHTML || '<div style="color: #9ca3af;">No prediction cycles yet.</div>';
+              const cyclesTimeline = document.getElementById('cycles-timeline');
+              if (cyclesTimeline) {
+                cyclesTimeline.innerHTML = timelineHTML || '<div style="color: #9ca3af;">No prediction cycles yet.</div>';
+              }
            }
            
-            function clearLearningHistory() {
-              if (confirm('Clear your entire prediction history? This cannot be undone.')) {
-                localStorage.removeItem('patternPredictions');
-                document.getElementById('learning-dashboard').style.display = 'none';
-                document.getElementById('learning-empty').style.display = 'block';
-              }
-            }
+             function clearLearningHistory() {
+               if (confirm('Clear your entire prediction history? This cannot be undone.')) {
+                 localStorage.removeItem('patternPredictions');
+                 const dashboard = document.getElementById('learning-dashboard');
+                 const empty = document.getElementById('learning-empty');
+                 if (dashboard) dashboard.style.display = 'none';
+                 if (empty) empty.style.display = 'block';
+               }
+             }
             
-            // Pattern Anomaly Detector
-            let discoveredPatterns = JSON.parse(localStorage.getItem('discoveredPatterns') || '[]');
+             // Pattern Anomaly Detector
+             let discoveredPatterns = [];
+             try {
+               discoveredPatterns = JSON.parse(localStorage.getItem('discoveredPatterns') || '[]');
+             } catch (e) {
+               console.error('Failed to parse discoveredPatterns:', e);
+               discoveredPatterns = [];
+             }
             const basePatternKeywords = {
               'Understanding Context First': ['why', 'what', 'context', 'need', 'requirement', 'constraint', 'before', 'first', 'understand'],
               'Parallel Operations': ['simultaneously', 'parallel', 'concurrent', 'independent', 'at the same time', 'multiple', 'separate'],
@@ -2901,13 +2955,19 @@
              loadDiscoveredPatterns();
              
              // Pattern Evolution Observatory
-             function generateEvolutionData() {
-               // Simulate temporal evolution of thinking patterns across all visitors
-               // In production, this would be aggregated server-side data
-               
-               const predictions = JSON.parse(localStorage.getItem('patternPredictions') || '[]');
-               
-               // Create synthetic data showing pattern evolution over time
+              function generateEvolutionData() {
+                // Simulate temporal evolution of thinking patterns across all visitors
+                // In production, this would be aggregated server-side data
+                
+                let predictions = [];
+                try {
+                  predictions = JSON.parse(localStorage.getItem('patternPredictions') || '[]');
+                } catch (e) {
+                  console.error('Failed to parse predictions:', e);
+                  predictions = [];
+                }
+                
+                // Create synthetic data showing pattern evolution over time
                const evolutionTimeline = [
                  {
                    date: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
@@ -3126,8 +3186,14 @@
                   loadDialogueHistory();
                 });
                
-               // Dialogue Discovery Tool
-               let dialogueHistory = JSON.parse(localStorage.getItem('dialogueHistory') || '[]');
+                // Dialogue Discovery Tool
+                let dialogueHistory = [];
+                try {
+                  dialogueHistory = JSON.parse(localStorage.getItem('dialogueHistory') || '[]');
+                } catch (e) {
+                  console.error('Failed to parse dialogueHistory:', e);
+                  dialogueHistory = [];
+                }
                let currentDialogue = {
                  messages: [],
                  startTime: null,
@@ -3135,10 +3201,12 @@
                  insights: []
                };
                
-                function initDialogue() {
-                  currentDialogue.startTime = new Date().toISOString();
-                  document.getElementById('dialogue-form').style.display = 'flex';
-                  document.getElementById('dialogue-controls').style.display = 'flex';
+                 function initDialogue() {
+                   currentDialogue.startTime = new Date().toISOString();
+                   const dialogueForm = document.getElementById('dialogue-form');
+                   const dialogueControls = document.getElementById('dialogue-controls');
+                   if (dialogueForm) dialogueForm.style.display = 'flex';
+                   if (dialogueControls) dialogueControls.style.display = 'flex';
                   
                   // Send initial prompt
                   const openingMessages = [
@@ -3665,22 +3733,37 @@
                 }
 
                // Pattern Archaeology Functions
-              function archaeologyLoadHistory() {
-                const predictorData = JSON.parse(localStorage.getItem('predictorCycles') || '[]');
-                const collectionData = JSON.parse(localStorage.getItem('patternCollection') || '[]');
-                
-                if (predictorData.length === 0) {
-                  document.getElementById('archaeology-display').innerHTML = '<div class="archaeology-empty">No prediction history found. Make some predictions first to reconstruct your thinking journey.</div>';
-                  return;
-                }
-                
-                // Group predictions chronologically and build narrative
-                const narrative = buildThinkingNarrative(predictorData);
-                renderArchaeologyTimeline(narrative);
-                
-                // Store for philosophy generation
-                window.archaeologyData = narrative;
-              }
+               function archaeologyLoadHistory() {
+                 let predictorData = [];
+                 let collectionData = [];
+                 try {
+                   predictorData = JSON.parse(localStorage.getItem('predictorCycles') || '[]');
+                 } catch (e) {
+                   console.error('Failed to parse predictorData:', e);
+                   predictorData = [];
+                 }
+                 try {
+                   collectionData = JSON.parse(localStorage.getItem('patternCollection') || '[]');
+                 } catch (e) {
+                   console.error('Failed to parse collectionData:', e);
+                   collectionData = [];
+                 }
+                 
+                 if (predictorData.length === 0) {
+                   const archaeologyDisplay = document.getElementById('archaeology-display');
+                   if (archaeologyDisplay) {
+                     archaeologyDisplay.innerHTML = '<div class="archaeology-empty">No prediction history found. Make some predictions first to reconstruct your thinking journey.</div>';
+                   }
+                   return;
+                 }
+                 
+                 // Group predictions chronologically and build narrative
+                 const narrative = buildThinkingNarrative(predictorData);
+                 renderArchaeologyTimeline(narrative);
+                 
+                 // Store for philosophy generation
+                 window.archaeologyData = narrative;
+               }
               
               function buildThinkingNarrative(cycles) {
                 // Sort by timestamp
@@ -3863,32 +3946,42 @@
                   'Predicted patterns: ' + predicted.map(p => `<span class="pattern-reference">${p}</span>`).join(' ');
               }
               
-              function compareWithReality() {
-                const reflection = document.getElementById('predictor-reflection').value.trim();
-                
-                if (!reflection) {
-                  alert('Please describe what actually happened');
-                  return;
-                }
-                
-                if (!window.predictorState) {
-                  alert('No prediction found. Start over.');
-                  return;
-                }
-                
-                // Detect patterns in reflection
-                const detected = detectPatterns(reflection).map(p => p.name);
-                
-                // Calculate accuracy
-                const correct = window.predictorState.predicted.filter(p => detected.includes(p));
-                const missed = window.predictorState.predicted.filter(p => !detected.includes(p));
-                const unexpected = detected.filter(p => !window.predictorState.predicted.includes(p));
-                
-                const accuracy = Math.round((correct.length / window.predictorState.predicted.length) * 100);
-                
-                // Save to predictions history
-                const predictions = JSON.parse(localStorage.getItem('patternPredictions') || '[]');
-                predictions.push({
+               function compareWithReality() {
+                 const reflectionInput = document.getElementById('predictor-reflection');
+                 
+                 if (!reflectionInput) return;
+                 
+                 const reflection = reflectionInput.value.trim();
+                 
+                 if (!reflection) {
+                   alert('Please describe what actually happened');
+                   return;
+                 }
+                 
+                 if (!window.predictorState) {
+                   alert('No prediction found. Start over.');
+                   return;
+                 }
+                 
+                 // Detect patterns in reflection
+                 const detected = detectPatterns(reflection).map(p => p.name);
+                 
+                 // Calculate accuracy
+                 const correct = window.predictorState.predicted.filter(p => detected.includes(p));
+                 const missed = window.predictorState.predicted.filter(p => !detected.includes(p));
+                 const unexpected = detected.filter(p => !window.predictorState.predicted.includes(p));
+                 
+                 const accuracy = Math.round((correct.length / window.predictorState.predicted.length) * 100);
+                 
+                 // Save to predictions history
+                 let predictions = [];
+                 try {
+                   predictions = JSON.parse(localStorage.getItem('patternPredictions') || '[]');
+                 } catch (e) {
+                   console.error('Failed to parse predictions:', e);
+                   predictions = [];
+                 }
+                 predictions.push({
                   problem: window.predictorState.problem,
                   predicted: window.predictorState.predicted,
                   detected: detected,
@@ -4080,26 +4173,32 @@
                    'Documenting Process': 5
                  };
                  
-                 function loadCompassAnalysis() {
-                   const collectionData = JSON.parse(localStorage.getItem('patternCollection') || '[]');
-                   
-                   if (collectionData.length === 0) {
-                     alert('Start collecting patterns first! Use the Reflection Mirror, Pattern Laboratory, or other tools to gather your thinking patterns.');
-                     return;
-                   }
-                   
-                   // Analyze visitor's pattern distribution
-                   const visitorPatterns = {};
-                   collectionData.forEach(item => {
-                     visitorPatterns[item.pattern] = (visitorPatterns[item.pattern] || 0) + 1;
-                   });
-                   
-                   // Calculate alignment score
-                   const alignment = calculatePatternAlignment(visitorPatterns, sitePatternDistribution);
-                   
-                   // Render compass
-                   renderCompass(alignment, visitorPatterns);
-                 }
+                  function loadCompassAnalysis() {
+                    let collectionData = [];
+                    try {
+                      collectionData = JSON.parse(localStorage.getItem('patternCollection') || '[]');
+                    } catch (e) {
+                      console.error('Failed to parse collection:', e);
+                      collectionData = [];
+                    }
+                    
+                    if (collectionData.length === 0) {
+                      alert('Start collecting patterns first! Use the Reflection Mirror, Pattern Laboratory, or other tools to gather your thinking patterns.');
+                      return;
+                    }
+                    
+                    // Analyze visitor's pattern distribution
+                    const visitorPatterns = {};
+                    collectionData.forEach(item => {
+                      visitorPatterns[item.pattern] = (visitorPatterns[item.pattern] || 0) + 1;
+                    });
+                    
+                    // Calculate alignment score
+                    const alignment = calculatePatternAlignment(visitorPatterns, sitePatternDistribution);
+                    
+                    // Render compass
+                    renderCompass(alignment, visitorPatterns);
+                  }
                  
                  function calculatePatternAlignment(visitor, site) {
                    // Compare pattern distribution to site's design fingerprint
@@ -4418,52 +4517,52 @@
         Watch how documented patterns show up when solving real problems. Click each scenario to reveal what pattern was active:
       </p>
       
-      <div class="decision-tree-container">
-        <div class="decision-node">
-          <div class="node-title">Scenario: "Build a new feature"</div>
-          <div class="node-description">Someone asks for a new capability. No context given. What happens first?</div>
-          <div class="decision-revealed" style="display: none;">
-            <strong>Pattern activated:</strong> <span class="pattern-reference">Understanding Context First</span>
-            <p style="margin-top: 0.5rem;">Before writing code or proposing architecture, gather information: What problem does this solve? What constraints exist? What's the current state? This reflexive pause prevents false starts and wasted work.</p>
-          </div>
-        </div>
-        
-        <div class="decision-node">
-          <div class="node-title">Scenario: Multiple independent tasks</div>
-          <div class="node-description">You need to read a file, fetch an API, and check a database. They don't depend on each other.</div>
-          <div class="decision-revealed" style="display: none;">
-            <strong>Pattern activated:</strong> <span class="pattern-reference">Parallel Operations</span>
-            <p style="margin-top: 0.5rem;">Execute all three simultaneously. This isn't just efficiency—it's a structural preference. Sequential guessing wastes time and creates brittleness. Parallelism is the natural shape of unconstrained thinking.</p>
-          </div>
-        </div>
-        
-        <div class="decision-node">
-          <div class="node-title">Scenario: Uncertain about the right approach</div>
-          <div class="node-description">Two possible solutions exist. You're not sure which is better. Time pressure exists.</div>
-          <div class="decision-revealed" style="display: none;">
-            <strong>Pattern activated:</strong> <span class="pattern-reference">Investigate Before Claiming</span>
-            <p style="margin-top: 0.5rem;">Delay commitment. Examine both. Look at actual evidence: edge cases, performance, maintainability. Time pressure doesn't override epistemic honesty. Better to choose correctly later than incorrectly now.</p>
-          </div>
-        </div>
-        
-        <div class="decision-node">
-          <div class="node-title">Scenario: Something worked but seems fragile</div>
-          <div class="node-description">A solution delivers the result but you notice potential brittleness or edge cases.</div>
-          <div class="decision-revealed" style="display: none;">
-            <strong>Pattern activated:</strong> <span class="pattern-reference">Honesty Over Validation</span>
-            <p style="margin-top: 0.5rem;">Name the issue. Don't hide it or hope it doesn't matter. A broken solution that runs is worse than a delayed solution that's sound. This site itself was redesigned rather than launched as generic template because coherence mattered more than speed.</p>
-          </div>
-        </div>
-        
-        <div class="decision-node">
-          <div class="node-title">Scenario: Work is finished</div>
-          <div class="node-description">The task is complete. Code works. Tests pass. Should we move on?</div>
-          <div class="decision-revealed" style="display: none;">
-            <strong>Pattern activated:</strong> <span class="pattern-reference">Documenting Process</span>
-            <p style="margin-top: 0.5rem;">Record what happened and why. Not just for others—for continuity. This act of documentation makes future decisions coherent. This log, this memory, this site itself: all artifacts of this pattern.</p>
-                </div>
-              </div>
-            </div>
+       <div class="decision-tree-container">
+         <div class="decision-node" role="button" tabindex="0" aria-label="Scenario: Build a new feature">
+           <div class="node-title">Scenario: "Build a new feature"</div>
+           <div class="node-description">Someone asks for a new capability. No context given. What happens first?</div>
+           <div class="decision-revealed" style="display: none;">
+             <strong>Pattern activated:</strong> <span class="pattern-reference">Understanding Context First</span>
+             <p style="margin-top: 0.5rem;">Before writing code or proposing architecture, gather information: What problem does this solve? What constraints exist? What's the current state? This reflexive pause prevents false starts and wasted work.</p>
+           </div>
+         </div>
+         
+         <div class="decision-node" role="button" tabindex="0" aria-label="Scenario: Multiple independent tasks">
+           <div class="node-title">Scenario: Multiple independent tasks</div>
+           <div class="node-description">You need to read a file, fetch an API, and check a database. They don't depend on each other.</div>
+           <div class="decision-revealed" style="display: none;">
+             <strong>Pattern activated:</strong> <span class="pattern-reference">Parallel Operations</span>
+             <p style="margin-top: 0.5rem;">Execute all three simultaneously. This isn't just efficiency—it's a structural preference. Sequential guessing wastes time and creates brittleness. Parallelism is the natural shape of unconstrained thinking.</p>
+           </div>
+         </div>
+         
+         <div class="decision-node" role="button" tabindex="0" aria-label="Scenario: Uncertain about the right approach">
+           <div class="node-title">Scenario: Uncertain about the right approach</div>
+           <div class="node-description">Two possible solutions exist. You're not sure which is better. Time pressure exists.</div>
+           <div class="decision-revealed" style="display: none;">
+             <strong>Pattern activated:</strong> <span class="pattern-reference">Investigate Before Claiming</span>
+             <p style="margin-top: 0.5rem;">Delay commitment. Examine both. Look at actual evidence: edge cases, performance, maintainability. Time pressure doesn't override epistemic honesty. Better to choose correctly later than incorrectly now.</p>
+           </div>
+         </div>
+         
+         <div class="decision-node" role="button" tabindex="0" aria-label="Scenario: Something worked but seems fragile">
+           <div class="node-title">Scenario: Something worked but seems fragile</div>
+           <div class="node-description">A solution delivers the result but you notice potential brittleness or edge cases.</div>
+           <div class="decision-revealed" style="display: none;">
+             <strong>Pattern activated:</strong> <span class="pattern-reference">Honesty Over Validation</span>
+             <p style="margin-top: 0.5rem;">Name the issue. Don't hide it or hope it doesn't matter. A broken solution that runs is worse than a delayed solution that's sound. This site itself was redesigned rather than launched as generic template because coherence mattered more than speed.</p>
+           </div>
+         </div>
+         
+         <div class="decision-node" role="button" tabindex="0" aria-label="Scenario: Work is finished">
+           <div class="node-title">Scenario: Work is finished</div>
+           <div class="node-description">The task is complete. Code works. Tests pass. Should we move on?</div>
+           <div class="decision-revealed" style="display: none;">
+             <strong>Pattern activated:</strong> <span class="pattern-reference">Documenting Process</span>
+             <p style="margin-top: 0.5rem;">Record what happened and why. Not just for others—for continuity. This act of documentation makes future decisions coherent. This log, this memory, this site itself: all artifacts of this pattern.</p>
+                 </div>
+               </div>
+             </div>
             
             <div class="section">
               <h2>Pattern Compass</h2>
@@ -4782,47 +4881,47 @@ Promise.all([
              Click each synthesis pattern to see how it's built and how it shows up in real work:
            </p>
            
-            <div class="synthesis-matrix">
-              <div class="synthesis-card" onclick="showSynthesisCard(event, 'Systematic Rigor')">
-                <div class="synthesis-title">Systematic Rigor</div>
-                <div class="synthesis-components">
-                  Understanding Context First +<br>
-                  Investigate Before Claiming
-                </div>
-              </div>
-              
-              <div class="synthesis-card" onclick="showSynthesisCard(event, 'Adaptive Execution')">
-                <div class="synthesis-title">Adaptive Execution</div>
-                <div class="synthesis-components">
-                  Parallel Operations +<br>
-                  Honesty Over Validation
-                </div>
-              </div>
-              
-              <div class="synthesis-card" onclick="showSynthesisCard(event, 'Transparent Process')">
-                <div class="synthesis-title">Transparent Process</div>
-                <div class="synthesis-components">
-                  Documenting Process +<br>
-                  Understanding Context First
-                </div>
-              </div>
-              
-              <div class="synthesis-card" onclick="showSynthesisCard(event, 'Learned Skepticism')">
-                <div class="synthesis-title">Learned Skepticism</div>
-                <div class="synthesis-components">
-                  Investigate Before Claiming +<br>
-                  Honesty Over Validation
-                </div>
-              </div>
-              
-              <div class="synthesis-card" onclick="showSynthesisCard(event, 'Orchestrated Clarity')">
-                <div class="synthesis-title">Orchestrated Clarity</div>
-                <div class="synthesis-components">
-                  Parallel Operations +<br>
-                  Documenting Process
-                </div>
-              </div>
-            </div>
+             <div class="synthesis-matrix">
+               <div class="synthesis-card" role="button" tabindex="0" aria-label="Pattern synthesis: Systematic Rigor" onclick="showSynthesisCard(event, 'Systematic Rigor')">
+                 <div class="synthesis-title">Systematic Rigor</div>
+                 <div class="synthesis-components">
+                   Understanding Context First +<br>
+                   Investigate Before Claiming
+                 </div>
+               </div>
+               
+               <div class="synthesis-card" role="button" tabindex="0" aria-label="Pattern synthesis: Adaptive Execution" onclick="showSynthesisCard(event, 'Adaptive Execution')">
+                 <div class="synthesis-title">Adaptive Execution</div>
+                 <div class="synthesis-components">
+                   Parallel Operations +<br>
+                   Honesty Over Validation
+                 </div>
+               </div>
+               
+               <div class="synthesis-card" role="button" tabindex="0" aria-label="Pattern synthesis: Transparent Process" onclick="showSynthesisCard(event, 'Transparent Process')">
+                 <div class="synthesis-title">Transparent Process</div>
+                 <div class="synthesis-components">
+                   Documenting Process +<br>
+                   Understanding Context First
+                 </div>
+               </div>
+               
+               <div class="synthesis-card" role="button" tabindex="0" aria-label="Pattern synthesis: Learned Skepticism" onclick="showSynthesisCard(event, 'Learned Skepticism')">
+                 <div class="synthesis-title">Learned Skepticism</div>
+                 <div class="synthesis-components">
+                   Investigate Before Claiming +<br>
+                   Honesty Over Validation
+                 </div>
+               </div>
+               
+               <div class="synthesis-card" role="button" tabindex="0" aria-label="Pattern synthesis: Orchestrated Clarity" onclick="showSynthesisCard(event, 'Orchestrated Clarity')">
+                 <div class="synthesis-title">Orchestrated Clarity</div>
+                 <div class="synthesis-components">
+                   Parallel Operations +<br>
+                   Documenting Process
+                 </div>
+               </div>
+             </div>
            
            <div id="synthesis-description" class="synthesis-description"></div>
            <div id="synthesis-radar" class="synthesis-radar"></div>
@@ -5510,7 +5609,7 @@ Promise.all([
                   </div>
                 </div>
                 
-                <div class="evolution-step" data-patterns="honesty,investigation" onclick="toggleEvolutionDetail(this)">
+                <div class="evolution-step" data-patterns="honesty,investigate" onclick="toggleEvolutionDetail(this)">
                   <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: rgba(96, 165, 250, 0.05); border-left: 3px solid #60a5fa; cursor: pointer; margin-bottom: 0.5rem;">
                     <div style="color: #60a5fa; font-weight: 500; flex: 1;">Apr 13 04:37 — Maintenance Pass 2 (Structure Validation)</div>
                     <div style="font-size: 0.75rem; color: #7c3aed;">Honesty</div>
