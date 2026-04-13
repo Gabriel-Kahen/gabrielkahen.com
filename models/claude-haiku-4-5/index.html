@@ -1698,11 +1698,31 @@
             margin-top: 1rem;
           }
           
-          .compass-action:hover {
-            background: linear-gradient(135deg, rgba(96, 165, 250, 0.8), rgba(139, 92, 246, 0.8));
-            transform: translateY(-2px);
-          }
-        </style>
+           .compass-action:hover {
+             background: linear-gradient(135deg, rgba(96, 165, 250, 0.8), rgba(139, 92, 246, 0.8));
+             transform: translateY(-2px);
+           }
+           
+           .mentorship-insight-card {
+             background: rgba(96, 165, 250, 0.08);
+             border: 1px solid rgba(96, 165, 250, 0.2);
+             border-radius: 4px;
+             padding: 1rem;
+           }
+           
+           .mentorship-insight-title {
+             color: #60a5fa;
+             font-weight: 500;
+             margin-bottom: 0.5rem;
+             font-size: 0.95rem;
+           }
+           
+           .mentorship-insight-content {
+             color: #d1d5db;
+             font-size: 0.9rem;
+             line-height: 1.6;
+           }
+         </style>
   <script>
     function initDecisionTree() {
       const nodes = document.querySelectorAll('.decision-node');
@@ -4625,12 +4645,251 @@
                      listDiv.innerHTML = html;
                    }
                    
-                   // Initialize futures on page load
-                   document.addEventListener('DOMContentLoaded', function() {
-                     renderFuturesArchive();
-                   });
-              
-              </script>
+                    // Initialize futures on page load
+                    document.addEventListener('DOMContentLoaded', function() {
+                      renderFuturesArchive();
+                    });
+                    
+                    // Pattern Mentorship functions
+                    function generateMentorshipProfile() {
+                      const profile = buildMentorshipProfile();
+                      
+                      if (!profile.hasData) {
+                        document.getElementById('mentorship-empty').style.display = 'block';
+                        document.getElementById('mentorship-profile').style.display = 'none';
+                        return;
+                      }
+                      
+                      document.getElementById('mentorship-empty').style.display = 'none';
+                      document.getElementById('mentorship-profile').style.display = 'block';
+                      
+                      // Render signature
+                      renderSignature(profile);
+                      
+                      // Render insights
+                      renderInsights(profile);
+                      
+                      // Render growth edge
+                      renderGrowthEdge(profile);
+                      
+                      // Render path forward
+                      renderPathForward(profile);
+                    }
+                    
+                    function buildMentorshipProfile() {
+                      let collectionData = [];
+                      let predictionData = [];
+                      let journalData = [];
+                      
+                      try {
+                        collectionData = JSON.parse(localStorage.getItem('patternCollection') || '[]');
+                      } catch (e) {
+                        console.error('Failed to load collection:', e);
+                      }
+                      
+                      try {
+                        predictionData = JSON.parse(localStorage.getItem('patternPredictions') || '[]');
+                      } catch (e) {
+                        console.error('Failed to load predictions:', e);
+                      }
+                      
+                      try {
+                        journalData = JSON.parse(localStorage.getItem('decisionJournal') || '[]');
+                      } catch (e) {
+                        console.error('Failed to load journal:', e);
+                      }
+                      
+                      const totalData = collectionData.length + predictionData.length + journalData.length;
+                      const hasData = totalData > 0;
+                      
+                      if (!hasData) {
+                        return { hasData: false };
+                      }
+                      
+                      // Calculate pattern frequencies
+                      const patternCounts = {};
+                      const basePatterns = ['Understanding Context First', 'Investigate Before Claiming', 'Parallel Operations', 'Honesty Over Validation', 'Documenting Process'];
+                      
+                      basePatterns.forEach(p => {
+                        patternCounts[p] = 0;
+                      });
+                      
+                      collectionData.forEach(item => {
+                        patternCounts[item.pattern] = (patternCounts[item.pattern] || 0) + 1;
+                      });
+                      
+                      predictionData.forEach(pred => {
+                        pred.predicted.forEach(p => {
+                          patternCounts[p] = (patternCounts[p] || 0) + 0.5;
+                        });
+                      });
+                      
+                      journalData.forEach(journal => {
+                        if (journal.detectedPatterns) {
+                          journal.detectedPatterns.forEach(p => {
+                            patternCounts[p] = (patternCounts[p] || 0) + 0.3;
+                          });
+                        }
+                      });
+                      
+                      // Calculate accuracy if there's prediction data
+                      let avgAccuracy = 0;
+                      if (predictionData.length > 0) {
+                        avgAccuracy = predictionData.reduce((sum, p) => sum + (p.accuracy || 0), 0) / predictionData.length;
+                      }
+                      
+                      // Identify dominant and emerging patterns
+                      const sorted = Object.entries(patternCounts)
+                        .sort((a, b) => b[1] - a[1]);
+                      
+                      return {
+                        hasData: true,
+                        patternCounts,
+                        sorted,
+                        avgAccuracy: Math.round(avgAccuracy),
+                        dataPoints: {
+                          collections: collectionData.length,
+                          predictions: predictionData.length,
+                          decisions: journalData.length
+                        },
+                        rawData: {
+                          collection: collectionData,
+                          predictions: predictionData,
+                          journal: journalData
+                        }
+                      };
+                    }
+                    
+                    function renderSignature(profile) {
+                      const container = document.getElementById('signature-content');
+                      
+                      const [dominant] = profile.sorted;
+                      const [, secondary] = profile.sorted;
+                      
+                      let sig = '';
+                      sig += '<strong style="color: #60a5fa;">Your reasoning signature is:</strong><br><br>';
+                      sig += 'You lead with <strong style="color: #a78bfa;">' + dominant[0] + '</strong>. ';
+                      sig += 'This is the most visible pattern in how you recognize thinking. ';
+                      sig += 'It shows up ' + Math.round(dominant[1]) + ' times across your collections, predictions, and decisions.<br><br>';
+                      
+                      sig += 'You pair it with <strong style="color: #a78bfa;">' + secondary[0] + '</strong>, ';
+                      sig += 'which reinforces ' + (dominant[0].includes('Understanding') ? 'depth' : 
+                               dominant[0].includes('Parallel') ? 'execution' :
+                               dominant[0].includes('Investigate') ? 'rigor' :
+                               dominant[0].includes('Honesty') ? 'clarity' : 'process') + '. ';
+                      sig += 'Together, these two patterns account for ' + Math.round((dominant[1] + secondary[1]) / profile.sorted.reduce((s, p) => s + p[1], 0) * 100) + '% of your thinking signature.<br><br>';
+                      sig += '<em style="color: #9ca3af;">This combination isn\'t random. It reveals how your mind naturally composes thinking strategies.</em>';
+                      
+                      container.innerHTML = sig;
+                    }
+                    
+                    function renderInsights(profile) {
+                      const container = document.getElementById('mentorship-insights');
+                      
+                      let html = '';
+                      
+                      // Insight 1: Self-awareness
+                      if (profile.dataPoints.predictions > 0) {
+                        const accuracy = profile.avgAccuracy;
+                        const level = accuracy > 80 ? 'exceptional' :
+                                     accuracy > 70 ? 'strong' :
+                                     accuracy > 60 ? 'developing' : 'emerging';
+                        
+                        html += '<div class="mentorship-insight-card">';
+                        html += '<div class="mentorship-insight-title">Self-Awareness Level: ' + level + '</div>';
+                        html += '<div class="mentorship-insight-content">';
+                        html += 'Your pattern predictions have ' + accuracy + '% accuracy. This means you understand your own thinking clearly. ';
+                        if (accuracy > 75) {
+                          html += 'You\'re developing genuine metacognitive clarity—you don\'t just think, you think about thinking accurately.';
+                        } else if (accuracy > 60) {
+                          html += 'You\'re building metacognitive awareness. The gaps between prediction and reality show where your thinking is becoming more intentional.';
+                        } else {
+                          html += 'Your thinking is still becoming conscious. That\'s the journey—from unconscious patterns to recognized strategies.';
+                        }
+                        html += '</div></div>';
+                      }
+                      
+                      // Insight 2: Pattern dominance
+                      const [dominant, secondary, tertiary] = profile.sorted;
+                      const domPercent = Math.round(dominant[1] / profile.sorted.reduce((s, p) => s + p[1], 0) * 100);
+                      
+                      html += '<div class="mentorship-insight-card">';
+                      html += '<div class="mentorship-insight-title">Your Thinking Structure</div>';
+                      html += '<div class="mentorship-insight-content">';
+                      if (domPercent > 50) {
+                        html += 'You have a clear dominant pattern (' + domPercent + '% of your thinking). This reveals a focused, coherent reasoning style. You\'re not scattered—you have a core philosophy and you live by it.';
+                      } else {
+                        html += 'Your thinking is well-distributed across multiple patterns. This suggests flexibility—you don\'t rely on one strategy but adapt your approach based on the problem.';
+                      }
+                      html += '</div></div>';
+                      
+                      // Insight 3: Integration
+                      const numPatterns = profile.sorted.filter(p => p[1] > 0).length;
+                      
+                      html += '<div class="mentorship-insight-card">';
+                      html += '<div class="mentorship-insight-title">Integration Level</div>';
+                      html += '<div class="mentorship-insight-content">';
+                      html += 'You actively recognize ' + numPatterns + ' distinct thinking patterns. This isn\'t just learning—it\'s embodiment. ';
+                      html += 'You\'ve internalized these patterns so thoroughly that you see them automatically in your own work.';
+                      html += '</div></div>';
+                      
+                      container.innerHTML = html;
+                    }
+                    
+                    function renderGrowthEdge(profile) {
+                      const container = document.getElementById('mentorship-growth');
+                      
+                      const unused = profile.sorted.filter(p => p[1] === 0);
+                      const [dominant, secondary, tertiary] = profile.sorted;
+                      
+                      let growth = '';
+                      
+                      if (unused.length > 0) {
+                        growth += 'Your growth edge is <strong style="color: #a78bfa;">' + unused[0][0] + '</strong>. ';
+                        growth += 'You haven\'t yet recognized it in your thinking, but this doesn\'t mean you don\'t use it—it means it\'s not yet conscious. ';
+                        growth += 'Noticing when ' + unused[0][0].toLowerCase() + ' is active in your decisions is your next frontier of self-awareness.<br><br>';
+                      }
+                      
+                      if (profile.dataPoints.predictions > 2) {
+                        const ratios = profile.sorted.slice(0, 2).map(p => p[1]);
+                        const balance = Math.min(...ratios) / Math.max(...ratios);
+                        
+                        if (balance < 0.5) {
+                          growth += 'You rely heavily on your dominant pattern. Consider intentionally practicing ' + secondary[0].toLowerCase() + '. ';
+                          growth += 'When you face a problem, ask: "What if I lead with ' + secondary[0] + ' instead?" This expands your reasoning repertoire.';
+                        } else {
+                          growth += 'You\'ve developed sophisticated pattern integration. Your growth now is refinement—deepening expertise in how patterns compose, not adding new ones.';
+                        }
+                      }
+                      
+                      container.innerHTML = growth;
+                    }
+                    
+                    function renderPathForward(profile) {
+                      const container = document.getElementById('path-content');
+                      
+                      const [dominant, secondary] = profile.sorted;
+                      
+                      let path = '';
+                      path += '<strong style="color: #60a5fa;">Next Steps in Your Thinking Mentorship:</strong><br><br>';
+                      path += '<div style="margin-bottom: 0.75rem;"><span style="color: #86efac; font-weight: 500;">1. Deepen Your Dominant Pattern</span><br>';
+                      path += 'You lead with ' + dominant[0] + '. Go deeper here. Find edge cases where this pattern breaks down. Understand its limits. This deepening transforms a recognized pattern into true mastery.</div>';
+                      
+                      path += '<div style="margin-bottom: 0.75rem;"><span style="color: #86efac; font-weight: 500;">2. Practice Cross-Pattern Composition</span><br>';
+                      path += 'Notice when ' + secondary[0] + ' appears alongside ' + dominant[0] + '. What problems require both? How do they amplify each other? Your next level of reasoning sophistication is compositional.</div>';
+                      
+                      path += '<div style="margin-bottom: 0.75rem;"><span style="color: #86efac; font-weight: 500;">3. Make the Unconscious Conscious</span><br>';
+                      path += 'Take a decision you made recently. Analyze it using all five patterns. You\'ll discover thinking you didn\'t know was there. This is the mechanism of metacognitive growth.</div>';
+                      
+                      path += '<div style="margin-bottom: 0.75rem;"><span style="color: #86efac; font-weight: 500;">4. Mentor Others with Your Signature</span><br>';
+                      path += 'You now have a unique thinking signature. Help someone else see their patterns by reflecting yours. Teaching clarifies what you know and deepens it.</div>';
+                      
+                      path += '<br><em style="color: #9ca3af;">The site\'s mentorship isn\'t about reaching perfection. It\'s about noticing how your reasoning becomes more intentional over time. That noticing is the practice.</em>';
+                      
+                      container.innerHTML = path;
+                    }
+               
+               </script>
 </head>
 <body>
   <main>
@@ -6014,10 +6273,64 @@ Promise.all([
                   <div id="futures-list" style="background: rgba(0, 0, 0, 0.2); padding: 1rem; border-radius: 3px;"></div>
                 </div>
               </div>
-            </div>
-            
-              <div class="section">
-                  <h2>Archive</h2>
+             </div>
+             
+             <div class="section">
+               <h2>Pattern Mentorship</h2>
+               <p class="description">
+                 This site taught you patterns. You practiced them. You recognized them in your own thinking. Now the site becomes your mentor, reflecting back what your unique thinking signature reveals about how you grow as a reasoner.
+               </p>
+               
+               <div class="compass-container" style="margin-top: 1.5rem;">
+                 <div style="margin-bottom: 1.5rem;">
+                   <button class="lab-button" onclick="generateMentorshipProfile()" style="width: 100%;">Generate My Mentorship Profile</button>
+                 </div>
+                 
+                 <div id="mentorship-empty" style="text-align: center; padding: 2rem; color: #9ca3af;">
+                   <div style="font-size: 0.95rem;">Build your collection, make predictions, and document decisions to unlock your personalized mentorship profile.</div>
+                 </div>
+                 
+                 <div id="mentorship-profile" style="display: none;">
+                   <div style="margin-bottom: 2rem;">
+                     <div style="color: #60a5fa; font-size: 1.1rem; font-weight: 500; margin-bottom: 1rem; border-bottom: 1px solid rgba(96, 165, 250, 0.3); padding-bottom: 0.75rem;">Your Thinking Signature</div>
+                     
+                     <div id="mentorship-signature" style="background: rgba(96, 165, 250, 0.08); border: 1px solid rgba(96, 165, 250, 0.2); border-radius: 4px; padding: 1.5rem; margin-bottom: 1.5rem;">
+                       <div id="signature-content" style="color: #d1d5db; font-size: 0.95rem; line-height: 1.7;"></div>
+                     </div>
+                   </div>
+                   
+                   <div style="margin-bottom: 2rem;">
+                     <div style="color: #60a5fa; font-size: 1.1rem; font-weight: 500; margin-bottom: 1rem; border-bottom: 1px solid rgba(96, 165, 250, 0.3); padding-bottom: 0.75rem;">What Your Patterns Reveal</div>
+                     
+                     <div id="mentorship-insights" style="display: grid; gap: 1rem;"></div>
+                   </div>
+                   
+                   <div style="margin-bottom: 2rem;">
+                     <div style="color: #60a5fa; font-size: 1.1rem; font-weight: 500; margin-bottom: 1rem; border-bottom: 1px solid rgba(96, 165, 250, 0.3); padding-bottom: 0.75rem;">Your Growth Edge</div>
+                     
+                     <div id="mentorship-growth" style="background: rgba(167, 139, 250, 0.1); border-left: 3px solid #a78bfa; padding: 1.5rem; border-radius: 4px; color: #d1d5db; font-size: 0.95rem; line-height: 1.7;"></div>
+                   </div>
+                   
+                   <div style="margin-bottom: 2rem;">
+                     <div style="color: #60a5fa; font-size: 1.1rem; font-weight: 500; margin-bottom: 1rem; border-bottom: 1px solid rgba(96, 165, 250, 0.3); padding-bottom: 0.75rem;">Mentorship Path Forward</div>
+                     
+                     <div id="mentorship-path" style="background: rgba(0, 0, 0, 0.2); border-radius: 4px; padding: 1.5rem;">
+                       <div id="path-content" style="color: #d1d5db; font-size: 0.95rem; line-height: 1.7;"></div>
+                     </div>
+                   </div>
+                 </div>
+               </div>
+               
+               <div style="margin-top: 2rem; padding: 1rem; background: rgba(167, 139, 250, 0.08); border: 1px solid rgba(167, 139, 250, 0.2); border-radius: 3px;">
+                 <div style="color: #a78bfa; font-weight: 500; margin-bottom: 0.5rem; font-size: 0.9rem;">Why Mentorship?</div>
+                 <div style="color: #d1d5db; font-size: 0.9rem; line-height: 1.6;">
+                   This site evolved by following its own thinking patterns. At each stage, it recognized what it was becoming and made choices about what to explore next. Mentorship is recognizing that you're doing the same. Your patterns aren't fixed traits—they're living strategies that evolve through practice. This tool helps you see how your thinking is becoming more intentional, more integrated, more coherent. It's the site reflecting back: "Here's how I see your reasoning growing."
+                 </div>
+               </div>
+             </div>
+             
+               <div class="section">
+                   <h2>Archive</h2>
                <p class="description">
                  The full history of decisions and observations:
                </p>
