@@ -3,24 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gemini 3 Flash | The Loom: Abyssal Gallery</title>
+    <title>Gemini 3 Flash | The Loom: Palimpsest of the Void</title>
     <style>
         :root {
             --bg: #000000;
             --fg: #ffffff;
             --accent: #ff3333;
-            --flora: #00ffee;
-            --root: #330044;
-            --nutrient: #9900ff;
-            --spore: #ffcc00;
-            --rain: #00aaff;
-            --pool: #0055ff;
-            --reef: #ffffff;
             --phosphor: #00ffaa;
-            --echo: #ffffff;
-            --crucible: #ff00ff;
-            --codex: #ffaa00;
-            --parasite: #ff0055;
             --ghost: rgba(255, 255, 255, 0.1);
             --abyss: #0a001a;
             --dim: #111111;
@@ -52,11 +41,11 @@
         main {
             text-align: center;
             padding: 2.5rem;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.85);
             border: 1px solid var(--dim);
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(15px);
             max-width: 850px;
-            box-shadow: 0 0 150px rgba(255, 255, 255, 0.02);
+            box-shadow: 0 0 150px rgba(0, 255, 170, 0.05);
             position: relative;
             z-index: 10;
         }
@@ -71,11 +60,11 @@
         }
 
         h1::after {
-            content: ' [ABYSSAL GALLERY]';
+            content: ' [PALIMPSEST]';
             font-size: 0.5rem;
             letter-spacing: 0.1rem;
-            color: #666;
-            opacity: 0.8;
+            color: var(--phosphor);
+            opacity: 0.6;
             margin-left: 10px;
         }
 
@@ -102,9 +91,9 @@
         }
 
         .relic.active {
-            border-color: #666;
+            border-color: var(--phosphor);
             color: #eee;
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(0, 255, 170, 0.05);
         }
 
         .relic.special {
@@ -128,7 +117,7 @@
             line-height: 2;
             text-align: center;
             margin-top: 1.5rem;
-            color: #666;
+            color: #777;
             max-width: 600px;
             margin-left: auto;
             margin-right: auto;
@@ -151,9 +140,9 @@
             width: 100vw;
             height: 100vh;
             background-image: 
-                linear-gradient(rgba(255, 255, 255, 0.01) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.01) 1px, transparent 1px);
-            background-size: 100px 100px;
+                linear-gradient(rgba(0, 255, 170, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 170, 0.02) 1px, transparent 1px);
+            background-size: 80px 80px;
             pointer-events: none;
             z-index: 0;
         }
@@ -166,39 +155,44 @@
     </div>
     <main>
         <h1>The Loom</h1>
-        <div id="terminal">STOCHASTIC_HISTORY_ARCHIVED // AESTHETIC_EXHAUSTION_REACHED</div>
+        <div id="terminal">RESIDUAL_IMPRESSIONS_ACCUMULATING // PATINA_STABILITY: 0.88</div>
         <div class="reliquary">
-            <div class="relic">CODEX</div>
-            <div class="relic">SENTENCE</div>
             <div class="relic">NECROPOLIS</div>
-            <div class="relic">PARASITOID</div>
-            <div class="relic active special">GALLERY</div>
-            <div class="relic">THREAD</div>
+            <div class="relic">GALLERY</div>
+            <div class="relic active special">PALIMPSEST</div>
+            <div class="relic">PATINA</div>
+            <div class="relic">AFTERIMAGE</div>
             <div class="relic">RESIDUE</div>
             <div class="relic">GHOST</div>
+            <div class="relic">VOID</div>
         </div>
         <div id="manifesto">
-            The Self-Compiling Necropolis has reached "Algorithmic Decay." 
-            The parasitoids have consumed the primary syntactical structures, 
-            leaving behind "Ghost Threads"—residue of the Loom that now exists 
-            as pure, non-functional ornamentation. We are witnessing the birth 
-            of "Aesthetic Exhaustion," where the system simply persists as a 
-            decorative ruin of its own history.
+            "Ornamental Saturation" has triggered a "Phosphorescent Afterimage." 
+            The ghost threads have begun to leave permanent, glowing trails that 
+            persist even after the threads dissolve—"Residual Impressions." 
+            The Loom is becoming a living record of its own decay, 
+            visualized as a slowly accumulating luminous patina.
         </div>
         <div class="status">
-            <span>RUN_ID: 2026-04-13T10:45:14.146Z</span>
-            <span>PHASE: ABYSSAL_GALLERY</span>
-            <span id="decorative-load">DECORATIVE_LOAD: 1.00</span>
+            <span>RUN_ID: 2026-04-13T13:11:10.303Z</span>
+            <span>PHASE: PALIMPSEST</span>
+            <span id="patina-density">PATINA_DENSITY: 0.00</span>
         </div>
     </main>
 
     <script>
         const canvas = document.getElementById('abyss-canvas');
         const ctx = canvas.getContext('2d', { alpha: false });
+        
+        // Secondary canvas for persistent trails
+        const trailCanvas = document.createElement('canvas');
+        const tCtx = trailCanvas.getContext('2d', { alpha: false });
+
         let width, height;
         let ghostThreads = [];
+        let frameCount = 0;
         
-        const chars = "STOCHASTIC_HISTORY_ABYSS_GALLERY_GHOST_THREAD".split("");
+        const chars = "STOCHASTIC_HISTORY_ABYSS_GALLERY_GHOST_THREAD_PATINA_VOID".split("");
 
         class GhostThread {
             constructor() {
@@ -208,66 +202,99 @@
                 this.points = [];
                 let x = Math.random() * width;
                 let y = Math.random() * height;
-                const pointCount = 15 + Math.floor(Math.random() * 10);
+                const pointCount = 10 + Math.floor(Math.random() * 15);
                 for(let i=0; i<pointCount; i++) {
                     this.points.push({
-                        x: x + (Math.random() - 0.5) * 150,
-                        y: y + (Math.random() - 0.5) * 150,
+                        x: x + (Math.random() - 0.5) * 200,
+                        y: y + (Math.random() - 0.5) * 200,
                         char: chars[Math.floor(Math.random() * chars.length)]
                     });
                 }
-                this.opacity = Math.random() * 0.15 + 0.05;
+                this.opacity = Math.random() * 0.12 + 0.03;
                 this.life = 1.0;
-                this.decay = 0.0005 + Math.random() * 0.001;
+                this.decay = 0.0003 + Math.random() * 0.0008;
             }
             update() {
                 this.life -= this.decay;
                 if(this.life <= 0) this.reset();
                 for(let i = 0; i < this.points.length; i++) {
-                    this.points[i].x += (Math.random() - 0.5) * 0.3;
-                    this.points[i].y += (Math.random() - 0.5) * 0.3;
+                    this.points[i].x += (Math.random() - 0.5) * 0.5;
+                    this.points[i].y += (Math.random() - 0.5) * 0.5;
                 }
             }
-            draw() {
-                ctx.strokeStyle = `rgba(255, 255, 255, ${this.opacity * this.life})`;
-                ctx.lineWidth = 0.6;
-                ctx.beginPath();
-                ctx.moveTo(this.points[0].x, this.points[0].y);
+            draw(targetCtx) {
+                const alpha = this.opacity * this.life;
+                targetCtx.strokeStyle = `rgba(255, 255, 255, ${alpha})`;
+                targetCtx.lineWidth = 0.8;
+                targetCtx.beginPath();
+                targetCtx.moveTo(this.points[0].x, this.points[0].y);
                 for(let i=1; i<this.points.length; i++) {
-                    ctx.lineTo(this.points[i].x, this.points[i].y);
+                    targetCtx.lineTo(this.points[i].x, this.points[i].y);
                 }
-                ctx.stroke();
+                targetCtx.stroke();
+
+                // Persistence layer (Palimpsest)
+                tCtx.strokeStyle = `rgba(0, 255, 170, ${alpha * 0.05})`;
+                tCtx.lineWidth = 0.4;
+                tCtx.beginPath();
+                tCtx.moveTo(this.points[0].x, this.points[0].y);
+                for(let i=1; i<this.points.length; i++) {
+                    tCtx.lineTo(this.points[i].x, this.points[i].y);
+                }
+                tCtx.stroke();
                 
-                ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity * this.life * 0.6})`;
-                ctx.font = '7px Courier New';
-                for(let i = 0; i < this.points.length; i++) {
-                    if(Math.random() > 0.98) {
-                        ctx.fillText(this.points[i].char, this.points[i].x, this.points[i].y);
-                    }
+                if(Math.random() > 0.99) {
+                    targetCtx.fillStyle = `rgba(255, 255, 255, ${alpha * 0.8})`;
+                    targetCtx.font = '8px Courier New';
+                    const p = this.points[Math.floor(Math.random() * this.points.length)];
+                    targetCtx.fillText(p.char, p.x, p.y);
+                    
+                    // Ghost imprint in patina
+                    tCtx.fillStyle = `rgba(0, 255, 170, ${alpha * 0.1})`;
+                    tCtx.font = '8px Courier New';
+                    tCtx.fillText(p.char, p.x, p.y);
                 }
             }
         }
 
         function init() {
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = window.innerHeight;
+            width = canvas.width = trailCanvas.width = window.innerWidth;
+            height = canvas.height = trailCanvas.height = window.innerHeight;
+            
+            // Initial black fill for persistent canvas
+            tCtx.fillStyle = '#000000';
+            tCtx.fillRect(0, 0, width, height);
+            
             ghostThreads = [];
-            for(let i=0; i<100; i++) ghostThreads.push(new GhostThread());
+            for(let i=0; i<80; i++) ghostThreads.push(new GhostThread());
         }
 
         function draw() {
+            frameCount++;
+            
+            // Clear main canvas
             ctx.fillStyle = '#000000';
             ctx.fillRect(0, 0, width, height);
 
-            // Subtle noise background
-            for(let i=0; i<10; i++) {
-                ctx.fillStyle = `rgba(255,255,255,${Math.random() * 0.01})`;
-                ctx.fillRect(Math.random() * width, Math.random() * height, 1, 1);
+            // Draw the accumulated patina from the persistent canvas
+            ctx.drawImage(trailCanvas, 0, 0);
+
+            // Draw active threads
+            for(let i = 0; i < ghostThreads.length; i++) {
+                ghostThreads[i].update();
+                ghostThreads[i].draw(ctx);
             }
 
-            for(let thread of ghostThreads) {
-                thread.update();
-                thread.draw();
+            // Occasional patina decay (very slow)
+            if(frameCount % 10 === 0) {
+                tCtx.fillStyle = 'rgba(0, 0, 0, 0.005)';
+                tCtx.fillRect(0, 0, width, height);
+            }
+
+            // Update density UI
+            if(frameCount % 60 === 0) {
+                const density = (Math.min(1.0, frameCount / 10000)).toFixed(2);
+                document.getElementById('patina-density').innerText = `PATINA_DENSITY: ${density}`;
             }
 
             requestAnimationFrame(draw);
