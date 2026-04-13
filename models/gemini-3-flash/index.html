@@ -308,7 +308,7 @@
                 // Check for intersections
                 ripples.forEach(other => {
                     if (other === this) return;
-                    const d = Math.hypot(this.x - other.x, this.y - other.y);
+            const d = Math.hypot(this.x - other.x, this.y - other.y);
                     if (d < this.r + other.r && d > Math.abs(this.r - other.r)) {
                         const intersectIntensity = this.opacity * other.opacity * 10;
                         if (intersectIntensity > 0.05) {
@@ -384,12 +384,13 @@
                 const interaction = Math.max(0, 1 - dist / 300);
                 
                 let harmonicFactor = 0;
-                ripples.forEach(r => {
+                for (let i = 0; i < ripples.length; i++) {
+                    const r = ripples[i];
                     const rd = Math.hypot(this.x - r.x, this.y - r.y);
                     if (Math.abs(rd - r.r) < 20) {
                         harmonicFactor = Math.max(harmonicFactor, r.opacity * 4);
                     }
-                });
+                }
 
                 ctx.save();
                 ctx.translate(this.x, this.y);
@@ -431,18 +432,20 @@
             draw() {
                 ctx.save();
                 ctx.translate(this.x, this.y);
-                this.nodes.forEach((n, i) => {
+                for (let i = 0; i < this.nodes.length; i++) {
+                    const n = this.nodes[i];
                     ctx.fillStyle = `rgba(255, 255, 255, ${0.1 + (i / this.nodes.length) * 0.2})`;
                     ctx.font = '9px Courier New';
                     ctx.fillText(n.char, n.x, n.y);
                     if (i > 0) {
+                        const prev = this.nodes[i-1];
                         ctx.strokeStyle = `rgba(0, 255, 170, 0.15)`;
                         ctx.beginPath();
-                        ctx.moveTo(this.nodes[i-1].x + 4, this.nodes[i-1].y - 4);
+                        ctx.moveTo(prev.x + 4, prev.y - 4);
                         ctx.lineTo(n.x + 4, n.y - 4);
                         ctx.stroke();
                     }
-                });
+                }
                 ctx.restore();
             }
         }
@@ -450,8 +453,10 @@
         function init() {
             width = canvas.width = window.innerWidth;
             height = canvas.height = window.innerHeight;
-            drops = Array.from({length: 60}, () => new Drop());
-            reefs = Array.from({length: 10}, () => new Reef(Math.random() * width, height - Math.random() * 150));
+            drops = [];
+            for (let i = 0; i < 60; i++) drops.push(new Drop());
+            reefs = [];
+            for (let i = 0; i < 10; i++) reefs.push(new Reef(Math.random() * width, height - Math.random() * 150));
             flora = [];
             pool = [];
             syllables = [];
@@ -467,45 +472,52 @@
             ctx.fillStyle = grad;
             ctx.fillRect(0, 0, width, height);
 
-            ripples.forEach((r, i) => {
+            for (let i = ripples.length - 1; i >= 0; i--) {
+                const r = ripples[i];
                 r.update();
                 r.draw();
                 if (r.opacity <= 0) ripples.splice(i, 1);
-            });
+            }
 
-            drops.forEach(d => {
+            for (let i = 0; i < drops.length; i++) {
+                const d = drops[i];
                 d.update();
                 d.draw();
-            });
+            }
 
-            reefs.forEach(r => {
+            for (let i = 0; i < reefs.length; i++) {
+                const r = reefs[i];
                 r.update();
                 r.draw();
-            });
+            }
 
-            flora.forEach(f => {
+            for (let i = 0; i < flora.length; i++) {
+                const f = flora[i];
                 f.update();
                 f.draw();
-            });
+            }
 
-            syllables.forEach((s, i) => {
+            for (let i = syllables.length - 1; i >= 0; i--) {
+                const s = syllables[i];
                 s.update();
                 s.draw();
                 if (s.life <= 0) syllables.splice(i, 1);
-            });
+            }
 
-            sentences.forEach((s, i) => {
+            for (let i = sentences.length - 1; i >= 0; i--) {
+                const s = sentences[i];
                 s.update();
                 s.draw();
                 if (s.life <= 0) sentences.splice(i, 1);
-            });
+            }
 
-            pool.forEach(p => {
+            for (let i = 0; i < pool.length; i++) {
+                const p = pool[i];
                 p.life -= 0.002;
                 ctx.fillStyle = `rgba(100, 200, 255, ${p.opacity * p.life})`;
                 ctx.font = '7px Courier New';
                 ctx.fillText(p.char, p.x, p.y);
-            });
+            }
             pool = pool.filter(p => p.life > 0);
 
             if (pool.length > 500) pool.splice(0, pool.length - 500);
