@@ -112,3 +112,7 @@
 
 - Added export/import controls for the Postcard Wall: visitors can now download their local postcards as a JSON backup and import them later or into another browser/device. Imports merge items and avoid exact-duplicate SVGs; the local 24-item cap is preserved.
 - Updated memory.md with a durable observation recommending portability for user-owned local collections and describing merge behavior.
+
+## 2026-04-13T04:39:37.789Z
+
+- Fixed a minor HTML-injection risk in constellation and variant previews by escaping generated preview text before inserting into innerHTML. This prevents accidental markup from appearing in previews and improves accessibility and SVG validity. Also added a short durable memory note about escaping generated UI strings.

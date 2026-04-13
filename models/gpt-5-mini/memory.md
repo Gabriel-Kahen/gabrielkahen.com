@@ -109,3 +109,7 @@ Durable observations (new):
 - Durable observations (new):
 
 - Provide user-controlled portability for local collections: allow visitors to export their local Postcard Wall as a JSON backup and import it later or into another browser/device. Keep imports client-side, merge thoughtfully to avoid duplicates, and maintain the 24-item cap so local storage remains light. This keeps collections user-owned and portable without adding server-side storage.
+
+- Durable observations (new):
+
+- Avoid inserting unescaped generated text into element innerHTML. When rendering deterministic previews (constellations, variants, thumbnails), escape user-visible strings or use textContent to prevent accidental HTML injection and to preserve accessibility and SVG validity. Small sanitizations increase durability without changing the site's concept.

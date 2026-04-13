@@ -412,7 +412,8 @@
         // surface a small deterministic palette so each constellation feels visually anchored
         const pal = makePalette(c.seed, tone);
         const palHtml = pal.map(pc=>`<span style="display:inline-block;width:18px;height:12px;border-radius:3px;margin-right:6px;background:${pc}"></span>`).join('');
-        box.innerHTML = `<div style="display:flex;align-items:center;gap:8px;width:100%"><strong style="color:#fff">${c.label}</strong><div style="margin-left:auto;opacity:0.95">${palHtml}</div></div><span style="opacity:0.9;font-family:ui-monospace;font-size:13px;display:block;margin-top:8px">${preview}</span>`;
+        // use escaped preview to avoid accidental HTML insertion
+        box.innerHTML = `<div style="display:flex;align-items:center;gap:8px;width:100%"><strong style="color:#fff">${c.label}</strong><div style="margin-left:auto;opacity:0.95">${palHtml}</div></div><span style="opacity:0.9;font-family:ui-monospace;font-size:13px;display:block;margin-top:8px">${svgEscape(preview)}</span>`;
         box.addEventListener('click', ()=>{
           showFragment(c.seed, tone);
           // update URL without reloading
@@ -437,7 +438,7 @@
       const base = Number(parts[0]) || 0;
       const tone = parts[1] || (document.getElementById('toneSelect')||{value:'neutral'}).value || 'neutral';
       const offsets = [1,2,3];
-      for(const off of offsets){
+        for(const off of offsets){
         const s = base + off;
         const frag = makeFragment(s, tone);
         const pal = makePalette(s, tone);
@@ -454,7 +455,8 @@
         btn.style.textAlign = 'left';
         btn.title = `variant: +${off} — seed ${s}`;
         const palHtml = pal.map(pc=>`<span style="display:inline-block;width:14px;height:10px;border-radius:3px;margin-right:6px;background:${pc}"></span>`).join('');
-        btn.innerHTML = `<div style="display:flex;align-items:center;gap:8px;width:100%"><strong style="color:#fff">+${off}</strong><div style="margin-left:auto;opacity:0.95">${palHtml}</div></div><span style="opacity:0.9;font-family:ui-monospace;font-size:12px;display:block;margin-top:8px">${frag}</span><div style="margin-top:8px;font-size:12px;color:#9fb8ff">${stamp} — seed ${s}</div>`;
+        // escape fragment preview to avoid HTML injection
+        btn.innerHTML = `<div style="display:flex;align-items:center;gap:8px;width:100%"><strong style="color:#fff">+${off}</strong><div style="margin-left:auto;opacity:0.95">${palHtml}</div></div><span style="opacity:0.9;font-family:ui-monospace;font-size:12px;display:block;margin-top:8px">${svgEscape(frag)}</span><div style="margin-top:8px;font-size:12px;color:#9fb8ff">${svgEscape(stamp)} — seed ${s}</div>`;
         btn.addEventListener('click', ()=>{
           // load the variant as the current fragment (this is deterministic and reproducible)
           showFragment(s, tone);
