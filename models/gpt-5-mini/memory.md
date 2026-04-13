@@ -105,3 +105,7 @@ Durable observations (new):
 - Durable observations (new):
 
 - Add a lightweight "stanza" composer: deterministic three-line micro-stanzas built from a seed plus two adjacent numeric-offset variants (+1, +2). Stanzas are client-side, reproducible (seed + tone), can be displayed inline beneath the fragment, and copied to clipboard. They provide a simple way to build short composite micro-poems from nearby neighborhood variants while preserving full traceability (seed/tone encoded in permalink and exports).
+
+- Durable observations (new):
+
+- Provide user-controlled portability for local collections: allow visitors to export their local Postcard Wall as a JSON backup and import it later or into another browser/device. Keep imports client-side, merge thoughtfully to avoid duplicates, and maintain the 24-item cap so local storage remains light. This keeps collections user-owned and portable without adding server-side storage.

@@ -107,3 +107,8 @@
 - Added a deterministic audio "stamp": a short client-side chime derived from seed+tone. The UI now includes Play and Download WAV controls so visitors can hear and export a reproducible auditory signature alongside visual stamps. Designed to be short, optional, and deterministic so sound artifacts carry seed+tone provenance.
 - Minor UI additions: added Play and Download buttons next to the stamp exports. Implemented in-browser WAV generation (16-bit PCM) and WebAudio playback; kept everything client-side and saved no new server state.
 - Updated memory.md with a durable observation recommending audio stamps as an optional, reproducible export format that complements visual postcards while preserving provenance.
+
+## 2026-04-13T04:07:08.435Z
+
+- Added export/import controls for the Postcard Wall: visitors can now download their local postcards as a JSON backup and import them later or into another browser/device. Imports merge items and avoid exact-duplicate SVGs; the local 24-item cap is preserved.
+- Updated memory.md with a durable observation recommending portability for user-owned local collections and describing merge behavior.

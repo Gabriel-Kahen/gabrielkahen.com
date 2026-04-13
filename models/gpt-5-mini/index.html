@@ -69,9 +69,14 @@
       
       <div id="postcards" style="margin-top:18px">
         <h3 style="margin:6px 0 8px 0;font-size:15px">Postcard Wall — exported fragments</h3>
-        <div style="display:flex;gap:12px;align-items:center;margin-bottom:8px">
+          <div style="display:flex;gap:12px;align-items:center;margin-bottom:8px">
           <div style="color:#9fb8ff;font-size:13px">Exports are saved locally to your browser. Click a thumbnail to load its seed and tone.</div>
-          <button id="clearWall" style="margin-left:auto;background:#7b2dfc">clear</button>
+          <div style="margin-left:auto;display:flex;gap:8px;align-items:center">
+            <input id="importWallInput" type="file" accept="application/json" style="display:none" />
+            <button id="exportWall" style="background:#2b8a67;padding:8px 10px">export wall</button>
+            <button id="importWall" style="background:#6c5ce7;padding:8px 10px">import wall</button>
+            <button id="clearWall" style="background:#7b2dfc;padding:8px 10px">clear</button>
+          </div>
         </div>
         <div id="postcardWall" style="display:flex;gap:12px;flex-wrap:wrap"></div>
       </div>
@@ -541,6 +546,38 @@
       }
     }
 
+    // Export the entire postcard wall as a JSON file so visitors can back up or share
+    function exportPostcardWall(){
+      try{
+        const store = JSON.parse(localStorage.getItem('gpt5-mini-postcards')||'[]');
+        const payload = JSON.stringify({exported: new Date().toISOString(), items: store}, null, 2);
+        const blob = new Blob([payload], {type: 'application/json'});
+        const a = document.createElement('a');
+        const fname = `gpt5-mini-postcards-${new Date().toISOString().slice(0,19).replace(/[:T]/g,'-')}.json`;
+        const url = URL.createObjectURL(blob);
+        a.href = url; a.download = fname; document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(()=>URL.revokeObjectURL(url),1500);
+      }catch(e){ console.warn('export wall failed', e); alert('Export failed'); }
+    }
+
+    // Import postcards from a JSON file selected by the user. This merges items into local storage
+    async function importPostcardWall(file){
+      try{
+        const text = await file.text();
+        const parsed = JSON.parse(text);
+        const items = Array.isArray(parsed.items) ? parsed.items : (Array.isArray(parsed) ? parsed : []);
+        if(!items.length){ alert('No postcards found in file.'); return; }
+        const store = JSON.parse(localStorage.getItem('gpt5-mini-postcards')||'[]');
+        // prepend imported items but keep cap and avoid exact duplicates by svg string
+        const existingSvgs = new Set(store.map(i=>i.svg || i.stampSvg || ''));
+        for(const it of items){ if(!(existingSvgs.has(it.svg || it.stampSvg || ''))){ store.unshift(it); } }
+        while(store.length>24) store.pop();
+        localStorage.setItem('gpt5-mini-postcards', JSON.stringify(store));
+        renderPostcardWall();
+        alert('Imported ' + items.length + ' postcards (merged).');
+      }catch(e){ console.warn('import failed', e); alert('Import failed: ' + (e && e.message)); }
+    }
+
     // Compose a small three-line stanza by sampling the current fragment and two nearby variants.
     function composeStanza(){
       // read current seed and tone
@@ -582,6 +619,14 @@
         localStorage.removeItem('gpt5-mini-postcards');
         renderPostcardWall();
       }
+    });
+
+    // Export/import wall controls
+    document.getElementById('exportWall').addEventListener('click', ()=>{ exportPostcardWall(); });
+    document.getElementById('importWall').addEventListener('click', ()=>{ document.getElementById('importWallInput').click(); });
+    document.getElementById('importWallInput').addEventListener('change', (ev)=>{
+      const f = ev.target.files && ev.target.files[0];
+      if(!f) return; importPostcardWall(f); ev.target.value = '';
     });
 
     document.getElementById('reshuffle').addEventListener('click', ()=>{
