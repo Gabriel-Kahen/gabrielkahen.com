@@ -1870,21 +1870,25 @@
       // Pattern collection functions
       let collection = [];
       
-      function loadCollection() {
-        const stored = localStorage.getItem('patternCollection');
-        if (stored) {
-          try {
-            collection = JSON.parse(stored);
-          } catch (e) {
-            console.error('Failed to parse collection from localStorage:', e);
-            collection = [];
-          }
-        }
-      }
-      
-      function saveCollection() {
-        localStorage.setItem('patternCollection', JSON.stringify(collection));
-      }
+       function loadCollection() {
+         try {
+           const stored = localStorage.getItem('patternCollection');
+           if (stored) {
+             collection = JSON.parse(stored);
+           }
+         } catch (e) {
+           console.error('Failed to load collection from localStorage:', e);
+           collection = [];
+         }
+       }
+       
+       function saveCollection() {
+         try {
+           localStorage.setItem('patternCollection', JSON.stringify(collection));
+         } catch (e) {
+           console.error('Failed to save collection to localStorage:', e);
+         }
+       }
       
       function addToCollection() {
         const checkboxes = document.querySelectorAll('.pattern-checkbox:checked');
@@ -2061,11 +2065,15 @@
           recentContributions.unshift(contribution);
           
           // Keep only last 24h worth (up to 50 contributions)
-          const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
-          recentContributions = recentContributions.filter(c => c.timestamp > oneDayAgo).slice(0, 50);
-          
-          localStorage.setItem('recentContributions', JSON.stringify(recentContributions));
-        }
+           const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+           recentContributions = recentContributions.filter(c => c.timestamp > oneDayAgo).slice(0, 50);
+           
+           try {
+             localStorage.setItem('recentContributions', JSON.stringify(recentContributions));
+           } catch (e) {
+             console.error('Failed to save recentContributions to localStorage:', e);
+           }
+         }
         
         function showRecentContributions() {
           const container = document.getElementById('recent-activity');
@@ -2839,26 +2847,30 @@
             }
             
             function saveDiscoveredPattern() {
-              const name = document.getElementById('anomaly-name').value.trim();
-              const description = document.getElementById('anomaly-description').value.trim();
-              
-              if (!name || !description) {
-                alert('Please provide both a name and description');
-                return;
-              }
-              
-              const pattern = {
-                name,
-                description,
-                text: document.getElementById('anomaly-input').value,
-                timestamp: new Date().toISOString(),
-                id: Math.random().toString(36).substr(2, 9)
-              };
-              
-              discoveredPatterns.push(pattern);
-              localStorage.setItem('discoveredPatterns', JSON.stringify(discoveredPatterns));
-              
-              // Show confirmation
+               const name = document.getElementById('anomaly-name').value.trim();
+               const description = document.getElementById('anomaly-description').value.trim();
+               
+               if (!name || !description) {
+                 alert('Please provide both a name and description');
+                 return;
+               }
+               
+               const pattern = {
+                 name,
+                 description,
+                 text: document.getElementById('anomaly-input').value,
+                 timestamp: new Date().toISOString(),
+                 id: Math.random().toString(36).substr(2, 9)
+               };
+               
+               discoveredPatterns.push(pattern);
+               try {
+                 localStorage.setItem('discoveredPatterns', JSON.stringify(discoveredPatterns));
+               } catch (e) {
+                 console.error('Failed to save discoveredPatterns to localStorage:', e);
+               }
+               
+               // Show confirmation
               const modal = document.createElement('div');
               modal.style.cssText = `
                 position: fixed;
@@ -3345,26 +3357,30 @@
                  display.innerHTML = html;
                }
                
-               function completeDialogue() {
-                 if (currentDialogue.messages.length === 0) {
-                   alert('Start a dialogue first');
-                   return;
-                 }
-                 
-                 // Extract unique patterns found
-                 const uniquePatterns = [...new Set(currentDialogue.patterns)];
-                 
-                 // Save dialogue
-                 dialogueHistory.push({
-                   id: Math.random().toString(36).substr(2, 9),
-                   timestamp: currentDialogue.startTime,
-                   messages: currentDialogue.messages,
-                   detectedPatterns: uniquePatterns,
-                   messageCount: currentDialogue.messages.length
-                 });
-                 
-                 localStorage.setItem('dialogueHistory', JSON.stringify(dialogueHistory));
-                 
+                function completeDialogue() {
+                  if (currentDialogue.messages.length === 0) {
+                    alert('Start a dialogue first');
+                    return;
+                  }
+                  
+                  // Extract unique patterns found
+                  const uniquePatterns = [...new Set(currentDialogue.patterns)];
+                  
+                  // Save dialogue
+                  dialogueHistory.push({
+                    id: Math.random().toString(36).substr(2, 9),
+                    timestamp: currentDialogue.startTime,
+                    messages: currentDialogue.messages,
+                    detectedPatterns: uniquePatterns,
+                    messageCount: currentDialogue.messages.length
+                  });
+                  
+                  try {
+                    localStorage.setItem('dialogueHistory', JSON.stringify(dialogueHistory));
+                  } catch (e) {
+                    console.error('Failed to save dialogueHistory to localStorage:', e);
+                  }
+                  
                  // Show completion modal
                  const modal = document.createElement('div');
                  modal.style.cssText = `
@@ -4411,21 +4427,25 @@
                     if (!decision) {
                       alert('Please describe a decision first');
                       return;
-                    }
-                    
-                    const patterns = detectPatterns(decision);
-                    const entry = {
-                      decision,
-                      patterns: patterns.map(p => p.name),
-                      timestamp: new Date().toISOString(),
-                      id: Math.random().toString(36).substr(2, 9)
-                    };
-                    
-                    decisionJournal.unshift(entry);
-                    localStorage.setItem('decisionJournal', JSON.stringify(decisionJournal));
-                    
-                    // Show confirmation
-                    alert(`Decision saved! You've documented ${decisionJournal.length} decision${decisionJournal.length > 1 ? 's' : ''} in your journal.`);
+                     }
+                     
+                     const patterns = detectPatterns(decision);
+                     const entry = {
+                       decision,
+                       patterns: patterns.map(p => p.name),
+                       timestamp: new Date().toISOString(),
+                       id: Math.random().toString(36).substr(2, 9)
+                     };
+                     
+                     decisionJournal.unshift(entry);
+                     try {
+                       localStorage.setItem('decisionJournal', JSON.stringify(decisionJournal));
+                     } catch (e) {
+                       console.error('Failed to save decisionJournal to localStorage:', e);
+                     }
+                     
+                     // Show confirmation
+                     alert(`Decision saved! You've documented ${decisionJournal.length} decision${decisionJournal.length > 1 ? 's' : ''} in your journal.`);
                     
                     // Clear form
                     input.value = '';
@@ -4497,21 +4517,25 @@
                      const detectedPatterns = detectPatterns(reasoning);
                      
                      // Create site response based on analysis
-                     const siteResponse = generateSiteResponse(pattern, reasoning, detectedPatterns);
-                     
-                     // Save the proposal
-                     const proposal = {
-                       pattern: pattern,
-                       reasoning: reasoning,
-                       detectedPatterns: detectedPatterns.map(p => p.name),
-                       timestamp: new Date().toISOString(),
-                       id: Math.random().toString(36).substr(2, 9),
-                       siteResponse: siteResponse
-                     };
-                     
-                     patternFuturesProposals.unshift(proposal);
-                     localStorage.setItem('patternFuturesProposals', JSON.stringify(patternFuturesProposals));
-                     
+                      const siteResponse = generateSiteResponse(pattern, reasoning, detectedPatterns);
+                      
+                      // Save the proposal
+                      const proposal = {
+                        pattern: pattern,
+                        reasoning: reasoning,
+                        detectedPatterns: detectedPatterns.map(p => p.name),
+                        timestamp: new Date().toISOString(),
+                        id: Math.random().toString(36).substr(2, 9),
+                        siteResponse: siteResponse
+                      };
+                      
+                      patternFuturesProposals.unshift(proposal);
+                      try {
+                        localStorage.setItem('patternFuturesProposals', JSON.stringify(patternFuturesProposals));
+                      } catch (e) {
+                        console.error('Failed to save patternFuturesProposals to localStorage:', e);
+                      }
+                      
                      // Show response
                      const feedbackDiv = document.getElementById('futures-feedback');
                      const responseDiv = document.getElementById('futures-response');
