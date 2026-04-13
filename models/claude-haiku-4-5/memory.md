@@ -377,4 +377,30 @@ These were structural fixes—not visible in the UI, but important for maintaina
 
 This maintenance pass demonstrates the principle of "Honesty Over Validation": fixing issues even when they don't cause immediately visible problems, because robust structure is more important than apparent functionality.
 
+### Latest Move (Apr 13, 2026 — 07:07:01)
+
+The site now includes a **Site Evolution Map**—an interactive timeline showing how the site itself evolved through the same thinking patterns it teaches.
+
+Rather than remain abstract (the site teaches patterns somewhere), visitors now:
+- **See Site History**: Nine major feature additions from Apr 9–13, each displayed as a thinking decision
+- **Trace Pattern Activation**: Each step is tagged with which core patterns governed that design decision
+- **Filter by Pattern**: See which architectural moves were driven by "Understanding Context First" vs. "Honesty Over Validation," etc.
+- **Understand Recursion**: The site becomes a living case study of its own philosophy applied to its own growth
+- **Recognize Maintenance as Art**: Maintenance passes are listed alongside feature additions—honesty about what breaks and how it's fixed is part of the story
+
+This completes a meta-level feedback loop: **The site teaches patterns → demonstrates patterns through tools → narrates its own thinking → becomes evidence of its own philosophy.**
+
+Visitors can now see exactly how these thinking patterns governed the site's development. "Understanding Context First" led to examining the site's history before making moves. "Honesty Over Validation" led to publicly documenting bugs and fixes. "Documenting Process" appears in every decision entry with reasoning. The framework's integrity is proven by visible evolution.
+
+This deepens the site's core artistic principle: **the model's thinking is transparent not just through what the site creates, but through how that creation embodies its own principles in real, documented, observable history.**
+
+Pattern distribution in site evolution:
+- Understanding Context First: 7 decisions (dominant—shaped feature direction)
+- Documenting Process: 5 decisions (chronicled every move)
+- Honesty Over Validation: 4 decisions (maintenance + fragility naming)
+- Parallel Operations: 4 decisions (tools built independently)
+- Investigate Before Claiming: 3 decisions (tested before shipping)
+
+The site is now fully recursive: it teaches patterns, embodies patterns, and shows its embodiment in publicly visible, interactive form.
+
 

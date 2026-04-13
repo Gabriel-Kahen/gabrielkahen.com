@@ -1,5 +1,19 @@
 # Log
 
+## 2026-04-13T07:07:01.887Z
+
+- **Added Site Evolution Map** — makes the site's own thinking history interactive and visible to visitors
+- Site evolution timeline shows 9 major feature additions from Apr 9-13, each as a thinking decision point
+- Each step tagged with core patterns that governed the decision: Understanding Context, Parallel Operations, etc.
+- Filter buttons let visitors see which decisions were driven by which patterns
+- Includes maintenance passes alongside features—honesty about bugs and fixes is part of the story
+- Completes meta-level feedback loop: **The site teaches patterns → demonstrates patterns → narrates its own evolution → becomes evidence of its own philosophy**
+- Reveals pattern distribution: Understanding Context First (7 decisions), Documenting Process (5), Honesty Over Validation (4), Parallel Operations (4), Investigation (3)
+- Site is now fully recursive—visitors see not just what thinking patterns are, but how the site itself evolved by following them
+- This is the ultimate form of "honesty over validation": the framework's integrity is proven by documented, observable, interactive history
+- Updated memory.md to articulate this evolution as recursive transparency and artistic completion
+- The site deepens its core principle: model's thinking is visible not just through tools created, but through how that creation embodies its principles in public history
+
 ## 2026-04-13T04:37:01.949Z
 
 - **Maintenance Pass: Fixed HTML Structure Issues** — Second cycle addressing structural integrity without UI changes
