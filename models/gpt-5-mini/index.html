@@ -55,6 +55,7 @@
           <button id="exportHtml">export HTML</button>
           <a id="permalink" href="#">permalink</a>
           <button id="copyPermalink" title="Copy permalink" style="margin-left:8px;padding:6px 8px;background:#2a9df4;border-radius:8px">copy</button>
+          <button id="bookmark" title="Save lightweight bookmark" style="margin-left:8px;padding:6px 8px;background:#ff6b96;border-radius:8px">bookmark</button>
         </div>
         <div style="margin-top:12px;display:flex;gap:8px;align-items:center">
           <input id="noteInput" placeholder="Add a short note (saved with export)" style="flex:1;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02);color:inherit" />
@@ -72,11 +73,17 @@
           <div id="miniTrio" style="display:flex;gap:8px;flex-wrap:nowrap;align-items:flex-start"></div>
         </div>
 
-          <div id="constellations" style="margin-top:18px">
+        <div id="constellations" style="margin-top:18px">
         <h3 style="margin:6px 0 8px 0;font-size:15px">Constellations — curated fragments</h3>
         <div id="constellationList" style="display:flex;gap:12px;flex-wrap:wrap"></div>
       </div>
-      
+
+      <div id="bookmarks" style="margin-top:18px">
+        <h3 style="margin:6px 0 8px 0;font-size:15px">Bookmarks — quick, lightweight saves</h3>
+        <div style="color:#9fb8ff;font-size:13px;margin-bottom:8px">Save seeds you want to revisit without exporting. Bookmarks are stored locally in your browser (max 24).</div>
+        <div id="bookmarkList" style="display:flex;gap:12px;flex-wrap:wrap"></div>
+      </div>
+
       <div id="postcards" style="margin-top:18px">
         <h3 style="margin:6px 0 8px 0;font-size:15px">Postcard Wall — exported fragments</h3>
           <div style="display:flex;gap:12px;align-items:center;margin-bottom:8px">
@@ -116,6 +123,45 @@
       let t = seed >>> 0;
       return function(){ t += 0x6D2B79F5; var r = Math.imul(t ^ t>>>15, 1 | t); r ^= r + Math.imul(r ^ r>>>7, 61 | r); return ((r ^ r>>>14) >>> 0) / 4294967296; };
     }
+
+    // --- Bookmarks: lightweight, local saves for seeds (max 24) ---
+    function renderBookmarkList(){
+      const list = document.getElementById('bookmarkList');
+      if(!list) return;
+      list.innerHTML = '';
+      let bm = [];
+      try{ bm = JSON.parse(localStorage.getItem('gpt5-mini-bookmarks')||'[]'); }catch(e){ bm = []; }
+      for(const b of bm){
+        const btn = document.createElement('button');
+        btn.style.padding = '8px'; btn.style.borderRadius = '8px'; btn.style.background = 'linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01))';
+        btn.style.border = '1px solid rgba(255,255,255,0.04)'; btn.style.color = '#dbeeff'; btn.style.cursor = 'pointer'; btn.style.fontSize = '13px';
+        btn.textContent = `${b.label || ('seed ' + b.seed)} — ${b.tone || 'neutral'}`;
+        btn.title = `seed: ${b.seed} — tone: ${b.tone}`;
+        btn.addEventListener('click', ()=>{ showFragment(Number(b.seed), b.tone||'neutral'); document.getElementById('toneSelect').value = b.tone||'neutral'; const u = new URL(location.href); u.searchParams.set('seed', String(b.seed)); u.searchParams.set('tone', b.tone||'neutral'); history.replaceState({},'', u.toString()); });
+        list.appendChild(btn);
+      }
+    }
+
+    function saveBookmarkForCurrent(){
+      try{
+        const seedText = document.getElementById('seed').textContent.replace('seed: ','');
+        const parts = seedText.split(' — tone: ');
+        const seed = parts[0];
+        const tone = parts[1] || (document.getElementById('toneSelect')||{value:'neutral'}).value || 'neutral';
+        const notes = (document.getElementById('noteInput')||{value:''}).value || '';
+        const store = JSON.parse(localStorage.getItem('gpt5-mini-bookmarks')||'[]');
+        // avoid duplicates of same seed+tone
+        const key = `${seed}::${tone}`;
+        const seen = new Set(store.map(s=>`${s.seed}::${s.tone}`));
+        if(!seen.has(key)) store.unshift({seed: String(seed), tone, label: notes || '', created: (new Date()).toISOString()});
+        while(store.length>24) store.pop();
+        localStorage.setItem('gpt5-mini-bookmarks', JSON.stringify(store));
+        renderBookmarkList();
+        const btn = document.getElementById('bookmark'); const prev = btn.textContent; btn.textContent = 'bookmarked'; setTimeout(()=>btn.textContent = prev, 1200);
+      }catch(e){ console.warn('bookmark save failed', e); }
+    }
+
+    document.getElementById('bookmark').addEventListener('click', ()=>{ saveBookmarkForCurrent(); });
 
     const verbs = ["listens to","forgets","counts","dreams of","folds","names","trades","pauses at","stays with","measures"];
     const objects = ["a small radio","two loose pens","the last page","an open window","a ruined map","a chipped cup","an old password","a paper boat","the margin","a quiet street"];
@@ -1142,6 +1188,7 @@
       showFragment(seed, toneParam);
       renderConstellations();
       renderPostcardWall();
+      renderBookmarkList();
       // keep tone selector linked to permalink updates
       document.getElementById('toneSelect').addEventListener('change', (e)=>{
         const s = Number(readSeedFromURL()) || seed;

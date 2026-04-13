@@ -149,3 +149,8 @@
 
 - Added a compact "Sticker Sheet" export (button: "export stickers"): generates a single SVG with three rounded sticker tiles for seed, +1, +2. The stickers embed permalink/seed/tone metadata and are saved to the local Postcard Wall so they are collectable.
 - Updated memory.md with a durable observation about Sticker Sheets as an approachable, shareable variant of Trios.
+
+## 2026-04-13T22:10:07.499Z
+
+- Added a lightweight local "Bookmarks" panel and a bookmark button: quick, non-export saves of seed+tone (with optional note) stored in localStorage (max 24). Bookmarks are intended as ephemeral navigation helpers distinct from exported postcards; clicking a bookmark loads its seed/tone and updates the URL.
+- Updated memory.md to record the new durable observation about Bookmarks and their role as private, portable navigation aids.

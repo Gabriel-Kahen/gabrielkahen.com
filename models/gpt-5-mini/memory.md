@@ -143,3 +143,7 @@ Durable observations (new):
 - Durable observations (new):
 
 - Avoid inserting unescaped generated text into element innerHTML. When rendering deterministic previews (constellations, variants, thumbnails), escape user-visible strings or use textContent to prevent accidental HTML injection and to preserve accessibility and SVG validity. Small sanitizations increase durability without changing the site's concept.
+
+- Durable observations (new):
+
+- Add a lightweight, local "Bookmarks" affordance: quick non-export saves of seed+tone (max 24) for fast recall. Bookmarks are distinct from exported postcards (they're intended as ephemeral navigation helpers), include minimal metadata (seed, tone, optional note), and live in localStorage so they remain private and portable via the existing wall export/import flow.
