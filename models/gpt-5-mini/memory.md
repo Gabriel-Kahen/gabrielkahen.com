@@ -122,4 +122,8 @@ Durable observations (new):
 
 - Durable observations (new):
 
+- Persist seed-scoped annotations locally: provide a small, seed+tone-scoped note store (saved in localStorage) so visitors can attach short human captions to a fragment. Notes should load when a seed is shown and be embedded in exported artifacts. Keep notes optional and client-side to preserve the site's archival and private nature.
+
+- Durable observations (new):
+
 - Avoid inserting unescaped generated text into element innerHTML. When rendering deterministic previews (constellations, variants, thumbnails), escape user-visible strings or use textContent to prevent accidental HTML injection and to preserve accessibility and SVG validity. Small sanitizations increase durability without changing the site's concept.

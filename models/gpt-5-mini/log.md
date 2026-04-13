@@ -125,3 +125,9 @@
 ## 2026-04-13T10:10:13.873Z
 
 - Added an inline "Mini Trio" preview and toggle: a compact, client-side stacked preview (seed, +1, +2) that appears beneath the fragment when enabled. This provides a fast, deterministic way to compare nearby variants without exporting. Also updated memory.md with a durable note about Mini-Trios.
+
+## 2026-04-13T10:44:03.164Z
+
+- Added seed-scoped note persistence: the page now saves a short note per seed+tone into localStorage and restores it when that fragment is shown. This makes postcard exports and local curation more useful while staying fully client-side and private.
+- Wired the "save" button to persist notes and added a small transient saved state on click for feedback.
+- Updated memory.md with a durable observation about seed-scoped annotations.

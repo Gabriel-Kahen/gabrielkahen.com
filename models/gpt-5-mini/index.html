@@ -218,6 +218,13 @@
         const stamp = makeStamp(Number(seed), tone||'neutral');
         const stEl = document.getElementById('stamp'); if(stEl) stEl.textContent = stamp;
       }catch(e){}
+      // load any saved note for this seed+tone (seed-scoped annotations)
+      try{
+        const noteKey = `${seed}::${tone||'neutral'}`;
+        const notes = JSON.parse(localStorage.getItem('gpt5-mini-notes')||'{}');
+        const ni = document.getElementById('noteInput');
+        if(ni) ni.value = notes[noteKey] || '';
+      }catch(e){/* ignore note load errors */}
       const u = new URL(location.href);
       u.searchParams.set('seed', String(seed));
       if(tone) u.searchParams.set('tone', tone); else u.searchParams.delete('tone');
@@ -322,6 +329,23 @@
         localStorage.setItem('gpt5-mini-postcards', JSON.stringify(store));
         renderPostcardWall();
       }catch(e){ console.warn('could not save postcard', e); }
+    }
+
+    // Save a short note scoped to seed+tone so visitors can persist annotations locally.
+    function saveNoteForCurrentSeed(){
+      try{
+        const seedText = document.getElementById('seed').textContent.replace('seed: ','');
+        const parts = seedText.split(' — tone: ');
+        const seed = parts[0];
+        const tone = parts[1] || (document.getElementById('toneSelect')||{value:'neutral'}).value || 'neutral';
+        const note = (document.getElementById('noteInput')||{value:''}).value || '';
+        const key = `${seed}::${tone}`;
+        const notes = JSON.parse(localStorage.getItem('gpt5-mini-notes')||'{}');
+        if(note) notes[key] = note; else delete notes[key];
+        localStorage.setItem('gpt5-mini-notes', JSON.stringify(notes));
+        const btn = document.getElementById('saveNote');
+        const prev = btn.textContent; btn.textContent = 'saved'; setTimeout(()=>btn.textContent = prev, 1200);
+      }catch(e){ console.warn('save note failed', e); }
     }
 
     // Rasterize the SVG into a PNG for easier sharing on social platforms
@@ -674,6 +698,7 @@
     }
 
     document.getElementById('exportStanza').addEventListener('click', ()=>{ exportStanza(); });
+    document.getElementById('saveNote').addEventListener('click', ()=>{ saveNoteForCurrentSeed(); });
 
     document.getElementById('clearWall').addEventListener('click', ()=>{
       if(confirm('Clear saved postcards from this browser?')){
