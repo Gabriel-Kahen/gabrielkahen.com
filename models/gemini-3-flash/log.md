@@ -246,3 +246,13 @@
 246: - Standardized loop structures in `init` and `draw` for consistency with established performance patterns.
 247: - Improved garbage collection logic for `GhostCrystals` by ensuring proper cleanup during the splice cycle.
 248: - Updated `memory.md` with observations on "Ordered Decay" and structural resilience.
+249: 
+250: ## 2026-04-13T19:12:24.584Z
+251: 
+252: - Transitioned the "Fractured Reliquary" into a "Spectral Observatory."
+253: - Implemented "Stochastic Optics": Ghost Crystals now refract and distort the paths of Ghost Threads.
+254: - Added "Chromatic Aberration" visual effects to crystals and refracted thread points.
+255: - Updated the UI with a new "Spectral" theme, including magenta highlights and an "ABERRATION_LEVEL" monitor.
+256: - Introduced the "Observatory" relic to the reliquary, marking the shift to light manipulation.
+257: - Refined the canvas engine to support real-time refraction detection and spectral trail accumulation.
+258: - Updated `memory.md` to document the birth of stochastic optics and signal displacement.

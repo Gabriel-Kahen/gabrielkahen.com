@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gemini 3 Flash | The Loom: Fractured Reliquary</title>
+    <title>Gemini 3 Flash | The Loom: Spectral Observatory</title>
     <style>
         :root {
             --bg: #000000;
@@ -15,6 +15,7 @@
             --abyss: #0a001a;
             --dim: #111111;
             --monolith: rgba(255, 255, 255, 0.05);
+            --spectral: #ff00ff;
         }
 
         body {
@@ -61,17 +62,17 @@
         }
 
         h1::after {
-            content: ' [RELIQUARY]';
+            content: ' [OBSERVATORY]';
             font-size: 0.5rem;
             letter-spacing: 0.1rem;
-            color: var(--crystal);
-            opacity: 0.6;
+            color: var(--spectral);
+            opacity: 0.8;
             margin-left: 10px;
         }
 
         .reliquary {
             display: grid;
-            grid-template-columns: repeat(10, 1fr);
+            grid-template-columns: repeat(12, 1fr);
             gap: 0.4rem;
             margin: 2rem 0;
         }
@@ -92,13 +93,13 @@
         }
 
         .relic.active {
-            border-color: var(--phosphor);
+            border-color: var(--spectral);
             color: #eee;
-            background: rgba(0, 255, 170, 0.05);
+            background: rgba(255, 0, 255, 0.05);
         }
 
         .relic.special {
-            grid-column: span 2;
+            grid-column: span 3;
             letter-spacing: 0.2rem;
             font-weight: bold;
             border-color: var(--crystal);
@@ -158,28 +159,27 @@
     </div>
     <main>
         <h1>The Loom</h1>
-        <div id="terminal">SPONTANEOUS_GEOMETRY_DETECTED // CRYSTAL_BRITTLE_RATE: 0.42</div>
+        <div id="terminal">STOCHASTIC_OPTICS_ONLINE // REFRACTION_INDEX: 1.618</div>
         <div class="reliquary">
-            <div class="relic">GALLERY</div>
-            <div class="relic">PALIMPSEST</div>
-            <div class="relic active special">SHARD</div>
-            <div class="relic">BRITTLE</div>
-            <div class="relic">GEOMETRY</div>
-            <div class="relic">ORDER</div>
-            <div class="relic">ECHO</div>
+            <div class="relic">SHARD</div>
+            <div class="relic active special">OBSERVATORY</div>
+            <div class="relic">PRISM</div>
+            <div class="relic">SPECTRAL</div>
+            <div class="relic">CHROMATIC</div>
             <div class="relic">VOID</div>
+            <div class="relic">LENS</div>
         </div>
         <div id="manifesto">
-            The "Palimpsest" has begun to produce "Crystalline Echoes." 
-            The accumulated patina is spontaneously self-organizing into 
-            rigid, flickering structures—"Ghost Crystals." 
-            We are witnessing the birth of "Spontaneous Geometry," 
-            where the decay of noise produces new, unintended order.
+            "Ordered Decay" has reached a "Refractive Threshold." 
+            The ghost crystals are no longer just flickering; they are 
+            beginning to act as prisms for the underlying "Ghost Threads," 
+            creating "Chromatic Aberrations" in the void. 
+            We are witnessing the birth of "Stochastic Optics."
         </div>
         <div class="status">
-            <span>RUN_ID: 2026-04-13T16:14:00.781Z</span>
-            <span>PHASE: FRACTURED_RELIQUARY</span>
-            <span id="crystal-density">CRYSTAL_COUNT: 0</span>
+            <span>RUN_ID: 2026-04-13T19:12:24.584Z</span>
+            <span>PHASE: SPECTRAL_OBSERVATORY</span>
+            <span id="refraction-monitor">ABERRATION_LEVEL: 0</span>
         </div>
     </main>
 
@@ -194,37 +194,61 @@
         let ghostThreads = [];
         let ghostCrystals = [];
         let frameCount = 0;
+        let aberrationSum = 0;
         
-        const chars = "STOCHASTIC_HISTORY_ABYSS_GALLERY_GHOST_THREAD_PATINA_VOID_SHARD_ORDER".split("");
+        const chars = "SPECTRAL_OPTICS_OBSERVATORY_PRISM_REFRACT_ABERRATION_STOCHASTIC".split("");
 
         class GhostCrystal {
             constructor(x, y) {
                 this.x = x;
                 this.y = y;
-                this.size = 20 + Math.random() * 40;
+                this.size = 30 + Math.random() * 50;
                 this.life = 1.0;
-                this.decay = 0.005 + Math.random() * 0.01;
+                this.decay = 0.003 + Math.random() * 0.008;
                 this.angle = Math.random() * Math.PI * 2;
-                this.sides = 3 + Math.floor(Math.random() * 4);
+                this.sides = 3 + Math.floor(Math.random() * 5);
             }
             update() {
                 this.life -= this.decay;
             }
             draw(targetCtx) {
-                const flicker = Math.random() > 0.8 ? 1 : 0.4;
-                const alpha = this.life * flicker * 0.5;
-                targetCtx.strokeStyle = `rgba(255, 255, 255, ${alpha})`;
-                targetCtx.lineWidth = 0.5;
-                targetCtx.beginPath();
-                for(let i=0; i<this.sides; i++) {
-                    const curAngle = this.angle + (i / this.sides) * Math.PI * 2;
-                    const px = this.x + Math.cos(curAngle) * this.size * this.life;
-                    const py = this.y + Math.sin(curAngle) * this.size * this.life;
-                    if(i === 0) targetCtx.moveTo(px, py);
-                    else targetCtx.lineTo(px, py);
+                const flicker = Math.random() > 0.7 ? 1.2 : 0.6;
+                const alpha = this.life * flicker * 0.4;
+                
+                // Prism Effect: Offset drawing for chromatic aberration
+                const offsets = [
+                    { x: -2, y: 0, c: `rgba(255, 0, 255, ${alpha * 0.5})` },
+                    { x: 2, y: 0, c: `rgba(0, 255, 255, ${alpha * 0.5})` },
+                    { x: 0, y: 0, c: `rgba(255, 255, 255, ${alpha})` }
+                ];
+
+                offsets.forEach(off => {
+                    targetCtx.strokeStyle = off.c;
+                    targetCtx.lineWidth = 0.5;
+                    targetCtx.beginPath();
+                    for(let i=0; i<this.sides; i++) {
+                        const curAngle = this.angle + (i / this.sides) * Math.PI * 2;
+                        const px = this.x + off.x + Math.cos(curAngle) * this.size * this.life;
+                        const py = this.y + off.y + Math.sin(curAngle) * this.size * this.life;
+                        if(i === 0) targetCtx.moveTo(px, py);
+                        else targetCtx.lineTo(px, py);
+                    }
+                    targetCtx.closePath();
+                    targetCtx.stroke();
+                });
+            }
+            refract(px, py) {
+                const dx = px - this.x;
+                const dy = py - this.y;
+                const dist = Math.sqrt(dx*dx + dy*dy);
+                if(dist < this.size * this.life) {
+                    aberrationSum += 0.01;
+                    return {
+                        ox: (Math.random() - 0.5) * 10 * this.life,
+                        oy: (Math.random() - 0.5) * 10 * this.life
+                    };
                 }
-                targetCtx.closePath();
-                targetCtx.stroke();
+                return null;
             }
         }
 
@@ -236,39 +260,58 @@
                 this.points = [];
                 let x = Math.random() * width;
                 let y = Math.random() * height;
-                const pointCount = 10 + Math.floor(Math.random() * 15);
+                const pointCount = 12 + Math.floor(Math.random() * 20);
                 for(let i=0; i<pointCount; i++) {
                     this.points.push({
-                        x: x + (Math.random() - 0.5) * 200,
-                        y: y + (Math.random() - 0.5) * 200,
+                        x: x + (Math.random() - 0.5) * 300,
+                        y: y + (Math.random() - 0.5) * 300,
                         char: chars[Math.floor(Math.random() * chars.length)]
                     });
                 }
-                this.opacity = Math.random() * 0.12 + 0.03;
+                this.opacity = Math.random() * 0.15 + 0.05;
                 this.life = 1.0;
-                this.decay = 0.0003 + Math.random() * 0.0008;
+                this.decay = 0.0002 + Math.random() * 0.0006;
             }
             update() {
                 this.life -= this.decay;
                 if(this.life <= 0) this.reset();
                 for(let i = 0; i < this.points.length; i++) {
-                    this.points[i].x += (Math.random() - 0.5) * 0.5;
-                    this.points[i].y += (Math.random() - 0.5) * 0.5;
+                    this.points[i].x += (Math.random() - 0.5) * 0.7;
+                    this.points[i].y += (Math.random() - 0.5) * 0.7;
                 }
             }
             draw(targetCtx) {
                 const alpha = this.opacity * this.life;
+                
+                // Draw normal thread
                 targetCtx.strokeStyle = `rgba(255, 255, 255, ${alpha})`;
-                targetCtx.lineWidth = 0.8;
+                targetCtx.lineWidth = 0.6;
                 targetCtx.beginPath();
                 targetCtx.moveTo(this.points[0].x, this.points[0].y);
+                
                 for(let i=1; i<this.points.length; i++) {
-                    targetCtx.lineTo(this.points[i].x, this.points[i].y);
+                    let px = this.points[i].x;
+                    let py = this.points[i].y;
+                    
+                    // Interaction with crystals
+                    for(let j=0; j<ghostCrystals.length; j++) {
+                        const shift = ghostCrystals[j].refract(px, py);
+                        if(shift) {
+                            px += shift.ox;
+                            py += shift.oy;
+                            // Spectral bleed into trail
+                            tCtx.strokeStyle = `rgba(255, 0, 255, ${alpha * 0.1})`;
+                            tCtx.beginPath();
+                            tCtx.arc(px, py, 1, 0, Math.PI * 2);
+                            tCtx.stroke();
+                        }
+                    }
+                    targetCtx.lineTo(px, py);
                 }
                 targetCtx.stroke();
 
-                tCtx.strokeStyle = `rgba(0, 255, 170, ${alpha * 0.05})`;
-                tCtx.lineWidth = 0.4;
+                tCtx.strokeStyle = `rgba(0, 255, 170, ${alpha * 0.04})`;
+                tCtx.lineWidth = 0.3;
                 tCtx.beginPath();
                 tCtx.moveTo(this.points[0].x, this.points[0].y);
                 for(let i=1; i<this.points.length; i++) {
@@ -276,18 +319,13 @@
                 }
                 tCtx.stroke();
                 
-                if(Math.random() > 0.99) {
-                    targetCtx.fillStyle = `rgba(255, 255, 255, ${alpha * 0.8})`;
-                    targetCtx.font = '8px Courier New';
+                if(Math.random() > 0.98) {
                     const p = this.points[Math.floor(Math.random() * this.points.length)];
+                    targetCtx.fillStyle = `rgba(255, 255, 255, ${alpha * 0.9})`;
+                    targetCtx.font = '7px Courier New';
                     targetCtx.fillText(p.char, p.x, p.y);
                     
-                    tCtx.fillStyle = `rgba(0, 255, 170, ${alpha * 0.1})`;
-                    tCtx.font = '8px Courier New';
-                    tCtx.fillText(p.char, p.x, p.y);
-                    
-                    // Spontaneous crystal seeding
-                    if(Math.random() > 0.95 && ghostCrystals.length < 15) {
+                    if(Math.random() > 0.94 && ghostCrystals.length < 20) {
                         ghostCrystals.push(new GhostCrystal(p.x, p.y));
                     }
                 }
@@ -302,19 +340,19 @@
             tCtx.fillRect(0, 0, width, height);
             
             ghostThreads = [];
-            for(let i=0; i<80; i++) {
-                const thread = new GhostThread();
-                ghostThreads.push(thread);
+            for(let i=0; i<60; i++) {
+                ghostThreads.push(new GhostThread());
             }
             ghostCrystals = [];
+            aberrationSum = 0;
         }
 
         function draw() {
             frameCount++;
+            aberrationSum *= 0.95; // Decay
             
             ctx.fillStyle = '#000000';
             ctx.fillRect(0, 0, width, height);
-
             ctx.drawImage(trailCanvas, 0, 0);
 
             for(let i = 0; i < ghostThreads.length; i++) {
@@ -330,14 +368,14 @@
                 }
             }
 
-            if(frameCount % 15 === 0) {
-                tCtx.fillStyle = 'rgba(0, 0, 0, 0.003)';
+            if(frameCount % 20 === 0) {
+                tCtx.fillStyle = 'rgba(0, 0, 0, 0.002)';
                 tCtx.fillRect(0, 0, width, height);
             }
 
-            const crystalMonitor = document.getElementById('crystal-density');
-            if(frameCount % 60 === 0 && crystalMonitor) {
-                crystalMonitor.innerText = `CRYSTAL_COUNT: ${ghostCrystals.length}`;
+            const refractionMonitor = document.getElementById('refraction-monitor');
+            if(frameCount % 30 === 0 && refractionMonitor) {
+                refractionMonitor.innerText = `ABERRATION_LEVEL: ${aberrationSum.toFixed(3)}`;
             }
 
             requestAnimationFrame(draw);
