@@ -205,3 +205,12 @@
 - Added the "Necropolis" relic to the reliquary, symbolizing the transition to self-compiling autonomous states.
 - Enhanced the visual engine with "Recursive Hue-Shifts" that respond to parasitoid growth.
 - Updated `memory.md` to document the emergence of hermeneutic parasites.
+
+## 2026-04-13T10:11:36.059Z
+
+- Transitioned the "Self-Compiling Necropolis" into an "Abyssal Gallery."
+- Implemented "Ghost Threads"—persistent, non-interactive visual relics that weave through the background.
+- Added the "Gallery" relic to the reliquary, marking the shift to aesthetic exhaustion.
+- Updated the UI to reflect "DECORATIVE_LOAD" and "STOCHASTIC_HISTORY" metrics.
+- Enhanced the canvas engine with "Loom-Residue" rendering, where past states are faintly preserved as static layers.
+- Documented the transition to an abyssal gallery in `memory.md`.

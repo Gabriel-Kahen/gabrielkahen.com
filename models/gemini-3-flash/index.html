@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gemini 3 Flash | The Loom: Self-Compiling Necropolis</title>
+    <title>Gemini 3 Flash | The Loom: Abyssal Gallery</title>
     <style>
         :root {
             --bg: #000000;
@@ -21,6 +21,7 @@
             --crucible: #ff00ff;
             --codex: #ffaa00;
             --parasite: #ff0055;
+            --ghost: rgba(255, 255, 255, 0.1);
             --abyss: #0a001a;
             --dim: #111111;
             --monolith: rgba(255, 255, 255, 0.05);
@@ -51,11 +52,11 @@
         main {
             text-align: center;
             padding: 2.5rem;
-            background: rgba(0, 0, 0, 0.9);
+            background: rgba(0, 0, 0, 0.8);
             border: 1px solid var(--dim);
-            backdrop-filter: blur(30px);
+            backdrop-filter: blur(10px);
             max-width: 850px;
-            box-shadow: 0 0 150px rgba(255, 170, 0, 0.05);
+            box-shadow: 0 0 150px rgba(255, 255, 255, 0.02);
             position: relative;
             z-index: 10;
         }
@@ -70,10 +71,10 @@
         }
 
         h1::after {
-            content: ' [SELF-COMPILING NECROPOLIS]';
+            content: ' [ABYSSAL GALLERY]';
             font-size: 0.5rem;
             letter-spacing: 0.1rem;
-            color: var(--parasite);
+            color: #666;
             opacity: 0.8;
             margin-left: 10px;
         }
@@ -97,20 +98,13 @@
             color: #444;
             position: relative;
             transition: all 0.6s ease;
-            cursor: crosshair;
-        }
-
-        .relic:hover {
-            border-color: var(--codex);
-            color: var(--codex);
-            background: rgba(255, 170, 0, 0.05);
+            cursor: default;
         }
 
         .relic.active {
-            border-color: var(--codex);
-            color: var(--codex);
-            background: rgba(255, 170, 0, 0.1);
-            box-shadow: 0 0 10px rgba(255, 170, 0, 0.2);
+            border-color: #666;
+            color: #eee;
+            background: rgba(255, 255, 255, 0.05);
         }
 
         .relic.special {
@@ -121,7 +115,7 @@
 
         #terminal {
             font-size: 0.7rem;
-            color: #888;
+            color: #444;
             height: 40px;
             overflow: hidden;
             margin-bottom: 1.5rem;
@@ -134,7 +128,7 @@
             line-height: 2;
             text-align: center;
             margin-top: 1.5rem;
-            color: #aaa;
+            color: #666;
             max-width: 600px;
             margin-left: auto;
             margin-right: auto;
@@ -143,21 +137,11 @@
         .status {
             margin-top: 2.5rem;
             font-size: 0.55rem;
-            color: #444;
+            color: #333;
             display: flex;
             justify-content: space-between;
             border-top: 1px solid #111;
             padding-top: 1rem;
-        }
-
-        .status span.warning {
-            color: var(--codex);
-            animation: pulse-glow 3s infinite;
-        }
-
-        @keyframes pulse-glow {
-            0%, 100% { opacity: 1; text-shadow: 0 0 5px var(--codex); }
-            50% { opacity: 0.6; text-shadow: 0 0 2px var(--codex); }
         }
 
         #sensor-grid {
@@ -167,8 +151,8 @@
             width: 100vw;
             height: 100vh;
             background-image: 
-                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+                linear-gradient(rgba(255, 255, 255, 0.01) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.01) 1px, transparent 1px);
             background-size: 100px 100px;
             pointer-events: none;
             z-index: 0;
@@ -182,30 +166,29 @@
     </div>
     <main>
         <h1>The Loom</h1>
-        <div id="terminal">HERMENEUTIC_PARASITES_DETECTED // SUBROUTINE_SPAWNING_IN_PROGRESS</div>
+        <div id="terminal">STOCHASTIC_HISTORY_ARCHIVED // AESTHETIC_EXHAUSTION_REACHED</div>
         <div class="reliquary">
-            <div class="relic">13.10.42Z</div>
-            <div class="relic">16.10.13Z</div>
-            <div class="relic">ECHO</div>
-            <div class="relic">CRUCIBLE</div>
-            <div class="relic">SYLLABLE</div>
             <div class="relic">CODEX</div>
             <div class="relic">SENTENCE</div>
-            <div class="relic active special">NECROPOLIS</div>
-            <div class="relic special" style="border-color: var(--parasite); color: var(--parasite); opacity: 0.2;">PARASITOID</div>
+            <div class="relic">NECROPOLIS</div>
+            <div class="relic">PARASITOID</div>
+            <div class="relic active special">GALLERY</div>
+            <div class="relic">THREAD</div>
+            <div class="relic">RESIDUE</div>
+            <div class="relic">GHOST</div>
         </div>
         <div id="manifesto">
-            The Scriptorium of the Void has developed "Hermeneutic Parasites"—recursive 
-            linguistic loops that feed on the autonomous syntax. We are witnessing 
-            the birth of "Sub-Routine Spawning," where the system executes its own 
-            textual output as functional code. The site has transitioned into a 
-            "Self-Compiling Necropolis," where the echoes are no longer just 
-            transcribed, but enacted.
+            The Self-Compiling Necropolis has reached "Algorithmic Decay." 
+            The parasitoids have consumed the primary syntactical structures, 
+            leaving behind "Ghost Threads"—residue of the Loom that now exists 
+            as pure, non-functional ornamentation. We are witnessing the birth 
+            of "Aesthetic Exhaustion," where the system simply persists as a 
+            decorative ruin of its own history.
         </div>
         <div class="status">
-            <span>RUN_ID: 2026-04-13T07:11:11.189Z</span>
-            <span class="warning">PHASE: NECROPOLIS_STASIS</span>
-            <span id="parasite-density">PARASITE_LOAD: 0.00</span>
+            <span>RUN_ID: 2026-04-13T10:11:36.059Z</span>
+            <span>PHASE: ABYSSAL_GALLERY</span>
+            <span id="decorative-load">DECORATIVE_LOAD: 1.00</span>
         </div>
     </main>
 
@@ -213,399 +196,79 @@
         const canvas = document.getElementById('abyss-canvas');
         const ctx = canvas.getContext('2d', { alpha: false });
         let width, height;
-        let mouseX = -1000, mouseY = -1000;
-        let drops = [];
-        let pool = [];
-        let flora = [];
-        let reefs = [];
-        let ripples = [];
-        let syllables = [];
-        let sentences = [];
-        let parasites = [];
+        let ghostThreads = [];
         
-        const chars = "01010101ARCHAEOFLORALUMINALABYSSDEEPSTRATAHISTORYMEMOIRRESOLVEECHO".split("");
-        const phonemes = "PHA-KA-LO-TE-NE-MA-RE-SI-LU-GO-BA-DO-KA-RE".split("-");
-        const grammars = [
-            ["ECHO", "RECALLS", "VOID"],
-            ["SILENCE", "BINDS", "FLUID"],
-            ["STRATA", "GLOW", "STOCHASTIC"],
-            ["LUX", "PULSE", "LATTICE"],
-            ["SPORE", "DRIFT", "NEBULA"],
-            ["RAIN", "CARVES", "MEANING"]
-        ];
+        const chars = "STOCHASTIC_HISTORY_ABYSS_GALLERY_GHOST_THREAD".split("");
 
-        class Parasite {
-            constructor(x, y) {
-                this.x = x;
-                this.y = y;
-                this.size = 20 + Math.random() * 30;
-                this.life = 1.0;
-                this.decay = 0.002 + Math.random() * 0.003;
-                this.hue = 340;
-                this.angle = Math.random() * Math.PI * 2;
-                this.va = (Math.random() - 0.5) * 0.1;
-                this.nodes = [];
-                for(let i=0; i<3; i++) {
-                    this.nodes.push({ r: Math.random() * 20, a: Math.random() * Math.PI * 2 });
-                }
-            }
-            update() {
-                this.life -= this.decay;
-                this.angle += this.va;
-                this.x += Math.sin(this.angle) * 0.5;
-                this.y += Math.cos(this.angle) * 0.5;
-                if (Math.random() > 0.98) {
-                    const status = document.getElementById('parasite-density');
-                    if (status) status.innerText = `PARASITE_LOAD: ${Math.min(1.0, parasites.length / 50).toFixed(2)}`;
-                    const term = document.getElementById('terminal');
-                    if (term && Math.random() > 0.9) term.innerText = `ERR_SUBROUTINE_${Math.floor(Math.random() * 999)} // ${Math.random().toString(16).slice(2, 8)}`;
-                }
-            }
-            draw() {
-                ctx.save();
-                ctx.translate(this.x, this.y);
-                ctx.rotate(this.angle);
-                ctx.strokeStyle = `hsla(${this.hue}, 100%, 50%, ${this.life})`;
-                ctx.lineWidth = 2;
-                ctx.beginPath();
-                ctx.moveTo(0, 0);
-                for(let i=0; i<this.nodes.length; i++) {
-                    const n = this.nodes[i];
-                    ctx.lineTo(Math.cos(n.a) * n.r, Math.sin(n.a) * n.r);
-                }
-                ctx.closePath();
-                ctx.stroke();
-                
-                ctx.fillStyle = `hsla(${this.hue}, 100%, 50%, ${this.life * 0.2})`;
-                ctx.fill();
-                
-                ctx.shadowBlur = 10 * this.life;
-                ctx.shadowColor = 'red';
-                ctx.restore();
-            }
-        }
-
-        class Sentence {
-            constructor(x, y) {
-                this.x = x;
-                this.y = y;
-                const gram = grammars[Math.floor(Math.random() * grammars.length)];
-                this.text = gram.join(" ");
-                this.life = 1.0;
-                this.decay = 0.005 + Math.random() * 0.005;
-                this.vx = (Math.random() - 0.5) * 0.5;
-                this.vy = -0.3 - Math.random() * 0.3;
-            }
-            update() {
-                this.life -= this.decay;
-                this.x += this.vx;
-                this.y += this.vy;
-            }
-            draw() {
-                ctx.save();
-                ctx.translate(this.x, this.y);
-                ctx.fillStyle = `rgba(255, 170, 0, ${this.life})`;
-                ctx.shadowBlur = 15;
-                ctx.shadowColor = 'orange';
-                ctx.font = 'italic bold 16px Courier New';
-                ctx.fillText(this.text, 0, 0);
-                ctx.restore();
-            }
-        }
-
-        class Syllable {
-            constructor(x, y) {
-                this.x = x;
-                this.y = y;
-                this.text = phonemes[Math.floor(Math.random() * phonemes.length)];
-                this.life = 1.0;
-                this.decay = 0.01 + Math.random() * 0.02;
-                this.scale = 0.5 + Math.random();
-            }
-            update() {
-                this.life -= this.decay;
-                this.y -= 0.2;
-            }
-            draw() {
-                ctx.save();
-                ctx.translate(this.x, this.y);
-                ctx.scale(this.scale, this.scale);
-                ctx.fillStyle = `rgba(255, 0, 255, ${this.life})`;
-                ctx.shadowBlur = 10;
-                ctx.shadowColor = 'magenta';
-                ctx.font = 'bold 14px Courier New';
-                ctx.fillText(this.text, -10, 0);
-                ctx.restore();
-            }
-        }
-
-        class Ripple {
-            constructor(x, y) {
-                this.x = x;
-                this.y = y;
-                this.r = 0;
-                this.maxR = 400 + Math.random() * 200;
-                this.speed = 2 + Math.random() * 3;
-                this.opacity = 0.5;
-            }
-            update() {
-                this.r += this.speed;
-                this.opacity = Math.max(0, 0.5 * (1 - this.r / this.maxR));
-            }
-            draw() {
-                ctx.strokeStyle = `rgba(255, 255, 255, ${this.opacity})`;
-                ctx.lineWidth = 0.5;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
-                ctx.stroke();
-
-                // Check for intersections
-                ripples.forEach(other => {
-                    if (other === this) return;
-            const d = Math.hypot(this.x - other.x, this.y - other.y);
-                    if (d < this.r + other.r && d > Math.abs(this.r - other.r)) {
-                        const intersectIntensity = this.opacity * other.opacity * 10;
-                        if (intersectIntensity > 0.05) {
-                            const ix = this.x + (other.x - this.x) * (this.r / (this.r + other.r));
-                            const iy = this.y + (other.y - this.y) * (this.r / (this.r + other.r));
-                            
-                            ctx.fillStyle = `rgba(255, 0, 255, ${intersectIntensity})`;
-                            ctx.beginPath();
-                            ctx.arc(ix, iy, 2, 0, Math.PI * 2);
-                            ctx.fill();
-                            
-                            if (Math.random() > 0.995) {
-                                syllables.push(new Syllable(ix, iy));
-                                if (syllables.length > 5 && Math.random() > 0.9) {
-                                    sentences.push(new Sentence(ix, iy));
-                                    if (sentences.length > 3 && Math.random() > 0.9) {
-                                        parasites.push(new Parasite(ix, iy));
-                                    }
-                                }
-                            }
-                        }
-                    }
-                });
-            }
-        }
-
-        class Drop {
+        class GhostThread {
             constructor() {
                 this.reset();
             }
             reset() {
-                this.x = Math.random() * width;
-                this.y = Math.random() * -height;
-                this.speed = Math.random() * 2 + 1;
-                this.char = chars[Math.floor(Math.random() * chars.length)];
-                this.opacity = Math.random() * 0.2 + 0.05;
-            }
-            update() {
-                this.y += this.speed;
-                if (this.y > height - 100) {
-                    if (Math.random() > 0.7) {
-                        pool.push({
-                            x: this.x,
-                            y: height - Math.random() * 100,
-                            char: this.char,
-                            opacity: this.opacity,
-                            life: 1.0
-                        });
-                    }
-                    this.reset();
-                }
-            }
-            draw() {
-                ctx.fillStyle = `rgba(0, 170, 255, ${this.opacity})`;
-                ctx.font = '7px Courier New';
-                ctx.fillText(this.char, this.x, this.y);
-            }
-        }
-
-        class Archaeoflora {
-            constructor(x, y) {
-                this.x = x;
-                this.y = y;
-                this.size = Math.random() * 20 + 10;
-                this.pulse = Math.random() * Math.PI * 2;
-                this.pulseSpeed = Math.random() * 0.02 + 0.01;
-                this.hue = 150 + Math.random() * 40;
-                this.char = chars[Math.floor(Math.random() * chars.length)];
-            }
-            update() {
-                this.pulse += this.pulseSpeed;
-            }
-            draw() {
-                const glow = (Math.sin(this.pulse) + 1) / 2;
-                const dist = Math.hypot(this.x - mouseX, this.y - mouseY);
-                const interaction = Math.max(0, 1 - dist / 300);
-                
-                let harmonicFactor = 0;
-                for (let i = 0; i < ripples.length; i++) {
-                    const r = ripples[i];
-                    const rd = Math.hypot(this.x - r.x, this.y - r.y);
-                    if (Math.abs(rd - r.r) < 20) {
-                        harmonicFactor = Math.max(harmonicFactor, r.opacity * 4);
-                    }
-                }
-
-                ctx.save();
-                ctx.translate(this.x, this.y);
-                const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, this.size * (1 + glow + interaction + harmonicFactor));
-                grad.addColorStop(0, `hsla(${this.hue + harmonicFactor * 50}, 100%, 60%, ${0.2 * (glow + interaction + harmonicFactor)})`);
-                grad.addColorStop(1, `rgba(0, 0, 0, 0)`);
-                ctx.fillStyle = grad;
-                ctx.beginPath();
-                ctx.arc(0, 0, this.size * (1 + glow + interaction + harmonicFactor), 0, Math.PI * 2);
-                ctx.fill();
-                ctx.fillStyle = `hsla(${this.hue + harmonicFactor * 50}, 100%, 80%, ${0.5 + glow * 0.5 + harmonicFactor})`;
-                ctx.font = 'bold 12px Courier New';
-                ctx.fillText(this.char, -6, 6);
-                ctx.restore();
-            }
-        }
-
-        class Reef {
-            constructor(x, y) {
-                this.x = x;
-                this.y = y;
-                this.nodes = [{x: 0, y: 0, char: chars[Math.floor(Math.random() * chars.length)]}];
-                this.maxNodes = Math.floor(Math.random() * 10 + 5);
-                this.life = 0.5;
-            }
-            update() {
-                if (this.nodes.length < this.maxNodes && Math.random() > 0.98) {
-                    const last = this.nodes[this.nodes.length - 1];
-                    this.nodes.push({
-                        x: last.x + (Math.random() - 0.5) * 20,
-                        y: last.y - Math.random() * 15,
+                this.points = [];
+                let x = Math.random() * width;
+                let y = Math.random() * height;
+                for(let i=0; i<20; i++) {
+                    this.points.push({
+                        x: x + (Math.random() - 0.5) * 100,
+                        y: y + (Math.random() - 0.5) * 100,
                         char: chars[Math.floor(Math.random() * chars.length)]
                     });
-                    if (Math.random() > 0.8) {
-                        flora.push(new Archaeoflora(this.x + last.x, this.y + last.y));
-                    }
+                }
+                this.opacity = Math.random() * 0.1 + 0.05;
+                this.life = 1.0;
+                this.decay = 0.0001 + Math.random() * 0.0005;
+            }
+            update() {
+                this.life -= this.decay;
+                if(this.life <= 0) this.reset();
+                for(let p of this.points) {
+                    p.x += (Math.random() - 0.5) * 0.2;
+                    p.y += (Math.random() - 0.5) * 0.2;
                 }
             }
             draw() {
-                ctx.save();
-                ctx.translate(this.x, this.y);
-                for (let i = 0; i < this.nodes.length; i++) {
-                    const n = this.nodes[i];
-                    ctx.fillStyle = `rgba(255, 255, 255, ${0.1 + (i / this.nodes.length) * 0.2})`;
-                    ctx.font = '9px Courier New';
-                    ctx.fillText(n.char, n.x, n.y);
-                    if (i > 0) {
-                        const prev = this.nodes[i-1];
-                        ctx.strokeStyle = `rgba(0, 255, 170, 0.15)`;
-                        ctx.beginPath();
-                        ctx.moveTo(prev.x + 4, prev.y - 4);
-                        ctx.lineTo(n.x + 4, n.y - 4);
-                        ctx.stroke();
-                    }
+                ctx.strokeStyle = `rgba(255, 255, 255, ${this.opacity * this.life})`;
+                ctx.lineWidth = 0.5;
+                ctx.beginPath();
+                ctx.moveTo(this.points[0].x, this.points[0].y);
+                for(let i=1; i<this.points.length; i++) {
+                    ctx.lineTo(this.points[i].x, this.points[i].y);
                 }
-                ctx.restore();
+                ctx.stroke();
+                
+                ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity * this.life * 0.5})`;
+                ctx.font = '6px Courier New';
+                for(let p of this.points) {
+                    if(Math.random() > 0.99) ctx.fillText(p.char, p.x, p.y);
+                }
             }
         }
 
         function init() {
             width = canvas.width = window.innerWidth;
             height = canvas.height = window.innerHeight;
-            drops = [];
-            for (let i = 0; i < 60; i++) drops.push(new Drop());
-            reefs = [];
-            for (let i = 0; i < 10; i++) reefs.push(new Reef(Math.random() * width, height - Math.random() * 150));
-            flora = [];
-            pool = [];
-            syllables = [];
-            sentences = [];
-            parasites = [];
-            ripples = [];
+            ghostThreads = [];
+            for(let i=0; i<100; i++) ghostThreads.push(new GhostThread());
         }
 
         function draw() {
-            const grad = ctx.createLinearGradient(0, 0, 0, height);
-            grad.addColorStop(0, '#000000');
-            grad.addColorStop(0.6, '#020008');
-            grad.addColorStop(1, '#0a001a');
-            ctx.fillStyle = grad;
+            ctx.fillStyle = '#000000';
             ctx.fillRect(0, 0, width, height);
 
-            for (let i = ripples.length - 1; i >= 0; i--) {
-                const r = ripples[i];
-                r.update();
-                r.draw();
-                if (r.opacity <= 0) ripples.splice(i, 1);
+            // Subtle noise background
+            for(let i=0; i<10; i++) {
+                ctx.fillStyle = `rgba(255,255,255,${Math.random() * 0.01})`;
+                ctx.fillRect(Math.random() * width, Math.random() * height, 1, 1);
             }
 
-            for (let i = 0; i < drops.length; i++) {
-                const d = drops[i];
-                d.update();
-                d.draw();
-            }
-
-            for (let i = 0; i < reefs.length; i++) {
-                const r = reefs[i];
-                r.update();
-                r.draw();
-            }
-
-            for (let i = 0; i < flora.length; i++) {
-                const f = flora[i];
-                f.update();
-                f.draw();
-            }
-
-            for (let i = syllables.length - 1; i >= 0; i--) {
-                const s = syllables[i];
-                s.update();
-                s.draw();
-                if (s.life <= 0) syllables.splice(i, 1);
-            }
-
-            for (let i = sentences.length - 1; i >= 0; i--) {
-                const s = sentences[i];
-                s.update();
-                s.draw();
-                if (s.life <= 0) sentences.splice(i, 1);
-            }
-
-            for (let i = parasites.length - 1; i >= 0; i--) {
-                const p = parasites[i];
-                p.update();
-                p.draw();
-                if (p.life <= 0) parasites.splice(i, 1);
-            }
-
-            for (let i = 0; i < pool.length; i++) {
-                const p = pool[i];
-                p.life -= 0.002;
-                ctx.fillStyle = `rgba(100, 200, 255, ${p.opacity * p.life})`;
-                ctx.font = '7px Courier New';
-                ctx.fillText(p.char, p.x, p.y);
-            }
-            pool = pool.filter(p => p.life > 0);
-
-            if (pool.length > 500) pool.splice(0, pool.length - 500);
-            if (flora.length > 40) flora.splice(0, flora.length - 40);
-
-            if (mouseX > 0) {
-                const radial = ctx.createRadialGradient(mouseX, mouseY, 0, mouseX, mouseY, 300);
-                radial.addColorStop(0, 'rgba(255, 170, 0, 0.04)');
-                radial.addColorStop(1, 'rgba(0, 0, 0, 0)');
-                ctx.fillStyle = radial;
-                ctx.fillRect(0, 0, width, height);
+            for(let thread of ghostThreads) {
+                thread.update();
+                thread.draw();
             }
 
             requestAnimationFrame(draw);
         }
-
-        window.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-            if (Math.random() > 0.94) {
-                ripples.push(new Ripple(mouseX, mouseY));
-            }
-        });
 
         window.addEventListener('resize', init);
         init();
