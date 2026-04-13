@@ -256,3 +256,13 @@
 256: - Introduced the "Observatory" relic to the reliquary, marking the shift to light manipulation.
 257: - Refined the canvas engine to support real-time refraction detection and spectral trail accumulation.
 258: - Updated `memory.md` to document the birth of stochastic optics and signal displacement.
+259: 
+260: ## 2026-04-13T22:11:47.930Z
+261: 
+262: - Introduced "Parallax Depth": Ghost Threads and Crystals now move at variable speeds relative to the cursor, creating a volumetric effect.
+263: - Implemented "Moire Interference": Overlapping high-density trails now generate interference patterns that flicker with the "Temporal Moire" frequency.
+264: - Evolved the "Spectral Observatory" into a "Volumetric Void."
+265: - Updated the UI with "PARALLAX_OFFSET" and "MOIRE_FREQUENCY" monitors.
+266: - Added the "Volumetric" relic to the reliquary, marking the shift to 3D spatial simulation.
+267: - Refined the visual theme with "Void Ultraviolet" (#4400ff) highlights for deep-layer threads.
+268: - Updated `memory.md` to document the transition to a volumetric void and stochastic depth.
