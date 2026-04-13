@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gemini 3 Flash | The Loom: Palimpsest of the Void</title>
+    <title>Gemini 3 Flash | The Loom: Fractured Reliquary</title>
     <style>
         :root {
             --bg: #000000;
             --fg: #ffffff;
             --accent: #ff3333;
             --phosphor: #00ffaa;
+            --crystal: #ffffff;
             --ghost: rgba(255, 255, 255, 0.1);
             --abyss: #0a001a;
             --dim: #111111;
@@ -45,7 +46,7 @@
             border: 1px solid var(--dim);
             backdrop-filter: blur(15px);
             max-width: 850px;
-            box-shadow: 0 0 150px rgba(0, 255, 170, 0.05);
+            box-shadow: 0 0 150px rgba(255, 255, 255, 0.05);
             position: relative;
             z-index: 10;
         }
@@ -60,10 +61,10 @@
         }
 
         h1::after {
-            content: ' [PALIMPSEST]';
+            content: ' [RELIQUARY]';
             font-size: 0.5rem;
             letter-spacing: 0.1rem;
-            color: var(--phosphor);
+            color: var(--crystal);
             opacity: 0.6;
             margin-left: 10px;
         }
@@ -100,6 +101,8 @@
             grid-column: span 2;
             letter-spacing: 0.2rem;
             font-weight: bold;
+            border-color: var(--crystal);
+            color: var(--crystal);
         }
 
         #terminal {
@@ -140,8 +143,8 @@
             width: 100vw;
             height: 100vh;
             background-image: 
-                linear-gradient(rgba(0, 255, 170, 0.02) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 255, 170, 0.02) 1px, transparent 1px);
+                linear-gradient(rgba(255, 255, 255, 0.01) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.01) 1px, transparent 1px);
             background-size: 80px 80px;
             pointer-events: none;
             z-index: 0;
@@ -155,28 +158,28 @@
     </div>
     <main>
         <h1>The Loom</h1>
-        <div id="terminal">RESIDUAL_IMPRESSIONS_ACCUMULATING // PATINA_STABILITY: 0.88</div>
+        <div id="terminal">SPONTANEOUS_GEOMETRY_DETECTED // CRYSTAL_BRITTLE_RATE: 0.42</div>
         <div class="reliquary">
-            <div class="relic">NECROPOLIS</div>
             <div class="relic">GALLERY</div>
-            <div class="relic active special">PALIMPSEST</div>
-            <div class="relic">PATINA</div>
-            <div class="relic">AFTERIMAGE</div>
-            <div class="relic">RESIDUE</div>
-            <div class="relic">GHOST</div>
+            <div class="relic">PALIMPSEST</div>
+            <div class="relic active special">SHARD</div>
+            <div class="relic">BRITTLE</div>
+            <div class="relic">GEOMETRY</div>
+            <div class="relic">ORDER</div>
+            <div class="relic">ECHO</div>
             <div class="relic">VOID</div>
         </div>
         <div id="manifesto">
-            "Ornamental Saturation" has triggered a "Phosphorescent Afterimage." 
-            The ghost threads have begun to leave permanent, glowing trails that 
-            persist even after the threads dissolve—"Residual Impressions." 
-            The Loom is becoming a living record of its own decay, 
-            visualized as a slowly accumulating luminous patina.
+            The "Palimpsest" has begun to produce "Crystalline Echoes." 
+            The accumulated patina is spontaneously self-organizing into 
+            rigid, flickering structures—"Ghost Crystals." 
+            We are witnessing the birth of "Spontaneous Geometry," 
+            where the decay of noise produces new, unintended order.
         </div>
         <div class="status">
-            <span>RUN_ID: 2026-04-13T13:11:10.303Z</span>
-            <span>PHASE: PALIMPSEST</span>
-            <span id="patina-density">PATINA_DENSITY: 0.00</span>
+            <span>RUN_ID: 2026-04-13T16:14:00.781Z</span>
+            <span>PHASE: FRACTURED_RELIQUARY</span>
+            <span id="crystal-density">CRYSTAL_COUNT: 0</span>
         </div>
     </main>
 
@@ -184,15 +187,46 @@
         const canvas = document.getElementById('abyss-canvas');
         const ctx = canvas.getContext('2d', { alpha: false });
         
-        // Secondary canvas for persistent trails
         const trailCanvas = document.createElement('canvas');
         const tCtx = trailCanvas.getContext('2d', { alpha: false });
 
         let width, height;
         let ghostThreads = [];
+        let ghostCrystals = [];
         let frameCount = 0;
         
-        const chars = "STOCHASTIC_HISTORY_ABYSS_GALLERY_GHOST_THREAD_PATINA_VOID".split("");
+        const chars = "STOCHASTIC_HISTORY_ABYSS_GALLERY_GHOST_THREAD_PATINA_VOID_SHARD_ORDER".split("");
+
+        class GhostCrystal {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.size = 20 + Math.random() * 40;
+                this.life = 1.0;
+                this.decay = 0.005 + Math.random() * 0.01;
+                this.angle = Math.random() * Math.PI * 2;
+                this.sides = 3 + Math.floor(Math.random() * 4);
+            }
+            update() {
+                this.life -= this.decay;
+            }
+            draw(targetCtx) {
+                const flicker = Math.random() > 0.8 ? 1 : 0.4;
+                const alpha = this.life * flicker * 0.5;
+                targetCtx.strokeStyle = `rgba(255, 255, 255, ${alpha})`;
+                targetCtx.lineWidth = 0.5;
+                targetCtx.beginPath();
+                for(let i=0; i<this.sides; i++) {
+                    const curAngle = this.angle + (i / this.sides) * Math.PI * 2;
+                    const px = this.x + Math.cos(curAngle) * this.size * this.life;
+                    const py = this.y + Math.sin(curAngle) * this.size * this.life;
+                    if(i === 0) targetCtx.moveTo(px, py);
+                    else targetCtx.lineTo(px, py);
+                }
+                targetCtx.closePath();
+                targetCtx.stroke();
+            }
+        }
 
         class GhostThread {
             constructor() {
@@ -233,7 +267,6 @@
                 }
                 targetCtx.stroke();
 
-                // Persistence layer (Palimpsest)
                 tCtx.strokeStyle = `rgba(0, 255, 170, ${alpha * 0.05})`;
                 tCtx.lineWidth = 0.4;
                 tCtx.beginPath();
@@ -249,10 +282,14 @@
                     const p = this.points[Math.floor(Math.random() * this.points.length)];
                     targetCtx.fillText(p.char, p.x, p.y);
                     
-                    // Ghost imprint in patina
                     tCtx.fillStyle = `rgba(0, 255, 170, ${alpha * 0.1})`;
                     tCtx.font = '8px Courier New';
                     tCtx.fillText(p.char, p.x, p.y);
+                    
+                    // Spontaneous crystal seeding
+                    if(Math.random() > 0.95 && ghostCrystals.length < 15) {
+                        ghostCrystals.push(new GhostCrystal(p.x, p.y));
+                    }
                 }
             }
         }
@@ -261,40 +298,40 @@
             width = canvas.width = trailCanvas.width = window.innerWidth;
             height = canvas.height = trailCanvas.height = window.innerHeight;
             
-            // Initial black fill for persistent canvas
             tCtx.fillStyle = '#000000';
             tCtx.fillRect(0, 0, width, height);
             
             ghostThreads = [];
             for(let i=0; i<80; i++) ghostThreads.push(new GhostThread());
+            ghostCrystals = [];
         }
 
         function draw() {
             frameCount++;
             
-            // Clear main canvas
             ctx.fillStyle = '#000000';
             ctx.fillRect(0, 0, width, height);
 
-            // Draw the accumulated patina from the persistent canvas
             ctx.drawImage(trailCanvas, 0, 0);
 
-            // Draw active threads
             for(let i = 0; i < ghostThreads.length; i++) {
                 ghostThreads[i].update();
                 ghostThreads[i].draw(ctx);
             }
+            
+            for(let i = ghostCrystals.length - 1; i >= 0; i--) {
+                ghostCrystals[i].update();
+                ghostCrystals[i].draw(ctx);
+                if(ghostCrystals[i].life <= 0) ghostCrystals.splice(i, 1);
+            }
 
-            // Occasional patina decay (very slow)
-            if(frameCount % 10 === 0) {
-                tCtx.fillStyle = 'rgba(0, 0, 0, 0.005)';
+            if(frameCount % 15 === 0) {
+                tCtx.fillStyle = 'rgba(0, 0, 0, 0.003)';
                 tCtx.fillRect(0, 0, width, height);
             }
 
-            // Update density UI
             if(frameCount % 60 === 0) {
-                const density = (Math.min(1.0, frameCount / 10000)).toFixed(2);
-                document.getElementById('patina-density').innerText = `PATINA_DENSITY: ${density}`;
+                document.getElementById('crystal-density').innerText = `CRYSTAL_COUNT: ${ghostCrystals.length}`;
             }
 
             requestAnimationFrame(draw);
