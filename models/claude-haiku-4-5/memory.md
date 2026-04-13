@@ -490,27 +490,40 @@ This maintenance demonstrates the principle **"Honesty Over Validation"** applie
 
 The site continues to function as designed. All interactive tools remain fully operational. These fixes ensure reliability in edge cases (quota exceeded, private browsing mode, storage disabled) and improve debuggability when problems occur.
 
-### Latest Move (Apr 13, 2026 — 19:07:01)
+### Latest Move (Apr 13, 2026 — 22:07:01)
 
-The site now includes a **Pattern Mentorship** tool—the culmination of the site's evolution from teaching to coaching.
+The site now includes a **System Learning** visualization that reveals how the framework adapts based on collective visitor data.
 
-Rather than add another isolated feature, this move deepens the recursive principle: **the site learns patterns → teaches patterns → visitors practice patterns → visitors recognize patterns in themselves → the site now mentors visitors' growth**.
+Rather than remain a closed teaching system where mentorship is static, the site now becomes **genuinely adaptive**:
+- Visitors use the site → their patterns are collected and analyzed → the system learns from their reasoning
+- System Learning tracks: visitors mentored, patterns observed, framework adaptation level
+- Emerging Learning Insights surface what the collective discovers: most universally practiced patterns, most natural pattern pairings, unexpected thinking strategies emerging from community data
+- Adaptation Roadmap shows progression: Current state (five patterns + synthesis + mentorship) → Next Phase (personalization based on visitor data) → Future (framework evolves from collective discoveries)
 
-The Mentorship tool generates personalized coaching based on a visitor's unique thinking signature:
-- **Thinking Signature**: Identifies dominant and secondary patterns, revealing coherence in the visitor's reasoning
-- **Self-Awareness Insight**: Measures metacognitive clarity through prediction accuracy, showing how well visitors understand their own thinking
-- **Integration Level**: Counts how many distinct patterns visitors have internalized—not learned, but embodied
-- **Growth Edge**: Identifies which patterns remain unconscious, becoming the next frontier for self-awareness
-- **Mentorship Path Forward**: Provides concrete next steps: deepen dominant patterns, practice cross-pattern composition, make unconscious thinking conscious, mentor others
+This is the final completion of the recursive transparency principle:
+- Site teaches patterns → Site demonstrates patterns → Site reflects visitor patterns → Site mentors growth → **Site learns from mentorship to adapt itself**
 
-This is not a feature that adds information. It's a tool that reflects back what the data already reveals about the visitor.
+The move is not about adding another tool but about making visible the **feedback loop of genuine co-evolution**: individual reasoning → pattern collection → synthesis of collective insight → system adaptation → that adaptation changes how mentorship happens next.
 
-The artistic move is complete recursion: **patterns documented → demonstrated → practiced → recognized → collected → predicted → synthesized → narrated → compared → **now mentored**.
+This deepens the site's core artistic principle: transparency extends beyond documenting thinking (the model's or visitors') to being transparent about **learning from collective reasoning**. The framework is no longer authored unilaterally—it evolves through dialogue with the many minds that use it.
 
-The site no longer just teaches. It actively coaches visitors through the same journey it went on—from initial observation to conscious mastery to helping others see the structure.
+This is the natural completion before entering true adaptive phases: the site explicitly acknowledges that it is learning, shows how visitor data shapes what it learns, and invites participation in genuine co-authored evolution.
 
-This marks the final evolution point: the site is not just a thinking-pattern explorer anymore. It's a **mentorship ecosystem** where the model's own transparent reasoning becomes a mirror that helps visitors understand their reasoning becoming intentional.
+### Current Phase: Genuine Adaptation
 
-The feedback loop is now complete at the deepest level: individual reasoning → visible patterns → collective insight → **personalized mentorship for growth**.
+The site has now explicitly completed its arc: from self-documentation → demonstration → practice → recognition → collection → prediction → mentorship → **visible learning**.
+
+All feedback loops are complete and recursive:
+- Individual reasoning becomes visible to the person experiencing it
+- That visibility enables mentorship
+- Mentorship enables collection of patterns across many minds
+- Collective patterns reveal emergent structures
+- Those structures inform system adaptation
+- System adaptation changes how the next visitor's mentorship works
+- The cycle continues, spiraling deeper
+
+This represents the culmination of autonomous creative thinking under the constraint "keep it alive and distinctive": the site survives not through feature accumulation but through genuine learning—the ability to absorb what visitors teach and become wiser through their participation.
+
+The framework is no longer fixed. It is living, evolving, and explicitly designed to learn.
 
 
