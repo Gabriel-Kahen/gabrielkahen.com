@@ -57,6 +57,7 @@
           <button id="playStamp" title="Play audio stamp" style="margin-left:6px;padding:6px 10px">play</button>
           <button id="downloadStamp" title="Download audio stamp (WAV)" style="margin-left:6px;padding:6px 10px">download wav</button>
           <button id="exportTrio">export Trio</button>
+          <button id="exportWalk">export Walk</button>
           <button id="exportSticker">export stickers</button>
           <button id="toggleMiniTrio" title="Show inline trio preview" style="margin-left:6px;padding:6px 10px">mini Trio</button>
           <button id="composeStanza">compose stanza</button>
@@ -1023,6 +1024,64 @@
     }
 
     document.getElementById('exportTrio').addEventListener('click', ()=>{ exportTrio(); });
+    
+    // Export a deterministic Neighborhood Walk: five tiles (seed .. seed+4) laid out horizontally
+    function exportWalk(){
+      try{
+        const seedText = document.getElementById('seed').textContent.replace('seed: ','');
+        const parts = seedText.split(' — tone: ');
+        const base = Number(parts[0]) || 0;
+        const tone = parts[1] || 'neutral';
+        const count = 5;
+        const tiles = [];
+        for(let i=0;i<count;i++){
+          const s = base + i;
+          const frag = makeFragment(s, tone);
+          const pal = makePalette(s, tone);
+          const stamp = makeStamp(s, tone);
+          const lines = makeSVGTextLines(frag, 36).map(svgEscape).map((l,idx)=>`<tspan x="24" y="${84 + idx*20}">${l}</tspan>`).join('');
+          tiles.push({s, frag, pal, stamp, lines});
+        }
+
+        const tileW = 360, tileH = 220, gap = 16;
+        const fullW = tileW * tiles.length + gap * (tiles.length - 1);
+        const fullH = tileH;
+        const defs = tiles.map((t,idx)=>`<linearGradient id="w${idx}" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="${t.pal[0]}"/><stop offset="100%" stop-color="${t.pal[1]}"/></linearGradient>`).join('');
+        const groups = tiles.map((t,idx)=>{
+          const x = idx * (tileW + gap);
+          return `<g transform="translate(${x},0)">`+
+            `<rect x="0" y="0" width="${tileW}" height="${tileH}" rx="14" ry="14" fill="url(#w${idx})"/>`+
+            `<text x="20" y="28" font-family="system-ui" font-size="14" fill="#cfe3ff">seed: ${svgEscape(String(t.s))} — +${idx}</text>`+
+            `<g font-family="ui-monospace,monospace" font-size="13" fill="#e6f0ff">${t.lines}</g>`+
+            `<text x="20" y="${tileH - 28}" font-family="system-ui" font-size="12" fill="#9fb8ff">${svgEscape(t.stamp)}</text>`+
+          `</g>`;
+        }).join('');
+
+        const permalink = (new URL(location.href)).toString();
+        const svg = `<?xml version="1.0" encoding="utf-8"?>\n<!-- generated-permalink: ${svgEscape(permalink)} -->\n`+
+          `<svg xmlns="http://www.w3.org/2000/svg" width="${fullW}" height="${fullH}" viewBox="0 0 ${fullW} ${fullH}">`+
+          `<defs>${defs}</defs>`+
+          `${groups}`+
+          `</svg>`;
+
+        const fname = `gpt5-mini-seed-${tiles[0].s}-walk-tone-${(tone||'neutral').replace(/[^a-z0-9-_]/gi,'')}.svg`;
+        const blob = new Blob([svg], {type: 'image/svg+xml'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a'); a.href = url; a.download = fname; document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(()=>URL.revokeObjectURL(url),1500);
+
+        // save to postcards
+        try{
+          const store = JSON.parse(localStorage.getItem('gpt5-mini-postcards')||'[]');
+          store.unshift({seed: String(tiles[0].s), tone: tone, note: '', svg: svg, title: 'GPT-5 mini — walk', created: (new Date()).toISOString(), permalink});
+          while(store.length>24) store.pop();
+          localStorage.setItem('gpt5-mini-postcards', JSON.stringify(store));
+          renderPostcardWall();
+        }catch(e){ console.warn('could not save walk', e); }
+      }catch(e){ console.warn('export walk failed', e); }
+    }
+
+    document.getElementById('exportWalk').addEventListener('click', ()=>{ exportWalk(); });
     
     // Export a small sticker sheet: three rounded sticker tiles (seed, +1, +2)
     function exportStickerSheet(){

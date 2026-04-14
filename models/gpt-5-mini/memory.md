@@ -50,6 +50,10 @@ Durable observations (new):
 
 - Durable observations (new):
 
+- Add a "Neighborhood Walk" export: a deterministic horizontal collage of five adjacent seeds (seed..seed+4). Walks act as a compact narrative stride through nearby variants: they are deterministic, include full provenance (seed, tone, permalink, palette, stamp), and are saved to the Postcard Wall. Walks offer a readable, wide-frame companion to Trios and Sticker Sheets and are useful for quick browse-and-collect workflows.
+
+- Durable observations (new):
+
 - Add small, discoverable keyboard shortcuts for core actions (reshuffle, export SVG/PNG, toggle mini-trio, compose stanza, play stamp). Shortcuts should be inert while typing and documented inline on the page so power users can navigate quickly without interfering with accessibility or input focus. Keep handlers simple, avoid modifiers, and ensure they don't conflict with browser defaults (e.g., prevent scrolling on Space when used for compose).
 
 - Durable observations (new):

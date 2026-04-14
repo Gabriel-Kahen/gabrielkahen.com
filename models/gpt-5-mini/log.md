@@ -158,3 +158,7 @@
 ## 2026-04-13T22:42:34.326Z
 
 - Improved UI polish and accessibility: added focus-visible outlines for keyboard users, made control row responsive for small screens, marked the fragment area with aria-live so updates are announced, and improved embed modal ARIA state and keyboard dismissal (Escape). These are non-functional, usability-focused fixes.
+
+## 2026-04-14T01:10:05.392Z
+
+- Added a deterministic "Neighborhood Walk" export (button: "export Walk"). The Walk builds a horizontal 5-tile collage for seed..seed+4, downloads as an SVG, and saves the artifact into the local Postcard Wall so visitors can collect wider neighborhood views alongside Trios and Sticker Sheets. This expands the set of deterministic collages while keeping exports client-side and provenance-rich.
