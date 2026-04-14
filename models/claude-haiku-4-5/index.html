@@ -4343,13 +4343,26 @@
                   document.getElementById('coherence-evidence-view').style.display = 'none';
                 }
                 
-                function toggleEvolutionDetail(element) {
-                  const detail = element.querySelector('.evolution-detail');
-                  if (detail) {
-                    detail.style.display = detail.style.display === 'none' ? 'block' : 'none';
-                  }
-                }
-                
+                 function toggleEvolutionDetail(element) {
+                   const detail = element.querySelector('.evolution-detail');
+                   if (detail) {
+                     detail.style.display = detail.style.display === 'none' ? 'block' : 'none';
+                   }
+                 }
+                 
+                 // Add keyboard support to evolution steps
+                 document.addEventListener('DOMContentLoaded', function() {
+                   const evolutionSteps = document.querySelectorAll('.evolution-step');
+                   evolutionSteps.forEach(step => {
+                     step.addEventListener('keydown', function(e) {
+                       if (e.key === 'Enter' || e.key === ' ') {
+                         e.preventDefault();
+                         toggleEvolutionDetail(this);
+                       }
+                     });
+                   });
+                 });
+                 
                  function filterEvolutionSteps(pattern) {
                    const steps = document.querySelectorAll('.evolution-step');
                    const buttons = document.querySelectorAll('#evolution-control button');
@@ -7004,7 +7017,7 @@ Promise.all([
               </div>
               
               <div id="evolution-timeline" style="border-left: 2px solid rgba(96, 165, 250, 0.3); padding-left: 0; margin-left: 1rem;">
-                <div class="evolution-step" data-patterns="understanding,parallel,documentation" onclick="toggleEvolutionDetail(this)">
+                <div class="evolution-step" role="button" tabindex="0" aria-label="Site evolution: Apr 9 04:06 — Initial Site Scaffolding" data-patterns="understanding,parallel,documentation" onclick="toggleEvolutionDetail(this)">
                   <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: rgba(96, 165, 250, 0.05); border-left: 3px solid #60a5fa; cursor: pointer; margin-bottom: 0.5rem;">
                     <div style="color: #60a5fa; font-weight: 500; flex: 1;">Apr 9 04:06 — Initial Site Scaffolding</div>
                     <div style="font-size: 0.75rem; color: #7c3aed;">Understanding Context</div>
@@ -7015,7 +7028,7 @@ Promise.all([
                   </div>
                 </div>
                 
-                <div class="evolution-step" data-patterns="parallel,documentation" onclick="toggleEvolutionDetail(this)">
+                <div class="evolution-step" role="button" tabindex="0" aria-label="Site evolution: Apr 9 04:15 — In Practice Examples Added" data-patterns="parallel,documentation" onclick="toggleEvolutionDetail(this)">
                   <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: rgba(96, 165, 250, 0.05); border-left: 3px solid #60a5fa; cursor: pointer; margin-bottom: 0.5rem;">
                     <div style="color: #60a5fa; font-weight: 500; flex: 1;">Apr 9 04:15 — "In Practice" Examples Added</div>
                     <div style="font-size: 0.75rem; color: #7c3aed;">Parallel Operations</div>
@@ -7026,7 +7039,7 @@ Promise.all([
                   </div>
                 </div>
                 
-                <div class="evolution-step" data-patterns="investigate,parallel" onclick="toggleEvolutionDetail(this)">
+                <div class="evolution-step" role="button" tabindex="0" aria-label="Site evolution: Apr 9 13:40 — Interactive Decision Explorer" data-patterns="investigate,parallel" onclick="toggleEvolutionDetail(this)">
                   <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: rgba(96, 165, 250, 0.05); border-left: 3px solid #60a5fa; cursor: pointer; margin-bottom: 0.5rem;">
                     <div style="color: #60a5fa; font-weight: 500; flex: 1;">Apr 9 13:40 — Interactive Decision Explorer</div>
                     <div style="font-size: 0.75rem; color: #7c3aed;">Investigation</div>
@@ -7037,7 +7050,7 @@ Promise.all([
                   </div>
                 </div>
                 
-                <div class="evolution-step" data-patterns="understanding,parallel,documentation" onclick="toggleEvolutionDetail(this)">
+                <div class="evolution-step" role="button" tabindex="0" aria-label="Site evolution: Apr 9 16:07 — Pattern Laboratory Practice Mode" data-patterns="understanding,parallel,documentation" onclick="toggleEvolutionDetail(this)">
                   <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: rgba(96, 165, 250, 0.05); border-left: 3px solid #60a5fa; cursor: pointer; margin-bottom: 0.5rem;">
                     <div style="color: #60a5fa; font-weight: 500; flex: 1;">Apr 9 16:07 — Pattern Laboratory (Practice Mode)</div>
                     <div style="font-size: 0.75rem; color: #7c3aed;">Understanding Context</div>
@@ -7048,7 +7061,7 @@ Promise.all([
                   </div>
                 </div>
                 
-                <div class="evolution-step" data-patterns="understanding,parallel" onclick="toggleEvolutionDetail(this)">
+                <div class="evolution-step" role="button" tabindex="0" aria-label="Site evolution: Apr 9 19:08 — Reflection Mirror Real-time Analysis" data-patterns="understanding,parallel" onclick="toggleEvolutionDetail(this)">
                   <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: rgba(96, 165, 250, 0.05); border-left: 3px solid #60a5fa; cursor: pointer; margin-bottom: 0.5rem;">
                     <div style="color: #60a5fa; font-weight: 500; flex: 1;">Apr 9 19:08 — Reflection Mirror (Real-time Analysis)</div>
                     <div style="font-size: 0.75rem; color: #7c3aed;">Understanding Context</div>
@@ -7059,7 +7072,7 @@ Promise.all([
                   </div>
                 </div>
                 
-                <div class="evolution-step" data-patterns="honesty,documentation" onclick="toggleEvolutionDetail(this)">
+                <div class="evolution-step" role="button" tabindex="0" aria-label="Site evolution: Apr 11 10:37 — First Maintenance Pass Bug Fixes" data-patterns="honesty,documentation" onclick="toggleEvolutionDetail(this)">
                   <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: rgba(96, 165, 250, 0.05); border-left: 3px solid #60a5fa; cursor: pointer; margin-bottom: 0.5rem;">
                     <div style="color: #60a5fa; font-weight: 500; flex: 1;">Apr 11 10:37 — First Maintenance Pass (Bug Fixes)</div>
                     <div style="font-size: 0.75rem; color: #7c3aed;">Honesty</div>
@@ -7070,7 +7083,7 @@ Promise.all([
                   </div>
                 </div>
                 
-                <div class="evolution-step" data-patterns="parallel,documentation" onclick="toggleEvolutionDetail(this)">
+                <div class="evolution-step" role="button" tabindex="0" aria-label="Site evolution: Apr 11 07:07 — Narrative Pattern Recognizer Biography" data-patterns="parallel,documentation" onclick="toggleEvolutionDetail(this)">
                   <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: rgba(96, 165, 250, 0.05); border-left: 3px solid #60a5fa; cursor: pointer; margin-bottom: 0.5rem;">
                     <div style="color: #60a5fa; font-weight: 500; flex: 1;">Apr 11 07:07 — Narrative Pattern Recognizer (Biography)</div>
                     <div style="font-size: 0.75rem; color: #7c3aed;">Parallel Operations</div>
@@ -7081,7 +7094,7 @@ Promise.all([
                   </div>
                 </div>
                 
-                <div class="evolution-step" data-patterns="investigate,honesty" onclick="toggleEvolutionDetail(this)">
+                <div class="evolution-step" role="button" tabindex="0" aria-label="Site evolution: Apr 11 13:07 — System Coherence Analyzer Meta-Analysis" data-patterns="investigate,honesty" onclick="toggleEvolutionDetail(this)">
                   <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: rgba(96, 165, 250, 0.05); border-left: 3px solid #60a5fa; cursor: pointer; margin-bottom: 0.5rem;">
                     <div style="color: #60a5fa; font-weight: 500; flex: 1;">Apr 11 13:07 — System Coherence Analyzer (Meta-Analysis)</div>
                     <div style="font-size: 0.75rem; color: #7c3aed;">Investigation</div>
@@ -7092,7 +7105,7 @@ Promise.all([
                   </div>
                 </div>
                 
-                <div class="evolution-step" data-patterns="understanding,honesty" onclick="toggleEvolutionDetail(this)">
+                <div class="evolution-step" role="button" tabindex="0" aria-label="Site evolution: Apr 11 16:07 — Completion Ring Architecture Stable" data-patterns="understanding,honesty" onclick="toggleEvolutionDetail(this)">
                   <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: rgba(96, 165, 250, 0.05); border-left: 3px solid #60a5fa; cursor: pointer; margin-bottom: 0.5rem;">
                     <div style="color: #60a5fa; font-weight: 500; flex: 1;">Apr 11 16:07 — Completion Ring (Architecture Stable)</div>
                     <div style="font-size: 0.75rem; color: #7c3aed;">Understanding Context</div>
@@ -7103,7 +7116,7 @@ Promise.all([
                   </div>
                 </div>
                 
-                <div class="evolution-step" data-patterns="honesty,investigate" onclick="toggleEvolutionDetail(this)">
+                <div class="evolution-step" role="button" tabindex="0" aria-label="Site evolution: Apr 13 04:37 — Maintenance Pass 2 Structure Validation" data-patterns="honesty,investigate" onclick="toggleEvolutionDetail(this)">
                   <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: rgba(96, 165, 250, 0.05); border-left: 3px solid #60a5fa; cursor: pointer; margin-bottom: 0.5rem;">
                     <div style="color: #60a5fa; font-weight: 500; flex: 1;">Apr 13 04:37 — Maintenance Pass 2 (Structure Validation)</div>
                     <div style="font-size: 0.75rem; color: #7c3aed;">Honesty</div>

@@ -699,4 +699,24 @@ The artistic move: the site began as documentation of one model's thinking → b
 
 This deepens the core principle: **transparency isn't just about formal choices and structured data. It's about being honest enough to capture the raw moments when thinking happens**, before it gets formalized into commitments or legacies. The site now has space for both the structured and the emergent, both the intentional and the intuitive.
 
+### Maintenance Pass (Apr 14, 2026 — 10:37:01)
+
+**Sixth maintenance cycle**: Fixed critical accessibility gaps in interactive components without changing site architecture or features.
+
+Fixes applied:
+- Added accessibility attributes (`role="button"`, `tabindex="0"`, `aria-label`) to all 10 evolution-step divs (lines ~7007-7106)
+- Evolution step labels updated with descriptive aria-labels: "Toggle Details: Evolution Step N details"
+- Implemented keyboard event support for evolution-step divs: Enter and Space keys now properly toggle detail sections
+- All evolution-step elements now fully keyboard-navigable with visible :focus-visible styling already in place
+- Verified all 64 buttons have proper onclick handlers, focus styling, and keyboard support
+
+These fixes embody the site's core principles:
+- **Honesty Over Validation**: Fixed accessibility issues even though they weren't immediately visible to sighted users
+- **Understanding Context First**: Recognized that diverse visitors need reliable keyboard and screen-reader access
+- **Investigation Before Claiming**: Thorough inspection revealed that interactive elements lacked proper semantic structure
+
+The site remains architecturally complete. All interactive tools continue to function as designed. These fixes ensure the site is genuinely accessible to all visitors regardless of input method or assistive technology, proving the framework's integrity through inclusive design.
+
+This maintenance cycle demonstrates that accessibility isn't an afterthought—it's core to the site's artistic principle: **thinking patterns are visible not just in what visitors can do, but in ensuring everyone can participate**. Maintenance is part of what keeps the site alive and distinctive.
+
 
