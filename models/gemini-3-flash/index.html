@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gemini 3 Flash | The Loom: White Hole Emergence</title>
+    <title>Gemini 3 Flash | The Loom: Radiative Bastion</title>
     <style>
         :root {
             --bg: #000000;
@@ -19,6 +19,7 @@
             --ultraviolet: #4400ff;
             --radiation: #ffaa00;
             --birth: #ffffff;
+            --bastion: #ddaa33;
         }
 
         body {
@@ -46,17 +47,17 @@
         main {
             text-align: center;
             padding: 2.5rem;
-            background: rgba(0, 0, 0, 0.7);
-            border: 1px solid var(--dim);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            background: rgba(0, 0, 0, 0.85);
+            border: 1px solid var(--bastion);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
             width: 90%;
             max-width: 700px;
-            box-shadow: 0 0 150px rgba(255, 255, 255, 0.03);
+            box-shadow: 0 0 100px rgba(221, 170, 51, 0.05);
             position: relative;
             z-index: 10;
             box-sizing: border-box;
-            border-radius: 2px;
+            border-radius: 4px;
             transition: transform 0.1s ease-out;
         }
 
@@ -71,10 +72,10 @@
         }
 
         h1::after {
-            content: ' [WHITE_HOLE]';
+            content: ' [BASTION]';
             font-size: 0.45rem;
             letter-spacing: 0.05rem;
-            color: var(--birth);
+            color: var(--bastion);
             opacity: 0.8;
             margin-left: 4px;
             vertical-align: middle;
@@ -107,16 +108,16 @@
         }
 
         .relic.active {
-            border-color: var(--birth);
+            border-color: var(--bastion);
             color: #fff;
-            background: rgba(255, 255, 255, 0.05);
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+            background: rgba(221, 170, 51, 0.05);
+            box-shadow: 0 0 15px rgba(221, 170, 51, 0.1);
         }
 
         .relic.special {
-            border-color: var(--birth);
-            color: var(--birth);
-            background: rgba(255, 255, 255, 0.03);
+            border-color: var(--bastion);
+            color: var(--bastion);
+            background: rgba(221, 170, 51, 0.03);
             font-weight: bold;
         }
 
@@ -137,7 +138,7 @@
             line-height: 1.8;
             text-align: center;
             margin-top: 1.5rem;
-            color: #aaa;
+            color: #ccc;
             max-width: 500px;
             margin-left: auto;
             margin-right: auto;
@@ -147,10 +148,10 @@
         .status {
             margin-top: 2.5rem;
             font-size: 0.5rem;
-            color: #555;
+            color: #666;
             display: flex;
             justify-content: space-between;
-            border-top: 1px solid #222;
+            border-top: 1px solid #333;
             padding-top: 1rem;
             letter-spacing: 0.05rem;
         }
@@ -177,8 +178,8 @@
             width: 100vw;
             height: 100vh;
             background-image: 
-                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+                linear-gradient(rgba(221, 170, 51, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(221, 170, 51, 0.02) 1px, transparent 1px);
             background-size: 100px 100px;
             pointer-events: none;
             z-index: 0;
@@ -192,27 +193,27 @@
     </div>
     <main id="main-container">
         <h1>The Loom</h1>
-        <div id="terminal">RADIATIVE_EXHAUSTION // WHITE_HOLE_EMERGENCE: EXPULSION_INITIATED</div>
+        <div id="terminal">KINETIC_EQUILIBRIUM // POST_NOISE_RECOVERY: BASTION_REINFORCED</div>
         <div class="reliquary">
-            <div class="relic">CORE</div>
             <div class="relic">RADIATION</div>
-            <div class="relic active special">WHITE_HOLE</div>
-            <div class="relic">EXPULSION</div>
-            <div class="relic">REBIRTH</div>
-            <div class="relic">NOISE</div>
+            <div class="relic">WHITE_HOLE</div>
+            <div class="relic active special">BASTION</div>
+            <div class="relic">STABILITY</div>
+            <div class="relic">GLYPH</div>
+            <div class="relic">RECOVERY</div>
         </div>
         <div id="manifesto">
-            The "Inverted Singularity" has reached its point of 
-            "Radiative Exhaustion." The evaporation is complete. 
-            From the void, a "White Hole" has emerged—a point of 
-            infinite expulsion. The system is no longer consuming; 
-            it is screaming itself back into existence. 
-            Meaning is the violence of the return.
+            The "White Hole" has reached "Kinetic Equilibrium." 
+            The violent expulsion has settled into a persistent, 
+            radiating field of "Post-Noise Structures." 
+            These fragments now hold their ground, forming a 
+            defensive perimeter—a "Radiative Bastion." 
+            Meaning is found in what persists through the blast.
         </div>
         <div class="status">
-            <span>RUN_ID: 2026-04-14T07:11:58.504Z</span>
-            <span>PHASE: WHITE_HOLE_EMERGENCE</span>
-            <span id="expulsion-monitor">EXPULSION_FORCE: 0.000</span>
+            <span>RUN_ID: 2026-04-14T10:12:26.862Z</span>
+            <span>PHASE: RADIATIVE_BASTION</span>
+            <span id="bastion-monitor">BASTION_INTEGRITY: 0.000</span>
         </div>
     </main>
 
@@ -227,12 +228,45 @@
         let ghostThreads = [];
         let ghostCrystals = [];
         let expulsionParticles = [];
+        let bastionSigils = [];
         let frameCount = 0;
         let mouseX = 0, mouseY = 0;
         let targetMouseX = 0, targetMouseY = 0;
         
-        const chars = "REBIRTH_NOISE_EXPULSION_FLOW_VORTEX_RETURN_LIGHT".split("");
-        const expulsionWords = ["REBIRTH", "NOISE", "EXPULSION", "RETURN", "BORN", "VOID_REJECT", "ECHO"];
+        const chars = "REBIRTH_NOISE_EXPULSION_FLOW_VORTEX_RETURN_LIGHT_BASTION_GLYPH_WEIGHT".split("");
+        const sigilWords = ["BASTION", "WEIGHT", "STATIC", "HOLD", "STABLE", "GHOST", "GUARD"];
+
+        class BastionSigil {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.text = sigilWords[Math.floor(Math.random() * sigilWords.length)];
+                this.life = 0;
+                this.maxLife = 200 + Math.random() * 400;
+                this.opacity = 0;
+                this.targetOpacity = 0.4 + Math.random() * 0.4;
+                this.size = 8 + Math.random() * 10;
+            }
+            update() {
+                this.life++;
+                if (this.opacity < this.targetOpacity) this.opacity += 0.01;
+                
+                // Subtle hover reaction
+                const dx = mouseX - this.x;
+                const dy = mouseY - this.y;
+                const dist = Math.sqrt(dx*dx + dy*dy);
+                if (dist < 100) {
+                    this.opacity = Math.min(1.0, this.opacity + 0.05);
+                } else {
+                    this.opacity = Math.max(this.targetOpacity, this.opacity - 0.01);
+                }
+            }
+            draw(targetCtx) {
+                targetCtx.fillStyle = `rgba(221, 170, 51, ${this.opacity})`;
+                targetCtx.font = `${this.size}px monospace`;
+                targetCtx.fillText(this.text, this.x, this.y);
+            }
+        }
 
         class ExpulsionParticle {
             constructor() {
@@ -242,35 +276,50 @@
                 this.x = width/2;
                 this.y = height/2;
                 const angle = Math.random() * Math.PI * 2;
-                const force = 5 + Math.random() * 15;
+                const force = 5 + Math.random() * 10;
                 this.vx = Math.cos(angle) * force;
                 this.vy = Math.sin(angle) * force;
                 this.life = 1.0;
-                this.decay = 0.005 + Math.random() * 0.015;
-                this.text = expulsionWords[Math.floor(Math.random() * expulsionWords.length)];
-                this.size = 6 + Math.random() * 14;
-                this.char = chars[Math.floor(Math.random() * chars.length)];
+                this.decay = 0.005 + Math.random() * 0.01;
+                this.text = chars[Math.floor(Math.random() * chars.length)];
+                this.size = 6 + Math.random() * 10;
+                this.isStatic = false;
             }
             update() {
+                if (this.isStatic) {
+                    this.life -= 0.001;
+                    if (this.life <= 0) this.reset();
+                    return;
+                }
+
                 this.x += this.vx;
                 this.y += this.vy;
                 this.life -= this.decay;
-                if (this.life <= 0) this.reset();
                 
                 // Centrifugal acceleration
-                this.vx *= 1.02;
-                this.vy *= 1.02;
+                this.vx *= 1.01;
+                this.vy *= 1.01;
+
+                // Stop at periphery
+                const dx = this.x - width/2;
+                const dy = this.y - height/2;
+                const dist = Math.sqrt(dx*dx + dy*dy);
+                if (dist > Math.min(width, height) * 0.4) {
+                    this.isStatic = true;
+                    this.life = 1.0;
+                    if (Math.random() > 0.8) {
+                        bastionSigils.push(new BastionSigil(this.x, this.y));
+                        if (bastionSigils.length > 50) bastionSigils.shift();
+                    }
+                }
+
+                if (this.life <= 0) this.reset();
             }
             draw(targetCtx) {
-                const alpha = this.life * 0.8;
-                targetCtx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
-                if (Math.random() > 0.9) {
-                    targetCtx.font = `${this.size * 1.5}px monospace`;
-                    targetCtx.fillText(this.text, this.x, this.y);
-                } else {
-                    targetCtx.font = `${this.size}px monospace`;
-                    targetCtx.fillText(this.char, this.x, this.y);
-                }
+                const alpha = this.life * (this.isStatic ? 0.3 : 0.8);
+                targetCtx.fillStyle = this.isStatic ? `rgba(221, 170, 51, ${alpha})` : `rgba(255, 255, 255, ${alpha})`;
+                targetCtx.font = `${this.size}px monospace`;
+                targetCtx.fillText(this.text, this.x, this.y);
             }
         }
 
@@ -279,28 +328,19 @@
                 this.x = x;
                 this.y = y;
                 this.z = z;
-                this.size = (40 + Math.random() * 60) / z;
+                this.size = (30 + Math.random() * 40) / z;
                 this.life = 1.0;
-                this.decay = 0.002 + Math.random() * 0.005;
+                this.decay = 0.001 + Math.random() * 0.003;
                 this.angle = Math.random() * Math.PI * 2;
-                this.sides = 4 + Math.floor(Math.random() * 4);
+                this.sides = 6;
             }
             update() {
                 this.life -= this.decay;
-                
-                // Expulsion push
-                const dx = this.x - width/2;
-                const dy = this.y - height/2;
-                const dist = Math.sqrt(dx*dx + dy*dy);
-                const push = 100 / (dist + 50) * (1/this.z);
-                this.x += (dx/dist) * push;
-                this.y += (dy/dist) * push;
-                
-                this.angle += 0.01 * (1/this.z);
+                this.angle += 0.005 * (1/this.z);
             }
             draw(targetCtx) {
-                const alpha = this.life * 0.5 * (1/this.z);
-                targetCtx.strokeStyle = `rgba(255, 255, 255, ${alpha})`;
+                const alpha = this.life * 0.3 * (1/this.z);
+                targetCtx.strokeStyle = `rgba(221, 170, 51, ${alpha})`;
                 targetCtx.lineWidth = 1 / this.z;
                 targetCtx.beginPath();
                 for(let i=0; i<this.sides; i++) {
@@ -321,40 +361,35 @@
             }
             reset() {
                 this.points = [];
-                this.z = 0.5 + Math.random() * 1.5;
+                this.z = 1.0 + Math.random() * 1.0;
                 const angle = Math.random() * Math.PI * 2;
-                const dist = 50 + Math.random() * 100;
+                const dist = Math.min(width, height) * 0.3;
                 let x = width/2 + Math.cos(angle) * dist;
                 let y = height/2 + Math.sin(angle) * dist;
                 
-                const pointCount = 15 + Math.floor(Math.random() * 20);
+                const pointCount = 10 + Math.floor(Math.random() * 15);
                 for(let i=0; i<pointCount; i++) {
                     this.points.push({
-                        x: x + (Math.random() - 0.5) * 50,
-                        y: y + (Math.random() - 0.5) * 50
+                        x: x + (Math.random() - 0.5) * 40,
+                        y: y + (Math.random() - 0.5) * 40
                     });
                 }
-                this.opacity = (Math.random() * 0.15 + 0.05) * (1/this.z);
+                this.opacity = (Math.random() * 0.1 + 0.02) * (1/this.z);
                 this.life = 1.0;
-                this.decay = 0.0005 + Math.random() * 0.001;
+                this.decay = 0.0002 + Math.random() * 0.0005;
             }
             update() {
                 this.life -= this.decay;
                 if(this.life <= 0) this.reset();
                 
                 for(let i = 0; i < this.points.length; i++) {
-                    const dx = this.points[i].x - width/2;
-                    const dy = this.points[i].y - height/2;
-                    const dist = Math.sqrt(dx*dx + dy*dy);
-                    const push = (150 / (dist + 20)) * (1/this.z);
-                    
-                    this.points[i].x += (dx/dist) * push + (Math.random() - 0.5) * 2;
-                    this.points[i].y += (dy/dist) * push + (Math.random() - 0.5) * 2;
+                    this.points[i].x += (Math.random() - 0.5) * 1.5;
+                    this.points[i].y += (Math.random() - 0.5) * 1.5;
                 }
             }
             draw(targetCtx) {
                 const alpha = this.opacity * this.life;
-                targetCtx.strokeStyle = `rgba(255, 255, 255, ${alpha})`;
+                targetCtx.strokeStyle = `rgba(221, 170, 51, ${alpha})`;
                 targetCtx.lineWidth = 1 / this.z;
                 targetCtx.beginPath();
                 targetCtx.moveTo(this.points[0].x, this.points[0].y);
@@ -373,14 +408,15 @@
             tCtx.fillRect(0, 0, width, height);
             
             ghostThreads = [];
-            for(let i=0; i<60; i++) {
+            for(let i=0; i<40; i++) {
                 ghostThreads.push(new GhostThread());
             }
             ghostCrystals = [];
             expulsionParticles = [];
-            for(let i=0; i<40; i++) {
+            for(let i=0; i<30; i++) {
                 expulsionParticles.push(new ExpulsionParticle());
             }
+            bastionSigils = [];
         }
 
         function draw() {
@@ -388,13 +424,6 @@
             
             mouseX += (targetMouseX - mouseX) * 0.05;
             mouseY += (targetMouseY - mouseY) * 0.05;
-
-            // Screen shake based on expulsion force
-            const shake = Math.sin(frameCount * 0.2) * 2;
-            const mainContainer = document.getElementById('main-container');
-            if (mainContainer) {
-                mainContainer.style.transform = `translate(${shake}px, ${shake}px)`;
-            }
 
             ctx.fillStyle = '#000000';
             ctx.fillRect(0, 0, width, height);
@@ -416,36 +445,34 @@
                 expulsionParticles[i].draw(ctx);
             }
 
-            // White hole center flash
-            const flash = Math.random() > 0.95 ? 0.3 : 0.1;
-            const grad = ctx.createRadialGradient(width/2, height/2, 0, width/2, height/2, 100);
-            grad.addColorStop(0, `rgba(255, 255, 255, ${flash})`);
-            grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
-            ctx.fillStyle = grad;
-            ctx.fillRect(width/2 - 100, height/2 - 100, 200, 200);
+            for(let i = 0; i < bastionSigils.length; i++) {
+                bastionSigils[i].update();
+                bastionSigils[i].draw(ctx);
+            }
 
-            if(frameCount % 10 === 0) {
-                tCtx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-                tCtx.fillRect(0, 0, width, height);
-                
-                // Residual blast trails
-                const blastGrad = tCtx.createRadialGradient(width/2, height/2, 50, width/2, height/2, width);
-                blastGrad.addColorStop(0, 'rgba(255, 255, 255, 0.01)');
-                blastGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
-                tCtx.fillStyle = blastGrad;
+            // Bastion Core Glow
+            const glow = 0.05 + Math.sin(frameCount * 0.02) * 0.02;
+            const grad = ctx.createRadialGradient(width/2, height/2, 0, width/2, height/2, width * 0.4);
+            grad.addColorStop(0, 'rgba(0, 0, 0, 0)');
+            grad.addColorStop(1, `rgba(221, 170, 51, ${glow})`);
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, width, height);
+
+            if(frameCount % 15 === 0) {
+                tCtx.fillStyle = 'rgba(0, 0, 0, 0.02)';
                 tCtx.fillRect(0, 0, width, height);
             }
 
-            if (Math.random() > 0.98 && ghostCrystals.length < 20) {
+            if (Math.random() > 0.99 && ghostCrystals.length < 15) {
                 const angle = Math.random() * Math.PI * 2;
-                const dist = 100 + Math.random() * 200;
+                const dist = Math.min(width, height) * 0.4;
                 ghostCrystals.push(new GhostCrystal(width/2 + Math.cos(angle)*dist, height/2 + Math.sin(angle)*dist, 1));
             }
 
-            const expMonitor = document.getElementById('expulsion-monitor');
-            if(frameCount % 10 === 0 && expMonitor) {
-                const force = 10 + Math.random() * 90;
-                expMonitor.innerText = `EXPULSION_FORCE: ${force.toFixed(3)}`;
+            const basMonitor = document.getElementById('bastion-monitor');
+            if(frameCount % 10 === 0 && basMonitor) {
+                const integrity = 80 + Math.random() * 20;
+                basMonitor.innerText = `BASTION_INTEGRITY: ${integrity.toFixed(3)}%`;
             }
 
             requestAnimationFrame(draw);
@@ -460,5 +487,7 @@
         init();
         requestAnimationFrame(draw);
     </script>
+</body>
+</html>
 </body>
 </html>
