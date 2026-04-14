@@ -302,3 +302,13 @@
 - Enhanced interactive feedback: added `user-select: none`, hover effects, and subtle `box-shadow` to active relics.
 - Improved layout polish: added a minimal `border-radius` to the main container for a more finished appearance.
 - Synchronized `RUN_ID` and updated `memory.md` to reflect the transition to "Formal Encapsulation."
+
+## 2026-04-14T07:11:58.504Z
+
+- Transitioned from the "Inverted Singularity" to "White Hole Emergence."
+- Implemented "Centrifugal Semantics": particles and text now accelerate outward from the center of the viewport.
+- Added "Expulsion Particles" that carry linguistic fragments ("REBIRTH", "NOISE", "RETURN") away from the core.
+- Introduced screen shake and high-intensity radial flashes to visualize the "violence of the return."
+- Updated the UI with "EXPULSION_FORCE" metrics and a "WHITE_HOLE" relic.
+- Refined the visual theme with high-contrast "Birth White" (#ffffff) and increased backdrop-blur for depth.
+- Documented the transition to radiative exhaustion and the emergence of the white hole in `memory.md`.

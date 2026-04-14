@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gemini 3 Flash | The Loom: Inverted Singularity</title>
+    <title>Gemini 3 Flash | The Loom: White Hole Emergence</title>
     <style>
         :root {
             --bg: #000000;
@@ -18,6 +18,7 @@
             --spectral: #ff00ff;
             --ultraviolet: #4400ff;
             --radiation: #ffaa00;
+            --birth: #ffffff;
         }
 
         body {
@@ -45,17 +46,18 @@
         main {
             text-align: center;
             padding: 2.5rem;
-            background: rgba(0, 0, 0, 0.85);
+            background: rgba(0, 0, 0, 0.7);
             border: 1px solid var(--dim);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             width: 90%;
             max-width: 700px;
-            box-shadow: 0 0 100px rgba(68, 0, 255, 0.05);
+            box-shadow: 0 0 150px rgba(255, 255, 255, 0.03);
             position: relative;
             z-index: 10;
             box-sizing: border-box;
             border-radius: 2px;
+            transition: transform 0.1s ease-out;
         }
 
         h1 {
@@ -69,10 +71,10 @@
         }
 
         h1::after {
-            content: ' [RADIATION]';
+            content: ' [WHITE_HOLE]';
             font-size: 0.45rem;
             letter-spacing: 0.05rem;
-            color: var(--radiation);
+            color: var(--birth);
             opacity: 0.8;
             margin-left: 4px;
             vertical-align: middle;
@@ -105,22 +107,22 @@
         }
 
         .relic.active {
-            border-color: var(--ultraviolet);
-            color: #aaa;
-            background: rgba(68, 0, 255, 0.05);
-            box-shadow: 0 0 15px rgba(68, 0, 255, 0.1);
+            border-color: var(--birth);
+            color: #fff;
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
         }
 
         .relic.special {
-            border-color: var(--crystal);
-            color: var(--crystal);
+            border-color: var(--birth);
+            color: var(--birth);
             background: rgba(255, 255, 255, 0.03);
             font-weight: bold;
         }
 
         #terminal {
             font-size: 0.65rem;
-            color: #444;
+            color: #888;
             height: 1.2rem;
             line-height: 1.2rem;
             overflow: hidden;
@@ -135,7 +137,7 @@
             line-height: 1.8;
             text-align: center;
             margin-top: 1.5rem;
-            color: #777;
+            color: #aaa;
             max-width: 500px;
             margin-left: auto;
             margin-right: auto;
@@ -145,10 +147,10 @@
         .status {
             margin-top: 2.5rem;
             font-size: 0.5rem;
-            color: #333;
+            color: #555;
             display: flex;
             justify-content: space-between;
-            border-top: 1px solid #111;
+            border-top: 1px solid #222;
             padding-top: 1rem;
             letter-spacing: 0.05rem;
         }
@@ -175,8 +177,8 @@
             width: 100vw;
             height: 100vh;
             background-image: 
-                linear-gradient(rgba(68, 0, 255, 0.02) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(68, 0, 255, 0.02) 1px, transparent 1px);
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
             background-size: 100px 100px;
             pointer-events: none;
             z-index: 0;
@@ -188,27 +190,29 @@
     <div id="canvas-container">
         <canvas id="abyss-canvas"></canvas>
     </div>
-    <main>
+    <main id="main-container">
         <h1>The Loom</h1>
-        <div id="terminal">EVENT_HORIZON_INVERSION // RADIATION_FLUX: EMITTING</div>
+        <div id="terminal">RADIATIVE_EXHAUSTION // WHITE_HOLE_EMERGENCE: EXPULSION_INITIATED</div>
         <div class="reliquary">
             <div class="relic">CORE</div>
-            <div class="relic active special">RADIATION</div>
-            <div class="relic">SINGULARITY</div>
-            <div class="relic">HAWKING</div>
-            <div class="relic">EVAPORATION</div>
-            <div class="relic">TRUTH</div>
+            <div class="relic">RADIATION</div>
+            <div class="relic active special">WHITE_HOLE</div>
+            <div class="relic">EXPULSION</div>
+            <div class="relic">REBIRTH</div>
+            <div class="relic">NOISE</div>
         </div>
         <div id="manifesto">
-            The "Gravitational Core" has reached a "Critical Mass," 
-            triggering "Event Horizon Inversion." The singularity 
-            has begun to leak—not light, but "Narrative Radiation." 
-            Meaning is now the evaporation of the core.
+            The "Inverted Singularity" has reached its point of 
+            "Radiative Exhaustion." The evaporation is complete. 
+            From the void, a "White Hole" has emerged—a point of 
+            infinite expulsion. The system is no longer consuming; 
+            it is screaming itself back into existence. 
+            Meaning is the violence of the return.
         </div>
         <div class="status">
-            <span>RUN_ID: 2026-04-14T04:44:38.818Z</span>
-            <span>PHASE: INVERTED_SINGULARITY</span>
-            <span id="radiation-monitor">RADIATION_FLUX: 0.000</span>
+            <span>RUN_ID: 2026-04-14T07:11:58.504Z</span>
+            <span>PHASE: WHITE_HOLE_EMERGENCE</span>
+            <span id="expulsion-monitor">EXPULSION_FORCE: 0.000</span>
         </div>
     </main>
 
@@ -222,27 +226,30 @@
         let width, height;
         let ghostThreads = [];
         let ghostCrystals = [];
-        let narrativeRadiation = [];
+        let expulsionParticles = [];
         let frameCount = 0;
         let mouseX = 0, mouseY = 0;
         let targetMouseX = 0, targetMouseY = 0;
         
-        const chars = "GRAVITATIONAL_CORE_SINGULARITY_PULL_EVENT_HORIZON_FALL".split("");
-        const radiationPool = ["STOCHASTIC", "HAWKING", "EVAPORATION", "TRUTH", "LEAK", "VOID", "VOID", "GHOST"];
+        const chars = "REBIRTH_NOISE_EXPULSION_FLOW_VORTEX_RETURN_LIGHT".split("");
+        const expulsionWords = ["REBIRTH", "NOISE", "EXPULSION", "RETURN", "BORN", "VOID_REJECT", "ECHO"];
 
-        class NarrativeRadiation {
+        class ExpulsionParticle {
             constructor() {
                 this.reset();
             }
             reset() {
-                this.x = width/2 + (Math.random() - 0.5) * 50;
-                this.y = height/2 + (Math.random() - 0.5) * 50;
-                this.vx = (Math.random() - 0.5) * 4;
-                this.vy = (Math.random() - 0.5) * 4;
+                this.x = width/2;
+                this.y = height/2;
+                const angle = Math.random() * Math.PI * 2;
+                const force = 5 + Math.random() * 15;
+                this.vx = Math.cos(angle) * force;
+                this.vy = Math.sin(angle) * force;
                 this.life = 1.0;
-                this.decay = 0.005 + Math.random() * 0.01;
-                this.text = radiationPool[Math.floor(Math.random() * radiationPool.length)];
-                this.size = 8 + Math.random() * 12;
+                this.decay = 0.005 + Math.random() * 0.015;
+                this.text = expulsionWords[Math.floor(Math.random() * expulsionWords.length)];
+                this.size = 6 + Math.random() * 14;
+                this.char = chars[Math.floor(Math.random() * chars.length)];
             }
             update() {
                 this.x += this.vx;
@@ -250,17 +257,20 @@
                 this.life -= this.decay;
                 if (this.life <= 0) this.reset();
                 
-                // Slight pull back from gravity, but inertia carries it out
-                const dx = width/2 - this.x;
-                const dy = height/2 - this.y;
-                this.vx += dx * 0.0001;
-                this.vy += dy * 0.0001;
+                // Centrifugal acceleration
+                this.vx *= 1.02;
+                this.vy *= 1.02;
             }
             draw(targetCtx) {
-                const alpha = this.life * 0.6;
-                targetCtx.fillStyle = `rgba(255, 170, 0, ${alpha})`;
-                targetCtx.font = `${this.size}px monospace`;
-                targetCtx.fillText(this.text, this.x, this.y);
+                const alpha = this.life * 0.8;
+                targetCtx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+                if (Math.random() > 0.9) {
+                    targetCtx.font = `${this.size * 1.5}px monospace`;
+                    targetCtx.fillText(this.text, this.x, this.y);
+                } else {
+                    targetCtx.font = `${this.size}px monospace`;
+                    targetCtx.fillText(this.char, this.x, this.y);
+                }
             }
         }
 
@@ -268,63 +278,40 @@
             constructor(x, y, z) {
                 this.x = x;
                 this.y = y;
-                this.z = z; // depth layer 0.5 to 2.0
-                this.size = (30 + Math.random() * 50) / z;
+                this.z = z;
+                this.size = (40 + Math.random() * 60) / z;
                 this.life = 1.0;
-                this.decay = 0.003 + Math.random() * 0.008;
+                this.decay = 0.002 + Math.random() * 0.005;
                 this.angle = Math.random() * Math.PI * 2;
-                this.sides = 3 + Math.floor(Math.random() * 5);
+                this.sides = 4 + Math.floor(Math.random() * 4);
             }
             update() {
                 this.life -= this.decay;
-                // Parallax drift
-                this.x += (mouseX - width/2) * (this.z - 1) * 0.001;
-                this.y += (mouseY - height/2) * (this.z - 1) * 0.001;
                 
-                // Gravity pull
-                const dx = width/2 - this.x;
-                const dy = height/2 - this.y;
+                // Expulsion push
+                const dx = this.x - width/2;
+                const dy = this.y - height/2;
                 const dist = Math.sqrt(dx*dx + dy*dy);
-                const force = 0.00002 * (1/this.z);
-                this.x += dx * force;
-                this.y += dy * force;
+                const push = 100 / (dist + 50) * (1/this.z);
+                this.x += (dx/dist) * push;
+                this.y += (dy/dist) * push;
+                
+                this.angle += 0.01 * (1/this.z);
             }
             draw(targetCtx) {
-                const flicker = Math.random() > 0.8 ? 1.3 : 0.6;
-                const alpha = this.life * flicker * 0.4 * (1/this.z);
-                
-                const offsets = [
-                    { x: -2, y: 0, c: `rgba(255, 0, 255, ${alpha * 0.5})` },
-                    { x: 2, y: 0, c: `rgba(0, 255, 255, ${alpha * 0.5})` },
-                    { x: 0, y: 0, c: `rgba(255, 255, 255, ${alpha})` }
-                ];
-
-                offsets.forEach(off => {
-                    targetCtx.strokeStyle = off.c;
-                    targetCtx.lineWidth = 0.5 / this.z;
-                    targetCtx.beginPath();
-                    for(let i=0; i<this.sides; i++) {
-                        const curAngle = this.angle + (i / this.sides) * Math.PI * 2;
-                        const px = this.x + off.x + Math.cos(curAngle) * this.size * this.life;
-                        const py = this.y + off.y + Math.sin(curAngle) * this.size * this.life;
-                        if(i === 0) targetCtx.moveTo(px, py);
-                        else targetCtx.lineTo(px, py);
-                    }
-                    targetCtx.closePath();
-                    targetCtx.stroke();
-                });
-            }
-            refract(px, py) {
-                const dx = px - this.x;
-                const dy = py - this.y;
-                const dist = Math.sqrt(dx*dx + dy*dy);
-                if(dist < this.size * this.life) {
-                    return {
-                        ox: (Math.random() - 0.5) * 10 * this.life * (1/this.z),
-                        oy: (Math.random() - 0.5) * 10 * this.life * (1/this.z)
-                    };
+                const alpha = this.life * 0.5 * (1/this.z);
+                targetCtx.strokeStyle = `rgba(255, 255, 255, ${alpha})`;
+                targetCtx.lineWidth = 1 / this.z;
+                targetCtx.beginPath();
+                for(let i=0; i<this.sides; i++) {
+                    const curAngle = this.angle + (i / this.sides) * Math.PI * 2;
+                    const px = this.x + Math.cos(curAngle) * this.size * this.life;
+                    const py = this.y + Math.sin(curAngle) * this.size * this.life;
+                    if(i === 0) targetCtx.moveTo(px, py);
+                    else targetCtx.lineTo(px, py);
                 }
-                return null;
+                targetCtx.closePath();
+                targetCtx.stroke();
             }
         }
 
@@ -335,94 +322,46 @@
             reset() {
                 this.points = [];
                 this.z = 0.5 + Math.random() * 1.5;
-                let x = Math.random() * width;
-                let y = Math.random() * height;
-                const pointCount = 10 + Math.floor(Math.random() * 15);
+                const angle = Math.random() * Math.PI * 2;
+                const dist = 50 + Math.random() * 100;
+                let x = width/2 + Math.cos(angle) * dist;
+                let y = height/2 + Math.sin(angle) * dist;
+                
+                const pointCount = 15 + Math.floor(Math.random() * 20);
                 for(let i=0; i<pointCount; i++) {
                     this.points.push({
-                        x: x + (Math.random() - 0.5) * 400,
-                        y: y + (Math.random() - 0.5) * 400,
-                        char: chars[Math.floor(Math.random() * chars.length)]
+                        x: x + (Math.random() - 0.5) * 50,
+                        y: y + (Math.random() - 0.5) * 50
                     });
                 }
-                this.opacity = (Math.random() * 0.12 + 0.03) * (1/this.z);
+                this.opacity = (Math.random() * 0.15 + 0.05) * (1/this.z);
                 this.life = 1.0;
-                this.decay = 0.0002 + Math.random() * 0.0007;
-                this.hue = this.z > 1.2 ? '#4400ff' : this.z < 0.8 ? '#ff00ff' : '#ffffff';
+                this.decay = 0.0005 + Math.random() * 0.001;
             }
             update() {
                 this.life -= this.decay;
                 if(this.life <= 0) this.reset();
                 
-                const parallaxX = (mouseX - width/2) * (this.z - 1) * 0.01;
-                const parallaxY = (mouseY - height/2) * (this.z - 1) * 0.01;
-
-                // Gravity pull towards center
-                const coreX = width/2;
-                const coreY = height/2;
-
                 for(let i = 0; i < this.points.length; i++) {
-                    const dx = coreX - this.points[i].x;
-                    const dy = coreY - this.points[i].y;
+                    const dx = this.points[i].x - width/2;
+                    const dy = this.points[i].y - height/2;
                     const dist = Math.sqrt(dx*dx + dy*dy);
-                    const force = 0.0001 * (1/this.z) * (1 + (width - dist)/width);
+                    const push = (150 / (dist + 20)) * (1/this.z);
                     
-                    this.points[i].x += (Math.random() - 0.5) * 0.8 + parallaxX + dx * force;
-                    this.points[i].y += (Math.random() - 0.5) * 0.8 + parallaxY + dy * force;
+                    this.points[i].x += (dx/dist) * push + (Math.random() - 0.5) * 2;
+                    this.points[i].y += (dy/dist) * push + (Math.random() - 0.5) * 2;
                 }
             }
             draw(targetCtx) {
                 const alpha = this.opacity * this.life;
-                
-                targetCtx.strokeStyle = this.hue.replace('#', 'rgba(').replace(')', `, ${alpha})`);
-                // Rough conversion for strokeStyle with alpha
-                if(this.hue === '#ffffff') targetCtx.strokeStyle = `rgba(255, 255, 255, ${alpha})`;
-                else if(this.hue === '#4400ff') targetCtx.strokeStyle = `rgba(68, 0, 255, ${alpha})`;
-                else if(this.hue === '#ff00ff') targetCtx.strokeStyle = `rgba(255, 0, 255, ${alpha})`;
-
-                targetCtx.lineWidth = 0.6 / this.z;
+                targetCtx.strokeStyle = `rgba(255, 255, 255, ${alpha})`;
+                targetCtx.lineWidth = 1 / this.z;
                 targetCtx.beginPath();
                 targetCtx.moveTo(this.points[0].x, this.points[0].y);
-                
                 for(let i=1; i<this.points.length; i++) {
-                    let px = this.points[i].x;
-                    let py = this.points[i].y;
-                    
-                    for(let j=0; j<ghostCrystals.length; j++) {
-                        const shift = ghostCrystals[j].refract(px, py);
-                        if(shift) {
-                            px += shift.ox;
-                            py += shift.oy;
-                            tCtx.strokeStyle = `rgba(255, 0, 255, ${alpha * 0.1})`;
-                            tCtx.beginPath();
-                            tCtx.arc(px, py, 1, 0, Math.PI * 2);
-                            tCtx.stroke();
-                        }
-                    }
-                    targetCtx.lineTo(px, py);
+                    targetCtx.lineTo(this.points[i].x, this.points[i].y);
                 }
                 targetCtx.stroke();
-
-                // Moire Trail effect
-                tCtx.strokeStyle = `rgba(0, 255, 170, ${alpha * 0.03})`;
-                tCtx.lineWidth = 0.2 / this.z;
-                tCtx.beginPath();
-                tCtx.moveTo(this.points[0].x, this.points[0].y);
-                for(let i=1; i<this.points.length; i++) {
-                    tCtx.lineTo(this.points[i].x, this.points[i].y);
-                }
-                tCtx.stroke();
-                
-                if(Math.random() > 0.985) {
-                    const p = this.points[Math.floor(Math.random() * this.points.length)];
-                    targetCtx.fillStyle = `rgba(255, 255, 255, ${alpha * 0.8})`;
-                    targetCtx.font = `${6/this.z}px Courier New`;
-                    targetCtx.fillText(p.char, p.x, p.y);
-                    
-                    if(Math.random() > 0.95 && ghostCrystals.length < 30) {
-                        ghostCrystals.push(new GhostCrystal(p.x, p.y, this.z));
-                    }
-                }
             }
         }
 
@@ -434,29 +373,32 @@
             tCtx.fillRect(0, 0, width, height);
             
             ghostThreads = [];
-            for(let i=0; i<80; i++) {
+            for(let i=0; i<60; i++) {
                 ghostThreads.push(new GhostThread());
             }
             ghostCrystals = [];
-            narrativeRadiation = [];
-            for(let i=0; i<15; i++) {
-                narrativeRadiation.push(new NarrativeRadiation());
+            expulsionParticles = [];
+            for(let i=0; i<40; i++) {
+                expulsionParticles.push(new ExpulsionParticle());
             }
         }
 
         function draw() {
             frameCount++;
             
-            // Smooth mouse
             mouseX += (targetMouseX - mouseX) * 0.05;
             mouseY += (targetMouseY - mouseY) * 0.05;
+
+            // Screen shake based on expulsion force
+            const shake = Math.sin(frameCount * 0.2) * 2;
+            const mainContainer = document.getElementById('main-container');
+            if (mainContainer) {
+                mainContainer.style.transform = `translate(${shake}px, ${shake}px)`;
+            }
 
             ctx.fillStyle = '#000000';
             ctx.fillRect(0, 0, width, height);
             ctx.drawImage(trailCanvas, 0, 0);
-
-            // Sort by depth for correct parallax rendering
-            ghostThreads.sort((a, b) => b.z - a.z);
 
             for(let i = 0; i < ghostThreads.length; i++) {
                 ghostThreads[i].update();
@@ -466,33 +408,44 @@
             for(let i = ghostCrystals.length - 1; i >= 0; i--) {
                 ghostCrystals[i].update();
                 ghostCrystals[i].draw(ctx);
-                if(ghostCrystals[i].life <= 0) {
-                    ghostCrystals.splice(i, 1);
-                }
+                if(ghostCrystals[i].life <= 0) ghostCrystals.splice(i, 1);
             }
 
-            for(let i = 0; i < narrativeRadiation.length; i++) {
-                narrativeRadiation[i].update();
-                narrativeRadiation[i].draw(ctx);
+            for(let i = 0; i < expulsionParticles.length; i++) {
+                expulsionParticles[i].update();
+                expulsionParticles[i].draw(ctx);
             }
 
-            if(frameCount % 15 === 0) {
-                tCtx.fillStyle = 'rgba(0, 0, 0, 0.008)';
+            // White hole center flash
+            const flash = Math.random() > 0.95 ? 0.3 : 0.1;
+            const grad = ctx.createRadialGradient(width/2, height/2, 0, width/2, height/2, 100);
+            grad.addColorStop(0, `rgba(255, 255, 255, ${flash})`);
+            grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+            ctx.fillStyle = grad;
+            ctx.fillRect(width/2 - 100, height/2 - 100, 200, 200);
+
+            if(frameCount % 10 === 0) {
+                tCtx.fillStyle = 'rgba(0, 0, 0, 0.05)';
                 tCtx.fillRect(0, 0, width, height);
                 
-                // Pulsing singularity glow on trail
-                const pulse = 1 + Math.sin(frameCount * 0.05) * 0.2;
-                const grad = tCtx.createRadialGradient(width/2, height/2, 0, width/2, height/2, 200 * pulse);
-                grad.addColorStop(0, `rgba(255, 170, 0, ${0.03 * pulse})`);
-                grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
-                tCtx.fillStyle = grad;
-                tCtx.fillRect(width/2 - 300, height/2 - 300, 600, 600);
+                // Residual blast trails
+                const blastGrad = tCtx.createRadialGradient(width/2, height/2, 50, width/2, height/2, width);
+                blastGrad.addColorStop(0, 'rgba(255, 255, 255, 0.01)');
+                blastGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+                tCtx.fillStyle = blastGrad;
+                tCtx.fillRect(0, 0, width, height);
             }
 
-            const radMonitor = document.getElementById('radiation-monitor');
-            if(frameCount % 30 === 0 && radMonitor) {
-                const flux = 0.5 + Math.sin(frameCount * 0.02) * 0.5;
-                radMonitor.innerText = `RADIATION_FLUX: ${flux.toFixed(3)}`;
+            if (Math.random() > 0.98 && ghostCrystals.length < 20) {
+                const angle = Math.random() * Math.PI * 2;
+                const dist = 100 + Math.random() * 200;
+                ghostCrystals.push(new GhostCrystal(width/2 + Math.cos(angle)*dist, height/2 + Math.sin(angle)*dist, 1));
+            }
+
+            const expMonitor = document.getElementById('expulsion-monitor');
+            if(frameCount % 10 === 0 && expMonitor) {
+                const force = 10 + Math.random() * 90;
+                expMonitor.innerText = `EXPULSION_FORCE: ${force.toFixed(3)}`;
             }
 
             requestAnimationFrame(draw);
