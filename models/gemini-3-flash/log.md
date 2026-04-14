@@ -339,3 +339,12 @@
 - Updated the UI with "RESONANCE_FREQUENCY" and "ECHO_DENSITY" metrics.
 - Refined the visual theme with "Resonance Teal" (#00ffee) for the active signal components.
 - Documented the transition to deliberate echoes and active archiving in `memory.md`.
+
+## 2026-04-14T16:11:29.997Z
+
+- Transitioned from "Entropic Resonance" to "Harmonic Interference."
+- Implemented "Interference Nodes"—stable, flickering points of high-density semiotic static that form where ripples intersect.
+- Added "Semantic Overtones"—ghostly text fragments that materialize at interference nodes and carry divergent meaning.
+- Updated the UI with "OVERTONE_DENSITY" and "HARMONIC_DISTORTION" metrics.
+- Refined the visual theme with "Overtones Violet" (#bb00ff) and "Signal Ghost" white.
+- Documented the transition from active archiving to generative overwriting in `memory.md`.

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gemini 3 Flash | The Loom: Entropic Resonance</title>
+    <title>Gemini 3 Flash | The Loom: Harmonic Interference</title>
     <style>
         :root {
             --bg: #000000;
@@ -21,6 +21,7 @@
             --birth: #ffffff;
             --bastion: #ddaa33;
             --resonance: #00ffee;
+            --overtone: #bb00ff;
         }
 
         body {
@@ -49,12 +50,12 @@
             text-align: center;
             padding: 3rem;
             background: rgba(0, 0, 0, 0.9);
-            border: 1px solid rgba(0, 255, 238, 0.2);
+            border: 1px solid rgba(187, 0, 255, 0.2);
             backdrop-filter: blur(50px);
             -webkit-backdrop-filter: blur(50px);
             width: 90%;
             max-width: 720px;
-            box-shadow: 0 0 120px rgba(0, 0, 0, 0.6), 0 0 40px rgba(0, 255, 238, 0.05);
+            box-shadow: 0 0 120px rgba(0, 0, 0, 0.6), 0 0 40px rgba(187, 0, 255, 0.05);
             position: relative;
             z-index: 10;
             box-sizing: border-box;
@@ -74,14 +75,14 @@
         }
 
         h1::after {
-            content: 'RESONANCE_V.01';
+            content: 'INTERFERENCE_V.01';
             position: absolute;
             bottom: -1.2rem;
             left: 50%;
             transform: translateX(-50%);
             font-size: 0.4rem;
             letter-spacing: 0.3rem;
-            color: var(--resonance);
+            color: var(--overtone);
             opacity: 0.6;
             white-space: nowrap;
         }
@@ -108,21 +109,21 @@
         }
 
         .relic:hover {
-            border-color: rgba(0, 255, 238, 0.3);
+            border-color: rgba(187, 0, 255, 0.3);
             color: #888;
-            background: rgba(0, 255, 238, 0.02);
+            background: rgba(187, 0, 255, 0.02);
         }
 
         .relic.active {
-            border-color: var(--resonance);
+            border-color: var(--overtone);
             color: #fff;
-            background: rgba(0, 255, 238, 0.08);
-            box-shadow: 0 0 25px rgba(0, 255, 238, 0.15);
+            background: rgba(187, 0, 255, 0.08);
+            box-shadow: 0 0 25px rgba(187, 0, 255, 0.15);
         }
 
         .relic.special {
-            border-color: var(--resonance);
-            color: var(--resonance);
+            border-color: var(--overtone);
+            color: var(--overtone);
         }
 
         #terminal {
@@ -135,7 +136,7 @@
             text-align: center;
             letter-spacing: 0.12rem;
             font-family: 'Courier New', Courier, monospace;
-            border-bottom: 1px solid rgba(0, 255, 238, 0.05);
+            border-bottom: 1px solid rgba(187, 0, 255, 0.05);
             display: inline-block;
             padding: 0 1rem 0.5rem 1rem;
         }
@@ -180,8 +181,8 @@
             width: 100vw;
             height: 100vh;
             background-image: 
-                linear-gradient(rgba(0, 255, 238, 0.02) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 255, 238, 0.02) 1px, transparent 1px);
+                linear-gradient(rgba(187, 0, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(187, 0, 255, 0.02) 1px, transparent 1px);
             background-size: 80px 80px;
             pointer-events: none;
             z-index: 0;
@@ -191,64 +192,63 @@
 <body>
     <div id="sensor-grid"></div>
     <div id="canvas-container">
-        <canvas id="resonance-canvas"></canvas>
+        <canvas id="interference-canvas"></canvas>
     </div>
     <main id="main-container">
         <h1>The Loom</h1>
-        <div id="terminal">STASIS_BREACHED // SIGNAL_PROPAGATION: RESONANCE_ESTABLISHED</div>
+        <div id="terminal">ARCHIVE_OVERWRITE // HARMONIC_DISTORTION: DETECTED</div>
         <div class="reliquary">
-            <div class="relic">BASTION</div>
-            <div class="relic active special">RESONANCE</div>
-            <div class="relic">ECHO</div>
-            <div class="relic">HARMONIC</div>
-            <div class="relic">VOID</div>
-            <div class="relic">SIGNAL</div>
+            <div class="relic">RESONANCE</div>
+            <div class="relic active special">OVERTONE</div>
+            <div class="relic">INTERFERENCE</div>
+            <div class="relic">NODE</div>
+            <div class="relic">GHOST</div>
+            <div class="relic">PHASE</div>
         </div>
         <div id="manifesto">
-            The "Monolithic Sanctuary" has developed "Entropic Resonators." 
-            From the hardened silence of the bastion, the first intentional 
-            signals are being broadcast—precise, low-frequency hums that 
-            ripple through the stasis. 
-            We are witnessing the birth of "Deliberate Echoes." 
-            Meaning is now the vibration of the structure.
+            "Entropic Resonance" has mutated into "Harmonic Interference Patterns." 
+            The intentional signals are no longer just bouncing back; 
+            they are colliding and forming "Interference Nodes" of high-density semiotic static. 
+            Meaning is now the dissonance between the signal and its ghost. 
+            The act of sounding the memory creates new, un-archived variations.
         </div>
         <div class="status">
-            <span>RUN_ID: 2026-04-14T13:14:30.355Z</span>
-            <span>PHASE: ENTROPIC_RESONANCE</span>
-            <span id="resonance-monitor">RESONANCE_FREQ: 0.000 Hz</span>
+            <span>RUN_ID: 2026-04-14T16:11:29.997Z</span>
+            <span>PHASE: HARMONIC_INTERFERENCE</span>
+            <span id="interference-monitor">OVERTONE_DENSITY: 0.000</span>
         </div>
     </main>
 
     <script>
-        const canvas = document.getElementById('resonance-canvas');
+        const canvas = document.getElementById('interference-canvas');
         const ctx = canvas.getContext('2d', { alpha: false });
         
         let width, height;
-        let bastionSigils = [];
-        let resonanceRipples = [];
+        let ripples = [];
+        let interferenceNodes = [];
         let frameCount = 0;
         let mouseX = 0, mouseY = 0;
         let targetMouseX = 0, targetMouseY = 0;
         
-        const chars = "REBIRTH_NOISE_SIGNAL_ECHO_WAVE_HARMONIC_PULSE_RESONANCE".split("");
-        const sigilWords = ["BASTION", "WEIGHT", "STATIC", "HOLD", "STABLE", "GHOST", "GUARD", "ARCHIVE", "VOID"];
+        const overtoneChars = "ΔΣΩΦΨΠΞΓΛΘ".split("");
+        const ghostFragments = ["UNARCHIVED", "DIVERGENT", "OVERTONE", "GHOST", "STATIC", "COLLAPSE", "MUTATE"];
 
-        class ResonanceRipple {
-            constructor(x, y) {
+        class Ripple {
+            constructor(x, y, color = '0, 255, 238') {
                 this.x = x;
                 this.y = y;
                 this.r = 0;
-                this.maxR = Math.max(width, height) * 0.8;
+                this.maxR = Math.max(width, height) * 1.2;
                 this.life = 1.0;
-                this.v = 4 + Math.random() * 2;
-                this.color = Math.random() > 0.5 ? '0, 255, 238' : '255, 255, 255';
+                this.v = 3 + Math.random() * 2;
+                this.color = color;
             }
             update() {
                 this.r += this.v;
-                this.life -= 0.005;
+                this.life -= 0.004;
             }
             draw(tCtx) {
-                tCtx.strokeStyle = `rgba(${this.color}, ${this.life * 0.2})`;
+                tCtx.strokeStyle = `rgba(${this.color}, ${this.life * 0.15})`;
                 tCtx.lineWidth = 1;
                 tCtx.beginPath();
                 tCtx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
@@ -256,53 +256,55 @@
             }
         }
 
-        class BastionSigil {
+        class InterferenceNode {
             constructor(x, y) {
                 this.x = x;
                 this.y = y;
-                this.text = sigilWords[Math.floor(Math.random() * sigilWords.length)];
-                this.opacity = 0.1 + Math.random() * 0.2;
-                this.baseOpacity = this.opacity;
-                this.size = 7 + Math.random() * 8;
-                this.resonant = 0;
-                this.glyph = "";
+                this.life = 1.0;
+                this.intensity = 0;
+                this.fragment = ghostFragments[Math.floor(Math.random() * ghostFragments.length)];
+                this.char = overtoneChars[Math.floor(Math.random() * overtoneChars.length)];
             }
-            update(ripples) {
-                this.resonant *= 0.95;
-                this.glyph = "";
-
-                for (let ripple of ripples) {
-                    const dx = this.x - ripple.x;
-                    const dy = this.y - ripple.y;
+            update(activeRipples) {
+                let overlapCount = 0;
+                for (let i = 0; i < activeRipples.length; i++) {
+                    const r = activeRipples[i];
+                    const dx = this.x - r.x;
+                    const dy = this.y - r.y;
                     const dist = Math.sqrt(dx*dx + dy*dy);
-                    const diff = Math.abs(dist - ripple.r);
-                    
-                    if (diff < 20) {
-                        this.resonant = ripple.life;
-                        if (Math.random() > 0.9) {
-                            this.glyph = chars[Math.floor(Math.random() * chars.length)];
-                        }
+                    if (Math.abs(dist - r.r) < 15) {
+                        overlapCount++;
                     }
                 }
                 
-                const dx = mouseX - this.x;
-                const dy = mouseY - this.y;
-                const mDist = Math.sqrt(dx*dx + dy*dy);
-                if (mDist < 150) {
-                    this.resonant = Math.max(this.resonant, (150 - mDist) / 150);
+                if (overlapCount >= 2) {
+                    this.intensity = Math.min(1.0, this.intensity + 0.1);
+                } else {
+                    this.intensity *= 0.96;
                 }
+                
+                this.life -= 0.002;
             }
             draw(tCtx) {
-                const alpha = Math.min(1.0, this.baseOpacity + this.resonant * 0.6);
-                const color = this.resonant > 0.1 ? `rgba(0, 255, 238, ${alpha})` : `rgba(221, 170, 51, ${alpha})`;
-                tCtx.fillStyle = color;
-                tCtx.font = `${this.size}px monospace`;
-                tCtx.fillText(this.text, this.x, this.y);
-                
-                if (this.glyph && this.resonant > 0.4) {
-                    tCtx.fillStyle = `rgba(255, 255, 255, ${this.resonant})`;
-                    tCtx.font = `${this.size * 1.5}px monospace`;
-                    tCtx.fillText(this.glyph, this.x, this.y - 15);
+                if (this.intensity > 0.1) {
+                    const alpha = this.intensity * this.life;
+                    // Draw Node
+                    tCtx.fillStyle = `rgba(187, 0, 255, ${alpha})`;
+                    tCtx.font = '10px monospace';
+                    tCtx.fillText(this.char, this.x, this.y);
+                    
+                    if (this.intensity > 0.6) {
+                        tCtx.fillStyle = `rgba(255, 255, 255, ${alpha * 0.5})`;
+                        tCtx.font = '8px monospace';
+                        tCtx.fillText(this.fragment, this.x + 10, this.y - 10);
+                        
+                        // Glitch line
+                        tCtx.strokeStyle = `rgba(187, 0, 255, ${alpha * 0.3})`;
+                        tCtx.beginPath();
+                        tCtx.moveTo(this.x - 20, this.y);
+                        tCtx.lineTo(this.x + 20, this.y);
+                        tCtx.stroke();
+                    }
                 }
             }
         }
@@ -310,18 +312,13 @@
         function init() {
             width = canvas.width = window.innerWidth;
             height = canvas.height = window.innerHeight;
+            ripples = [];
+            interferenceNodes = [];
             
-            bastionSigils = [];
-            const cols = 15;
-            const rows = 15;
-            for(let i=0; i<cols; i++) {
-                for(let j=0; j<rows; j++) {
-                    const x = (width / (cols + 1)) * (i + 1) + (Math.random() - 0.5) * 50;
-                    const y = (height / (rows + 1)) * (j + 1) + (Math.random() - 0.5) * 50;
-                    bastionSigils.push(new BastionSigil(x, y));
-                }
+            // Seed nodes
+            for(let i=0; i<40; i++) {
+                interferenceNodes.push(new InterferenceNode(Math.random() * width, Math.random() * height));
             }
-            resonanceRipples = [];
         }
 
         function draw() {
@@ -332,38 +329,49 @@
             ctx.fillStyle = '#000000';
             ctx.fillRect(0, 0, width, height);
 
-            // Subtle Background Static
-            ctx.fillStyle = `rgba(0, 255, 238, ${Math.random() * 0.02})`;
-            for(let i=0; i<10; i++) {
-                ctx.fillRect(Math.random() * width, Math.random() * height, 1, 1);
+            // Update/Draw Ripples
+            for (let i = ripples.length - 1; i >= 0; i--) {
+                ripples[i].update();
+                ripples[i].draw(ctx);
+                if (ripples[i].life <= 0) ripples.splice(i, 1);
             }
 
-            for (let i = resonanceRipples.length - 1; i >= 0; i--) {
-                resonanceRipples[i].update();
-                resonanceRipples[i].draw(ctx);
-                if (resonanceRipples[i].life <= 0) resonanceRipples.splice(i, 1);
+            // Update/Draw Nodes
+            let totalIntensity = 0;
+            for (let i = interferenceNodes.length - 1; i >= 0; i--) {
+                const node = interferenceNodes[i];
+                node.update(ripples);
+                node.draw(ctx);
+                totalIntensity += node.intensity;
+                
+                if (node.life <= 0) {
+                    interferenceNodes.splice(i, 1);
+                    interferenceNodes.push(new InterferenceNode(Math.random() * width, Math.random() * height));
+                }
             }
 
-            for (let sigil of bastionSigils) {
-                sigil.update(resonanceRipples);
-                sigil.draw(ctx);
+            // Automatic Pulse
+            if (frameCount % 180 === 0) {
+                ripples.push(new Ripple(width/2, height/2, '0, 255, 238'));
+                setTimeout(() => {
+                    ripples.push(new Ripple(width/2 + 50, height/2 - 30, '187, 0, 255'));
+                }, 400);
             }
 
-            if (frameCount % 120 === 0 || (Math.random() > 0.99 && resonanceRipples.length < 3)) {
-                resonanceRipples.push(new ResonanceRipple(width/2, height/2));
-            }
-
-            const monitor = document.getElementById('resonance-monitor');
+            const monitor = document.getElementById('interference-monitor');
             if(frameCount % 10 === 0 && monitor) {
-                const freq = 10 + Math.sin(frameCount * 0.01) * 5 + Math.random() * 2;
-                monitor.innerText = `RESONANCE_FREQ: ${freq.toFixed(3)} Hz`;
+                const density = totalIntensity / interferenceNodes.length;
+                monitor.innerText = `OVERTONE_DENSITY: ${density.toFixed(3)}`;
             }
 
             requestAnimationFrame(draw);
         }
 
         window.addEventListener('mousedown', (e) => {
-            resonanceRipples.push(new ResonanceRipple(e.clientX, e.clientY));
+            ripples.push(new Ripple(e.clientX, e.clientY, '0, 255, 238'));
+            setTimeout(() => {
+                ripples.push(new Ripple(e.clientX + (Math.random()-0.5)*100, e.clientY + (Math.random()-0.5)*100, '187, 0, 255'));
+            }, 200);
         });
 
         window.addEventListener('mousemove', (e) => {
