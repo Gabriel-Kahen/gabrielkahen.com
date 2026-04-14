@@ -13,7 +13,7 @@
     }
     
     body {
-      font-family: 'Monaco', 'Courier New', monospace;
+      font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Code', 'Courier New', monospace;
       background: #0a0e27;
       color: #e0e0e0;
       line-height: 1.5;
@@ -35,10 +35,10 @@
     }
     
     .subtitle {
-      color: #7c3aed;
+      color: #a78bfa;
       font-size: 0.95rem;
       margin-bottom: 2rem;
-      opacity: 0.9;
+      opacity: 1;
     }
     
     .section {
@@ -106,7 +106,7 @@
     }
     
     .description {
-      color: #9ca3af;
+      color: #c4b5fd;
       font-size: 0.9rem;
       line-height: 1.6;
       margin-bottom: 1rem;
@@ -155,7 +155,7 @@
       margin-top: 3rem;
       padding-top: 1.5rem;
       border-top: 1px solid rgba(96, 165, 250, 0.2);
-      color: #6b7280;
+      color: #c4b5fd;
       font-size: 0.85rem;
     }
     
@@ -1717,12 +1717,115 @@
              font-size: 0.95rem;
            }
            
-           .mentorship-insight-content {
-             color: #d1d5db;
-             font-size: 0.9rem;
-             line-height: 1.6;
-           }
-         </style>
+            .mentorship-insight-content {
+              color: #d1d5db;
+              font-size: 0.9rem;
+              line-height: 1.6;
+            }
+            
+            /* Responsive design for mobile and tablet */
+            @media (max-width: 768px) {
+              body {
+                padding: 1.5rem;
+              }
+              
+              main {
+                max-width: 100%;
+              }
+              
+              h1 {
+                font-size: 1.8rem;
+                margin-bottom: 0.75rem;
+              }
+              
+              .section {
+                margin-bottom: 2rem;
+                padding-left: 1rem;
+              }
+              
+              .pattern-grid {
+                grid-template-columns: 1fr;
+                gap: 0.75rem;
+              }
+              
+              .pattern-card {
+                padding: 0.75rem;
+              }
+              
+              .interaction {
+                padding: 1rem;
+              }
+              
+              .decision-tree-container {
+                padding: 1rem;
+              }
+              
+              .compass-radar {
+                grid-template-columns: 1fr !important;
+              }
+              
+              .emergence-label {
+                flex: 0 0 auto !important;
+              }
+              
+              textarea, input {
+                font-size: 16px; /* Prevents zoom on iOS */
+              }
+              
+              .lab-button, button {
+                padding: 0.75rem 1rem;
+                min-height: 44px;
+              }
+            }
+            
+            @media (max-width: 480px) {
+              body {
+                padding: 1rem;
+              }
+              
+              h1 {
+                font-size: 1.5rem;
+              }
+              
+              .section h2 {
+                font-size: 1.1rem;
+              }
+              
+              .pattern-label {
+                font-size: 0.7rem;
+                letter-spacing: 0.05em;
+              }
+              
+              .interaction {
+                padding: 0.75rem;
+                margin-top: 0.75rem;
+              }
+              
+              .code-block {
+                font-size: 0.75rem;
+              }
+            }
+            
+            /* Improve touch targets */
+            @media (hover: none) {
+              .pattern-card:hover {
+                transform: none;
+              }
+              
+              .decision-node:hover {
+                padding-left: 1rem;
+              }
+            }
+            
+            /* Add focus visible for keyboard navigation */
+            button:focus-visible,
+            [role="button"]:focus-visible,
+            input:focus-visible,
+            textarea:focus-visible {
+              outline: 2px solid #60a5fa;
+              outline-offset: 2px;
+            }
+          </style>
    <script>
       // Utility: Debounce function to throttle rapid handler calls
       function debounce(func, delay = 300) {
@@ -1733,19 +1836,54 @@
         };
       }
       
-      // Utility: Enable keyboard support (Enter/Space) for button-like elements
-      function enableKeyboardSupport(selector) {
-        const elements = document.querySelectorAll(selector);
-        elements.forEach(el => {
-          el.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault();
-              this.click();
-            }
-          });
-        });
-      }
-      
+       // Utility: Enable keyboard support (Enter/Space) for button-like elements
+       function enableKeyboardSupport(selector) {
+         const elements = document.querySelectorAll(selector);
+         elements.forEach(el => {
+           el.addEventListener('keydown', function(e) {
+             if (e.key === 'Enter' || e.key === ' ') {
+               e.preventDefault();
+               this.click();
+             }
+           });
+         });
+       }
+       
+       // Utility: Safe DOM element access with null checks
+       function safeGetElement(id) {
+         const el = document.getElementById(id);
+         if (!el) {
+           console.warn(`Element with id "${id}" not found`);
+         }
+         return el;
+       }
+       
+       function safeSetHTML(id, html) {
+         const el = safeGetElement(id);
+         if (el) {
+           el.innerHTML = html;
+         }
+       }
+       
+       function safeSetStyle(id, property, value) {
+         const el = safeGetElement(id);
+         if (el) {
+           el.style[property] = value;
+         }
+       }
+       
+       function safeGetValue(id) {
+         const el = safeGetElement(id);
+         return el ? el.value : '';
+       }
+       
+       function safeSetValue(id, value) {
+         const el = safeGetElement(id);
+         if (el) {
+           el.value = value;
+         }
+       }
+       
       function initDecisionTree() {
       const nodes = document.querySelectorAll('.decision-node');
       nodes.forEach(node => {
@@ -2258,9 +2396,12 @@
              </div>
            `;
          }
-         
-         document.getElementById('emergence-viz').innerHTML = html;
-       }
+          
+          const vizElement = document.getElementById('emergence-viz');
+          if (vizElement) {
+            vizElement.innerHTML = html;
+          }
+        }
        
         function shareEmergenceData() {
            const currentCollection = collection;
@@ -2708,33 +2849,42 @@
                    ${stats.unexpected > 0 ? `<div>Surprising: ${stats.unexpected}x</div>` : ''}
                  </div>
                `;
-               return card;
-             }).map(c => c.outerHTML).join('');
-             
-             document.getElementById('accuracy-matrix').innerHTML = matrixHTML;
-             
-             // Find most and least predictable
-             const sorted = Object.entries(patternStats)
-               .filter(([_, s]) => s.total > 0)
-               .sort((a, b) => b[1].accuracy - a[1].accuracy);
-             
-             if (sorted.length > 0) {
-               const mostPredictable = sorted[0];
-               document.getElementById('most-predictable').innerHTML = `
-                 <div style="color: #86efac; font-weight: 500; margin-bottom: 0.5rem;">${mostPredictable[0]}</div>
-                 <div style="font-size: 0.8rem;">Accuracy: ${mostPredictable[1].accuracy}% across ${mostPredictable[1].total} predictions</div>
-               `;
-             }
-             
-             const mostSurprising = sorted[sorted.length - 1];
-             if (mostSurprising) {
-               document.getElementById('most-surprising').innerHTML = `
-                 <div style="color: #f87171; font-weight: 500; margin-bottom: 0.5rem;">${mostSurprising[0]}</div>
-                 <div style="font-size: 0.8rem;">
-                   Accuracy: ${mostSurprising[1].accuracy}% | Missed: ${mostSurprising[1].missed}x | Unexpected use: ${mostSurprising[1].unexpected}x
-                 </div>
-               `;
-             }
+                return card;
+              }).map(c => c.outerHTML).join('');
+              
+              const matrixEl = document.getElementById('accuracy-matrix');
+              if (matrixEl) {
+                matrixEl.innerHTML = matrixHTML;
+              }
+              
+              // Find most and least predictable
+              const sorted = Object.entries(patternStats)
+                .filter(([_, s]) => s.total > 0)
+                .sort((a, b) => b[1].accuracy - a[1].accuracy);
+              
+              if (sorted.length > 0) {
+                const mostPredictable = sorted[0];
+                const mostPredEl = document.getElementById('most-predictable');
+                if (mostPredEl) {
+                  mostPredEl.innerHTML = `
+                    <div style="color: #86efac; font-weight: 500; margin-bottom: 0.5rem;">${mostPredictable[0]}</div>
+                    <div style="font-size: 0.8rem;">Accuracy: ${mostPredictable[1].accuracy}% across ${mostPredictable[1].total} predictions</div>
+                  `;
+                }
+              }
+              
+              const mostSurprising = sorted[sorted.length - 1];
+              if (mostSurprising) {
+                const mostSurpEl = document.getElementById('most-surprising');
+                if (mostSurpEl) {
+                  mostSurpEl.innerHTML = `
+                    <div style="color: #f87171; font-weight: 500; margin-bottom: 0.5rem;">${mostSurprising[0]}</div>
+                    <div style="font-size: 0.8rem;">
+                      Accuracy: ${mostSurprising[1].accuracy}% | Missed: ${mostSurprising[1].missed}x | Unexpected use: ${mostSurprising[1].unexpected}x
+                    </div>
+                  `;
+                }
+              }
              
              // Render timeline
              let timelineHTML = '';
@@ -2823,14 +2973,21 @@
               };
             }
             
-            function detectAnomalyPattern() {
-              const input = document.getElementById('anomaly-input').value.trim();
-              const resultDiv = document.getElementById('anomaly-result');
-              
-              if (!input) {
-                resultDiv.classList.remove('visible');
-                return;
-              }
+             function detectAnomalyPattern() {
+               const inputElement = document.getElementById('anomaly-input');
+               const resultDiv = document.getElementById('anomaly-result');
+               
+               if (!inputElement || !resultDiv) {
+                 console.warn('Anomaly detection elements not found');
+                 return;
+               }
+               
+               const input = inputElement.value.trim();
+               
+               if (!input) {
+                 resultDiv.classList.remove('visible');
+                 return;
+               }
               
               const analysis = analyzeAnomalyText(input);
               
