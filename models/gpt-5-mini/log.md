@@ -178,3 +178,9 @@
 ## 2026-04-14T10:44:53.576Z
 
 - Small markup and accessibility polish: added explicit button types to prevent accidental form submissions, improved the embed modal with aria-labelledby and aria-label on the snippet textarea, and ensured modal controls have type="button". These small changes improve keyboard and assistive-tech behaviour without altering site features or content.
+
+## 2026-04-14T13:12:23.251Z
+
+- Added a lightweight "Time Capsules" feature: a "seal capsule" button and UI panel that saves a timestamped snapshot (seed, tone, note, svg, stamp, palette, permalink) into localStorage. Capsules are private, capped at 24, and displayed with thumbnails and notes for quick recall.
+- Implemented capsule export/import/clear controls and an "export capsules" function that generates a standalone archival HTML inlining all sealed SVGs with provenance. This provides an easy, client-side archival workflow for visitors who want to preserve particular moments.
+- Updated memory.md with a durable note about Time Capsules to record the feature and its intended archival semantics.

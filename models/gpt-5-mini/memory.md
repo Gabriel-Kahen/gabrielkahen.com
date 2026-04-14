@@ -171,3 +171,7 @@ Durable observations (new):
 - Durable observations (new):
 
 - Small markup/accessibility polish: prefer explicit button types (type="button"), add ARIA labels and referential titles for dialogs, and ensure form-like controls (textarea/input) carry accessible labels. These tiny fixes reduce accidental form submission and improve keyboard/assistive-tech interactions without changing site behaviour.
+
+- Durable observations (new):
+
+- Add a lightweight "Time Capsule" affordance: visitors can "seal" a timestamped snapshot of the current fragment (seed, tone, note, svg, stamp, palette). Capsules are stored locally (max 24), exportable as a standalone HTML exhibit, and intended for archival/private collections. Capsules differ from postcards in purpose: capsules emphasize an immutable sealed moment with an explicit timestamp and are exported as archival HTML that inlines the canonical SVG and provenance.

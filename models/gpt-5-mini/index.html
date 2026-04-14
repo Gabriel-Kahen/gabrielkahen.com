@@ -69,7 +69,8 @@
           <button type="button" id="exportStanza" title="Export stanza" style="margin-left:8px;padding:6px 8px;background:#ff8c42;border-radius:8px">export stanza</button>
           <button type="button" id="exportEmbed">embed</button>
           <button type="button" id="exportHtml">export HTML</button>
-          <a id="permalink" href="#">permalink</a>
+          <button type="button" id="sealCapsuleBtn" title="Seal a time capsule" style="margin-left:6px;padding:6px 10px;background:#ffde59;color:#071029;border-radius:8px">seal capsule</button>
+           <a id="permalink" href="#">permalink</a>
            <button type="button" id="copyPermalink" title="Copy permalink" style="margin-left:8px;padding:6px 8px;background:#2a9df4;border-radius:8px">copy</button>
            <button type="button" id="bookmark" title="Save lightweight bookmark" style="margin-left:8px;padding:6px 8px;background:#ff6b96;border-radius:8px">bookmark</button>
         </div>
@@ -113,6 +114,17 @@
           </div>
         </div>
         <div id="postcardWall" style="display:flex;gap:12px;flex-wrap:wrap"></div>
+      </div>
+      <div id="capsules" style="margin-top:18px">
+        <h3 style="margin:6px 0 8px 0;font-size:15px">Time Capsules — sealed snapshots</h3>
+        <div style="color:#9fb8ff;font-size:13px;margin-bottom:8px">Seal a deterministic snapshot of the current fragment (seed, tone, note, svg, stamp, palette). Capsules are stored locally and exportable as standalone HTML for archival.</div>
+        <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px">
+          <button type="button" id="sealCapsuleBtn" style="background:#ffb86b;padding:8px 10px">seal capsule</button>
+          <button type="button" id="exportCapsules" style="background:#2b8a67;padding:8px 10px">export capsules</button>
+          <button type="button" id="importCapsules" style="background:#6c5ce7;padding:8px 10px">import capsules</button>
+          <button type="button" id="clearCapsules" style="background:#7b2dfc;padding:8px 10px">clear capsules</button>
+        </div>
+        <div id="capsuleList" style="display:flex;gap:12px;flex-wrap:wrap"></div>
       </div>
       <div style="margin-top:10px;color:#9fb8ff;font-size:13px">Shortcuts: <strong>r</strong> reshuffle · <strong>s</strong> export SVG · <strong>p</strong> export PNG · <strong>t</strong> mini Trio · <strong>space</strong> compose stanza · <strong>m</strong> play stamp · <strong>?</strong> show help</div>
       <footer>Small experiments live here. This page is static and reproducible: use the seed in the permalink to share a fragment.</footer>
@@ -648,6 +660,99 @@
         wall.appendChild(btn);
       }
     }
+
+    // --- Time Capsules: sealed snapshots saved locally (max 24) ---
+    function renderCapsuleList(){
+      const list = document.getElementById('capsuleList'); if(!list) return;
+      list.innerHTML = '';
+      let store = [];
+      try{ store = JSON.parse(localStorage.getItem('gpt5-mini-capsules')||'[]'); }catch(e){ store = []; }
+      for(const item of store){
+        const btn = document.createElement('button');
+        btn.style.padding = '8px'; btn.style.borderRadius = '8px'; btn.style.background = 'linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01))';
+        btn.style.border = '1px solid rgba(255,255,255,0.04)'; btn.style.color = '#dbeeff'; btn.style.cursor = 'pointer'; btn.style.fontSize = '13px';
+        btn.style.minWidth = '220px'; btn.style.textAlign = 'left';
+        btn.title = `sealed: ${item.created} — seed: ${item.seed} — tone: ${item.tone}`;
+        // show a small thumbnail from the svg (data URL)
+        const svgBlob = new Blob([item.svg], {type:'image/svg+xml'});
+        const url = URL.createObjectURL(svgBlob);
+        const img = document.createElement('img'); img.src = url; img.alt = `Capsule thumbnail seed ${item.seed}`;
+        img.style.width = '100%'; img.style.height = '100px'; img.style.objectFit = 'cover'; img.style.borderRadius = '6px';
+        btn.appendChild(img);
+        const cap = document.createElement('div'); cap.style.marginTop='6px'; cap.style.fontSize='12px'; cap.style.color='#cfe3ff'; cap.style.opacity='0.95'; cap.textContent = item.note ? item.note : `seed: ${item.seed} — ${item.tone}`;
+        btn.appendChild(cap);
+        btn.addEventListener('click', ()=>{
+          // load capsule into page
+          showFragment(Number(item.seed), item.tone);
+          document.getElementById('toneSelect').value = item.tone;
+          const ni = document.getElementById('noteInput'); if(ni) ni.value = item.note || '';
+        });
+        list.appendChild(btn);
+        img.addEventListener('load', ()=>{ URL.revokeObjectURL(url); });
+      }
+    }
+
+    function sealCapsule(){
+      try{
+        const obj = getCurrentSVG();
+        const created = new Date().toISOString();
+        const stamp = makeStamp(Number(obj.seed), obj.tone);
+        const pal = makePalette(Number(obj.seed), obj.tone);
+        const capsule = {seed: obj.seed, tone: obj.tone, note: obj.note, svg: obj.svg, stamp, palette: pal, permalink: obj.permalink, created};
+        const store = JSON.parse(localStorage.getItem('gpt5-mini-capsules')||'[]');
+        // avoid exact duplicate svg
+        const existing = new Set(store.map(i=>i.svg));
+        if(!existing.has(capsule.svg)) store.unshift(capsule);
+        while(store.length>24) store.pop();
+        localStorage.setItem('gpt5-mini-capsules', JSON.stringify(store));
+        renderCapsuleList();
+        const btn = document.getElementById('sealCapsuleBtn'); const prev = btn.textContent; btn.textContent = 'sealed'; setTimeout(()=>btn.textContent = prev,1200);
+      }catch(e){ console.warn('seal capsule failed', e); alert('Could not seal capsule'); }
+    }
+
+    function exportCapsules(){
+      try{
+        const store = JSON.parse(localStorage.getItem('gpt5-mini-capsules')||'[]');
+        if(!store.length){ alert('No capsules to export.'); return; }
+        // Build a standalone HTML that inlines each capsule SVG and shows provenance
+        const itemsHtml = store.map(it=>{
+          const inlined = it.svg.replace(/<\?xml.*?\?>\s*/,'');
+          const caption = svgEscape(it.note || (`seed: ${it.seed} — ${it.tone}`));
+          const permalink = svgEscape(it.permalink || '#');
+          return `<div style="margin:12px;padding:12px;background:#041023;border-radius:10px">${inlined}<div style="margin-top:8px;color:#9fb8ff;font-size:13px">${caption} — <a href="${permalink}" style="color:inherit;opacity:0.9">permalink</a><div style="font-size:11px;color:#9fb8ff">sealed: ${svgEscape(it.created)}</div></div></div>`;
+        }).join('\n');
+        const html = `<!doctype html>\n<html lang="en">\n<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>GPT-5 mini — Capsules</title>\n<style>body{margin:0;background:#071029;color:#e6f0ff;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;padding:24px} .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px}</style></head>\n<body>\n<h2 style="margin:0 0 12px 0">GPT-5 mini — Time Capsules</h2>\n<div class="grid">${itemsHtml}</div>\n<footer style="margin-top:18px;color:#9fb8ff;font-size:13px">Exported from gabrielkahen.com/models/gpt-5-mini/ — capsules are sealed snapshots containing seed, tone, note, palette and permalink.</footer>\n</body></html>`;
+        const blob = new Blob([html], {type: 'text/html'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a'); a.href = url; a.download = `gpt5-mini-capsules-${new Date().toISOString().slice(0,19).replace(/[:T]/g,'-')}.html`; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(url),1500);
+      }catch(e){ console.warn('export capsules failed', e); alert('Export failed'); }
+    }
+
+    async function importCapsulesFile(file){
+      try{
+        const text = await file.text();
+        const parsed = JSON.parse(text);
+        const items = Array.isArray(parsed.items) ? parsed.items : (Array.isArray(parsed) ? parsed : []);
+        if(!items.length){ alert('No capsules found in file.'); return; }
+        const store = JSON.parse(localStorage.getItem('gpt5-mini-capsules')||'[]');
+        const existingSvgs = new Set(store.map(i=>i.svg || ''));
+        for(const it of items){ if(it.svg && !existingSvgs.has(it.svg)) store.unshift(it); }
+        while(store.length>24) store.pop();
+        localStorage.setItem('gpt5-mini-capsules', JSON.stringify(store));
+        renderCapsuleList();
+        alert('Imported ' + items.length + ' capsules (merged).');
+      }catch(e){ console.warn('import capsules failed', e); alert('Import failed: ' + (e && e.message)); }
+    }
+
+    document.getElementById('sealCapsuleBtn').addEventListener('click', ()=>{ sealCapsule(); });
+    document.getElementById('exportCapsules').addEventListener('click', ()=>{ exportCapsules(); });
+    document.getElementById('clearCapsules').addEventListener('click', ()=>{ if(confirm('Clear sealed capsules from this browser?')){ localStorage.removeItem('gpt5-mini-capsules'); renderCapsuleList(); } });
+    // file input for importing capsules (reuse existing import input if needed)
+    // create a hidden input for capsule import
+    const capsuleImportInput = document.createElement('input'); capsuleImportInput.type = 'file'; capsuleImportInput.accept = 'application/json'; capsuleImportInput.style.display='none'; capsuleImportInput.id = 'importCapsulesInput'; document.body.appendChild(capsuleImportInput);
+    document.getElementById('importCapsules').addEventListener('click', ()=>{ capsuleImportInput.click(); });
+    capsuleImportInput.addEventListener('change', (ev)=>{ const f = ev.target.files && ev.target.files[0]; if(!f) return; importCapsulesFile(f); ev.target.value = ''; });
+
 
     // Export the entire postcard wall as a JSON file so visitors can back up or share
     function exportPostcardWall(){
