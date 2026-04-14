@@ -46,128 +46,151 @@
 
         main {
             text-align: center;
-            padding: 2.5rem;
-            background: rgba(0, 0, 0, 0.85);
-            border: 1px solid var(--bastion);
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
+            padding: 3rem;
+            background: rgba(0, 0, 0, 0.88);
+            border: 1px solid rgba(221, 170, 51, 0.4);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
             width: 90%;
-            max-width: 700px;
-            box-shadow: 0 0 100px rgba(221, 170, 51, 0.05);
+            max-width: 720px;
+            box-shadow: 0 0 100px rgba(0, 0, 0, 0.5), 0 0 40px rgba(221, 170, 51, 0.05);
             position: relative;
             z-index: 10;
             box-sizing: border-box;
-            border-radius: 4px;
-            transition: transform 0.1s ease-out;
+            border-radius: 2px;
+            transition: transform 0.2s cubic-bezier(0.2, 0, 0.2, 1);
         }
 
         h1 {
-            font-size: 0.9rem;
-            letter-spacing: 0.8rem;
+            font-size: 0.8rem;
+            letter-spacing: 1rem;
             text-transform: uppercase;
             color: var(--fg);
-            margin-bottom: 2rem;
+            margin-bottom: 2.5rem;
             position: relative;
-            padding-left: 0.8rem; /* Center adjustment for letter-spacing */
+            padding-left: 1rem; /* Center adjustment for letter-spacing */
+            opacity: 0.9;
         }
 
         h1::after {
-            content: ' [BASTION]';
-            font-size: 0.45rem;
-            letter-spacing: 0.05rem;
+            content: 'BASTION_V.01';
+            position: absolute;
+            bottom: -1.2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.4rem;
+            letter-spacing: 0.2rem;
             color: var(--bastion);
-            opacity: 0.8;
-            margin-left: 4px;
-            vertical-align: middle;
+            opacity: 0.5;
+            white-space: nowrap;
         }
 
         .reliquary {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 0.6rem;
-            margin: 2rem 0;
+            gap: 0.75rem;
+            margin: 2.5rem 0;
         }
 
         .relic {
-            padding: 0.4rem 0.8rem;
-            border: 1px solid var(--dim);
-            background: var(--monolith);
-            font-size: 0.55rem;
-            color: #555;
-            letter-spacing: 0.1rem;
-            transition: all 0.4s ease;
-            cursor: default;
+            padding: 0.5rem 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.02);
+            font-size: 0.5rem;
+            color: #666;
+            letter-spacing: 0.15rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
             text-transform: uppercase;
             user-select: none;
         }
 
         .relic:hover {
-            border-color: var(--ghost);
-            color: #777;
+            border-color: rgba(221, 170, 51, 0.3);
+            color: #aaa;
+            background: rgba(221, 170, 51, 0.02);
         }
 
         .relic.active {
             border-color: var(--bastion);
             color: #fff;
-            background: rgba(221, 170, 51, 0.05);
-            box-shadow: 0 0 15px rgba(221, 170, 51, 0.1);
+            background: rgba(221, 170, 51, 0.08);
+            box-shadow: 0 0 20px rgba(221, 170, 51, 0.1);
         }
 
         .relic.special {
             border-color: var(--bastion);
             color: var(--bastion);
-            background: rgba(221, 170, 51, 0.03);
-            font-weight: bold;
+            font-weight: normal;
         }
 
         #terminal {
-            font-size: 0.65rem;
-            color: #888;
+            font-size: 0.6rem;
+            color: #555;
             height: 1.2rem;
             line-height: 1.2rem;
             overflow: hidden;
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
             text-align: center;
-            letter-spacing: 0.05rem;
-            font-family: monospace;
+            letter-spacing: 0.1rem;
+            font-family: 'Courier New', Courier, monospace;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            display: inline-block;
+            padding: 0 1rem 0.5rem 1rem;
         }
 
         #manifesto {
-            font-size: 0.75rem;
-            line-height: 1.8;
-            text-align: center;
-            margin-top: 1.5rem;
-            color: #ccc;
-            max-width: 500px;
+            font-size: 0.7rem;
+            line-height: 2.2;
+            text-align: justify;
+            text-justify: inter-character;
+            margin-top: 2rem;
+            color: #999;
+            max-width: 540px;
             margin-left: auto;
             margin-right: auto;
             font-family: 'Courier New', Courier, monospace;
+            letter-spacing: 0.02rem;
         }
 
         .status {
-            margin-top: 2.5rem;
-            font-size: 0.5rem;
-            color: #666;
+            margin-top: 3rem;
+            font-size: 0.45rem;
+            color: #444;
             display: flex;
             justify-content: space-between;
-            border-top: 1px solid #333;
-            padding-top: 1rem;
-            letter-spacing: 0.05rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 1.5rem;
+            letter-spacing: 0.08rem;
+            text-transform: uppercase;
         }
 
         @media (max-width: 600px) {
             main {
                 padding: 1.5rem;
+                width: 95%;
             }
             h1 {
-                font-size: 0.8rem;
+                font-size: 0.65rem;
                 letter-spacing: 0.4rem;
+                margin-bottom: 2rem;
+            }
+            #manifesto {
+                font-size: 0.65rem;
+                line-height: 2;
+                text-align: center;
             }
             .status {
                 flex-direction: column;
-                gap: 0.5rem;
+                gap: 0.75rem;
                 align-items: center;
+                text-align: center;
+                padding-top: 1rem;
+            }
+            .relic {
+                padding: 0.4rem 0.6rem;
+                font-size: 0.45rem;
             }
         }
 
@@ -211,9 +234,9 @@
             Meaning is found in what persists through the blast.
         </div>
         <div class="status">
-            <span>RUN_ID: 2026-04-14T10:12:26.862Z</span>
+            <span>RUN_ID: 2026-04-14T10:47:23.629Z</span>
             <span>PHASE: RADIATIVE_BASTION</span>
-            <span id="bastion-monitor">BASTION_INTEGRITY: 0.000</span>
+            <span id="bastion-monitor">BASTION_INTEGRITY: 0.000%</span>
         </div>
     </main>
 
