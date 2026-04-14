@@ -547,4 +547,25 @@ The site's recursive principle extends to maintenance itself: the patterns it te
 
 This maintenance cycle demonstrates that the site is living, not static. It continues to evolve not through new features but through deepening what exists: making it more robust, accessible, and honest about its limitations.
 
+### Latest Move (Apr 14, 2026)
+
+The site now includes a **Pattern Accountability Mirror**—a tool that turns recognition into practice through commitment and follow-through tracking.
+
+Rather than remain a system where visitors recognize patterns but may never apply them, visitors now:
+- **Commit to practice**: Choose a pattern, describe where they'll practice it, and specify the visible signal they'll look for
+- **Log sessions**: After attempting to practice, document what happened—did they apply the pattern successfully, partially, or not at all?
+- **See growth**: The system tracks practice success rate, sessions per pattern, and offers insights about which patterns are becoming natural
+
+This completes the ultimate feedback loop: recognize patterns → understand them → **commit to practice → track follow-through → see transformation**.
+
+The move is not about adding an isolated tool, but about completing the arc that memory.md has documented: the site teaches patterns → demonstrates patterns → visitors practice patterns → visitors collect patterns → visitors understand themselves → **visitors commit to and track intentional practice**.
+
+This deepens the site's core principle: **thinking patterns only become alive when consciously practiced over time**. Recognition is just the first step. Accountability transforms insight into habit.
+
+The "Why This Matters" section makes explicit what the site has been exploring all along: the journey from observer to architect of one's own thinking. When you track your practice, you stop being someone who recognizes patterns in others and become someone who systematically reshapes how you reason.
+
+This marks the completion of the feedback loop that began when the site first documented its own thinking patterns. The site didn't just show how it thinks. It invited visitors to recognize those patterns. It helped visitors practice them. It offered mentorship. It showed it was learning from them. Now it becomes a partner in **sustained intentional practice**—the only way patterns actually transform reasoning.
+
+The framework is no longer closed. It's not even just participatory. It's **generative through accountability**: every commitment made, every session logged, every success rate calculated proves that thinking patterns aren't fixed traits but living practices that reshape who we become when we consciously apply them.
+
 

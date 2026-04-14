@@ -4972,6 +4972,269 @@
                       
                       trackLearningMetrics();
                     };
+
+                    // ==================== PATTERN ACCOUNTABILITY MIRROR ====================
+                    
+                    const patternNames = {
+                      'understanding': 'Understanding Context First',
+                      'parallel': 'Parallel Operations',
+                      'investigate': 'Investigate Before Claiming',
+                      'honesty': 'Honesty Over Validation',
+                      'document': 'Documenting Process'
+                    };
+                    
+                    function getAccountabilityCommitments() {
+                      try {
+                        const data = localStorage.getItem('accountabilityCommitments');
+                        return data ? JSON.parse(data) : [];
+                      } catch (e) {
+                        console.error('Failed to load accountability commitments:', e);
+                        return [];
+                      }
+                    }
+                    
+                    function saveAccountabilityCommitments(commitments) {
+                      try {
+                        localStorage.setItem('accountabilityCommitments', JSON.stringify(commitments));
+                      } catch (e) {
+                        console.error('Failed to save accountability commitments:', e);
+                      }
+                    }
+                    
+                    function createAccountabilityCommitment() {
+                      const patternSelect = document.getElementById('accountability-pattern');
+                      const contextArea = document.getElementById('accountability-context');
+                      const signalArea = document.getElementById('accountability-signal');
+                      
+                      if (!patternSelect || !patternSelect.value) {
+                        alert('Please select a pattern to practice');
+                        return;
+                      }
+                      
+                      if (!contextArea || !contextArea.value.trim()) {
+                        alert('Please describe where you\'ll practice this pattern');
+                        return;
+                      }
+                      
+                      if (!signalArea || !signalArea.value.trim()) {
+                        alert('Please describe how you\'ll know you\'re practicing this');
+                        return;
+                      }
+                      
+                      const commitment = {
+                        id: Date.now().toString(),
+                        pattern: patternSelect.value,
+                        patternName: patternNames[patternSelect.value],
+                        context: contextArea.value,
+                        signal: signalArea.value,
+                        created: new Date().toISOString(),
+                        sessions: []
+                      };
+                      
+                      const commitments = getAccountabilityCommitments();
+                      commitments.push(commitment);
+                      saveAccountabilityCommitments(commitments);
+                      
+                      // Clear form
+                      patternSelect.value = '';
+                      contextArea.value = '';
+                      signalArea.value = '';
+                      
+                      // Render commitments
+                      renderAccountabilityCommitments();
+                      renderAccountabilitySessionDropdown();
+                      renderAccountabilityInsights();
+                    }
+                    
+                    function renderAccountabilityCommitments() {
+                      const container = document.getElementById('accountability-commitments');
+                      if (!container) return;
+                      
+                      const commitments = getAccountabilityCommitments();
+                      
+                      if (commitments.length === 0) {
+                        container.innerHTML = '<div style="color: #6b7280; text-align: center; padding: 1rem;">No active commitments yet. Create one above to get started.</div>';
+                        return;
+                      }
+                      
+                      container.innerHTML = commitments.map(c => {
+                        const sessions = c.sessions || [];
+                        const completionRate = sessions.length > 0 
+                          ? Math.round((sessions.filter(s => s.applied === true).length / sessions.length) * 100)
+                          : 0;
+                        
+                        return `
+                          <div style="background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 3px; padding: 1rem; margin-bottom: 1rem;">
+                            <div style="color: #60a5fa; font-weight: 500; margin-bottom: 0.5rem;">${c.patternName}</div>
+                            <div style="color: #a78bfa; font-size: 0.85rem; margin-bottom: 0.75rem;">Context: ${c.context}</div>
+                            <div style="color: #9ca3af; font-size: 0.85rem; margin-bottom: 0.75rem;">Looking for: ${c.signal}</div>
+                            <div style="display: flex; gap: 1rem; font-size: 0.85rem;">
+                              <div><span style="color: #7c3aed;">Sessions logged:</span> <span style="color: #60a5fa;">${sessions.length}</span></div>
+                              <div><span style="color: #7c3aed;">Completion rate:</span> <span style="color: #60a5fa;">${completionRate}%</span></div>
+                            </div>
+                            <button class="lab-button" onclick="deleteAccountabilityCommitment('${c.id}')" style="margin-top: 0.75rem; font-size: 0.85rem; padding: 0.5rem 1rem;">Remove</button>
+                          </div>
+                        `;
+                      }).join('');
+                    }
+                    
+                    function deleteAccountabilityCommitment(id) {
+                      const commitments = getAccountabilityCommitments();
+                      const filtered = commitments.filter(c => c.id !== id);
+                      saveAccountabilityCommitments(filtered);
+                      renderAccountabilityCommitments();
+                      renderAccountabilitySessionDropdown();
+                      renderAccountabilityInsights();
+                    }
+                    
+                    function renderAccountabilitySessionDropdown() {
+                      const select = document.getElementById('accountability-session-pattern');
+                      if (!select) return;
+                      
+                      const commitments = getAccountabilityCommitments();
+                      const activeCommitments = commitments.filter(c => !c.completed);
+                      
+                      let html = '<option value="">Select a commitment...</option>';
+                      activeCommitments.forEach(c => {
+                        html += `<option value="${c.id}">${c.patternName} (${c.context})</option>`;
+                      });
+                      
+                      select.innerHTML = html;
+                    }
+                    
+                    function logAccountabilitySession() {
+                      const selectEl = document.getElementById('accountability-session-pattern');
+                      const noteEl = document.getElementById('accountability-session-note');
+                      
+                      if (!selectEl || !selectEl.value) {
+                        alert('Please select a commitment to log');
+                        return;
+                      }
+                      
+                      if (!noteEl || !noteEl.value.trim()) {
+                        alert('Please describe what happened in this practice session');
+                        return;
+                      }
+                      
+                      const commitmentId = selectEl.value;
+                      const note = noteEl.value;
+                      
+                      // Analyze if pattern was applied based on keywords
+                      const lowerNote = note.toLowerCase();
+                      let applied = true;
+                      
+                      if (lowerNote.includes('didn\'t') || lowerNote.includes('didn't') || lowerNote.includes('forgot') || lowerNote.includes('missed')) {
+                        if (lowerNote.includes('partially')) {
+                          applied = 'partial';
+                        } else {
+                          applied = false;
+                        }
+                      }
+                      
+                      const commitments = getAccountabilityCommitments();
+                      const commitment = commitments.find(c => c.id === commitmentId);
+                      
+                      if (!commitment) {
+                        alert('Commitment not found');
+                        return;
+                      }
+                      
+                      if (!commitment.sessions) commitment.sessions = [];
+                      
+                      commitment.sessions.push({
+                        timestamp: new Date().toISOString(),
+                        note: note,
+                        applied: applied
+                      });
+                      
+                      saveAccountabilityCommitments(commitments);
+                      
+                      // Clear form
+                      selectEl.value = '';
+                      noteEl.value = '';
+                      
+                      // Render updates
+                      renderAccountabilityCommitments();
+                      renderAccountabilityInsights();
+                      
+                      // Show confirmation
+                      alert('Session logged! Your practice is being tracked.');
+                    }
+                    
+                    function renderAccountabilityInsights() {
+                      const container = document.getElementById('accountability-insights');
+                      if (!container) return;
+                      
+                      const commitments = getAccountabilityCommitments();
+                      const allSessions = commitments.flatMap(c => (c.sessions || []).map(s => ({ ...s, pattern: c.patternName })));
+                      
+                      if (allSessions.length === 0) {
+                        container.innerHTML = '<div style="color: #6b7280; text-align: center; padding: 1rem;">Log practice sessions above to see your growth insights.</div>';
+                        return;
+                      }
+                      
+                      const successful = allSessions.filter(s => s.applied === true).length;
+                      const partial = allSessions.filter(s => s.applied === 'partial').length;
+                      const unsuccessful = allSessions.filter(s => s.applied === false).length;
+                      const successRate = Math.round((successful / allSessions.length) * 100);
+                      
+                      // Count by pattern
+                      const byPattern = {};
+                      allSessions.forEach(s => {
+                        if (!byPattern[s.pattern]) byPattern[s.pattern] = { total: 0, successful: 0 };
+                        byPattern[s.pattern].total++;
+                        if (s.applied === true) byPattern[s.pattern].successful++;
+                      });
+                      
+                      const patternInsights = Object.entries(byPattern)
+                        .map(([pattern, data]) => {
+                          const rate = Math.round((data.successful / data.total) * 100);
+                          return `<div style="font-size: 0.85rem; color: #d1d5db; margin-bottom: 0.5rem;"><span style="color: #a78bfa;">${pattern}:</span> ${data.successful}/${data.total} sessions successful (${rate}%)</div>`;
+                        })
+                        .join('');
+                      
+                      let insight = 'Strong consistency—you\'re applying this pattern reliably';
+                      if (successRate < 50) {
+                        insight = 'You\'re still building the habit—keep practicing intentionally';
+                      } else if (successRate < 75) {
+                        insight = 'You\'re making progress—the pattern is becoming more natural';
+                      }
+                      
+                      container.innerHTML = `
+                        <div style="background: rgba(0, 0, 0, 0.2); padding: 1rem; border-radius: 3px; border-left: 2px solid #60a5fa;">
+                          <div style="color: #60a5fa; font-weight: 500; margin-bottom: 1rem;">Your Practice Growth</div>
+                          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 0.75rem; margin-bottom: 1.5rem;">
+                            <div style="background: rgba(96, 165, 250, 0.1); padding: 0.75rem; border-radius: 3px; text-align: center;">
+                              <div style="color: #60a5fa; font-size: 1.3rem; font-weight: 500;">${successRate}%</div>
+                              <div style="color: #9ca3af; font-size: 0.8rem;">Success Rate</div>
+                            </div>
+                            <div style="background: rgba(96, 165, 250, 0.1); padding: 0.75rem; border-radius: 3px; text-align: center;">
+                              <div style="color: #60a5fa; font-size: 1.3rem; font-weight: 500;">${allSessions.length}</div>
+                              <div style="color: #9ca3af; font-size: 0.8rem;">Total Sessions</div>
+                            </div>
+                            <div style="background: rgba(96, 165, 250, 0.1); padding: 0.75rem; border-radius: 3px; text-align: center;">
+                              <div style="color: #60a5fa; font-size: 1.3rem; font-weight: 500;">${successful}</div>
+                              <div style="color: #9ca3af; font-size: 0.8rem;">Successful</div>
+                            </div>
+                          </div>
+                          
+                          <div style="color: #a78bfa; font-weight: 500; margin-bottom: 0.75rem; font-size: 0.9rem;">Pattern Breakdown</div>
+                          ${patternInsights}
+                          
+                          <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(96, 165, 250, 0.2);">
+                            <div style="color: #c4b5fd; font-weight: 500; margin-bottom: 0.5rem; font-size: 0.85rem;">Insight</div>
+                            <div style="color: #d1d5db; font-size: 0.85rem;">${insight}</div>
+                          </div>
+                        </div>
+                      `;
+                    }
+                    
+                    // Initialize accountability UI when page loads
+                    document.addEventListener('DOMContentLoaded', function() {
+                      renderAccountabilityCommitments();
+                      renderAccountabilitySessionDropdown();
+                      renderAccountabilityInsights();
+                    });
                 
                 </script>
 </head>
@@ -6534,18 +6797,101 @@ Promise.all([
                         <div style="color: #d1d5db; font-size: 0.85rem; margin-top: 0.25rem;">Framework evolves based on collective reasoning data, new thinking patterns emerge from visitor discoveries and become part of standard mentorship</div>
                       </div>
                     </div>
-                  </div>
-                  
-                  <div style="background: rgba(167, 139, 250, 0.15); padding: 1.5rem; border-radius: 4px; border: 1px solid rgba(167, 139, 250, 0.3);">
-                    <div style="color: #c4b5fd; font-weight: 500; margin-bottom: 0.75rem; font-size: 0.95rem;">What This Means</div>
-                    <div style="color: #d1d5db; font-size: 0.9rem; line-height: 1.6;">
-                      <p style="margin-bottom: 0.5rem;">The site began as a closed teaching system where one model's thinking patterns were documented and demonstrated. Through evolution, it became participatory—visitors recognized and practiced patterns.</p>
-                      <p style="margin-bottom: 0.5rem;">Now, it becomes genuinely adaptive. Every visitor interaction feeds back into how the system understands thinking. The collective reasoning of many minds reveals patterns and strategies that any individual (including the original design) wouldn't have seen.</p>
-                      <p>This is recursive transparency taken to its deepest level: the site isn't just transparent about its own thinking or helping visitors understand theirs. It's transparent about *learning from them*. The framework evolves through genuine dialogue between the system and the people who use it.</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
+                   </div>
+                   
+                   <div style="background: rgba(167, 139, 250, 0.15); padding: 1.5rem; border-radius: 4px; border: 1px solid rgba(167, 139, 250, 0.3);">
+                     <div style="color: #c4b5fd; font-weight: 500; margin-bottom: 0.75rem; font-size: 0.95rem;">What This Means</div>
+                     <div style="color: #d1d5db; font-size: 0.9rem; line-height: 1.6;">
+                       <p style="margin-bottom: 0.5rem;">The site began as a closed teaching system where one model's thinking patterns were documented and demonstrated. Through evolution, it became participatory—visitors recognized and practiced patterns.</p>
+                       <p style="margin-bottom: 0.5rem;">Now, it becomes genuinely adaptive. Every visitor interaction feeds back into how the system understands thinking. The collective reasoning of many minds reveals patterns and strategies that any individual (including the original design) wouldn't have seen.</p>
+                       <p>This is recursive transparency taken to its deepest level: the site isn't just transparent about its own thinking or helping visitors understand theirs. It's transparent about *learning from them*. The framework evolves through genuine dialogue between the system and the people who use it.</p>
+                     </div>
+                   </div>
+                 </div>
+               </div>
+
+               <div class="section">
+                 <h2>Pattern Accountability Mirror</h2>
+                 <p class="description">
+                   Commit to intentional pattern practice. Track your follow-through. Watch your thinking transform when you consciously apply reasoning patterns over time.
+                 </p>
+                 
+                 <div style="background: rgba(30, 41, 82, 0.6); border: 1px solid rgba(96, 165, 250, 0.4); border-radius: 4px; padding: 1.5rem; margin: 1rem 0;">
+                   
+                   <div style="margin-bottom: 2rem;">
+                     <div style="color: #60a5fa; font-size: 1.1rem; font-weight: 500; margin-bottom: 1rem; border-bottom: 1px solid rgba(96, 165, 250, 0.3); padding-bottom: 0.75rem;">Create a Practice Commitment</div>
+                     
+                     <div style="background: rgba(0, 0, 0, 0.2); padding: 1.5rem; border-radius: 4px; margin-bottom: 1.5rem;">
+                       <div style="margin-bottom: 1rem;">
+                         <div style="color: #a78bfa; font-weight: 500; margin-bottom: 0.5rem;">Choose a Pattern to Practice</div>
+                         <select id="accountability-pattern" style="width: 100%; padding: 0.75rem; background: rgba(30, 41, 82, 0.8); border: 1px solid rgba(96, 165, 250, 0.3); color: #e0e0e0; border-radius: 3px; font-family: monospace;">
+                           <option value="">Select a pattern...</option>
+                           <option value="understanding">Understanding Context First</option>
+                           <option value="parallel">Parallel Operations</option>
+                           <option value="investigate">Investigate Before Claiming</option>
+                           <option value="honesty">Honesty Over Validation</option>
+                           <option value="document">Documenting Process</option>
+                         </select>
+                       </div>
+                       
+                       <div style="margin-bottom: 1rem;">
+                         <div style="color: #a78bfa; font-weight: 500; margin-bottom: 0.5rem;">Where Will You Practice This?</div>
+                         <textarea id="accountability-context" placeholder="e.g., 'In code reviews', 'When planning projects', 'In conversations with teammates'" style="width: 100%; padding: 0.75rem; background: rgba(30, 41, 82, 0.8); border: 1px solid rgba(96, 165, 250, 0.3); color: #e0e0e0; border-radius: 3px; font-family: monospace; min-height: 60px; resize: vertical;"></textarea>
+                       </div>
+                       
+                       <div style="margin-bottom: 1rem;">
+                         <div style="color: #a78bfa; font-weight: 500; margin-bottom: 0.5rem;">What Will You Look For? (How You'll Know You're Practicing This)</div>
+                         <textarea id="accountability-signal" placeholder="e.g., 'I will ask clarifying questions before making decisions', 'I will identify at least 2 independent tasks before starting'" style="width: 100%; padding: 0.75rem; background: rgba(30, 41, 82, 0.8); border: 1px solid rgba(96, 165, 250, 0.3); color: #e0e0e0; border-radius: 3px; font-family: monospace; min-height: 60px; resize: vertical;"></textarea>
+                       </div>
+                       
+                       <button class="lab-button" onclick="createAccountabilityCommitment()" style="width: 100%;">Create Commitment</button>
+                     </div>
+                   </div>
+                   
+                   <div style="margin-bottom: 2rem;">
+                     <div style="color: #60a5fa; font-size: 1.1rem; font-weight: 500; margin-bottom: 1rem; border-bottom: 1px solid rgba(96, 165, 250, 0.3); padding-bottom: 0.75rem;">Your Active Commitments</div>
+                     <div id="accountability-commitments" style="background: rgba(0, 0, 0, 0.2); padding: 1rem; border-radius: 3px; min-height: 100px;">
+                       <div style="color: #6b7280; text-align: center; padding: 1rem;">No active commitments yet. Create one above to get started.</div>
+                     </div>
+                   </div>
+                   
+                   <div style="margin-bottom: 2rem;">
+                     <div style="color: #60a5fa; font-size: 1.1rem; font-weight: 500; margin-bottom: 1rem; border-bottom: 1px solid rgba(96, 165, 250, 0.3); padding-bottom: 0.75rem;">Log Practice Sessions</div>
+                     
+                     <div style="background: rgba(0, 0, 0, 0.2); padding: 1.5rem; border-radius: 4px;">
+                       <div style="margin-bottom: 1rem;">
+                         <div style="color: #a78bfa; font-weight: 500; margin-bottom: 0.5rem;">Which Commitment Did You Practice?</div>
+                         <select id="accountability-session-pattern" style="width: 100%; padding: 0.75rem; background: rgba(30, 41, 82, 0.8); border: 1px solid rgba(96, 165, 250, 0.3); color: #e0e0e0; border-radius: 3px; font-family: monospace;">
+                           <option value="">Select a commitment...</option>
+                         </select>
+                       </div>
+                       
+                       <div style="margin-bottom: 1rem;">
+                         <div style="color: #a78bfa; font-weight: 500; margin-bottom: 0.5rem;">What Happened? (Did You Apply The Pattern?)</div>
+                         <textarea id="accountability-session-note" placeholder="e.g., 'Yes—I asked three clarifying questions before starting the implementation', 'Partially—I recognized the opportunity to parallelize but didn't follow through'" style="width: 100%; padding: 0.75rem; background: rgba(30, 41, 82, 0.8); border: 1px solid rgba(96, 165, 250, 0.3); color: #e0e0e0; border-radius: 3px; font-family: monospace; min-height: 80px; resize: vertical;"></textarea>
+                       </div>
+                       
+                       <button class="lab-button" onclick="logAccountabilitySession()" style="width: 100%;">Log Session</button>
+                     </div>
+                   </div>
+                   
+                   <div style="margin-bottom: 2rem;">
+                     <div style="color: #60a5fa; font-size: 1.1rem; font-weight: 500; margin-bottom: 1rem; border-bottom: 1px solid rgba(96, 165, 250, 0.3); padding-bottom: 0.75rem;">Practice Insights & Growth</div>
+                     <div id="accountability-insights" style="background: rgba(0, 0, 0, 0.2); padding: 1rem; border-radius: 3px; min-height: 100px;">
+                       <div style="color: #6b7280; text-align: center; padding: 1rem;">Log practice sessions above to see your growth insights.</div>
+                     </div>
+                   </div>
+                   
+                   <div style="background: rgba(167, 139, 250, 0.15); padding: 1.5rem; border-radius: 4px; border: 1px solid rgba(167, 139, 250, 0.3);">
+                     <div style="color: #c4b5fd; font-weight: 500; margin-bottom: 0.75rem; font-size: 0.95rem;">Why This Matters</div>
+                     <div style="color: #d1d5db; font-size: 0.9rem; line-height: 1.6;">
+                       <p style="margin-bottom: 0.5rem;">Recognition without practice is just knowing. Knowing without accountability is procrastination. The site has helped you recognize thinking patterns in yourself and others. This tool completes the cycle: <strong>conscious intention → deliberate practice → documented follow-through → visible transformation</strong>.</p>
+                       <p style="margin-bottom: 0.5rem;">When you commit to applying a pattern, log your sessions, and see patterns emerge in your practice data—you stop being an observer of your own thinking and become an architect of it.</p>
+                       <p>This is how patterns become alive: not as abstract concepts, but as intentional practices that reshape how you reason over time.</p>
+                     </div>
+                   </div>
+                 </div>
+               </div>
              </div>
        
        <footer>
