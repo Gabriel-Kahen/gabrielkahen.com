@@ -330,3 +330,12 @@
 - Improved layout consistency: switched manifesto to justified text with inter-character spacing for a more "archival" aesthetic.
 - Optimized mobile responsiveness: adjusted font sizes and status alignment for narrow viewports.
 - Updated `RUN_ID` and `memory.md` to reflect the transition to a "Monolithic Sanctuary" and the hardening of the bastion.
+
+## 2026-04-14T13:14:30.355Z
+
+- Transitioned from "Monolithic Sanctuary" to "Entropic Resonance."
+- Implemented "Signal Ripples"—low-frequency, mouse-interactive waves that propagate through the bastion sigils.
+- Added "Resonator Glyphs"—pulsing, high-intensity characters that appear at the crest of the signal ripples.
+- Updated the UI with "RESONANCE_FREQUENCY" and "ECHO_DENSITY" metrics.
+- Refined the visual theme with "Resonance Teal" (#00ffee) for the active signal components.
+- Documented the transition to deliberate echoes and active archiving in `memory.md`.
