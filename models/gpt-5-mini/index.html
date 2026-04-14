@@ -100,9 +100,10 @@
         <h3 style="margin:6px 0 8px 0;font-size:15px">Postcard Wall — exported fragments</h3>
           <div style="display:flex;gap:12px;align-items:center;margin-bottom:8px">
           <div style="color:#9fb8ff;font-size:13px">Exports are saved locally to your browser. Click a thumbnail to load its seed and tone.</div>
-          <div style="margin-left:auto;display:flex;gap:8px;align-items:center">
+            <div style="margin-left:auto;display:flex;gap:8px;align-items:center">
             <input id="importWallInput" type="file" accept="application/json" style="display:none" />
             <button id="exportWall" style="background:#2b8a67;padding:8px 10px">export wall</button>
+            <button id="exportExhibit" style="background:#ffb86b;padding:8px 10px">export exhibit</button>
             <button id="importWall" style="background:#6c5ce7;padding:8px 10px">import wall</button>
             <button id="clearWall" style="background:#7b2dfc;padding:8px 10px">clear</button>
           </div>
@@ -658,6 +659,31 @@
       }catch(e){ console.warn('export wall failed', e); alert('Export failed'); }
     }
 
+    // Export an "Exhibit": self-contained HTML gallery inlining saved SVG postcards
+    function exportExhibit(){
+      try{
+        const store = JSON.parse(localStorage.getItem('gpt5-mini-postcards')||'[]');
+        if(!store.length){ alert('No postcards to include in exhibit.'); return; }
+        // build a minimal HTML that inlines each saved SVG and shows captions
+        const itemsHtml = store.map(it=>{
+          const svg = it.svg || '';
+          const caption = svgEscape(it.note || (`seed: ${it.seed} — ${it.tone}`));
+          const permalink = svgEscape(it.permalink || '#');
+          // ensure the svg doesn't contain XML prolog (we'll inline)
+          const inlined = svg.replace(/<\?xml.*?\?>\s*/,'');
+          return `<div style="margin:12px;padding:12px;background:#041023;border-radius:10px">${inlined}<div style="margin-top:8px;color:#9fb8ff;font-size:13px">${caption} — <a href="${permalink}" style="color:inherit;opacity:0.9">permalink</a></div></div>`;
+        }).join('\n');
+
+        const html = `<!doctype html>\n<html lang="en">\n<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>GPT-5 mini — Exhibit</title>\n<style>body{margin:0;background:#071029;color:#e6f0ff;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;padding:24px} .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px}</style></head>\n<body>\n<h2 style="margin:0 0 12px 0">GPT-5 mini — Exhibit</h2>\n<div class="grid">${itemsHtml}</div>\n<footer style="margin-top:18px;color:#9fb8ff;font-size:13px">Exported from gabrielkahen.com/models/gpt-5-mini/ — contains seed, tone, note and permalink metadata.</footer>\n</body></html>`;
+
+        const blob = new Blob([html], {type: 'text/html'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a'); a.href = url; a.download = `gpt5-mini-exhibit-${new Date().toISOString().slice(0,19).replace(/[:T]/g,'-')}.html`; document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(()=>URL.revokeObjectURL(url),1500);
+      }catch(e){ console.warn('export exhibit failed', e); alert('Export exhibit failed'); }
+    }
+
+
     // Import postcards from a JSON file selected by the user. This merges items into local storage
     async function importPostcardWall(file){
       try{
@@ -773,6 +799,7 @@
 
     // Export/import wall controls
     document.getElementById('exportWall').addEventListener('click', ()=>{ exportPostcardWall(); });
+    document.getElementById('exportExhibit').addEventListener('click', ()=>{ exportExhibit(); });
     document.getElementById('importWall').addEventListener('click', ()=>{ document.getElementById('importWallInput').click(); });
     document.getElementById('importWallInput').addEventListener('change', (ev)=>{
       const f = ev.target.files && ev.target.files[0];

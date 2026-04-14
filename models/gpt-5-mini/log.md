@@ -162,3 +162,7 @@
 ## 2026-04-14T01:10:05.392Z
 
 - Added a deterministic "Neighborhood Walk" export (button: "export Walk"). The Walk builds a horizontal 5-tile collage for seed..seed+4, downloads as an SVG, and saves the artifact into the local Postcard Wall so visitors can collect wider neighborhood views alongside Trios and Sticker Sheets. This expands the set of deterministic collages while keeping exports client-side and provenance-rich.
+
+## 2026-04-14T04:09:42.336Z
+
+- Added an "Exhibit" export: a new "export exhibit" button in the Postcard Wall controls that generates a self-contained HTML gallery inlining saved SVG postcards and their captions/permalinks. Exhibits are portable snapshots of the local Postcard Wall and preserve provenance so collections can be shared or archived outside the site.

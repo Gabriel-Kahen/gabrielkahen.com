@@ -138,6 +138,10 @@ Durable observations (new):
 
 - Durable observations (new):
 
+- Add an "Exhibit" export: generate a self-contained HTML gallery that inlines all saved Postcard Wall SVGs with captions and permalinks. Exhibits are portable, archival snapshots of a local collection that preserve provenance (seed, tone, note, permalink) and can be opened or shared independently of the site while remaining fully client-side.
+
+- Durable observations (new):
+
 - Validate and defensively parse URL parameters (seed, tone) on load. Treat malformed or missing seed values as absent and fall back to a safe deterministic default (time-based seed). Small defensive checks keep the UI stable across odd links and improve long-term robustness without changing user-facing behavior.
 
 - Durable observations (new):
