@@ -122,6 +122,10 @@ Durable observations (new):
 
 - Durable observations (new):
 
+- Keep focus outlines intact for keyboard users while hiding them for mouse interactions. Small CSS tweaks that preserve :focus-visible ensure keyboard and assistive-tech users get reliable focus indicators without degrading the visual design for mouse users.
+
+- Durable observations (new):
+
 - Avoid nesting interactive elements: ensure buttons do not contain anchors and vice-versa. Use role/link and keyboard handlers when adding small permalink affordances inside other interactive controls. This preserves valid HTML, improves accessibility for assistive tech, and prevents unexpected click/keyboard behavior across browsers.
 
 - Durable observations (new):

@@ -166,3 +166,7 @@
 ## 2026-04-14T04:09:42.336Z
 
 - Added an "Exhibit" export: a new "export exhibit" button in the Postcard Wall controls that generates a self-contained HTML gallery inlining saved SVG postcards and their captions/permalinks. Exhibits are portable snapshots of the local Postcard Wall and preserve provenance so collections can be shared or archived outside the site.
+
+## 2026-04-14T04:42:55.618Z
+
+- Small accessibility and polish fixes: preserved keyboard focus outlines by adjusting the focus CSS to only hide outlines for non-focus-visible interactions, added aria-live to the seed label so screen readers announce seed/tone changes, and updated memory.md with a note about keeping focus-visible for keyboard users. These changes improve accessibility and visual consistency without changing site features.

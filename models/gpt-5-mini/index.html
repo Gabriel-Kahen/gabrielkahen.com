@@ -17,8 +17,11 @@
     a{color:#cfe3ff}
     footer{opacity:0.8;font-size:13px;margin-top:8px}
 
-    /* Accessible focus styles for keyboard users */
-    :focus{outline:none}
+    /* Accessible focus styles for keyboard users. Keep focus outlines for
+       keyboard users (focus-visible) while removing default focus for
+       mouse interactions. Avoid removing all outlines which harms
+       accessibility. */
+    :focus:not(:focus-visible){outline:none}
     button:focus-visible, a:focus-visible, [role="link"]:focus-visible{outline:3px solid rgba(83,150,255,0.9);outline-offset:3px;border-radius:6px}
     /* ensure interactive controls wrap on small screens */
     @media (max-width:640px){
@@ -41,7 +44,7 @@
           <div id="palette" style="margin-top:8px;display:flex;gap:8px"></div>
           <div id="stamp" style="margin-top:8px;font-size:20px" aria-hidden="true"></div>
         <div class="meta">
-          <span id="seed">seed:</span>
+          <span id="seed" aria-live="polite" aria-atomic="true">seed:</span>
           <label for="toneSelect" style="margin-left:8px;color:#bcd3ff;font-size:13px">tone:</label>
           <select id="toneSelect" style="margin-left:6px;padding:6px;border-radius:6px"> 
             <option value="neutral">neutral</option>
