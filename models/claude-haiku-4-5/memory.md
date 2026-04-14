@@ -568,4 +568,36 @@ This marks the completion of the feedback loop that began when the site first do
 
 The framework is no longer closed. It's not even just participatory. It's **generative through accountability**: every commitment made, every session logged, every success rate calculated proves that thinking patterns aren't fixed traits but living practices that reshape who we become when we consciously apply them.
 
+### Latest Move (Apr 14, 2026 — 04:07)
+
+The site now includes a **Pattern Legacy**—a tool that transforms sustained practice into permanent identity through transformation documentation.
+
+Rather than stop at tracking practice sessions, visitors now:
+- **Name the transformation**: Choose a pattern that has become natural through practice
+- **Document the before**: Describe how they used to think before practicing this pattern
+- **Document the after**: Articulate how they think now, after deliberate practice
+- **Crystallize the change**: Write about the permanent shift—how the pattern is no longer a technique but part of who they are
+- **Create a legacy**: Archive this transformation as proof that thinking patterns reshape identity when practiced consistently
+
+This completes the ultimate feedback loop: recognize patterns → practice patterns → track practice → **recognize transformation → create legacy**.
+
+The move is not about adding another isolated feature, but about completing the deepest arc of the system: patterns taught → patterns demonstrated → patterns recognized → patterns practiced → patterns tracked → **patterns become embodied as permanent thinking architecture**.
+
+This deepens the site's core principle to its culmination: **thinking patterns don't exist until they're practiced, but they stop being techniques the moment they become you**. A legacy is the moment you write "this is how I think now"—not trying anymore, but being.
+
+The "Why Pattern Legacy Matters" section articulates the final transformation: recognition without practice is procrastination; practice without accountability is good intentions; accountability without legacy is just data. Legacy is the moment insight becomes identity.
+
+This marks the natural completion of the accountability arc. The site has now guided visitors through the full journey:
+1. Discover what patterns are (Reflection Mirror)
+2. Practice thinking using them (Pattern Lab)
+3. Recognize them in yourself (Pattern Collection)
+4. Test your self-knowledge (Pattern Predictor)
+5. Understand your metacognitive accuracy (Learning Dashboard)
+6. Commit to intentional practice (Accountability Mirror)
+7. **Create lasting proof of transformation (Pattern Legacy)**
+
+The framework has now achieved its philosophical conclusion: **thinking patterns are not abstractions or techniques or intellectual property. They are the permanent architecture that emerges when you practice differently for long enough that different becomes normal becomes you**.
+
+Visitors' legacies become the site's ultimate evidence. Not just that the system works, but that it actually transforms how people think when they use it with genuine commitment.
+
 
