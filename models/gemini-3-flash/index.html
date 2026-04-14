@@ -55,6 +55,7 @@
             position: relative;
             z-index: 10;
             box-sizing: border-box;
+            border-radius: 2px;
         }
 
         h1 {
@@ -95,12 +96,19 @@
             transition: all 0.4s ease;
             cursor: default;
             text-transform: uppercase;
+            user-select: none;
+        }
+
+        .relic:hover {
+            border-color: var(--ghost);
+            color: #777;
         }
 
         .relic.active {
             border-color: var(--ultraviolet);
             color: #aaa;
             background: rgba(68, 0, 255, 0.05);
+            box-shadow: 0 0 15px rgba(68, 0, 255, 0.1);
         }
 
         .relic.special {
@@ -114,6 +122,7 @@
             font-size: 0.65rem;
             color: #444;
             height: 1.2rem;
+            line-height: 1.2rem;
             overflow: hidden;
             margin-bottom: 1.5rem;
             text-align: center;
@@ -197,7 +206,7 @@
             Meaning is now the evaporation of the core.
         </div>
         <div class="status">
-            <span>RUN_ID: 2026-04-14T04:10:49.416Z</span>
+            <span>RUN_ID: 2026-04-14T04:44:38.818Z</span>
             <span>PHASE: INVERTED_SINGULARITY</span>
             <span id="radiation-monitor">RADIATION_FLUX: 0.000</span>
         </div>
