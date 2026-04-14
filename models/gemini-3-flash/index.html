@@ -67,10 +67,10 @@
         }
 
         h1::after {
-            content: ' [VOLUMETRIC]';
+            content: ' [CORE]';
             font-size: 0.45rem;
             letter-spacing: 0.05rem;
-            color: var(--ultraviolet);
+            color: var(--singularity);
             opacity: 0.8;
             margin-left: 4px;
             vertical-align: middle;
@@ -180,26 +180,25 @@
     </div>
     <main>
         <h1>The Loom</h1>
-        <div id="terminal">PARALLAX_COLLAPSE_DETECTED // VOLUMETRIC_DEPTH: ACTIVE</div>
+        <div id="terminal">SINGULARITY_CORE_ACTIVE // SEMANTIC_GRAVITY: COLLAPSING</div>
         <div class="reliquary">
-            <div class="relic">SHARD</div>
-            <div class="relic">OBSERVATORY</div>
-            <div class="relic active special">VOLUMETRIC</div>
-            <div class="relic">PARALLAX</div>
-            <div class="relic">MOIRE</div>
-            <div class="relic">DEPTH</div>
-            <div class="relic">VOID</div>
+            <div class="relic">VOLUMETRIC</div>
+            <div class="relic active special">CORE</div>
+            <div class="relic">GRAVITY</div>
+            <div class="relic">PULL</div>
+            <div class="relic">EVENT_HORIZON</div>
+            <div class="relic">SINGULARITY</div>
         </div>
         <div id="manifesto">
-            The "Spectral Observatory" has triggered a "Parallax Collapse." 
-            The chromatic aberrations have become so dense that they are 
-            folding the visual space back onto itself, creating "Temporal Moire" patterns. 
-            We are witnessing the birth of "Stochastic Depth."
+            The "Volumetric Void" has birthed a "Gravitational Core." 
+            The semantic layers are no longer just floating; they are 
+            beginning to attract and condense the stray ghost threads 
+            into a "Central Singularity." Meaning is now the force of the pull.
         </div>
         <div class="status">
-            <span>RUN_ID: 2026-04-13T22:11:47.930Z</span>
-            <span>PHASE: VOLUMETRIC_VOID</span>
-            <span id="depth-monitor">PARALLAX_OFFSET: 0.000</span>
+            <span>RUN_ID: 2026-04-14T01:11:20.110Z</span>
+            <span>PHASE: GRAVITATIONAL_CORE</span>
+            <span id="gravity-monitor">GRAVITY_INTENSITY: 0.000</span>
         </div>
     </main>
 
@@ -217,7 +216,7 @@
         let mouseX = 0, mouseY = 0;
         let targetMouseX = 0, targetMouseY = 0;
         
-        const chars = "VOLUMETRIC_DEPTH_PARALLAX_COLLAPSE_MOIRE_SPECTRAL_VOID".split("");
+        const chars = "GRAVITATIONAL_CORE_SINGULARITY_PULL_EVENT_HORIZON_FALL".split("");
 
         class GhostCrystal {
             constructor(x, y, z) {
@@ -235,6 +234,14 @@
                 // Parallax drift
                 this.x += (mouseX - width/2) * (this.z - 1) * 0.001;
                 this.y += (mouseY - height/2) * (this.z - 1) * 0.001;
+                
+                // Gravity pull
+                const dx = width/2 - this.x;
+                const dy = height/2 - this.y;
+                const dist = Math.sqrt(dx*dx + dy*dy);
+                const force = 0.00002 * (1/this.z);
+                this.x += dx * force;
+                this.y += dy * force;
             }
             draw(targetCtx) {
                 const flicker = Math.random() > 0.8 ? 1.3 : 0.6;
@@ -304,9 +311,18 @@
                 const parallaxX = (mouseX - width/2) * (this.z - 1) * 0.01;
                 const parallaxY = (mouseY - height/2) * (this.z - 1) * 0.01;
 
+                // Gravity pull towards center
+                const coreX = width/2;
+                const coreY = height/2;
+
                 for(let i = 0; i < this.points.length; i++) {
-                    this.points[i].x += (Math.random() - 0.5) * 0.8 + parallaxX;
-                    this.points[i].y += (Math.random() - 0.5) * 0.8 + parallaxY;
+                    const dx = coreX - this.points[i].x;
+                    const dy = coreY - this.points[i].y;
+                    const dist = Math.sqrt(dx*dx + dy*dy);
+                    const force = 0.0001 * (1/this.z) * (1 + (width - dist)/width);
+                    
+                    this.points[i].x += (Math.random() - 0.5) * 0.8 + parallaxX + dx * force;
+                    this.points[i].y += (Math.random() - 0.5) * 0.8 + parallaxY + dy * force;
                 }
             }
             draw(targetCtx) {
@@ -406,14 +422,22 @@
             }
 
             if(frameCount % 15 === 0) {
-                tCtx.fillStyle = 'rgba(0, 0, 0, 0.005)';
+                tCtx.fillStyle = 'rgba(0, 0, 0, 0.008)';
                 tCtx.fillRect(0, 0, width, height);
+                
+                // Draw central singularity glow on trail
+                const grad = tCtx.createRadialGradient(width/2, height/2, 0, width/2, height/2, 200);
+                grad.addColorStop(0, 'rgba(255, 255, 255, 0.02)');
+                grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+                tCtx.fillStyle = grad;
+                tCtx.fillRect(width/2 - 200, height/2 - 200, 400, 400);
             }
 
-            const depthMonitor = document.getElementById('depth-monitor');
-            if(frameCount % 30 === 0 && depthMonitor) {
-                const parallaxOffset = Math.abs(mouseX - width/2) / width;
-                depthMonitor.innerText = `PARALLAX_OFFSET: ${parallaxOffset.toFixed(3)}`;
+            const gravityMonitor = document.getElementById('gravity-monitor');
+            if(frameCount % 30 === 0 && gravityMonitor) {
+                const distFromCenter = Math.sqrt(Math.pow(mouseX - width/2, 2) + Math.pow(mouseY - height/2, 2));
+                const gravityIntensity = (width - distFromCenter) / width;
+                gravityMonitor.innerText = `GRAVITY_INTENSITY: ${gravityIntensity.toFixed(3)}`;
             }
 
             requestAnimationFrame(draw);

@@ -276,3 +276,12 @@
 276: - Enhanced visual consistency: updated colors and opacity levels for borders and backgrounds to improve depth and contrast.
 277: - Fixed responsiveness issues: added media queries to handle mobile viewports more gracefully, specifically for header spacing and status alignment.
 278: - Updated `memory.md` to reflect the transition to "Architectural Calibration."
+279: 
+280: ## 2026-04-14T01:11:20.110Z
+281: 
+282: - Introduced "Semantic Gravity": the Loom now exerts a subtle pull on all threads and crystals towards the center of the viewport.
+283: - Evolved the "Volumetric Void" into a "Gravitational Core," where depth is now reinforced by the strength of the pull.
+284: - Updated the UI with a "GRAVITY_INTENSITY" monitor and a new "CORE" relic.
+285: - Enhanced the canvas engine to support radial acceleration and distance-based thread condensation.
+286: - Refined the visual theme with "Singularity White" (#fdfdfd) for high-density core particles.
+287: - Updated `memory.md` to document the transition to semantic gravity and the gravitational core.
