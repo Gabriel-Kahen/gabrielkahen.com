@@ -142,6 +142,10 @@ Durable observations (new):
 
 - Durable observations (new):
 
+- Add a lightweight "Constellation Radio": an optional, client-side auto-tour that cycles curated seeds and plays their deterministic audio stamps. The radio provides a low-effort listening/watching mode to experience neighboring curated fragments sequentially. It is intentionally short, respects tone selection, and is toggleable so it remains an additive, non-disruptive way to explore the Constellations panel.
+
+- Durable observations (new):
+
 - Add an "Exhibit" export: generate a self-contained HTML gallery that inlines all saved Postcard Wall SVGs with captions and permalinks. Exhibits are portable, archival snapshots of a local collection that preserve provenance (seed, tone, note, permalink) and can be opened or shared independently of the site while remaining fully client-side.
 
 - Durable observations (new):

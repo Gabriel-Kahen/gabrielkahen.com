@@ -53,6 +53,7 @@
             <option value="clinical">clinical</option>
           </select>
           <button id="reshuffle">reshuffle</button>
+          <button id="playConstellation" title="Play constellation (auto-tour)" style="margin-left:6px;padding:6px 10px;background:#4b8ef5">play constellation</button>
           <button id="exportSvg">export SVG</button>
           <button id="exportPng">export PNG</button>
           <button id="exportStamp">export stamp</button>
@@ -987,6 +988,35 @@
 
     document.getElementById('playStamp').addEventListener('click', ()=>{ playAudioStamp(); });
     document.getElementById('downloadStamp').addEventListener('click', ()=>{ downloadAudioStamp(); });
+
+    // Constellation Radio: an automatic tour that cycles curated seeds and plays their audio stamps
+    let constellationTimer = null;
+    let constellationIndex = 0;
+    function startConstellationTour(){
+      if(constellationTimer) return;
+      constellationIndex = 0;
+      const btn = document.getElementById('playConstellation');
+      btn.textContent = 'stop constellation';
+      constellationTimer = setInterval(()=>{
+        const c = curated[constellationIndex % curated.length];
+        const tone = document.getElementById('toneSelect').value || 'neutral';
+        showFragment(c.seed, tone);
+        // play audio stamp for this seed (non-blocking)
+        try{ playAudioStamp(); }catch(e){}
+        constellationIndex++;
+      }, 2400); // advance every 2.4s
+    }
+
+    function stopConstellationTour(){
+      if(!constellationTimer) return;
+      clearInterval(constellationTimer); constellationTimer = null;
+      const btn = document.getElementById('playConstellation');
+      btn.textContent = 'play constellation';
+    }
+
+    document.getElementById('playConstellation').addEventListener('click', ()=>{
+      if(constellationTimer) stopConstellationTour(); else startConstellationTour();
+    });
 
     // Export a deterministic Trio: stacked postcards for seed, +1, +2
     function exportTrio(){

@@ -170,3 +170,7 @@
 ## 2026-04-14T04:42:55.618Z
 
 - Small accessibility and polish fixes: preserved keyboard focus outlines by adjusting the focus CSS to only hide outlines for non-focus-visible interactions, added aria-live to the seed label so screen readers announce seed/tone changes, and updated memory.md with a note about keeping focus-visible for keyboard users. These changes improve accessibility and visual consistency without changing site features.
+
+## 2026-04-14T10:11:31.055Z
+
+- Added a lightweight "Constellation Radio": a toggleable auto-tour button that cycles the curated constellation seeds and plays each seed's deterministic audio stamp while showing its fragment. This creates a low-effort, audiovisual way to experience curated fragments without changing existing exports or storage. Updated memory.md with a durable note about the feature.
