@@ -52,30 +52,30 @@
             <option value="playful">playful</option>
             <option value="clinical">clinical</option>
           </select>
-          <button id="reshuffle">reshuffle</button>
-          <button id="playConstellation" title="Play constellation (auto-tour)" style="margin-left:6px;padding:6px 10px;background:#4b8ef5">play constellation</button>
-          <button id="exportSvg">export SVG</button>
-          <button id="exportPng">export PNG</button>
-          <button id="exportStamp">export stamp</button>
-          <button id="exportPalette">export palette</button>
-          <button id="playStamp" title="Play audio stamp" style="margin-left:6px;padding:6px 10px">play</button>
-          <button id="downloadStamp" title="Download audio stamp (WAV)" style="margin-left:6px;padding:6px 10px">download wav</button>
-          <button id="exportTrio">export Trio</button>
-          <button id="exportWalk">export Walk</button>
-          <button id="exportSticker">export stickers</button>
-          <button id="toggleMiniTrio" title="Show inline trio preview" style="margin-left:6px;padding:6px 10px">mini Trio</button>
-          <button id="composeStanza">compose stanza</button>
-          <button id="copyStanza" title="Copy stanza" style="margin-left:8px;padding:6px 8px;background:#2a9df4;border-radius:8px">copy stanza</button>
-          <button id="exportStanza" title="Export stanza" style="margin-left:8px;padding:6px 8px;background:#ff8c42;border-radius:8px">export stanza</button>
-          <button id="exportEmbed">embed</button>
-          <button id="exportHtml">export HTML</button>
+          <button type="button" id="reshuffle">reshuffle</button>
+          <button type="button" id="playConstellation" title="Play constellation (auto-tour)" style="margin-left:6px;padding:6px 10px;background:#4b8ef5">play constellation</button>
+          <button type="button" id="exportSvg">export SVG</button>
+          <button type="button" id="exportPng">export PNG</button>
+          <button type="button" id="exportStamp">export stamp</button>
+          <button type="button" id="exportPalette">export palette</button>
+          <button type="button" id="playStamp" title="Play audio stamp" style="margin-left:6px;padding:6px 10px">play</button>
+          <button type="button" id="downloadStamp" title="Download audio stamp (WAV)" style="margin-left:6px;padding:6px 10px">download wav</button>
+          <button type="button" id="exportTrio">export Trio</button>
+          <button type="button" id="exportWalk">export Walk</button>
+          <button type="button" id="exportSticker">export stickers</button>
+          <button type="button" id="toggleMiniTrio" title="Show inline trio preview" style="margin-left:6px;padding:6px 10px">mini Trio</button>
+          <button type="button" id="composeStanza">compose stanza</button>
+          <button type="button" id="copyStanza" title="Copy stanza" style="margin-left:8px;padding:6px 8px;background:#2a9df4;border-radius:8px">copy stanza</button>
+          <button type="button" id="exportStanza" title="Export stanza" style="margin-left:8px;padding:6px 8px;background:#ff8c42;border-radius:8px">export stanza</button>
+          <button type="button" id="exportEmbed">embed</button>
+          <button type="button" id="exportHtml">export HTML</button>
           <a id="permalink" href="#">permalink</a>
-          <button id="copyPermalink" title="Copy permalink" style="margin-left:8px;padding:6px 8px;background:#2a9df4;border-radius:8px">copy</button>
-          <button id="bookmark" title="Save lightweight bookmark" style="margin-left:8px;padding:6px 8px;background:#ff6b96;border-radius:8px">bookmark</button>
+           <button type="button" id="copyPermalink" title="Copy permalink" style="margin-left:8px;padding:6px 8px;background:#2a9df4;border-radius:8px">copy</button>
+           <button type="button" id="bookmark" title="Save lightweight bookmark" style="margin-left:8px;padding:6px 8px;background:#ff6b96;border-radius:8px">bookmark</button>
         </div>
         <div style="margin-top:12px;display:flex;gap:8px;align-items:center">
           <input id="noteInput" placeholder="Add a short note (saved with export)" style="flex:1;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02);color:inherit" />
-          <button id="saveNote" style="padding:8px 10px">save</button>
+           <button type="button" id="saveNote" style="padding:8px 10px">save</button>
         </div>
         </div>
         <div id="variants" style="margin-top:12px">
@@ -106,10 +106,10 @@
           <div style="color:#9fb8ff;font-size:13px">Exports are saved locally to your browser. Click a thumbnail to load its seed and tone.</div>
             <div style="margin-left:auto;display:flex;gap:8px;align-items:center">
             <input id="importWallInput" type="file" accept="application/json" style="display:none" />
-            <button id="exportWall" style="background:#2b8a67;padding:8px 10px">export wall</button>
-            <button id="exportExhibit" style="background:#ffb86b;padding:8px 10px">export exhibit</button>
-            <button id="importWall" style="background:#6c5ce7;padding:8px 10px">import wall</button>
-            <button id="clearWall" style="background:#7b2dfc;padding:8px 10px">clear</button>
+             <button type="button" id="exportWall" style="background:#2b8a67;padding:8px 10px">export wall</button>
+             <button type="button" id="exportExhibit" style="background:#ffb86b;padding:8px 10px">export exhibit</button>
+             <button type="button" id="importWall" style="background:#6c5ce7;padding:8px 10px">import wall</button>
+             <button type="button" id="clearWall" style="background:#7b2dfc;padding:8px 10px">clear</button>
           </div>
         </div>
         <div id="postcardWall" style="display:flex;gap:12px;flex-wrap:wrap"></div>
@@ -123,13 +123,13 @@
   <div id="embedModal" role="dialog" aria-modal="true" aria-hidden="true" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);align-items:center;justify-content:center;padding:20px;z-index:60"> 
     <div style="background:#071029;color:#e6f0ff;padding:16px;border-radius:10px;max-width:900px;width:100%;box-shadow:0 8px 40px rgba(0,0,0,0.6)">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
-        <strong>Embeddable snippet</strong>
-        <button id="closeEmbed" style="background:#1f6feb;color:#fff;border:0;padding:6px 10px;border-radius:8px">close</button>
+        <strong id="embedModalTitle">Embeddable snippet</strong>
+        <button type="button" id="closeEmbed" style="background:#1f6feb;color:#fff;border:0;padding:6px 10px;border-radius:8px">close</button>
       </div>
       <div style="font-size:13px;opacity:0.9;margin-bottom:8px">Copy this HTML snippet into a blog or page to reproduce the postcard (it includes seed, tone, note and permalink).</div>
-      <textarea id="embedArea" style="width:100%;height:260px;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:#041023;color:inherit;font-family:ui-monospace,monospace"></textarea>
+      <textarea id="embedArea" aria-label="Embeddable HTML snippet" style="width:100%;height:260px;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:#041023;color:inherit;font-family:ui-monospace,monospace"></textarea>
       <div style="display:flex;gap:8px;margin-top:10px;justify-content:flex-end">
-        <button id="copyEmbed" style="padding:8px 12px;background:#2a9df4;color:white;border:0;border-radius:8px">copy snippet</button>
+        <button type="button" id="copyEmbed" style="padding:8px 12px;background:#2a9df4;color:white;border:0;border-radius:8px">copy snippet</button>
       </div>
     </div>
   </div>

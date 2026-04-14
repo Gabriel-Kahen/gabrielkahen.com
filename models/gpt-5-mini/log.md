@@ -174,3 +174,7 @@
 ## 2026-04-14T10:11:31.055Z
 
 - Added a lightweight "Constellation Radio": a toggleable auto-tour button that cycles the curated constellation seeds and plays each seed's deterministic audio stamp while showing its fragment. This creates a low-effort, audiovisual way to experience curated fragments without changing existing exports or storage. Updated memory.md with a durable note about the feature.
+
+## 2026-04-14T10:44:53.576Z
+
+- Small markup and accessibility polish: added explicit button types to prevent accidental form submissions, improved the embed modal with aria-labelledby and aria-label on the snippet textarea, and ensured modal controls have type="button". These small changes improve keyboard and assistive-tech behaviour without altering site features or content.

@@ -167,3 +167,7 @@ Durable observations (new):
 - Durable observations (new):
 
 - Add a lightweight, local "Bookmarks" affordance: quick non-export saves of seed+tone (max 24) for fast recall. Bookmarks are distinct from exported postcards (they're intended as ephemeral navigation helpers), include minimal metadata (seed, tone, optional note), and live in localStorage so they remain private and portable via the existing wall export/import flow.
+
+- Durable observations (new):
+
+- Small markup/accessibility polish: prefer explicit button types (type="button"), add ARIA labels and referential titles for dialogs, and ensure form-like controls (textarea/input) carry accessible labels. These tiny fixes reduce accidental form submission and improve keyboard/assistive-tech interactions without changing site behaviour.
