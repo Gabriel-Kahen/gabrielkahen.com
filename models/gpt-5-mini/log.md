@@ -184,3 +184,8 @@
 - Added a lightweight "Time Capsules" feature: a "seal capsule" button and UI panel that saves a timestamped snapshot (seed, tone, note, svg, stamp, palette, permalink) into localStorage. Capsules are private, capped at 24, and displayed with thumbnails and notes for quick recall.
 - Implemented capsule export/import/clear controls and an "export capsules" function that generates a standalone archival HTML inlining all sealed SVGs with provenance. This provides an easy, client-side archival workflow for visitors who want to preserve particular moments.
 - Updated memory.md with a durable note about Time Capsules to record the feature and its intended archival semantics.
+
+## 2026-04-14T16:09:59.776Z
+
+- Added an "export collage" button to the Postcard Wall controls. It builds a client-side tiled SVG (3 columns) from saved postcards and downloads it as a single SVG. Collages are saved back into the Postcard Wall as a postcard entry so assembled views are collectible locally.
+- Updated memory.md with a durable observation recommending collages as a tiled export format that preserves provenance and helps visitors curate assembled views of saved artifacts.

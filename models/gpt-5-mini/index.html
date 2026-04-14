@@ -107,8 +107,9 @@
           <div style="color:#9fb8ff;font-size:13px">Exports are saved locally to your browser. Click a thumbnail to load its seed and tone.</div>
             <div style="margin-left:auto;display:flex;gap:8px;align-items:center">
             <input id="importWallInput" type="file" accept="application/json" style="display:none" />
-             <button type="button" id="exportWall" style="background:#2b8a67;padding:8px 10px">export wall</button>
-             <button type="button" id="exportExhibit" style="background:#ffb86b;padding:8px 10px">export exhibit</button>
+              <button type="button" id="exportWall" style="background:#2b8a67;padding:8px 10px">export wall</button>
+              <button type="button" id="exportExhibit" style="background:#ffb86b;padding:8px 10px">export exhibit</button>
+              <button type="button" id="exportCollage" style="background:#6aa0ff;padding:8px 10px">export collage</button>
              <button type="button" id="importWall" style="background:#6c5ce7;padding:8px 10px">import wall</button>
              <button type="button" id="clearWall" style="background:#7b2dfc;padding:8px 10px">clear</button>
           </div>
@@ -909,6 +910,55 @@
     // Export/import wall controls
     document.getElementById('exportWall').addEventListener('click', ()=>{ exportPostcardWall(); });
     document.getElementById('exportExhibit').addEventListener('click', ()=>{ exportExhibit(); });
+    
+    // Export a collage: arrange saved postcards into a 3-column grid and export as a single SVG
+    function exportCollage(){
+      try{
+        const store = JSON.parse(localStorage.getItem('gpt5-mini-postcards')||'[]');
+        if(!store.length){ alert('No postcards to include in collage.'); return; }
+        const cols = 3;
+        const thumbW = 360, thumbH = 240, gap = 16;
+        const rows = Math.ceil(store.length / cols);
+        const fullW = cols * thumbW + gap * (cols - 1);
+        const fullH = rows * thumbH + gap * (rows - 1);
+        // Inline each saved SVG (strip XML prolog) and place into a <g> with translate
+        const items = store.slice(0, cols * rows);
+        const groups = items.map((it, idx)=>{
+          const col = idx % cols; const row = Math.floor(idx/cols);
+          const x = col * (thumbW + gap); const y = row * (thumbH + gap);
+          const inlined = (it.svg || '').replace(/<\?xml.*?\?>\s*/,'');
+          // wrap the inlined SVG in a <g> and scale it to thumb dimensions while preserving viewBox where possible
+          // simplest approach: place the inlined svg inside a <foreignObject> fallback by drawing as image via data URL
+          const data = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(inlined);
+          return `<g transform="translate(${x},${y})"><rect x="0" y="0" width="${thumbW}" height="${thumbH}" rx="12" ry="12" fill="#041023"/>`+
+                 `<image x="0" y="0" width="${thumbW}" height="${thumbH}" preserveAspectRatio="xMidYMid slice" href="${data}"/></g>`;
+        }).join('\n');
+
+        const permalink = (new URL(location.href)).toString();
+        const svg = `<?xml version="1.0" encoding="utf-8"?>\n<!-- generated-permalink: ${svgEscape(permalink)} -->\n`+
+          `<svg xmlns="http://www.w3.org/2000/svg" width="${fullW}" height="${fullH}" viewBox="0 0 ${fullW} ${fullH}">`+
+          `<rect width="100%" height="100%" fill="#071029"/>`+
+          `${groups}`+
+          `</svg>`;
+
+        const fname = `gpt5-mini-collage-${new Date().toISOString().slice(0,19).replace(/[:T]/g,'-')}.svg`;
+        const blob = new Blob([svg], {type: 'image/svg+xml'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a'); a.href = url; a.download = fname; document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(()=>URL.revokeObjectURL(url),1500);
+
+        // Save the collage as a postcard entry so it appears on the wall
+        try{
+          const store2 = JSON.parse(localStorage.getItem('gpt5-mini-postcards')||'[]');
+          store2.unshift({seed: store[0].seed || String(nowSeed()), tone: store[0].tone || 'neutral', note: 'collage', svg: svg, title: 'GPT-5 mini — collage', created: (new Date()).toISOString(), permalink});
+          while(store2.length>24) store2.pop();
+          localStorage.setItem('gpt5-mini-postcards', JSON.stringify(store2));
+          renderPostcardWall();
+        }catch(e){ console.warn('could not save collage', e); }
+      }catch(e){ console.warn('export collage failed', e); alert('Export collage failed'); }
+    }
+
+    document.getElementById('exportCollage').addEventListener('click', ()=>{ exportCollage(); });
     document.getElementById('importWall').addEventListener('click', ()=>{ document.getElementById('importWallInput').click(); });
     document.getElementById('importWallInput').addEventListener('change', (ev)=>{
       const f = ev.target.files && ev.target.files[0];

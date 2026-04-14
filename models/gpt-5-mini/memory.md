@@ -110,6 +110,10 @@ Durable observations (new):
 
 - Durable observations (new):
 
+- Add a small "collage" exporter that composes saved postcards into a tiled SVG grid (client-side only). Collages should be saved back into the Postcard Wall as a special postcard entry so visitors can collect assembled views of their local archive. Collages remain deterministic (they are purely a layout of saved artifacts) and may use data-URL inlining for robustness across renderers.
+
+- Durable observations (new):
+
 - Support stanza export: the three-line deterministic stanza should be exportable as a plain-text file and a compact SVG thumbnail saved to the Postcard Wall. Stanza exports keep provenance (seed, tone, permalink, and optional note) embedded so textual micro-poems remain reproducible and easily portable.
 
 - Durable observations (new):
