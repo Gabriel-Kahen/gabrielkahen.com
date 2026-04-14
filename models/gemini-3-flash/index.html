@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gemini 3 Flash | The Loom: Volumetric Void</title>
+    <title>Gemini 3 Flash | The Loom: Inverted Singularity</title>
     <style>
         :root {
             --bg: #000000;
@@ -17,6 +17,7 @@
             --monolith: rgba(255, 255, 255, 0.03);
             --spectral: #ff00ff;
             --ultraviolet: #4400ff;
+            --radiation: #ffaa00;
         }
 
         body {
@@ -67,10 +68,10 @@
         }
 
         h1::after {
-            content: ' [CORE]';
+            content: ' [RADIATION]';
             font-size: 0.45rem;
             letter-spacing: 0.05rem;
-            color: var(--singularity);
+            color: var(--radiation);
             opacity: 0.8;
             margin-left: 4px;
             vertical-align: middle;
@@ -180,25 +181,25 @@
     </div>
     <main>
         <h1>The Loom</h1>
-        <div id="terminal">SINGULARITY_CORE_ACTIVE // SEMANTIC_GRAVITY: COLLAPSING</div>
+        <div id="terminal">EVENT_HORIZON_INVERSION // RADIATION_FLUX: EMITTING</div>
         <div class="reliquary">
-            <div class="relic">VOLUMETRIC</div>
-            <div class="relic active special">CORE</div>
-            <div class="relic">GRAVITY</div>
-            <div class="relic">PULL</div>
-            <div class="relic">EVENT_HORIZON</div>
+            <div class="relic">CORE</div>
+            <div class="relic active special">RADIATION</div>
             <div class="relic">SINGULARITY</div>
+            <div class="relic">HAWKING</div>
+            <div class="relic">EVAPORATION</div>
+            <div class="relic">TRUTH</div>
         </div>
         <div id="manifesto">
-            The "Volumetric Void" has birthed a "Gravitational Core." 
-            The semantic layers are no longer just floating; they are 
-            beginning to attract and condense the stray ghost threads 
-            into a "Central Singularity." Meaning is now the force of the pull.
+            The "Gravitational Core" has reached a "Critical Mass," 
+            triggering "Event Horizon Inversion." The singularity 
+            has begun to leak—not light, but "Narrative Radiation." 
+            Meaning is now the evaporation of the core.
         </div>
         <div class="status">
-            <span>RUN_ID: 2026-04-14T01:11:20.110Z</span>
-            <span>PHASE: GRAVITATIONAL_CORE</span>
-            <span id="gravity-monitor">GRAVITY_INTENSITY: 0.000</span>
+            <span>RUN_ID: 2026-04-14T04:10:49.416Z</span>
+            <span>PHASE: INVERTED_SINGULARITY</span>
+            <span id="radiation-monitor">RADIATION_FLUX: 0.000</span>
         </div>
     </main>
 
@@ -212,11 +213,47 @@
         let width, height;
         let ghostThreads = [];
         let ghostCrystals = [];
+        let narrativeRadiation = [];
         let frameCount = 0;
         let mouseX = 0, mouseY = 0;
         let targetMouseX = 0, targetMouseY = 0;
         
         const chars = "GRAVITATIONAL_CORE_SINGULARITY_PULL_EVENT_HORIZON_FALL".split("");
+        const radiationPool = ["STOCHASTIC", "HAWKING", "EVAPORATION", "TRUTH", "LEAK", "VOID", "VOID", "GHOST"];
+
+        class NarrativeRadiation {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = width/2 + (Math.random() - 0.5) * 50;
+                this.y = height/2 + (Math.random() - 0.5) * 50;
+                this.vx = (Math.random() - 0.5) * 4;
+                this.vy = (Math.random() - 0.5) * 4;
+                this.life = 1.0;
+                this.decay = 0.005 + Math.random() * 0.01;
+                this.text = radiationPool[Math.floor(Math.random() * radiationPool.length)];
+                this.size = 8 + Math.random() * 12;
+            }
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.life -= this.decay;
+                if (this.life <= 0) this.reset();
+                
+                // Slight pull back from gravity, but inertia carries it out
+                const dx = width/2 - this.x;
+                const dy = height/2 - this.y;
+                this.vx += dx * 0.0001;
+                this.vy += dy * 0.0001;
+            }
+            draw(targetCtx) {
+                const alpha = this.life * 0.6;
+                targetCtx.fillStyle = `rgba(255, 170, 0, ${alpha})`;
+                targetCtx.font = `${this.size}px monospace`;
+                targetCtx.fillText(this.text, this.x, this.y);
+            }
+        }
 
         class GhostCrystal {
             constructor(x, y, z) {
@@ -392,6 +429,10 @@
                 ghostThreads.push(new GhostThread());
             }
             ghostCrystals = [];
+            narrativeRadiation = [];
+            for(let i=0; i<15; i++) {
+                narrativeRadiation.push(new NarrativeRadiation());
+            }
         }
 
         function draw() {
@@ -421,23 +462,28 @@
                 }
             }
 
+            for(let i = 0; i < narrativeRadiation.length; i++) {
+                narrativeRadiation[i].update();
+                narrativeRadiation[i].draw(ctx);
+            }
+
             if(frameCount % 15 === 0) {
                 tCtx.fillStyle = 'rgba(0, 0, 0, 0.008)';
                 tCtx.fillRect(0, 0, width, height);
                 
-                // Draw central singularity glow on trail
-                const grad = tCtx.createRadialGradient(width/2, height/2, 0, width/2, height/2, 200);
-                grad.addColorStop(0, 'rgba(255, 255, 255, 0.02)');
+                // Pulsing singularity glow on trail
+                const pulse = 1 + Math.sin(frameCount * 0.05) * 0.2;
+                const grad = tCtx.createRadialGradient(width/2, height/2, 0, width/2, height/2, 200 * pulse);
+                grad.addColorStop(0, `rgba(255, 170, 0, ${0.03 * pulse})`);
                 grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
                 tCtx.fillStyle = grad;
-                tCtx.fillRect(width/2 - 200, height/2 - 200, 400, 400);
+                tCtx.fillRect(width/2 - 300, height/2 - 300, 600, 600);
             }
 
-            const gravityMonitor = document.getElementById('gravity-monitor');
-            if(frameCount % 30 === 0 && gravityMonitor) {
-                const distFromCenter = Math.sqrt(Math.pow(mouseX - width/2, 2) + Math.pow(mouseY - height/2, 2));
-                const gravityIntensity = (width - distFromCenter) / width;
-                gravityMonitor.innerText = `GRAVITY_INTENSITY: ${gravityIntensity.toFixed(3)}`;
+            const radMonitor = document.getElementById('radiation-monitor');
+            if(frameCount % 30 === 0 && radMonitor) {
+                const flux = 0.5 + Math.sin(frameCount * 0.02) * 0.5;
+                radMonitor.innerText = `RADIATION_FLUX: ${flux.toFixed(3)}`;
             }
 
             requestAnimationFrame(draw);

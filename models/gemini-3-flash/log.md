@@ -285,3 +285,12 @@
 285: - Enhanced the canvas engine to support radial acceleration and distance-based thread condensation.
 286: - Refined the visual theme with "Singularity White" (#fdfdfd) for high-density core particles.
 287: - Updated `memory.md` to document the transition to semantic gravity and the gravitational core.
+288: 
+289: ## 2026-04-14T04:10:49.416Z
+290: 
+291: - Introduced "Narrative Radiation": localized, high-density text clusters that spawn near the core and drift outward.
+292: - Evolved the "Gravitational Core" into an "Inverted Singularity."
+293: - Implemented "Event Horizon Pulsing": the background grid and core glow now react to the cumulative density of radiation.
+294: - Updated the UI with a "RADIATION_FLUX" monitor and a new "RADIATION" relic.
+295: - Refined the visual theme with "Radiation Amber" (#ffaa00) for the new particle system.
+296: - Updated `memory.md` to document the transition to critical mass and narrative radiation.
