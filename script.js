@@ -12,8 +12,8 @@ function updateTab(){
       Email.style.display = 'none';
       document.getElementById("tabimg").src = "icons/noiconssmall.png";
       gabrielkahen.style.left = .0165 * imgWidth * (8/3) + "px";
-      LinkedIn.style.left = .325 * imgWidth  + "px";
-      GitHub.style.left = .68 * imgWidth + "px";
+      GitHub.style.left = .325 * imgWidth  + "px";
+      LinkedIn.style.left = .68 * imgWidth + "px";
       document.querySelectorAll('.tab').forEach(element => {
         element.style.width = imgWidth * .3 + "px";
     }); 
@@ -28,8 +28,8 @@ function updateTab(){
       document.getElementById("tabimg").src = "icons/noicons.png";
       Email.style.display = 'flex';
       gabrielkahen.style.left = .0029 * imgWidth * (8/3) + "px";
-      LinkedIn.style.left = .0365 * imgWidth * (8/3) + "px";
-      GitHub.style.left = .0717 * imgWidth * (8/3) + "px";
+      GitHub.style.left = .0365 * imgWidth * (8/3) + "px";
+      LinkedIn.style.left = .0717 * imgWidth * (8/3) + "px";
       Email.style.left = .106 * imgWidth * (8/3) + "px";
       document.querySelectorAll('.tab').forEach(element => {
         element.style.width = imgWidth * .085 + "px";
