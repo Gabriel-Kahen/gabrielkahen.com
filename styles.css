@@ -352,3 +352,139 @@ body {
     position: absolute;
     z-index: 999;
   }
+
+/* music dataset page */
+
+.music-page-shell {
+    min-height: 100vh;
+    background-color: #FAF9F9;
+    color: #212121;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.music-browser-top {
+    min-height: 46px;
+    background-color: #FAF9F9;
+    border-bottom: 1px solid #c5c4c4;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 8px 18px;
+    box-sizing: border-box;
+}
+
+.music-brand {
+    color: #1F1F1F;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.music-brand img {
+    width: 18px;
+    height: 18px;
+}
+
+.music-address {
+    flex: 1;
+    background-color: #EAE9ED;
+    border-radius: 25px;
+    color: #474747;
+    font-size: 14px;
+    line-height: 34px;
+    min-width: 0;
+    padding: 0 18px;
+}
+
+.music-data-page {
+    width: min(760px, calc(100% - 40px));
+    margin: 0 auto;
+    padding: 96px 0 64px;
+    text-align: center;
+}
+
+.music-data-icon {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 18px;
+}
+
+.music-data-page h1 {
+    font-size: 42px;
+    font-weight: 500;
+    margin: 0 0 12px;
+}
+
+.music-data-page p {
+    color: #555;
+    font-size: 17px;
+    line-height: 1.45;
+    margin: 0 auto 34px;
+}
+
+.music-data-links {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+}
+
+.music-data-links a {
+    background-color: #FFF;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    color: #212121;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    min-height: 98px;
+    justify-content: center;
+    padding: 18px;
+    text-decoration: none;
+    box-shadow: 0px 3px 8px 1px rgba(43, 43, 43, 0.08);
+}
+
+.music-data-links a:hover {
+    background-color: #F4F4F5;
+    border-color: #c8c8c8;
+    transition: 0.2s;
+}
+
+.music-data-links strong {
+    font-size: 19px;
+    font-weight: 600;
+}
+
+.music-data-links span {
+    color: #666;
+    font-size: 13px;
+}
+
+@media (max-width: 620px) {
+    .music-browser-top {
+        align-items: stretch;
+        flex-direction: column;
+        gap: 8px;
+        padding: 10px 12px;
+    }
+
+    .music-address {
+        font-size: 13px;
+        line-height: 32px;
+    }
+
+    .music-data-page {
+        width: min(420px, calc(100% - 28px));
+        padding-top: 64px;
+    }
+
+    .music-data-page h1 {
+        font-size: 34px;
+    }
+
+    .music-data-links {
+        grid-template-columns: 1fr;
+    }
+}

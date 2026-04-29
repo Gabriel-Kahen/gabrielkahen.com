@@ -215,7 +215,7 @@ function openTrading(){
 }
 
 function openMusic(){
-    window.open("https://www.kaggle.com/datasets/gabrielkahen/music-listening-data-500k-users");
+    window.open("/music_data/");
 }
 
 /* tooltips */
