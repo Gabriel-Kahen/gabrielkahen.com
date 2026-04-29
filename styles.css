@@ -439,7 +439,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 7px;
-    min-height: 98px;
+    min-height: 72px;
     justify-content: center;
     padding: 18px;
     text-decoration: none;
