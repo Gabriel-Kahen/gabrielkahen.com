@@ -89,7 +89,7 @@ document.querySelectorAll('.bookmark').forEach(element => {
     element.style.bottom = screenHeight * .005 + "px";
 });
 
-const bookmarkGap = 16;
+const bookmarkGap = 6;
 research.style.left = imgWidth * .003 * (8/3) + "px";
 trading.style.left = research.offsetLeft + research.offsetWidth + bookmarkGap + "px";
 music.style.left = trading.offsetLeft + trading.offsetWidth + bookmarkGap + "px";
