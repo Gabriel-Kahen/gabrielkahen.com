@@ -87,13 +87,12 @@ resizeURL();
 document.querySelectorAll('.bookmark').forEach(element => {
     element.style.height = screenHeight * .025 + "px";
     element.style.bottom = screenHeight * .005 + "px";
-
-paper.style.left = imgWidth * .003 * (8/3) + "px";
-trading.style.left = imgWidth * .033 * (8/3) + "px";
-music.style.left = imgWidth * .0875 * (8/3) + "px";
-
-
 });
+
+const bookmarkGap = 16;
+research.style.left = imgWidth * .003 * (8/3) + "px";
+trading.style.left = research.offsetLeft + research.offsetWidth + bookmarkGap + "px";
+music.style.left = trading.offsetLeft + trading.offsetWidth + bookmarkGap + "px";
 
 gabelogo.style.height = screenHeight * .08 + "px";
 gabelogo.style.marginTop = screenHeight * .2 + "px";
@@ -206,8 +205,8 @@ function openTripledots(){
     location.reload();
 }
 
-function openPaper(){
-    window.open("https://gabrielkahen.com/paper.pdf");
+function openResearch(){
+    window.open("https://kahenlab.com");
 }
 
 function openTrading(){
