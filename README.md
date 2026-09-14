@@ -7,7 +7,7 @@ The site is published from `main` by GitHub Pages. The drawing page lives at
 
 `draw/` is a standalone, dependency-free drawing interface. It records ordered
 polylines in millimeters on a 215.9 × 279.4 mm US Letter sheet, using an approximate
-0.4 mm ballpoint line. Pen-down distance is limited to 609.6 mm (24 inches); lifted
+0.4 mm ballpoint line. Pen-down distance is limited to 1219.2 mm (48 inches); lifted
 travel does not count. Undo restores the last stroke's allowance.
 
 `draw-server/` validates submissions, generates stroke-following Ender 3 G-code,
@@ -17,7 +17,7 @@ calibration, settings, API details, and exporting saved jobs.
 
 The default plot is 154.545 × 200 mm, centered within a 220 × 220 mm machine
 coordinate area. It scales the entire Letter frame uniformly, preserves stroke
-order and direction, and flips screen Y into machine Y. The 24-inch allowance
+order and direction, and flips screen Y into machine Y. The 48-inch allowance
 is measured before this scaling. The physical pen determines the printed line
 width; the screen preview approximates a BIC ballpoint on the original sheet.
 

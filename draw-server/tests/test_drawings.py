@@ -66,8 +66,8 @@ def test_length_excludes_pen_up_travel_and_accepts_dots():
 
 
 def test_exact_limit():
-    strokes = [[[0, 0], [200, 0], [0, 0], [209.6, 0]]]
-    assert validate_drawing(payload(strokes))[2] == 609.6
+    strokes = [[[0, 0], [200, 0], [0, 0], [200, 0], [0, 0], [200, 0], [0, 0], [19.2, 0]]]
+    assert validate_drawing(payload(strokes))[2] == 1219.2
     strokes[0][-1][0] += 0.0001
     with pytest.raises(InvalidDrawing):
         validate_drawing(payload(strokes))

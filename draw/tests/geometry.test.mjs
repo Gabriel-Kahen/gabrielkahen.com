@@ -9,7 +9,7 @@ test('length follows ordered strokes and does not count pen-up travel', () => {
 test('budget ends exactly on the submitted segment', () => {
   const part = spendInk([10, 10], [40, 50], 25);
   assert.deepEqual(part, { point: [25, 30], used: 25, exhausted: true });
-  assert.equal(spendInk([0, 0], [1000, 0], INK_LIMIT).point[0], INK_LIMIT);
+  assert.equal(spendInk([0, 0], [2000, 0], INK_LIMIT).point[0], INK_LIMIT);
 });
 
 test('paper clipping stops at the first edge, retaining the segment direction', () => {
@@ -37,7 +37,7 @@ test('drafts reject invalid geometry and enforce cumulative limits', () => {
   assert.ok(!valid([[[1, Infinity]]]));
   assert.ok(!valid([[[PAPER.width + 1, 1]]]));
   assert.ok(!valid([[[0, -1]]]));
-  assert.ok(!valid([[[0, 0], [0, 279], [0, 0], [0, 279]]]));
+  assert.ok(!valid([Array.from({ length: 6 }, (_, i) => [0, i % 2 ? 279 : 0])]));
   assert.ok(!valid(Array.from({ length: MAX_STROKES + 1 }, () => [[0, 0]])));
   assert.ok(!valid([Array.from({ length: MAX_POINTS + 1 }, () => [0, 0])]));
 });

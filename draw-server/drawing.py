@@ -7,7 +7,7 @@ from uuid import UUID
 
 PAPER_WIDTH_MM = 215.9
 PAPER_HEIGHT_MM = 279.4
-MAX_LENGTH_MM = 609.6
+MAX_LENGTH_MM = 1219.2
 MAX_STROKES = 200
 MAX_POINTS = 20_000
 
@@ -51,7 +51,7 @@ def validate_drawing(data):
         result.append(clean)
     length = math.fsum(lengths)
     if length > MAX_LENGTH_MM + 1e-6:
-        raise InvalidDrawing("The drawing exceeds the 24-inch pen length limit.")
+        raise InvalidDrawing("The drawing exceeds the 48-inch pen length limit.")
     canonical = json.dumps({"version": 1, "strokes": result}, separators=(",", ":"), allow_nan=False)
     return submission_id, result, length, canonical
 

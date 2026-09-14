@@ -37,7 +37,7 @@ try {
   assert.equal((await draft()).strokes.length, 1);
   await page.keyboard.press('Control+z');
   assert.equal((await draft()).strokes.length, 0);
-  assert.equal(await page.locator('#ink').textContent(), '24.0 in left');
+  assert.equal(await page.locator('#ink').textContent(), '48.0 in left');
 
   const circle = Array.from({ length: 65 }, (_, i) => {
     const angle = i / 64 * Math.PI * 2;
@@ -66,13 +66,13 @@ try {
   await page.locator('#another').click();
   assert.equal((await draft()).strokes.length, 0);
 
-  await stroke([[.1, .2], [.9, .2], [.1, .3], [.9, .3], [.1, .4], [.9, .4]]);
+  await stroke(Array.from({ length: 10 }, (_, i) => [i % 2 ? .9 : .1, .2 + i * .04]));
   const limited = (await draft()).strokes;
   const length = limited.reduce((sum, points) => sum + points.slice(1).reduce((s, p, i) => s + Math.hypot(p[0] - points[i][0], p[1] - points[i][1]), 0), 0);
-  assert(Math.abs(length - 609.6) < 1e-6);
+  assert(Math.abs(length - 1219.2) < 1e-6);
   assert.equal(await page.locator('#ink').textContent(), '0.0 in left');
   await page.locator('#undo').click();
-  assert.equal(await page.locator('#ink').textContent(), '24.0 in left');
+  assert.equal(await page.locator('#ink').textContent(), '48.0 in left');
   await stroke([[.5, .5], [1.1, .6]]);
   const edge = (await draft()).strokes[0].at(-1);
   assert.equal(edge[0], 215.9);

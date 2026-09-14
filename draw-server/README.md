@@ -34,7 +34,7 @@ The database defaults to `~/.local/share/gabriel-draw/drawings.sqlite3` and is c
 
 `/draw-api/health` and `/draw-api/drawings` are identical aliases so a reverse proxy can preserve or remove the `/draw-api` prefix. There are no public read, list, export, or deletion endpoints.
 
-Coordinates are millimeters on portrait US Letter paper, with `(0, 0)` at the upper-left corner and `(215.9, 279.4)` at the lower-right. Each stroke is an ordered list of `[x, y]` points. A single point is a dot. The server rejects unknown fields, invalid UUIDs, duplicate JSON keys, numeric strings, booleans, nonfinite coordinates, out-of-paper coordinates, empty strokes, over 200 strokes, over 20,000 total points, and bodies over 1 MiB, including streamed bodies. It recomputes the sum of distances between adjacent points *within each stroke*. The maximum is 609.6 mm (24 inches), with 0.000001 mm floating-point tolerance. Pen-up travel does not count. Client-supplied G-code is never accepted.
+Coordinates are millimeters on portrait US Letter paper, with `(0, 0)` at the upper-left corner and `(215.9, 279.4)` at the lower-right. Each stroke is an ordered list of `[x, y]` points. A single point is a dot. The server rejects unknown fields, invalid UUIDs, duplicate JSON keys, numeric strings, booleans, nonfinite coordinates, out-of-paper coordinates, empty strokes, over 200 strokes, over 20,000 total points, and bodies over 1 MiB, including streamed bodies. It recomputes the sum of distances between adjacent points *within each stroke*. The maximum is 1219.2 mm (48 inches), with 0.000001 mm floating-point tolerance. Pen-up travel does not count. Client-supplied G-code is never accepted.
 
 A new drawing returns HTTP 201:
 
@@ -67,7 +67,7 @@ SQLite uses its default rollback journal; leave additional free disk space for i
 
 ## Pen plotting and calibration
 
-US Letter is taller than the Ender 3's nominal 220 × 220 mm bed. The default mapping uniformly scales the paper to 200 mm high (scale `200/279.4 ≈ 0.7158196`) and centers it, putting the page at X `32.7273..187.2727`, Y `10..210` mm. Y is flipped from the screen's downward axis to the printer's upward axis. Smaller configured beds further reduce the scale to preserve the specified margins. A physical page template matching those bounds helps align the paper. The 24-inch limit applies to the original page; the default plotted path is approximately 17.18 inches at full budget.
+US Letter is taller than the Ender 3's nominal 220 × 220 mm bed. The default mapping uniformly scales the paper to 200 mm high (scale `200/279.4 ≈ 0.7158196`) and centers it, putting the page at X `32.7273..187.2727`, Y `10..210` mm. Y is flipped from the screen's downward axis to the printer's upward axis. Smaller configured beds further reduce the scale to preserve the specified margins. A physical page template matching those bounds helps align the paper. The 48-inch limit applies to the original page; the default plotted path is approximately 34.36 inches at full budget.
 
 The generator traces each submitted point in its original order and processes strokes in their original order. It does not rasterize, fill, optimize/reorder, or slice the image. XY travels between strokes happen with the pen lifted. Z changes only for pen placement and lifting; each drawn XY move contains no Z or extrusion command. Dots pause for 100 ms. Output is rounded to four decimal places in millimeters.
 

@@ -1,4 +1,4 @@
-import { PAPER, PEN_WIDTH, INK_LIMIT, MAX_STROKES, MAX_POINTS, distance, drawingLength, clipToPaper, spendInk, validDraft } from './geometry.mjs';
+import { PAPER, PEN_WIDTH, INK_LIMIT, MAX_STROKES, MAX_POINTS, distance, drawingLength, clipToPaper, spendInk, validDraft } from './geometry.mjs?v=48';
 
 const $ = id => document.getElementById(id);
 const paper = $('paper');
@@ -99,7 +99,7 @@ function appendPoint(event) {
       }
     }
     if (segment.exhausted) {
-      status('All 24 inches used. Undo a stroke to keep drawing, or submit.');
+      status('All 48 inches used. Undo a stroke to keep drawing, or submit.');
       endStroke();
       return;
     }
@@ -111,7 +111,7 @@ function appendPoint(event) {
 paper.addEventListener('pointerdown', event => {
   if (sending || submitted || activePointer !== null || !event.isPrimary || event.button !== 0) return;
   event.preventDefault();
-  if (INK_LIMIT - totalLength < 1e-7) return status('All 24 inches used. Undo a stroke to keep drawing, or submit.');
+  if (INK_LIMIT - totalLength < 1e-7) return status('All 48 inches used. Undo a stroke to keep drawing, or submit.');
   if (strokes.length >= MAX_STROKES) return status('200 strokes is the limit. You can undo a stroke or submit.');
   if (pointCount >= MAX_POINTS) return status('This drawing has reached its detail limit. You can undo a stroke or submit.');
   const point = position(event);

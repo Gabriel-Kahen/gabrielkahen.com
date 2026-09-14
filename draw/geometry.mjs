@@ -1,5 +1,5 @@
 export const PAPER = Object.freeze({ width: 215.9, height: 279.4 });
-export const INK_LIMIT = 609.6;
+export const INK_LIMIT = 1219.2;
 export const MAX_STROKES = 200;
 export const MAX_POINTS = 20000;
 export const PEN_WIDTH = 0.4;
