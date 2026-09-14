@@ -89,8 +89,10 @@ class Printer:
         self.command('M211 S0')
 
     def move(self, point, feed):
-        target=checked(point)
+        target=checked(point,travel=point[2]==LIFT_Z)
         target_counts=counts(target)
+        if target_counts[2]!=self.expected[2] and target_counts[:2]!=self.expected[:2]:
+            raise ValueError('Z moves must be vertical')
         if target_counts!=self.expected:
             x,y,z=target
             self.command(f'G1 X{x:.4f} Y{y:.4f} Z{z:.4f} F{feed}')

@@ -109,10 +109,11 @@ vectors are also uniformly fit. Contact Z is −2.60 mm, lifted Z0, drawing feed
 720 mm/min (12 mm/s), travel1200 (20 mm/s), Z30 (0.5 mm/s). Quantized duplicate points are removed; stroke order
 and vertices are otherwise preserved. Continuous local serial delivery waits for
 completion per stroke, not per segment. The pen lifts between strokes and parks
-at X55 Y50 Z0. Temporary M204 P100 T100 / M205 X1 Y1 use the tested gentle profile.
+at X85 Y100 Z0 to present the bed to the front camera. The expanded
+travel envelope is permitted only at lifted Z0; writing bounds remain unchanged. Temporary M204 P100 T100 / M205 X1 Y1 use the tested gentle profile.
 
 The worker exclusively opens the USB serial device, verifies starting motor counts
-(4400,4000,0), matching logical coordinates, endstops and M92 80/80/400. It disables
+(6800,8000,0), matching logical coordinates, endstops and M92 80/80/400. It disables
 idle stepper release with M84 S0 to retain this temporary calibration. It must be
 stopped before manual serial calibration. No homing, origin reset, EEPROM write,
 extrusion, or heating is performed. On clean stop, it finishes the current stroke,

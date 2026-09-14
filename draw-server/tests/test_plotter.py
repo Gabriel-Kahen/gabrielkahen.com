@@ -4,7 +4,7 @@ from uuid import uuid4
 
 import pytest
 from plot_queue import Queue
-from plot_path import strokes_for,counts,PARK
+from plot_path import strokes_for,counts,PARK,checked,LIFT_Z,CONTACT_Z
 from printer_worker import Printer
 
 
@@ -110,6 +110,29 @@ def test_cancel_before_first_stroke():
     assert not printer.draw(strokes_for(job([[[0,0]]])),lambda:True)
     assert printer.physical==counts(PARK)
     assert not any(c.startswith('G1') for c in printer.commands)
+
+
+def test_presentation_area_only_allows_lifted_travel():
+    assert checked(PARK,travel=True)==PARK
+    for point in (PARK,(85,100,CONTACT_Z),(56,60,CONTACT_Z)):
+        with pytest.raises(ValueError):
+            checked(point)
+    printer=FakePrinter()
+    with pytest.raises(ValueError):
+        printer.move((85,100,CONTACT_Z),30)
+    with pytest.raises(ValueError,match='vertical'):
+        printer.move((0,0,CONTACT_Z),30)
+    with pytest.raises(ValueError):
+        printer.move((85,101,LIFT_Z),1200)
+    assert not printer.commands
+
+
+def test_consecutive_drawings_return_to_presentation_position():
+    printer=FakePrinter()
+    for _ in range(2):
+        assert printer.draw(strokes_for(job([[[0,0],[200,200]]])),lambda:False)
+        assert printer.physical==counts((85,100,LIFT_Z))
+        assert printer.commands[-4].startswith('G1 X85.0000 Y100.0000 Z0.0000')
 
 
 def test_real_api_to_queue_to_mock_printer(tmp_path):
