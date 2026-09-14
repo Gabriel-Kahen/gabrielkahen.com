@@ -1,0 +1,22 @@
+[Unit]
+Description=Calibrated Ender 3 website drawing stream (explicit session only)
+After=gabriel-draw.service
+RequiresMountsFor=/mnt/fastssd/gabriel-draw
+BindsTo=mnt-fastssd.mount
+
+[Service]
+Type=simple
+User=gabe
+Group=gabe
+SupplementaryGroups=dialout
+WorkingDirectory=/home/gabe/code/gabriel-draw
+ExecStart=/home/gabe/code/gabriel-draw/.venv/bin/python -u printer_worker.py --db /mnt/fastssd/gabriel-draw/drawings.sqlite3 --arm-new-only
+Restart=no
+TimeoutStopSec=240
+UMask=0077
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/mnt/fastssd/gabriel-draw
+DevicePolicy=closed
+DeviceAllow=/dev/ttyUSB0 rw

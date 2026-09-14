@@ -16,6 +16,7 @@ from starlette.concurrency import run_in_threadpool
 
 from drawing import InvalidDrawing, PrinterConfig, validate_drawing
 from storage import ConflictingSubmission, StorageFull, Store
+from plot_queue import Queue
 
 MAX_BODY_BYTES = 1_048_576
 BODY_TIMEOUT_SECONDS = 15
@@ -134,6 +135,9 @@ def create_app(settings=None):
             raise HTTPException(409, "This submission ID was already used for a different drawing.") from None
         except StorageFull:
             raise HTTPException(503, "Drawing storage is full or busy. Please try again later.") from None
+        printer_status = await run_in_threadpool(Queue(settings.db_path).receipt_status, submission_id)
+        if printer_status:
+            receipt["status"] = printer_status
         return JSONResponse(receipt, status_code=201 if created else 200, headers={"Cache-Control": "no-store"})
 
     return app

@@ -1,6 +1,6 @@
 # Drawing receiver for gabepi
 
-A write-only FastAPI service saves original vector strokes and generated Ender 3 G-code in one SQLite transaction. It does **not** connect to a printer or execute instructions. Every record has status `pending_calibration`.
+A write-only FastAPI service saves original vector strokes and generated Ender 3 G-code in one SQLite transaction. The API itself does **not** connect to a printer. The separate, explicitly armed `printer_worker.py` streams new validated vectors using the current pen calibration; see below. Original archive records and their placeholder G-code retain status `pending_calibration`. API receipts report the separate printer job status when available.
 
 ## Run on the Pi
 
@@ -94,3 +94,57 @@ python3 export.py 6f59cd0a-314e-48f7-92db-f1d83e57aba8 --format json
 ```
 
 Export opens the database read-only, selects by UUID, and writes only the requested local file (or stdout). Tests cover square boundary mapping at 1:1 scale, legacy Letter mapping and retry compatibility, traversal, Y inversion, uniform scaling, pen lifts, dots, calibration configuration bounds, length and schema validation, atomic storage, retry conflicts, CORS, body limits, byte/count caps, rate limits, and local export.
+
+
+## Live printer worker (current temporary calibration)
+
+`printer_worker.py` consumes new database rows, regenerating bounded movements from
+validated vectors. **It never executes the archived placeholder G-code.** The
+website still accepts the full 200 mm square; the worker scales it uniformly to
+the verified 140 mm square X−85..55, Y−80..60, centered X−15 Y−10. Legacy Letter
+vectors are also uniformly fit. Contact Z is −2.50 mm, lifted Z0, drawing feed
+450 mm/min, travel600, Z30. Quantized duplicate points are removed; stroke order
+and vertices are otherwise preserved. Continuous local serial delivery waits for
+completion per stroke, not per segment. The pen lifts between strokes and parks
+at X55 Y50 Z0. Temporary M204 P100 T100 / M205 X1 Y1 use the tested gentle profile.
+
+The worker exclusively opens the USB serial device, verifies starting motor counts
+(4400,4000,0), matching logical coordinates, endstops and M92 80/80/400. It disables
+idle stepper release with M84 S0 to retain this temporary calibration. It must be
+stopped before manual serial calibration. No homing, origin reset, EEPROM write,
+extrusion, or heating is performed. On clean stop, it finishes the current stroke,
+lifts, and restores acceleration/jerk and software endstops. On a transport or
+position fault it disarms and closes without attempting uncertain recovery moves.
+Inspect/recalibrate before restarting; firmware counts cannot detect manual motion.
+
+`plot_session` records an atomic MAX(rowid) cutoff at arming. **Every existing
+submission is excluded**, including old retries. New jobs are claimed durably in
+`plot_jobs` before movement and processed FIFO, once each. Failed/interrupted jobs
+are never automatically retried. On any new arming, all then-existing submissions
+are again excluded. Queue states are queued/printing/done/failed/interrupted or
+printer_offline in POST receipts; immutable archive records are unchanged. Multiple
+submissions use the same physical paper; the system cannot replace paper itself.
+
+Installation after deploying this directory to `/home/gabe/code/gabriel-draw`:
+
+```sh
+.venv/bin/pip install -r requirements-printer.txt
+sudo install -m 644 gabriel-plotter.service /etc/systemd/system/gabriel-plotter.service
+sudo systemctl daemon-reload
+# Only after checking the live calibration and park position:
+sudo systemctl start gabriel-plotter
+journalctl -u gabriel-plotter -n 20 --no-pager
+# Stop before changing setup, paper placement, or manual printer control:
+sudo systemctl stop gabriel-plotter
+```
+
+Copy the service from `deploy/gabriel-plotter.service`. It deliberately has no boot
+enablement or automatic restart: this is a temporary calibrated session. A restart
+is a new arming operation with a fresh cutoff. Logs rotate at 10 MiB with two
+backups alongside the database. The API remains available if the worker stops.
+The API service needs restarting after deploying its receipt-status integration.
+
+Tests include real HTTP submission → SQLite queue → mocked serial movements,
+old UUID retries, durable claiming, FIFO, restart exclusion, offline receipts,
+geometry rejection, both coordinate versions, lifts, dots, parking, continuous
+strokes, and failure before calibration verification.
