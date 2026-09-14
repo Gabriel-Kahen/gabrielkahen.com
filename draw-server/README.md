@@ -9,13 +9,13 @@ Requires Python 3.11 or later. From this directory:
 ```sh
 python3 -m venv .venv
 .venv/bin/pip install -r requirements.txt
-export DRAW_DB_PATH=/home/gabe/.local/share/gabriel-draw/drawings.sqlite3
+export DRAW_DB_PATH=/mnt/fastssd/gabriel-draw/drawings.sqlite3
 .venv/bin/uvicorn app:app --host 127.0.0.1 --port 8012 --workers 1 --no-proxy-headers
 ```
 
 Use one worker: the submission rate limit is deliberately global and lives in memory. The default is 60 POST attempts per minute, independent of client-provided forwarding headers. With Tailscale Funnel the service may see one loopback client for all visitors; this does not change the global limit. HTTPS publication, systemd installation, and the site's API URL are covered by the repository's deployment files.
 
-The database defaults to `~/.local/share/gabriel-draw/drawings.sqlite3` and is created with mode `0600`. No drawings or G-code are placed inside the public website. SQLite commits both representations together, including the printer configuration used for that drawing and an ISO UTC creation timestamp. Back up the database with SQLite's backup command/API or stop the service before copying it.
+The deployed service stores the database at `/mnt/fastssd/gabriel-draw/drawings.sqlite3` on the Micron SSD with mode `0600`. Standalone development runs default to `~/.local/share/gabriel-draw/drawings.sqlite3`; set `DRAW_DB_PATH` or pass `--db` to the export command when working with the deployed database. The pre-migration SD database is retained as a backup and is no longer updated. No drawings or G-code are placed inside the public website. SQLite commits both representations together, including the printer configuration used for that drawing and an ISO UTC creation timestamp. Back up the database with SQLite's backup command/API or stop the service before copying it.
 
 ## API
 
@@ -84,7 +84,7 @@ The file turns heaters and fan off (`M104 S0`, `M140 S0`, `M107`), uses millimet
 
 ```sh
 python3 export.py 6f59cd0a-314e-48f7-92db-f1d83e57aba8 \
-  --db /home/gabe/.local/share/gabriel-draw/drawings.sqlite3 \
+  --db /mnt/fastssd/gabriel-draw/drawings.sqlite3 \
   --output /home/gabe/drawing.gcode
 python3 export.py 6f59cd0a-314e-48f7-92db-f1d83e57aba8 --format json
 .venv/bin/pip install -r requirements-dev.txt

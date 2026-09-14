@@ -25,9 +25,17 @@ width; the screen preview approximates a BIC ballpoint on the original sheet.
 
 From this checkout, run `bash deploy/install-pi.sh`. It installs the backend at
 `/home/gabe/code/gabriel-draw`, with a persistent database at
-`/home/gabe/.local/share/gabriel-draw/drawings.sqlite3`, and enables the
+`/mnt/fastssd/gabriel-draw/drawings.sqlite3` on the Micron SSD, and enables the
 `gabriel-draw` system service. Configuration overrides belong in
 `/home/gabe/.config/gabriel-draw.env` on the Pi.
+
+Deployment requires the SSD labeled `fastssd` (UUID
+`ab4b373f-26c6-4631-b78a-76c72fa89db8`) mounted at `/mnt/fastssd`. The first
+SSD deployment copies and verifies the original SD-card database, preserving
+the original as a backup. Later deployments retain the SSD database. The service
+depends on the mount and stops if it disappears, so uploads cannot silently fall
+back to the SD card. After reconnecting the drive, start `mnt-fastssd.mount` and
+then `gabriel-draw.service`.
 
 The existing Tailscale Funnel routes `/draw-api` on
 `https://gabepi.tail0cb95e.ts.net:8443` to loopback port 8012. It preserves the
