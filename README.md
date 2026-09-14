@@ -35,6 +35,12 @@ other existing routes. The page's API URL is in `draw/config.js`. HTTPS uploads
 are public; no Tailscale account is required for visitors. If the Pi is offline,
 the page preserves the drawing so visitors can retry later.
 
+On devices in the Pi's own Tailscale network, MagicDNS resolves the API hostname
+to the Pi's private address. Chrome may ask for local-network access; allow it
+for this site to submit through that private route. Visitors outside the tailnet
+use the public Funnel address. Headless live tests need that permission or a
+temporary resolver mapping to the hostname's current public DNS address.
+
 Push the static changes to `main` to publish GitHub Pages. Backend source,
 deployment files, and tests are excluded from the Pages build.
 
