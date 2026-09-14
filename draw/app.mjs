@@ -149,7 +149,7 @@ function undo() {
   layer.lastElementChild.remove();
   totalLength = drawingLength(strokes);
   submissionId = newId();
-  status('Last stroke undone.');
+  status('');
   updateControls();
   saveDraft();
 }
