@@ -148,3 +148,22 @@ Tests include real HTTP submission → SQLite queue → mocked serial movements,
 old UUID retries, durable claiming, FIFO, restart exclusion, offline receipts,
 geometry rejection, both coordinate versions, lifts, dots, parking, continuous
 strokes, and failure before calibration verification.
+
+
+### Submission latency
+
+After the SQLite commit, the API sends a nonblocking Unix datagram to
+`plotter-wakeup.sock` beside the database. The worker wakes immediately and claims
+the durable job. Notifications contain no drawing or G-code, can be coalesced,
+and are only a hint: a 250 ms fallback finds jobs even if notification fails.
+Idle position checks run every five seconds and still run before every drawing.
+The browser preconnects to the receiver origin to begin DNS/TLS work early.
+
+`benchmark_dispatch.py --root /mnt/fastssd/gabriel-draw` creates a disposable
+SQLite database and loopback HTTP API on port18012; it never opens serial or
+submits to the production API. On gabepi, 2026-09-14, HTTP request start through
+commit, claim and validated path: old1s polling median718.016ms (10 samples),
+notification median12.105ms/max13.414ms (20 samples). These numbers exclude public
+internet/TLS, actual serial verification, pen travel and descent. Physical feed
+rates and all bounds remain unchanged. Raw serial command timestamps remain in
+the rotating printer log for the actual user test.

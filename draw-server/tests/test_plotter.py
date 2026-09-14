@@ -151,3 +151,40 @@ def test_failed_preflight_never_moves_or_arms(queue,monkeypatch):
     assert printer.closed and not printer.cleaned
     with sqlite3.connect(queue.path) as db:
         assert not db.execute("SELECT name FROM sqlite_master WHERE name='plot_session'").fetchone()
+
+
+def test_wakeup_before_wait_and_missing_listener(tmp_path):
+    from plot_notify import Wakeup,notify
+    import time
+    path=tmp_path/'queue.sqlite3'
+    notify(path)  # Offline worker never blocks submission.
+    wake=Wakeup(path)
+    try:
+        notify(path)  # Notification in claim-to-wait gap must not be lost.
+        start=time.monotonic()
+        wake.wait(timeout=1)
+        assert time.monotonic()-start<0.1
+        for _ in range(1000):
+            notify(path)  # Saturation coalesces; never blocks API.
+        wake.wait(timeout=1)
+    finally:
+        wake.close()
+    assert not (tmp_path/'plotter-wakeup.sock').exists()
+
+
+def test_notification_after_commit_and_not_on_retry(tmp_path,monkeypatch):
+    from app import Settings,create_app
+    from fastapi.testclient import TestClient
+    import app as module
+    path=tmp_path/'commit.sqlite3'
+    seen=[]
+    def notified(db_path):
+        with sqlite3.connect(db_path) as db:
+            seen.append(db.execute('SELECT count(*) FROM drawings').fetchone()[0])
+    monkeypatch.setattr(module,'notify',notified)
+    with TestClient(create_app(Settings(db_path=str(path)))) as client:
+        payload={'version':2,'submission_id':str(uuid4()),'strokes':[[[100,100],[101,100]]]}
+        assert client.post('/drawings',json=payload).status_code==201
+        assert seen==[1]
+        assert client.post('/drawings',json=payload).status_code==200
+        assert seen==[1]

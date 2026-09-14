@@ -10,6 +10,7 @@ from pathlib import Path
 
 from plot_path import CONTACT_Z,LIFT_Z,PARK,STEPS,checked,counts,strokes_for
 from plot_queue import Queue
+from plot_notify import Wakeup
 
 
 class Printer:
@@ -156,8 +157,11 @@ def main():
     armed=False
     failed=False
     current=None
+    wakeup=None
+    last_idle_check=0.
     try:
         printer.prepare()
+        wakeup=Wakeup(args.db)
         cutoff=queue.arm()
         armed=True
         last_beat=0.
@@ -181,8 +185,10 @@ def main():
                 print('DONE' if done else 'INTERRUPTED',current['submission_id'],flush=True)
                 current=None
             else:
-                printer.verify()
-                time.sleep(1)
+                if time.monotonic()-last_idle_check>5:
+                    printer.verify()
+                    last_idle_check=time.monotonic()
+                wakeup.wait()
     except BaseException as error:
         failed=True
         if current:
@@ -197,6 +203,8 @@ def main():
                 printer.cleanup()
             # On transport/position errors do not send recovery moves or reconnect.
         finally:
+            if wakeup:
+                wakeup.close()
             printer.close()
 
 
