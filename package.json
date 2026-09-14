@@ -1,0 +1,12 @@
+{
+  "name": "gabrielkahen-site",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test draw/tests/*.test.mjs",
+    "test:browser": "node tests/browser.mjs"
+  },
+  "devDependencies": {
+    "playwright-core": "1.63.0"
+  }
+}

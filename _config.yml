@@ -1,0 +1,9 @@
+exclude:
+  - draw-server
+  - deploy
+  - tests
+  - package.json
+  - package-lock.json
+  - node_modules
+  - draw/tests
+  - README.md

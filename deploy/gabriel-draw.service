@@ -1,0 +1,27 @@
+[Unit]
+Description=Gabriel drawing storage and pen plotter conversion
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=gabe
+Group=gabe
+WorkingDirectory=/home/gabe/code/gabriel-draw
+Environment=DRAW_DB_PATH=/home/gabe/.local/share/gabriel-draw/drawings.sqlite3
+EnvironmentFile=-/home/gabe/.config/gabriel-draw.env
+ExecStart=/home/gabe/code/gabriel-draw/.venv/bin/uvicorn app:app --host 127.0.0.1 --port 8012 --workers 1 --no-proxy-headers --limit-concurrency 24 --timeout-keep-alive 5
+Restart=on-failure
+RestartSec=3
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/home/gabe/.local/share/gabriel-draw
+MemoryMax=256M
+TasksMax=64
+
+[Install]
+WantedBy=multi-user.target

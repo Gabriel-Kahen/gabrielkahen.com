@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f4f0">
+  <meta name="description" content="Draw a little picture with a black pen. Your strokes become a drawing on paper.">
+  <title>Draw · Gabriel Kahen</title>
+  <link rel="stylesheet" href="./style.css">
+  <script src="./config.js" defer></script>
+  <script src="./app.mjs" type="module"></script>
+</head>
+<body>
+  <main>
+    <header>
+      <a class="home" href="/">← Gabriel Kahen</a>
+      <h1>Draw something.</h1>
+      <p class="intro">A black pen. A sheet of paper. 24 inches of ink.</p>
+    </header>
+    <div class="paper-label" id="paper-label"><span>YOUR PAPER</span><span>8½ × 11 IN</span></div>
+    <svg id="paper" viewBox="0 0 215.9 279.4" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Drawing paper. Draw with your mouse, finger, or pen." aria-describedby="drawing-help">
+      <g id="strokes" fill="none" stroke="#000" stroke-width="0.4" stroke-linecap="round" stroke-linejoin="round"></g>
+    </svg>
+    <p id="drawing-help" class="visually-hidden">Drag on the paper to draw in black ink. Undo removes your last stroke. Drawings may use up to 24 inches of line.</p>
+    <div class="toolbar">
+      <button id="undo" class="secondary" type="button" disabled title="Undo last stroke (Ctrl or Command Z)"><span aria-hidden="true">↶</span> Undo</button>
+      <span id="ink" aria-live="off">24.0 in left</span>
+      <button id="submit" type="button" disabled>Submit drawing <span aria-hidden="true">↗</span></button>
+      <button id="another" type="button" hidden>Draw another <span aria-hidden="true">↗</span></button>
+    </div>
+    <p id="status" role="status" aria-live="polite">Draw with your mouse, finger, or pen.</p>
+    <noscript><p>JavaScript is needed to draw and submit a picture.</p></noscript>
+  </main>
+</body>
+</html>

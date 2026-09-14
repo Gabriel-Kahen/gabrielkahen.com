@@ -1,0 +1,12 @@
+{
+  "bed_width_mm": 220,
+  "bed_height_mm": 220,
+  "margin_mm": 10,
+  "drawing_height_mm": 200,
+  "contact_z_mm": 0,
+  "lifted_z_mm": 3,
+  "travel_feed_mm_min": 3000,
+  "drawing_feed_mm_min": 1200,
+  "z_feed_mm_min": 300,
+  "dot_dwell_ms": 100
+}
