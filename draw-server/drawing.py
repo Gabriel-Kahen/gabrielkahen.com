@@ -5,8 +5,8 @@ import json
 import math
 from uuid import UUID
 
-PAPER_WIDTH_MM = 215.9
-PAPER_HEIGHT_MM = 279.4
+DRAWING_VERSION = 2
+PAGE_DIMENSIONS = {1: (215.9, 279.4), 2: (200.0, 200.0)}
 MAX_LENGTH_MM = 1219.2
 MAX_STROKES = 200
 MAX_POINTS = 20_000
@@ -19,8 +19,10 @@ class InvalidDrawing(ValueError):
 def validate_drawing(data):
     if not isinstance(data, dict) or set(data) != {"version", "submission_id", "strokes"}:
         raise InvalidDrawing("Expected version, submission_id, and strokes only.")
-    if type(data["version"]) is not int or data["version"] != 1:
+    if type(data["version"]) is not int or data["version"] not in PAGE_DIMENSIONS:
         raise InvalidDrawing("Unsupported drawing version.")
+    version = data["version"]
+    width, height = PAGE_DIMENSIONS[version]
     try:
         submission_id = str(UUID(data["submission_id"]))
     except (ValueError, TypeError, AttributeError):
@@ -42,8 +44,8 @@ def validate_drawing(data):
             if any(type(n) not in (int, float) for n in point):
                 raise InvalidDrawing("Coordinates must be numbers.")
             x, y = point
-            if not (0 <= x <= PAPER_WIDTH_MM and 0 <= y <= PAPER_HEIGHT_MM):
-                raise InvalidDrawing("Coordinates must be finite and within the paper.")
+            if not (0 <= x <= width and 0 <= y <= height):
+                raise InvalidDrawing("Coordinates must be finite and within the drawing area.")
             x, y = float(x), float(y)
             clean.append([0.0 if x == 0 else x, 0.0 if y == 0 else y])
             if len(clean) > 1:
@@ -52,7 +54,7 @@ def validate_drawing(data):
     length = math.fsum(lengths)
     if length > MAX_LENGTH_MM + 1e-6:
         raise InvalidDrawing("The drawing exceeds the 48-inch pen length limit.")
-    canonical = json.dumps({"version": 1, "strokes": result}, separators=(",", ":"), allow_nan=False)
+    canonical = json.dumps({"version": version, "strokes": result}, separators=(",", ":"), allow_nan=False)
     return submission_id, result, length, canonical
 
 
@@ -88,36 +90,42 @@ class PrinterConfig:
 
     @property
     def scale(self):
-        return min(self.drawing_height_mm / PAPER_HEIGHT_MM,
-                   (self.bed_width_mm - 2 * self.margin_mm) / PAPER_WIDTH_MM,
-                   (self.bed_height_mm - 2 * self.margin_mm) / PAPER_HEIGHT_MM)
+        return self.scale_for(DRAWING_VERSION)
 
-    def transform(self, point):
-        scale = self.scale
-        x_offset = (self.bed_width_mm - PAPER_WIDTH_MM * scale) / 2
-        y_offset = (self.bed_height_mm - PAPER_HEIGHT_MM * scale) / 2
-        return x_offset + point[0] * scale, y_offset + (PAPER_HEIGHT_MM - point[1]) * scale
+    def scale_for(self, version):
+        width, height = PAGE_DIMENSIONS[version]
+        return min(self.drawing_height_mm / height,
+                   (self.bed_width_mm - 2 * self.margin_mm) / width,
+                   (self.bed_height_mm - 2 * self.margin_mm) / height)
+
+    def transform(self, point, version=DRAWING_VERSION):
+        width, height = PAGE_DIMENSIONS[version]
+        scale = self.scale_for(version)
+        x_offset = (self.bed_width_mm - width * scale) / 2
+        y_offset = (self.bed_height_mm - height * scale) / 2
+        return x_offset + point[0] * scale, y_offset + (height - point[1]) * scale
 
 
-def generate_gcode(strokes, config):
+def generate_gcode(strokes, config, version=DRAWING_VERSION):
     """Call only after validate_drawing. No rasterization, reordering, or extrusion."""
+    page_label = "Letter page" if version == 1 else "200 x 200 mm square"
     lines = [
         "; PEN PLOT - PENDING CALIBRATION - NOT READY FOR UNATTENDED EXECUTION",
         "; Home the printer BEFORE mounting the pen; this file does not home or set an origin.",
         "; Calibrate the absolute contact Z and lifted Z for the mounted pen and paper.",
         "; Verify clear travel and bed bounds; disable leveling (M420 S0 below).",
         "; Secure a flat sheet; test with pen lifted first. No printer is connected by this service.",
-        f"; Letter page scaled uniformly by {config.scale:.9f}; source origin is upper left.",
+        f"; {page_label} scaled uniformly by {config.scale_for(version):.9f}; source origin is upper left.",
         "M104 S0", "M140 S0", "M107", "G21", "G90", "M420 S0",
         f"G0 Z{config.lifted_z_mm:.4f} F{config.z_feed_mm_min:.1f}",
     ]
     for index, stroke in enumerate(strokes, 1):
         lines.append(f"; Stroke {index}")
-        x, y = config.transform(stroke[0])
+        x, y = config.transform(stroke[0], version)
         lines += [f"G0 X{x:.4f} Y{y:.4f} F{config.travel_feed_mm_min:.1f}",
                   f"G1 Z{config.contact_z_mm:.4f} F{config.z_feed_mm_min:.1f}"]
         for point in stroke[1:]:
-            x, y = config.transform(point)
+            x, y = config.transform(point, version)
             lines.append(f"G1 X{x:.4f} Y{y:.4f} F{config.drawing_feed_mm_min:.1f}")
         if len(stroke) == 1 or all(point == stroke[0] for point in stroke):
             lines.append(f"G4 P{config.dot_dwell_ms}")

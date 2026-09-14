@@ -17,8 +17,8 @@ from app import MAX_BODY_BYTES, Settings, create_app
 from drawing import InvalidDrawing, PrinterConfig, generate_gcode, validate_drawing
 
 
-def payload(strokes=None):
-    return {"version": 1, "submission_id": str(uuid4()), "strokes": [[[0, 0], [3, 4]]] if strokes is None else strokes}
+def payload(strokes=None, version=2):
+    return {"version": version, "submission_id": str(uuid4()), "strokes": [[[0, 0], [3, 4]]] if strokes is None else strokes}
 
 
 @pytest.fixture
@@ -34,7 +34,7 @@ def client(settings):
 
 def test_trace_order_y_flip_scale_and_safe_lifts():
     config = PrinterConfig()
-    strokes = [[[0, 0], [12, 30], [3, 50]], [[215.9, 279.4]]]
+    strokes = [[[0, 0], [12, 30], [3, 50]], [[200, 200]]]
     output = generate_gcode(strokes, config)
     lines = output.splitlines()
     moves = [line for line in lines if line.startswith(("G0 X", "G1 X"))]
@@ -43,8 +43,8 @@ def test_trace_order_y_flip_scale_and_safe_lifts():
         x, y = config.transform(point)
         assert coordinates["X"] == pytest.approx(x, abs=0.000051)
         assert coordinates["Y"] == pytest.approx(y, abs=0.000051)
-    assert config.transform([0, 0]) == pytest.approx((32.7272727273, 210))
-    assert config.transform([215.9, 279.4]) == pytest.approx((187.2727272727, 10))
+    assert config.transform([0, 0]) == pytest.approx((10, 210))
+    assert config.transform([200, 200]) == pytest.approx((210, 10))
     assert output.count("G1 Z0.0000") == 2
     assert output.count("G0 Z3.0000") == 3
     assert "G4 P100" in output
@@ -60,7 +60,7 @@ def test_trace_order_y_flip_scale_and_safe_lifts():
 
 
 def test_length_excludes_pen_up_travel_and_accepts_dots():
-    _, _, length, _ = validate_drawing(payload([[[0, 0], [3, 4]], [[215, 279]]]))
+    _, _, length, _ = validate_drawing(payload([[[0, 0], [3, 4]], [[200, 200]]]))
     assert length == 5
     assert validate_drawing(payload([[[1, 2]]]))[2] == 0
 
@@ -79,7 +79,7 @@ def test_reject_invalid_geometry(strokes):
         validate_drawing(payload(strokes))
 
 
-@pytest.mark.parametrize("change", [{"version": True}, {"version": 1.0}, {"version": 2}, {"submission_id": "bad"}, {"gcode": "anything"}])
+@pytest.mark.parametrize("change", [{"version": True}, {"version": 1.0}, {"version": 3}, {"submission_id": "bad"}, {"gcode": "anything"}])
 def test_reject_invalid_schema(change):
     with pytest.raises(InvalidDrawing):
         validate_drawing(payload() | change)
@@ -93,8 +93,8 @@ def test_reject_unsafe_config(changes):
 
 def test_small_bed_is_uniformly_fitted():
     config = PrinterConfig(bed_width_mm=100, bed_height_mm=100)
-    assert config.scale == pytest.approx(80 / 279.4)
-    for point in ([0, 0], [215.9, 279.4]):
+    assert config.scale == pytest.approx(80 / 200)
+    for point in ([0, 0], [200, 200]):
         assert all(10 <= coordinate <= 90 for coordinate in config.transform(point))
 
 
@@ -186,3 +186,39 @@ def test_stalled_body_deadline(settings, monkeypatch):
     with pytest.raises(HTTPException) as error:
         asyncio.run(endpoint(request))
     assert error.value.status_code == 408
+
+
+def test_square_boundary_validation_and_one_to_one_mapping():
+    strokes = [[[0, 0], [200, 0], [200, 200], [0, 200], [0, 0]]]
+    _, clean, length, canonical = validate_drawing(payload(strokes))
+    assert length == 800
+    assert json.loads(canonical)["version"] == 2
+    config = PrinterConfig()
+    assert config.scale == 1
+    output = generate_gcode(clean, config)
+    for command in ("G0 X10.0000 Y210.0000", "G1 X210.0000 Y210.0000",
+                    "G1 X210.0000 Y10.0000", "G1 X10.0000 Y10.0000"):
+        assert command in output
+    for point in ([200.001, 0], [0, 200.001]):
+        with pytest.raises(InvalidDrawing):
+            validate_drawing(payload([[point]]))
+
+
+def test_letter_compatibility_preserves_mapping_and_retries(client, settings):
+    strokes = [[[0, 0], [215.9, 279.4]]]
+    data = payload(strokes, version=1)
+    assert client.post("/drawings", json=data).status_code == 201
+    with sqlite3.connect(settings.db_path) as db:
+        original = db.execute("SELECT vector_json, gcode, printer_config_json FROM drawings").fetchone()
+    assert json.loads(original[0])["version"] == 1
+    assert "G0 X32.7273 Y210.0000" in original[1]
+    assert "G1 X187.2727 Y10.0000" in original[1]
+    assert client.post("/drawings", json=data).status_code == 200
+    with sqlite3.connect(settings.db_path) as db:
+        assert db.execute("SELECT vector_json, gcode, printer_config_json FROM drawings").fetchone() == original
+
+
+def test_same_uuid_with_new_coordinate_version_conflicts(client):
+    data = payload([[[1, 1]]], version=1)
+    assert client.post("/drawings", json=data).status_code == 201
+    assert client.post("/drawings", json=data | {"version": 2}).status_code == 409

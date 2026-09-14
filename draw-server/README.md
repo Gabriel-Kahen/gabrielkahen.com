@@ -23,7 +23,7 @@ The deployed service stores the database at `/mnt/fastssd/gabriel-draw/drawings.
 
 ```json
 {
-  "version": 1,
+  "version": 2,
   "submission_id": "6f59cd0a-314e-48f7-92db-f1d83e57aba8",
   "strokes": [
     [[20, 25], [22, 28], [25, 26]],
@@ -34,7 +34,7 @@ The deployed service stores the database at `/mnt/fastssd/gabriel-draw/drawings.
 
 `/draw-api/health` and `/draw-api/drawings` are identical aliases so a reverse proxy can preserve or remove the `/draw-api` prefix. There are no public read, list, export, or deletion endpoints.
 
-Coordinates are millimeters on portrait US Letter paper, with `(0, 0)` at the upper-left corner and `(215.9, 279.4)` at the lower-right. Each stroke is an ordered list of `[x, y]` points. A single point is a dot. The server rejects unknown fields, invalid UUIDs, duplicate JSON keys, numeric strings, booleans, nonfinite coordinates, out-of-paper coordinates, empty strokes, over 200 strokes, over 20,000 total points, and bodies over 1 MiB, including streamed bodies. It recomputes the sum of distances between adjacent points *within each stroke*. The maximum is 1219.2 mm (48 inches), with 0.000001 mm floating-point tolerance. Pen-up travel does not count. Client-supplied G-code is never accepted.
+Version 2 coordinates are millimeters on a 200 × 200 mm square, with `(0, 0)` at the upper-left corner and `(200, 200)` at the lower-right. Version 1 is still accepted with its original portrait US Letter dimensions `(215.9, 279.4)`, mapping, and retry identity. The coordinate version is saved with each drawing; existing records and G-code remain unchanged. Each stroke is an ordered list of `[x, y]` points. A single point is a dot. The server rejects unknown fields, invalid UUIDs, duplicate JSON keys, numeric strings, booleans, nonfinite coordinates, out-of-area coordinates, empty strokes, over 200 strokes, over 20,000 total points, and bodies over 1 MiB, including streamed bodies. It recomputes the sum of distances between adjacent points *within each stroke*. The maximum is 1219.2 mm (48 inches), with 0.000001 mm floating-point tolerance. Pen-up travel does not count. Client-supplied G-code is never accepted.
 
 A new drawing returns HTTP 201:
 
@@ -67,7 +67,9 @@ SQLite uses its default rollback journal; leave additional free disk space for i
 
 ## Pen plotting and calibration
 
-US Letter is taller than the Ender 3's nominal 220 × 220 mm bed. The default mapping uniformly scales the paper to 200 mm high (scale `200/279.4 ≈ 0.7158196`) and centers it, putting the page at X `32.7273..187.2727`, Y `10..210` mm. Y is flipped from the screen's downward axis to the printer's upward axis. Smaller configured beds further reduce the scale to preserve the specified margins. A physical page template matching those bounds helps align the paper. The 48-inch limit applies to the original page; the default plotted path is approximately 34.36 inches at full budget.
+Version 2's 200 × 200 mm square maps 1:1 into the Ender 3's configured 220 × 220 mm machine coordinate area, with a 10 mm margin on every side: X `10..210`, Y `10..210` mm. Screen `(0, 0)` maps to machine `(10, 210)` and screen `(200, 200)` maps to `(210, 10)`. Y is flipped from the screen's downward axis to the printer's upward axis. Smaller configured beds or a smaller configured drawing height uniformly reduce the scale to preserve margins and proportions. The 48-inch source limit equals the default plotted path limit.
+
+Legacy version 1 retains its Letter mapping: uniform scale `200/279.4 ≈ 0.7158196`, X `32.7273..187.2727`, Y `10..210` mm under the default configuration, and approximately 34.36 plotted inches at full source budget. No database migration is needed. Export returns the exact G-code already stored for a drawing, without regenerating it using new defaults.
 
 The generator traces each submitted point in its original order and processes strokes in their original order. It does not rasterize, fill, optimize/reorder, or slice the image. XY travels between strokes happen with the pen lifted. Z changes only for pen placement and lifting; each drawn XY move contains no Z or extrusion command. Dots pause for 100 ms. Output is rounded to four decimal places in millimeters.
 
@@ -91,4 +93,4 @@ python3 export.py 6f59cd0a-314e-48f7-92db-f1d83e57aba8 --format json
 .venv/bin/python -m pytest -q
 ```
 
-Export opens the database read-only, selects by UUID, and writes only the requested local file (or stdout). Tests cover traversal, Y inversion, uniform scaling, pen lifts, dots, calibration configuration bounds, length and schema validation, atomic storage, retry conflicts, CORS, body limits, byte/count caps, rate limits, and local export.
+Export opens the database read-only, selects by UUID, and writes only the requested local file (or stdout). Tests cover square boundary mapping at 1:1 scale, legacy Letter mapping and retry compatibility, traversal, Y inversion, uniform scaling, pen lifts, dots, calibration configuration bounds, length and schema validation, atomic storage, retry conflicts, CORS, body limits, byte/count caps, rate limits, and local export.

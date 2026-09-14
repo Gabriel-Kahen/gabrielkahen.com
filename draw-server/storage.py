@@ -51,7 +51,7 @@ class Store:
         self.path.chmod(0o600)
 
     def save(self, submission_id, strokes, length, canonical, config):
-        gcode = generate_gcode(strokes, config)
+        gcode = generate_gcode(strokes, config, json.loads(canonical)["version"])
         settings = json.dumps(asdict(config), sort_keys=True, separators=(",", ":"))
         created = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
         try:

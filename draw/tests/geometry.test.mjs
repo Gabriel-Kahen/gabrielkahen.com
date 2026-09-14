@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { INK_LIMIT, PAPER, MAX_POINTS, MAX_STROKES, drawingLength, clipToPaper, spendInk, validDraft } from '../geometry.mjs';
+import { DRAWING_VERSION, INK_LIMIT, PAPER, MAX_POINTS, MAX_STROKES, drawingLength, clipToPaper, spendInk, validDraft } from '../geometry.mjs';
 
 test('length follows ordered strokes and does not count pen-up travel', () => {
   assert.equal(drawingLength([[[0, 0], [3, 4], [0, 0]], [[200, 200]]]), 10);
@@ -14,7 +14,7 @@ test('budget ends exactly on the submitted segment', () => {
 
 test('paper clipping stops at the first edge, retaining the segment direction', () => {
   assert.deepEqual(clipToPaper([10, 20], [-10, -20]), [0, 0]);
-  assert.deepEqual(clipToPaper([200, 100], [300, 200]), [PAPER.width, 115.9]);
+  assert.deepEqual(clipToPaper([190, 100], [290, 200]), [PAPER.width, 110]);
   assert.deepEqual(clipToPaper([10, 10], [10, 20]), [10, 20]);
   assert.deepEqual(clipToPaper([0, 0], [-10, 10]), [0, 0]);
 });
@@ -29,7 +29,7 @@ test('zero budget adds no movement', () => {
 });
 
 test('drafts reject invalid geometry and enforce cumulative limits', () => {
-  const valid = strokes => validDraft({ version: 1, strokes });
+  const valid = strokes => validDraft({ version: DRAWING_VERSION, strokes });
   assert.ok(valid([[[0, 0], [1, 1]]]));
   assert.ok(valid([]));
   assert.ok(!valid([[]]));
@@ -37,7 +37,17 @@ test('drafts reject invalid geometry and enforce cumulative limits', () => {
   assert.ok(!valid([[[1, Infinity]]]));
   assert.ok(!valid([[[PAPER.width + 1, 1]]]));
   assert.ok(!valid([[[0, -1]]]));
-  assert.ok(!valid([Array.from({ length: 6 }, (_, i) => [0, i % 2 ? 279 : 0])]));
+  assert.ok(!valid([Array.from({ length: 8 }, (_, i) => [0, i % 2 ? 200 : 0])]));
   assert.ok(!valid(Array.from({ length: MAX_STROKES + 1 }, () => [[0, 0]])));
   assert.ok(!valid([Array.from({ length: MAX_POINTS + 1 }, () => [0, 0])]));
+});
+
+
+test('square dimensions and versioning keep Letter drafts separate', () => {
+  assert.deepEqual(PAPER, { width: 200, height: 200 });
+  assert.ok(validDraft({ version: 2, strokes: [[[0, 0], [200, 200]]] }));
+  const legacy = { version: 1, strokes: [[[215.9, 279.4]]] };
+  assert.ok(!validDraft(legacy));
+  assert.ok(validDraft(legacy, 1));
+  assert.ok(!validDraft({ ...legacy, version: 3 }, 3));
 });

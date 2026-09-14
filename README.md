@@ -6,7 +6,7 @@ The site is published from `main` by GitHub Pages. The drawing page lives at
 ## Drawing project
 
 `draw/` is a standalone, dependency-free drawing interface. It records ordered
-polylines in millimeters on a 215.9 × 279.4 mm US Letter sheet, using an approximate
+polylines in millimeters on a 200 × 200 mm square, using an approximate
 0.4 mm ballpoint line. Pen-down distance is limited to 1219.2 mm (48 inches); lifted
 travel does not count. Undo restores the last stroke's allowance.
 
@@ -15,11 +15,17 @@ and saves both representations in SQLite on `gabe@gabepi`. No printer execution
 is connected to submissions. See [the server guide](draw-server/README.md) for
 calibration, settings, API details, and exporting saved jobs.
 
-The default plot is 154.545 × 200 mm, centered within a 220 × 220 mm machine
-coordinate area. It scales the entire Letter frame uniformly, preserves stroke
-order and direction, and flips screen Y into machine Y. The 48-inch allowance
-is measured before this scaling. The physical pen determines the printed line
-width; the screen preview approximates a BIC ballpoint on the original sheet.
+The default plot is 200 × 200 mm, centered within the Ender 3's configured
+220 × 220 mm machine coordinate area with 10 mm margins on every side. New
+version 2 drawings map 1:1 to X/Y `10..210` mm, preserving stroke order and
+direction and flipping screen Y into machine Y. The 48-inch allowance therefore
+matches the default plotted path length. The physical pen determines line width;
+the preview approximates a BIC ballpoint.
+
+Version 1 Letter submissions retain their original dimensions and mapping, and
+saved server records are never rewritten. The browser keeps older Letter drafts
+under their original storage key and offers their original JSON as a download;
+new square drawings use a separate version 2 draft key.
 
 ## Deploy
 
@@ -49,7 +55,9 @@ for this site to submit through that private route. Visitors outside the tailnet
 use the public Funnel address. Headless live tests need that permission or a
 temporary resolver mapping to the hostname's current public DNS address.
 
-Push the static changes to `main` to publish GitHub Pages. Backend source,
+Deploy the backend before publishing version 2 static changes, so both older
+Letter clients and the new square client can submit. Push the static changes
+to `main` to publish GitHub Pages. Backend source,
 deployment files, and tests are excluded from the Pages build.
 
 For local UI work, run `python3 -m http.server 8765` from this directory and open

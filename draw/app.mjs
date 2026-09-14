@@ -1,9 +1,9 @@
-import { PAPER, PEN_WIDTH, INK_LIMIT, MAX_STROKES, MAX_POINTS, distance, drawingLength, clipToPaper, spendInk, validDraft } from './geometry.mjs?v=48';
+import { DRAWING_VERSION, PAPER, PEN_WIDTH, INK_LIMIT, MAX_STROKES, MAX_POINTS, distance, drawingLength, clipToPaper, spendInk, validDraft } from './geometry.mjs?v=50';
 
 const $ = id => document.getElementById(id);
 const paper = $('paper');
 const layer = $('strokes');
-const DRAFT_KEY = 'gabe.draw.draft.v1';
+const DRAFT_KEY = 'gabe.draw.draft.v2';
 const NS = 'http://www.w3.org/2000/svg';
 let strokes = [];
 let submissionId = null;
@@ -31,7 +31,7 @@ function updateControls() {
 
 function saveDraft() {
   try {
-    localStorage.setItem(DRAFT_KEY, JSON.stringify({ version: 1, submission_id: submissionId, strokes, submitted }));
+    localStorage.setItem(DRAFT_KEY, JSON.stringify({ version: DRAWING_VERSION, submission_id: submissionId, strokes, submitted }));
   } catch { /* Drawing still works when browser storage is unavailable. */ }
 }
 
@@ -174,7 +174,7 @@ $('submit').addEventListener('click', async () => {
     const response = await fetch(window.DRAW_CONFIG.apiUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ version: 1, submission_id: submissionId, strokes }),
+      body: JSON.stringify({ version: DRAWING_VERSION, submission_id: submissionId, strokes }),
       signal: controller.signal,
       credentials: 'omit',
     });
@@ -228,3 +228,14 @@ try {
   }
 } catch { /* Ignore unavailable storage or an invalid saved draft. */ }
 updateControls();
+
+// Retain Letter drafts under their original key and offer an exact, local backup.
+try {
+  const legacy = localStorage.getItem('gabe.draw.draft.v1');
+  const draft = JSON.parse(legacy);
+  if (validDraft(draft, 1) && draft.strokes.length) {
+    const link = $('legacy-download');
+    link.href = URL.createObjectURL(new Blob([legacy], { type: 'application/json' }));
+    $('legacy-draft').hidden = false;
+  }
+} catch { /* Ignore unavailable storage or an invalid legacy draft. */ }
