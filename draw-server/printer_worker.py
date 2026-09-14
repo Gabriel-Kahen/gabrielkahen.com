@@ -8,7 +8,7 @@ import signal
 import time
 from pathlib import Path
 
-from plot_path import CONTACT_Z,LIFT_Z,PARK,STEPS,checked,counts,strokes_for
+from plot_path import CONTACT_Z,LIFT_Z,PARK,STEPS,DRAW_FEED,TRAVEL_FEED,Z_FEED,checked,counts,strokes_for
 from plot_queue import Queue
 from plot_notify import Wakeup
 
@@ -102,7 +102,7 @@ class Printer:
 
     def lift(self):
         x,y,_=(v/s for v,s in zip(self.expected,STEPS))
-        self.move((x,y,LIFT_Z),30)
+        self.move((x,y,LIFT_Z),Z_FEED)
 
     def draw(self, paths, stopping):
         self.verify()
@@ -112,15 +112,15 @@ class Printer:
                 return False
             self.lift()
             x,y,_=path[0]
-            self.move((x,y,LIFT_Z),600)
-            self.move((x,y,CONTACT_Z),30)
+            self.move((x,y,LIFT_Z),TRAVEL_FEED)
+            self.move((x,y,CONTACT_Z),Z_FEED)
             for target in path[1:]:
-                self.move(target,450)
+                self.move(target,DRAW_FEED)
             if len(path)==1:
                 self.command('G4 P100')
             self.lift()
             self.finish_motion()
-        self.move(PARK,600)
+        self.move(PARK,TRAVEL_FEED)
         self.finish_motion()
         self.command('M211 S1')
         return True
@@ -172,7 +172,7 @@ def main():
                 queue.heartbeat()
                 last_beat=now
         printer.tick=heartbeat
-        print(f'ARMED: skipping all existing rows through {cutoff}; Z=-2.50; area=140x140',flush=True)
+        print(f'ARMED: skipping all existing rows through {cutoff}; Z={CONTACT_Z:.2f}; drawing={DRAW_FEED}mm/min; travel={TRAVEL_FEED}mm/min; area=140x140',flush=True)
         printer.command('M211 S1')
         while not stopping:
             heartbeat()

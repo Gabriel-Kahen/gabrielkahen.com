@@ -60,8 +60,8 @@ def job(strokes,version=2):
 
 def test_bounds_mapping_dedup_and_legacy():
     paths=strokes_for(job([[[0,0],[200,0],[200,200],[0,200],[0,0]],[[100,100],[100.001,100]]]))
-    assert paths[0]==[(-85,60,-2.5),(55,60,-2.5),(55,-80,-2.5),(-85,-80,-2.5),(-85,60,-2.5)]
-    assert paths[1]==[(-15,-10,-2.5)]
+    assert paths[0]==[(-85,60,-2.6),(55,60,-2.6),(55,-80,-2.6),(-85,-80,-2.6),(-85,60,-2.6)]
+    assert paths[1]==[(-15,-10,-2.6)]
     legacy=strokes_for(job([[[0,0],[215.9,279.4]]],1))[0]
     assert legacy[0][1]==60 and legacy[1][1]==-80
     assert legacy[0][0]>-85 and legacy[1][0]<55

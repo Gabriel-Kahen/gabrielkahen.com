@@ -3,11 +3,14 @@ import json
 import math
 from drawing import validate_drawing, PAGE_DIMENSIONS
 
-CONTACT_Z = -2.5
+CONTACT_Z = -2.6
 LIFT_Z = 0.0
 PARK = (55.0,50.0,0.0)
-BOUNDS = ((-85.,55.),(-80.,60.),(-2.5,0.))
+BOUNDS = ((-85.,55.),(-80.,60.),(CONTACT_Z,LIFT_Z))
 STEPS = (80,80,400)
+DRAW_FEED = 720
+TRAVEL_FEED = 1200
+Z_FEED = 30
 
 
 def counts(point):

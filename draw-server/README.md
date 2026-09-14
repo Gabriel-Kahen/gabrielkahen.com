@@ -102,8 +102,8 @@ Export opens the database read-only, selects by UUID, and writes only the reques
 validated vectors. **It never executes the archived placeholder G-code.** The
 website still accepts the full 200 mm square; the worker scales it uniformly to
 the verified 140 mm square X−85..55, Y−80..60, centered X−15 Y−10. Legacy Letter
-vectors are also uniformly fit. Contact Z is −2.50 mm, lifted Z0, drawing feed
-450 mm/min, travel600, Z30. Quantized duplicate points are removed; stroke order
+vectors are also uniformly fit. Contact Z is −2.60 mm, lifted Z0, drawing feed
+720 mm/min (12 mm/s), travel1200 (20 mm/s), Z30 (0.5 mm/s). Quantized duplicate points are removed; stroke order
 and vertices are otherwise preserved. Continuous local serial delivery waits for
 completion per stroke, not per segment. The pen lifts between strokes and parks
 at X55 Y50 Z0. Temporary M204 P100 T100 / M205 X1 Y1 use the tested gentle profile.
