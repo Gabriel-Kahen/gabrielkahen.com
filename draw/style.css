@@ -30,5 +30,3 @@ button:focus-visible, a:focus-visible { outline: 2px solid #67675b; outline-offs
   main { width: min(490px, calc(100svh - 280px)); }
 }
 
-.legacy-note { color: #85857b; font-size: 11px; line-height: 1.6; }
-.legacy-note a { color: #515149; }

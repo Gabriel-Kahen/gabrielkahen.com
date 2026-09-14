@@ -228,14 +228,3 @@ try {
   }
 } catch { /* Ignore unavailable storage or an invalid saved draft. */ }
 updateControls();
-
-// Retain Letter drafts under their original key and offer an exact, local backup.
-try {
-  const legacy = localStorage.getItem('gabe.draw.draft.v1');
-  const draft = JSON.parse(legacy);
-  if (validDraft(draft, 1) && draft.strokes.length) {
-    const link = $('legacy-download');
-    link.href = URL.createObjectURL(new Blob([legacy], { type: 'application/json' }));
-    $('legacy-draft').hidden = false;
-  }
-} catch { /* Ignore unavailable storage or an invalid legacy draft. */ }
