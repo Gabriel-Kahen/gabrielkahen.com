@@ -15,7 +15,7 @@ from fastapi.responses import JSONResponse
 from starlette.concurrency import run_in_threadpool
 
 from drawing import InvalidDrawing, PrinterConfig, validate_drawing
-from storage import ConflictingSubmission, StorageFull, Store
+from storage import AdmissionLimited, ConflictingSubmission, StorageFull, Store
 from plot_queue import Queue
 from plot_notify import notify
 
@@ -30,6 +30,9 @@ class Settings:
     max_storage_bytes: int = 134_217_728
     max_drawings: int = 10_000
     requests_per_minute: int = 60
+    new_drawings_per_minute: int = 6
+    new_drawings_per_hour: int = 30
+    max_pending_drawings: int = 3
     extra_origins: tuple = ()
     printer: PrinterConfig = field(default_factory=PrinterConfig)
 
@@ -38,6 +41,9 @@ class Settings:
             raise ValueError("Storage cap must be between 1 MiB and 100 GiB.")
         if not 1 <= self.max_drawings <= 1_000_000 or not 1 <= self.requests_per_minute <= 10_000:
             raise ValueError("Invalid drawing or request cap.")
+        if not (1 <= self.new_drawings_per_minute <= self.new_drawings_per_hour <= 10000
+                and 1 <= self.max_pending_drawings <= 100):
+            raise ValueError("Invalid submission or queue limits.")
         if any(not origin.startswith(("http://", "https://")) or origin.endswith("/") for origin in self.extra_origins):
             raise ValueError("Extra CORS origins must be explicit HTTP(S) origins without a trailing slash.")
 
@@ -50,6 +56,9 @@ class Settings:
             max_storage_bytes=int(os.getenv("DRAW_MAX_STORAGE_BYTES", "134217728")),
             max_drawings=int(os.getenv("DRAW_MAX_DRAWINGS", "10000")),
             requests_per_minute=int(os.getenv("DRAW_REQUESTS_PER_MINUTE", "60")),
+            new_drawings_per_minute=int(os.getenv("DRAW_NEW_PER_MINUTE", "6")),
+            new_drawings_per_hour=int(os.getenv("DRAW_NEW_PER_HOUR", "30")),
+            max_pending_drawings=int(os.getenv("DRAW_MAX_PENDING", "3")),
             extra_origins=tuple(origin.strip() for origin in os.getenv("DRAW_EXTRA_ORIGINS", "").split(",") if origin.strip()),
             printer=config,
         )
@@ -66,7 +75,8 @@ def unique_object(pairs):
 
 def create_app(settings=None):
     settings = settings or Settings.from_env()
-    store = Store(settings.db_path, settings.max_storage_bytes, settings.max_drawings)
+    store = Store(settings.db_path, settings.max_storage_bytes, settings.max_drawings,
+                  settings.new_drawings_per_minute, settings.new_drawings_per_hour, settings.max_pending_drawings)
     requests = deque()
     origins = (*PRODUCTION_ORIGINS, *settings.extra_origins)
 
@@ -77,7 +87,7 @@ def create_app(settings=None):
 
     app = FastAPI(lifespan=lifespan, docs_url=None, redoc_url=None, openapi_url=None)
     app.state.store = store
-    app.add_middleware(CORSMiddleware, allow_origins=list(origins), allow_methods=["GET", "POST"], allow_headers=["Content-Type"])
+    app.add_middleware(CORSMiddleware, allow_origins=list(origins), allow_methods=["GET", "POST"], allow_headers=["Content-Type"], expose_headers=["Retry-After"])
 
     @app.exception_handler(HTTPException)
     async def http_error(request, error):
@@ -132,6 +142,8 @@ def create_app(settings=None):
             raise HTTPException(422, detail) from None
         try:
             receipt, created = await run_in_threadpool(store.save, submission_id, strokes, length, canonical, settings.printer)
+        except AdmissionLimited as error:
+            raise HTTPException(429, str(error), headers={"Retry-After": str(error.retry_after)}) from None
         except ConflictingSubmission:
             raise HTTPException(409, "This submission ID was already used for a different drawing.") from None
         except StorageFull:

@@ -60,6 +60,9 @@ CORS permits only `https://gabrielkahen.com` and `https://www.gabrielkahen.com` 
 | `DRAW_MAX_STORAGE_BYTES` | `134217728` | 128 MiB cap on main SQLite file and stored payload accounting |
 | `DRAW_MAX_DRAWINGS` | `10000` | Maximum records; existing identical retries still work |
 | `DRAW_REQUESTS_PER_MINUTE` | `60` | Global POST attempt limit; resets when service restarts |
+| `DRAW_NEW_PER_MINUTE` | `6` | New accepted drawings per rolling minute; persists across restarts |
+| `DRAW_NEW_PER_HOUR` | `30` | New accepted drawings per rolling hour; persists across restarts |
+| `DRAW_MAX_PENDING` | `3` | Maximum queued plus printing jobs in the current printer session, including while paused |
 | `DRAW_EXTRA_ORIGINS` | empty | Explicit comma-separated development origins, e.g. `http://localhost:8080` |
 | `DRAW_PRINTER_CONFIG` | empty | Path to a JSON object with fields from `printer.example.json` |
 
@@ -167,3 +170,27 @@ notification median12.105ms/max13.414ms (20 samples). These numbers exclude publ
 internet/TLS, actual serial verification, pen travel and descent. Physical feed
 rates and all bounds remain unchanged. Raw serial command timestamps remain in
 the rotating printer log for the actual user test.
+
+
+### Submission abuse limits
+
+New submissions are admitted under the same SQLite write transaction as insertion.
+An index on creation time supports persistent rolling quotas:6 new drawings/minute
+and30/hour globally. Concurrent requests cannot race past these limits or the
+3-job printer backlog cap. The backlog includes queued and currently printing
+jobs even when the worker is paused; completed/failed/interrupted jobs and archives
+before the session cutoff do not occupy slots. Archive-only installations without
+a printer session enforce the acceptance quotas but have no printer backlog cap.
+
+Identical UUID retries return the original receipt before admission checks, do not
+regenerate G-code, and do not occupy another slot. New requests rejected by quotas
+also skip G-code generation. All attempts still share the existing60/minute early
+in-memory limit,1MiB body cap,15-second upload deadline, input complexity and path
+length checks, storage caps, and24-connection deployment concurrency cap. Limits
+are global: Funnel hides visitor addresses, and untrusted forwarding headers are
+not used as identity. CORS alone is not authentication.
+
+Admission rejections return429 with Retry-After (seconds until quota capacity, or
+15seconds for a full queue). Retry-After is exposed to the allowed browser origins.
+The browser displays the server's specific error while retaining the drawing.
+Security tests use isolated temporary databases; none enqueue production jobs.

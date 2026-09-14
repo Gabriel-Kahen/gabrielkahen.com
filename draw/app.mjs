@@ -180,9 +180,9 @@ $('submit').addEventListener('click', async () => {
     });
     const data = await response.json().catch(() => null);
     if (!response.ok) {
-      throw new Error(response.status === 429
-        ? 'A few too many drawings at once. Please wait a minute and try again.'
-        : typeof data?.error === 'string' ? data.error.slice(0, 240) : 'The server could not save your drawing. Please try again.');
+      throw new Error(typeof data?.error === 'string'
+        ? data.error.slice(0, 240)
+        : 'The server could not save your drawing. Please try again.');
     }
     if (!data?.id && !data?.submission_id) throw new Error('The server did not confirm the save. Please try again.');
     submitted = true;

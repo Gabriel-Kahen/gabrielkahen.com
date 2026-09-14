@@ -25,7 +25,8 @@ def main():
     args=parser.parse_args()
     with tempfile.TemporaryDirectory(prefix='dispatch-benchmark-',dir=args.root) as directory:
         db_path=str(Path(directory)/'benchmark.sqlite3')
-        env={**os.environ,'DRAW_DB_PATH':db_path}
+        env={**os.environ,'DRAW_DB_PATH':db_path,'DRAW_NEW_PER_MINUTE':'100',
+             'DRAW_NEW_PER_HOUR':'100','DRAW_REQUESTS_PER_MINUTE':'100'}
         server=subprocess.Popen([sys.executable,'-m','uvicorn','app:app','--host','127.0.0.1','--port',str(args.port)],
                                 cwd=Path(__file__).parent,env=env,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
         url=f'http://127.0.0.1:{args.port}'
