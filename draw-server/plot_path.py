@@ -2,6 +2,7 @@
 import json
 import math
 from drawing import validate_drawing, PAGE_DIMENSIONS
+from smoothing import smooth_stroke
 
 CONTACT_Z = -2.6
 LIFT_Z = 0.0
@@ -35,8 +36,9 @@ def strokes_for(job):
     result=[]
     for stroke in strokes:
         path=[]
-        for x,y in stroke:
-            target=checked((left+x*scale,top-y*scale,CONTACT_Z))
+        mapped = [(left+x*scale,top-y*scale) for x,y in stroke]
+        for x,y in smooth_stroke(mapped):
+            target=checked((x,y,CONTACT_Z))
             if not path or target!=path[-1]:
                 path.append(target)
         result.append(path)

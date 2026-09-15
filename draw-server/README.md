@@ -106,8 +106,15 @@ validated vectors. **It never executes the archived placeholder G-code.** The
 website still accepts the full 200 mm square; the worker scales it uniformly to
 the verified 140 mm square X−85..55, Y−80..60, centered X−15 Y−10. Legacy Letter
 vectors are also uniformly fit. Contact Z is −2.60 mm, lifted Z0, drawing feed
-720 mm/min (12 mm/s), travel1200 (20 mm/s), Z30 (0.5 mm/s). Quantized duplicate points are removed; stroke order
-and vertices are otherwise preserved. Continuous local serial delivery waits for
+720 mm/min (12 mm/s), travel1200 (20 mm/s), Z30 (0.5 mm/s). Before motor-step quantization, the worker removes pointer jitter with 0.06 mm
+RDP tolerance and rounds gentle turns using quadratic curves with at most 0.5 mm
+trim per side (limited to a quarter of either adjacent segment). Curve sampling
+uses 0.2 mm control-polygon steps. Turns of 60 degrees or more stay sharp; open
+endpoints, exact loop closure and stroke order are preserved. Smoothing stays
+inside the input convex hull, cannot increase path length, and final coordinates
+are checked against calibrated bounds. Archived vectors and the browser sketch
+remain original; this processing applies to the physical printer path. Quantized
+duplicate points are removed. Continuous local serial delivery waits for
 completion per stroke, not per segment. The pen lifts between strokes and parks
 at X85 Y100 Z0 to present the bed to the front camera. The expanded
 travel envelope is permitted only at lifted Z0; writing bounds remain unchanged. Temporary M204 P100 T100 / M205 X1 Y1 use the tested gentle profile.
