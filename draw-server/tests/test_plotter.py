@@ -60,11 +60,11 @@ def job(strokes,version=2):
 
 def test_bounds_mapping_dedup_and_legacy():
     paths=strokes_for(job([[[0,0],[200,0],[200,200],[0,200],[0,0]],[[100,100],[100.001,100]]]))
-    assert paths[0]==[(-85,60,-2.6),(55,60,-2.6),(55,-80,-2.6),(-85,-80,-2.6),(-85,60,-2.6)]
-    assert paths[1]==[(-15,-10,-2.6)]
+    assert paths[0]==[(-173,100,-2.6),(-33,100,-2.6),(-33,-40,-2.6),(-173,-40,-2.6),(-173,100,-2.6)]
+    assert paths[1]==[(-103,30,-2.6)]
     legacy=strokes_for(job([[[0,0],[215.9,279.4]]],1))[0]
-    assert legacy[0][1]==60 and legacy[1][1]==-80
-    assert legacy[0][0]>-85 and legacy[1][0]<55
+    assert legacy[0][1]==100 and legacy[1][1]==-40
+    assert legacy[0][0]>-173 and legacy[1][0]<-33
 
 
 @pytest.mark.parametrize('stroke',[[[-1,0]],[[201,0]],[[float('nan'),0]],[[True,0]],[[0,0],[200,200]]*6])
@@ -114,16 +114,16 @@ def test_cancel_before_first_stroke():
 
 def test_presentation_area_only_allows_lifted_travel():
     assert checked(PARK,travel=True)==PARK
-    for point in (PARK,(85,100,CONTACT_Z),(56,60,CONTACT_Z)):
+    for point in (PARK,(-3,130,CONTACT_Z),(-32,100,CONTACT_Z)):
         with pytest.raises(ValueError):
             checked(point)
     printer=FakePrinter()
     with pytest.raises(ValueError):
-        printer.move((85,100,CONTACT_Z),30)
+        printer.move((-3,130,CONTACT_Z),30)
     with pytest.raises(ValueError,match='vertical'):
-        printer.move((0,0,CONTACT_Z),30)
+        printer.move((-88,30,CONTACT_Z),30)
     with pytest.raises(ValueError):
-        printer.move((85,101,LIFT_Z),1200)
+        printer.move((-3,131,LIFT_Z),1200)
     assert not printer.commands
 
 
@@ -131,8 +131,8 @@ def test_consecutive_drawings_return_to_presentation_position():
     printer=FakePrinter()
     for _ in range(2):
         assert printer.draw(strokes_for(job([[[0,0],[200,200]]])),lambda:False)
-        assert printer.physical==counts((85,100,LIFT_Z))
-        assert printer.commands[-4].startswith('G1 X85.0000 Y100.0000 Z0.0000')
+        assert printer.physical==counts((-3,130,LIFT_Z))
+        assert printer.commands[-4].startswith('G1 X-3.0000 Y130.0000 Z0.0000')
 
 
 def test_real_api_to_queue_to_mock_printer(tmp_path):
