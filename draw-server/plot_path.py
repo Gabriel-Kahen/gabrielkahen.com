@@ -4,7 +4,7 @@ import math
 from drawing import validate_drawing, PAGE_DIMENSIONS
 from smoothing import smooth_stroke
 
-CONTACT_Z = -2.6
+CONTACT_Z = -3.0
 LIFT_Z = 0.0
 PARK = (-3.0,130.0,LIFT_Z)
 BOUNDS = ((-173.,-33.),(-40.,100.),(CONTACT_Z,LIFT_Z))
