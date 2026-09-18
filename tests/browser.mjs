@@ -19,8 +19,15 @@ try {
     if (fail) return route.abort('failed');
     await route.fulfill({ status: 201, contentType: 'application/json', body: JSON.stringify({ id: data.submission_id }) });
   });
+  await page.route('**/draw-camera/frame.jpg*', route => route.fulfill({
+    status: 200,
+    contentType: 'image/svg+xml',
+    body: '<svg xmlns="http://www.w3.org/2000/svg" width="760" height="650"/>',
+  }));
   await page.goto(url);
   await page.waitForFunction(() => document.querySelector('#paper').dataset.locked === 'false');
+  await page.waitForFunction(() => document.querySelector('#camera-status').textContent === 'Live');
+  assert.equal(await page.locator('#bed-camera').getAttribute('alt'), 'Live view of the Ender 3 drawing bed');
   const draft = () => page.evaluate(key => JSON.parse(localStorage.getItem(key)), key);
   const stroke = async points => {
     const box = await page.locator('#paper').boundingBox();
@@ -97,6 +104,11 @@ try {
 
   const mobile = await browser.newPage({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, deviceScaleFactor: 2 });
   mobile.on('pageerror', error => errors.push(error.message));
+  await mobile.route('**/draw-camera/frame.jpg*', route => route.fulfill({
+    status: 200,
+    contentType: 'image/svg+xml',
+    body: '<svg xmlns="http://www.w3.org/2000/svg" width="760" height="650"/>',
+  }));
   await mobile.goto(url);
   await mobile.waitForFunction(() => document.querySelector('#paper').dataset.locked === 'false');
   const box = await mobile.locator('#paper').boundingBox();

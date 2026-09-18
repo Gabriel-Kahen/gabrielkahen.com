@@ -1,0 +1,25 @@
+[Unit]
+Description=Cropped drawing-bed camera feed
+After=network-online.target gabepi-kvm-video.service
+Wants=network-online.target
+Requires=gabepi-kvm-video.service
+
+[Service]
+Type=simple
+User=gabe
+Group=gabe
+WorkingDirectory=/home/gabe/code/gabriel-draw
+ExecStart=/usr/bin/python3 -u camera_server.py
+Restart=on-failure
+RestartSec=2
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=strict
+ProtectHome=read-only
+MemoryMax=256M
+TasksMax=64
+
+[Install]
+WantedBy=multi-user.target

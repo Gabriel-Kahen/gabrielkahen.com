@@ -3,6 +3,7 @@ import { DRAWING_VERSION, PAPER, PEN_WIDTH, INK_LIMIT, MAX_STROKES, MAX_POINTS, 
 const $ = id => document.getElementById(id);
 const paper = $('paper');
 const layer = $('strokes');
+const camera = $('bed-camera');
 const DRAFT_KEY = 'gabe.draw.draft.v3';
 const NS = 'http://www.w3.org/2000/svg';
 let strokes = [];
@@ -13,6 +14,21 @@ let activePointer = null;
 let activeShape = null;
 let sending = false;
 let submitted = false;
+let cameraTimer;
+
+function loadCamera() {
+  clearTimeout(cameraTimer);
+  if (document.hidden) return;
+  camera.onload = () => {
+    $('camera-status').textContent = 'Live';
+    cameraTimer = setTimeout(loadCamera, 200);
+  };
+  camera.onerror = () => {
+    $('camera-status').textContent = 'Camera offline';
+    cameraTimer = setTimeout(loadCamera, 1500);
+  };
+  camera.src = `${window.DRAW_CONFIG.cameraUrl}?t=${Date.now()}`;
+}
 
 function status(message, error = false) {
   $('status').textContent = message;
@@ -140,7 +156,12 @@ paper.addEventListener('pointerup', event => {
 paper.addEventListener('pointercancel', event => { if (event.pointerId === activePointer) endStroke(); });
 paper.addEventListener('lostpointercapture', event => { if (event.pointerId === activePointer) endStroke(); });
 window.addEventListener('blur', endStroke);
-document.addEventListener('visibilitychange', () => { if (document.hidden) endStroke(); });
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) {
+    endStroke();
+    clearTimeout(cameraTimer);
+  } else loadCamera();
+});
 
 function undo() {
   if (sending || submitted || !strokes.length) return;
@@ -228,3 +249,4 @@ try {
   }
 } catch { /* Ignore unavailable storage or an invalid saved draft. */ }
 updateControls();
+loadCamera();

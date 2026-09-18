@@ -127,6 +127,16 @@ lifts, and restores acceleration/jerk and software endstops. On a transport or
 position fault it disarms and closes without attempting uncertain recovery moves.
 Inspect/recalibrate before restarting; firmware counts cannot detect manual motion.
 
+## Live drawing camera
+
+`camera_server.py` reads the existing Pi ustreamer feed, crops the 1920 × 1080
+camera to `760:650:610:190`, rotates it 180 degrees, and retains only the newest
+JPEG in memory. `gabriel-camera.service` serves loopback port 8766; the existing
+Tailscale Funnel exposes it at `/draw-camera`. The browser polls at 5 fps and
+pauses when its tab is hidden. Requests are limited to a burst of 16 per client
+over two seconds, cross-site image requests must originate from the production
+site, and other sites cannot embed the feed. No video or frame archive is made.
+
 `plot_session` records an atomic MAX(rowid) cutoff at arming. **Every existing
 submission is excluded**, including old retries. New jobs are claimed durably in
 `plot_jobs` before movement and processed FIFO, once each. Failed/interrupted jobs

@@ -21,6 +21,10 @@ screen `(0, 0)` at machine `X−148 Y−15`, and screen `(215, 175)` at
 The physical pen determines line width;
 the preview approximates a BIC ballpoint.
 
+The drawing page also shows a live, upright 760 × 650 view cropped around the
+paper. The Pi encodes the camera once and serves the newest in-memory JPEG at
+five frames per second per browser; frames are not recorded or written to disk.
+
 Version 1 Letter and version 2 square submissions retain their original dimensions,
 and saved server records are never rewritten. New rectangular drawings use a
 separate version 3 draft key.
