@@ -104,7 +104,7 @@ Export opens the database read-only, selects by UUID, and writes only the reques
 `printer_worker.py` consumes new database rows, regenerating bounded movements from
 validated vectors. **It never executes the archived placeholder G-code.** The
 version 3 website square maps 1:1 to X−108..67 and Y−190..−15. Older Letter and
-square vectors are uniformly fit inside that square. Contact Z is −6.00 mm, lifted Z0, drawing feed
+square vectors are uniformly fit inside that square. Contact Z is −5.60 mm, lifted Z0, drawing feed
 720 mm/min (12 mm/s), travel1200 (20 mm/s), Z30 (0.5 mm/s). Before motor-step quantization, the worker removes pointer jitter with 0.06 mm
 RDP tolerance and rounds gentle turns using quadratic curves with at most 0.5 mm
 trim per side (limited to a quarter of either adjacent segment). Curve sampling
