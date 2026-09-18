@@ -105,7 +105,7 @@ Export opens the database read-only, selects by UUID, and writes only the reques
 validated vectors. **It never executes the archived placeholder G-code.** The
 website still accepts the full 200 mm square; the worker scales it uniformly to
 the verified 140 mm square X−173..−33, Y−180..−40, centered X−103 Y−110. Legacy Letter
-vectors are also uniformly fit. Contact Z is −4.00 mm, lifted Z0, drawing feed
+vectors are also uniformly fit. Contact Z is −6.00 mm, lifted Z0, drawing feed
 720 mm/min (12 mm/s), travel1200 (20 mm/s), Z30 (0.5 mm/s). Before motor-step quantization, the worker removes pointer jitter with 0.06 mm
 RDP tolerance and rounds gentle turns using quadratic curves with at most 0.5 mm
 trim per side (limited to a quarter of either adjacent segment). Curve sampling
