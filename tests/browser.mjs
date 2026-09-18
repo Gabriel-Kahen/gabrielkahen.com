@@ -5,7 +5,7 @@ import { chromium } from 'playwright-core';
 // Start `python3 -m http.server 8765` in this checkout first.
 const url = process.env.DRAW_TEST_URL || 'http://127.0.0.1:8765/draw/';
 const browser = await chromium.launch({ executablePath: process.env.CHROME_PATH || '/usr/bin/google-chrome-stable', headless: true });
-const key = 'gabe.draw.draft.v2';
+const key = 'gabe.draw.draft.v3';
 const errors = [];
 await mkdir('test-results', { recursive: true });
 try {
@@ -31,8 +31,8 @@ try {
   };
   const paperBox = await page.locator('#paper').boundingBox();
   assert(Math.abs(paperBox.width - paperBox.height) < 1);
-  assert.equal(await page.locator('#paper').getAttribute('viewBox'), '0 0 200 200');
-  assert.equal(await page.locator('#paper-label').textContent(), '20 × 20 CM');
+  assert.equal(await page.locator('#paper').getAttribute('viewBox'), '0 0 175 175');
+  assert.equal(await page.locator('#paper-label').textContent(), '17.5 × 17.5 CM');
   assert(await page.locator('#submit').isDisabled());
   await stroke([[.2, .2], [.3, .3], [.4, .2]]);
   await stroke([[.6, .6]]);
@@ -67,7 +67,7 @@ try {
   await page.locator('#another').waitFor({ state: 'visible' });
   assert.equal(submissions[0].submission_id, submissions[1].submission_id);
   assert.deepEqual(submissions[1].strokes, original.strokes);
-  assert.equal(submissions[1].version, 2);
+  assert.equal(submissions[1].version, 3);
   await page.locator('#another').click();
   assert.equal((await draft()).strokes.length, 0);
 
@@ -80,8 +80,8 @@ try {
   assert.equal(await page.locator('#ink').textContent(), '48.0 in left');
   await stroke([[.5, .5], [1.1, .6]]);
   const edge = (await draft()).strokes[0].at(-1);
-  assert.equal(edge[0], 200);
-  assert(edge[1] >= 0 && edge[1] <= 200);
+  assert.equal(edge[0], 175);
+  assert(edge[1] >= 0 && edge[1] <= 175);
 
   const legacy = { version: 1, submission_id: '6f59cd0a-314e-48f7-92db-f1d83e57aba8', strokes: [[[215.9, 279.4]]], submitted: false };
   await page.evaluate(({ key, legacy }) => {
@@ -89,15 +89,10 @@ try {
     localStorage.setItem('gabe.draw.draft.v1', JSON.stringify(legacy));
   }, { key, legacy });
   await page.reload();
-  await page.locator('#legacy-draft').waitFor({ state: 'visible' });
   assert.equal(await page.locator('#strokes').locator('*').count(), 0);
-  const preserved = await page.evaluate(async () => {
-    const href = document.querySelector('#legacy-download').href;
-    return { stored: JSON.parse(localStorage.getItem('gabe.draw.draft.v1')), downloaded: await (await fetch(href)).json() };
-  });
-  assert.deepEqual(preserved, { stored: legacy, downloaded: legacy });
+  assert.deepEqual(await page.evaluate(() => JSON.parse(localStorage.getItem('gabe.draw.draft.v1'))), legacy);
   await stroke([[.1, .1], [.2, .2]]);
-  assert.equal((await draft()).version, 2);
+  assert.equal((await draft()).version, 3);
   assert.deepEqual(await page.evaluate(() => JSON.parse(localStorage.getItem('gabe.draw.draft.v1'))), legacy);
 
   const mobile = await browser.newPage({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, deviceScaleFactor: 2 });

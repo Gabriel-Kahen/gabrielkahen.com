@@ -5,8 +5,8 @@ import json
 import math
 from uuid import UUID
 
-DRAWING_VERSION = 2
-PAGE_DIMENSIONS = {1: (215.9, 279.4), 2: (200.0, 200.0)}
+DRAWING_VERSION = 3
+PAGE_DIMENSIONS = {1: (215.9, 279.4), 2: (200.0, 200.0), 3: (175.0, 175.0)}
 MAX_LENGTH_MM = 1219.2
 MAX_STROKES = 200
 MAX_POINTS = 20_000
@@ -108,7 +108,7 @@ class PrinterConfig:
 
 def generate_gcode(strokes, config, version=DRAWING_VERSION):
     """Call only after validate_drawing. No rasterization, reordering, or extrusion."""
-    page_label = "Letter page" if version == 1 else "200 x 200 mm square"
+    page_label = {1: "Letter page", 2: "200 x 200 mm square", 3: "175 x 175 mm calibrated square"}[version]
     lines = [
         "; PEN PLOT - PENDING CALIBRATION - NOT READY FOR UNATTENDED EXECUTION",
         "; Home the printer BEFORE mounting the pen; this file does not home or set an origin.",

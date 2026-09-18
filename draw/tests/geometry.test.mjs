@@ -14,7 +14,7 @@ test('budget ends exactly on the submitted segment', () => {
 
 test('paper clipping stops at the first edge, retaining the segment direction', () => {
   assert.deepEqual(clipToPaper([10, 20], [-10, -20]), [0, 0]);
-  assert.deepEqual(clipToPaper([190, 100], [290, 200]), [PAPER.width, 110]);
+  assert.deepEqual(clipToPaper([165, 80], [205, 190]), [PAPER.width, 107.5]);
   assert.deepEqual(clipToPaper([10, 10], [10, 20]), [10, 20]);
   assert.deepEqual(clipToPaper([0, 0], [-10, 10]), [0, 0]);
 });
@@ -37,17 +37,19 @@ test('drafts reject invalid geometry and enforce cumulative limits', () => {
   assert.ok(!valid([[[1, Infinity]]]));
   assert.ok(!valid([[[PAPER.width + 1, 1]]]));
   assert.ok(!valid([[[0, -1]]]));
-  assert.ok(!valid([Array.from({ length: 8 }, (_, i) => [0, i % 2 ? 200 : 0])]));
+  assert.ok(!valid([Array.from({ length: 8 }, (_, i) => [0, i % 2 ? PAPER.height : 0])]));
   assert.ok(!valid(Array.from({ length: MAX_STROKES + 1 }, () => [[0, 0]])));
   assert.ok(!valid([Array.from({ length: MAX_POINTS + 1 }, () => [0, 0])]));
 });
 
 
-test('square dimensions and versioning keep Letter drafts separate', () => {
-  assert.deepEqual(PAPER, { width: 200, height: 200 });
-  assert.ok(validDraft({ version: 2, strokes: [[[0, 0], [200, 200]]] }));
+test('calibrated dimensions and versioning keep older drafts separate', () => {
+  assert.deepEqual(PAPER, { width: 175, height: 175 });
+  assert.ok(validDraft({ version: 3, strokes: [[[0, 0], [175, 175]]] }));
+  assert.ok(!validDraft({ version: 2, strokes: [[[0, 0], [200, 200]]] }));
+  assert.ok(validDraft({ version: 2, strokes: [[[0, 0], [200, 200]]] }, 2));
   const legacy = { version: 1, strokes: [[[215.9, 279.4]]] };
   assert.ok(!validDraft(legacy));
   assert.ok(validDraft(legacy, 1));
-  assert.ok(!validDraft({ ...legacy, version: 3 }, 3));
+  assert.ok(!validDraft({ ...legacy, version: 4 }, 4));
 });

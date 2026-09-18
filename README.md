@@ -6,26 +6,24 @@ The site is published from `main` by GitHub Pages. The drawing page lives at
 ## Drawing project
 
 `draw/` is a standalone, dependency-free drawing interface. It records ordered
-polylines in millimeters on a 200 × 200 mm square, using an approximate
+polylines in millimeters on a 175 × 175 mm square, using an approximate
 0.4 mm ballpoint line. Pen-down distance is limited to 1219.2 mm (48 inches); lifted
 travel does not count. Undo restores the last stroke's allowance.
 
 `draw-server/` validates submissions, generates stroke-following Ender 3 G-code,
-and saves both representations in SQLite on `gabe@gabepi`. No printer execution
-is connected to submissions. See [the server guide](draw-server/README.md) for
+and saves both representations in SQLite on `gabe@gabepi`. An explicitly armed
+worker streams new submissions to the printer. See [the server guide](draw-server/README.md) for
 calibration, settings, API details, and exporting saved jobs.
 
-The default plot is 200 × 200 mm, centered within the Ender 3's configured
-220 × 220 mm machine coordinate area with 10 mm margins on every side. New
-version 2 drawings map 1:1 to X/Y `10..210` mm, preserving stroke order and
-direction and flipping screen Y into machine Y. The 48-inch allowance therefore
-matches the default plotted path length. The physical pen determines line width;
+New version 3 drawings map 1:1 to the manually measured 175 × 175 mm area:
+screen `(0, 0)` at machine `X−108 Y−15`, and screen `(175, 175)` at
+`X67 Y−190`. Stroke order is preserved and screen Y is flipped into machine Y.
+The physical pen determines line width;
 the preview approximates a BIC ballpoint.
 
-Version 1 Letter submissions retain their original dimensions and mapping, and
-saved server records are never rewritten. The browser keeps older Letter drafts
-under their original storage key and offers their original JSON as a download;
-new square drawings use a separate version 2 draft key.
+Version 1 Letter and version 2 square submissions retain their original dimensions,
+and saved server records are never rewritten. New rectangular drawings use a
+separate version 3 draft key.
 
 ## Deploy
 
@@ -55,8 +53,8 @@ for this site to submit through that private route. Visitors outside the tailnet
 use the public Funnel address. Headless live tests need that permission or a
 temporary resolver mapping to the hostname's current public DNS address.
 
-Deploy the backend before publishing version 2 static changes, so both older
-Letter clients and the new square client can submit. Push the static changes
+Deploy the backend before publishing version 3 static changes, so older clients
+and the new rectangular client can submit. Push the static changes
 to `main` to publish GitHub Pages. Backend source,
 deployment files, and tests are excluded from the Pages build.
 

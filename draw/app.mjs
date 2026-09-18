@@ -1,9 +1,9 @@
-import { DRAWING_VERSION, PAPER, PEN_WIDTH, INK_LIMIT, MAX_STROKES, MAX_POINTS, distance, drawingLength, clipToPaper, spendInk, validDraft } from './geometry.mjs?v=50';
+import { DRAWING_VERSION, PAPER, PEN_WIDTH, INK_LIMIT, MAX_STROKES, MAX_POINTS, distance, drawingLength, clipToPaper, spendInk, validDraft } from './geometry.mjs?v=53';
 
 const $ = id => document.getElementById(id);
 const paper = $('paper');
 const layer = $('strokes');
-const DRAFT_KEY = 'gabe.draw.draft.v2';
+const DRAFT_KEY = 'gabe.draw.draft.v3';
 const NS = 'http://www.w3.org/2000/svg';
 let strokes = [];
 let submissionId = null;

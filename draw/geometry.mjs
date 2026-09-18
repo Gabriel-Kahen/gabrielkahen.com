@@ -1,6 +1,7 @@
-export const DRAWING_VERSION = 2;
-export const PAPER = Object.freeze({ width: 200, height: 200 });
+export const DRAWING_VERSION = 3;
+export const PAPER = Object.freeze({ width: 175, height: 175 });
 const LEGACY_PAPER = Object.freeze({ width: 215.9, height: 279.4 });
+const SQUARE_PAPER = Object.freeze({ width: 200, height: 200 });
 export const INK_LIMIT = 1219.2;
 export const MAX_STROKES = 200;
 export const MAX_POINTS = 20000;
@@ -43,8 +44,8 @@ export function spendInk(from, to, remaining) {
 }
 
 export function validDraft(value, version = DRAWING_VERSION) {
-  const bounds = version === 1 ? LEGACY_PAPER : PAPER;
-  if (![1, DRAWING_VERSION].includes(version) || !value || value.version !== version || !Array.isArray(value.strokes) || value.strokes.length > MAX_STROKES) return false;
+  const bounds = version === 1 ? LEGACY_PAPER : version === 2 ? SQUARE_PAPER : PAPER;
+  if (![1, 2, DRAWING_VERSION].includes(version) || !value || value.version !== version || !Array.isArray(value.strokes) || value.strokes.length > MAX_STROKES) return false;
   let points = 0;
   for (const stroke of value.strokes) {
     if (!Array.isArray(stroke) || !stroke.length || (points += stroke.length) > MAX_POINTS) return false;

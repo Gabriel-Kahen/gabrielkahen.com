@@ -174,7 +174,7 @@ def main():
                 queue.heartbeat()
                 last_beat=now
         printer.tick=heartbeat
-        print(f'ARMED: skipping all existing rows through {cutoff}; Z={CONTACT_Z:.2f}; drawing={DRAW_FEED}mm/min; travel={TRAVEL_FEED}mm/min; area=140x140',flush=True)
+        print(f'ARMED: skipping all existing rows through {cutoff}; Z={CONTACT_Z:.2f}; drawing={DRAW_FEED}mm/min; travel={TRAVEL_FEED}mm/min; area=175x175',flush=True)
         printer.command('M211 S1')
         while not stopping:
             heartbeat()

@@ -8,11 +8,11 @@ from plot_path import strokes_for,counts,PARK,checked,LIFT_Z,CONTACT_Z
 from printer_worker import Printer
 
 
-def insert(path, strokes=None, version=2):
+def insert(path, strokes=None, version=3):
     identifier=str(uuid4())
     with sqlite3.connect(path) as db:
         db.execute('INSERT INTO drawings(submission_id,vector_json) VALUES (?,?)',
-                   (identifier,json.dumps({'version':version,'strokes':strokes or [[[0,0],[200,200]]]})))
+                   (identifier,json.dumps({'version':version,'strokes':strokes or [[[0,0],[175,175]]]})))
     return identifier
 
 
@@ -54,20 +54,20 @@ def test_fifo_done_and_offline(queue):
     assert queue.claim() is None
 
 
-def job(strokes,version=2):
+def job(strokes,version=3):
     return {'submission_id':str(uuid4()),'vector_json':json.dumps({'version':version,'strokes':strokes})}
 
 
 def test_bounds_mapping_dedup_and_legacy():
-    paths=strokes_for(job([[[0,0],[200,0],[200,200],[0,200],[0,0]],[[100,100],[100.001,100]]]))
-    assert paths[0]==[(-173,-40,-6.0),(-33,-40,-6.0),(-33,-180,-6.0),(-173,-180,-6.0),(-173,-40,-6.0)]
-    assert paths[1]==[(-103,-110,-6.0)]
+    paths=strokes_for(job([[[0,0],[175,0],[175,175],[0,175],[0,0]],[[87.5,87.5],[87.501,87.5]]]))
+    assert paths[0]==[(-108,-15,-6.0),(67,-15,-6.0),(67,-190,-6.0),(-108,-190,-6.0),(-108,-15,-6.0)]
+    assert paths[1]==[(-20.5,-102.5,-6.0)]
     legacy=strokes_for(job([[[0,0],[215.9,279.4]]],1))[0]
-    assert legacy[0][1]==-40 and legacy[1][1]==-180
-    assert legacy[0][0]>-173 and legacy[1][0]<-33
+    assert legacy[0][1]==-15 and legacy[1][1]==-190
+    assert -108 < legacy[0][0] < legacy[1][0] < 67
 
 
-@pytest.mark.parametrize('stroke',[[[-1,0]],[[201,0]],[[float('nan'),0]],[[True,0]],[[0,0],[200,200]]*6])
+@pytest.mark.parametrize('stroke',[[[-1,0]],[[176,0]],[[0,176]],[[float('nan'),0]],[[True,0]],[[0,0],[175,175]]*6])
 def test_reject_before_motion(stroke):
     with pytest.raises(ValueError):
         strokes_for(job([stroke]))
@@ -96,7 +96,7 @@ class FakePrinter(Printer):
 
 def test_continuous_strokes_lifts_and_park():
     printer=FakePrinter()
-    paths=strokes_for(job([[[80,80],[90,80],[100,90]],[[110,110]]]))
+    paths=strokes_for(job([[[20,80],[30,80],[40,90]],[[50,110]]]))
     assert printer.draw(paths,lambda:False)
     assert printer.physical==counts(PARK)
     assert printer.commands.count('M400')==3  # per stroke + final park, never per segment
@@ -114,25 +114,25 @@ def test_cancel_before_first_stroke():
 
 def test_presentation_area_only_allows_lifted_travel():
     assert checked(PARK,travel=True)==PARK
-    for point in (PARK,(-3,-10,CONTACT_Z),(-32,-40,CONTACT_Z)):
+    for point in ((-109,-15,CONTACT_Z),(68,-15,CONTACT_Z),(-108,-14,CONTACT_Z)):
         with pytest.raises(ValueError):
             checked(point)
     printer=FakePrinter()
     with pytest.raises(ValueError):
-        printer.move((-3,-10,CONTACT_Z),30)
+        printer.move((68,-15,CONTACT_Z),30)
     with pytest.raises(ValueError,match='vertical'):
-        printer.move((-88,-110,CONTACT_Z),30)
+        printer.move((-20.5,-102.5,CONTACT_Z),30)
     with pytest.raises(ValueError):
-        printer.move((-3,131,LIFT_Z),1200)
+        printer.move((68,-15,LIFT_Z),1200)
     assert not printer.commands
 
 
 def test_consecutive_drawings_return_to_presentation_position():
     printer=FakePrinter()
     for _ in range(2):
-        assert printer.draw(strokes_for(job([[[0,0],[200,200]]])),lambda:False)
-        assert printer.physical==counts((-3,-10,LIFT_Z))
-        assert printer.commands[-4].startswith('G1 X-3.0000 Y-10.0000 Z0.0000')
+        assert printer.draw(strokes_for(job([[[0,0],[175,175]]])),lambda:False)
+        assert printer.physical==counts((-108,-15,LIFT_Z))
+        assert printer.commands[-4].startswith('G1 X-108.0000 Y-15.0000 Z0.0000')
 
 
 def test_real_api_to_queue_to_mock_printer(tmp_path):

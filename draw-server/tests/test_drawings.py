@@ -34,7 +34,7 @@ def client(settings):
 
 def test_trace_order_y_flip_scale_and_safe_lifts():
     config = PrinterConfig()
-    strokes = [[[0, 0], [12, 30], [3, 50]], [[200, 200]]]
+    strokes = [[[0, 0], [12, 30], [3, 50]], [[175, 175]]]
     output = generate_gcode(strokes, config)
     lines = output.splitlines()
     moves = [line for line in lines if line.startswith(("G0 X", "G1 X"))]
@@ -44,7 +44,7 @@ def test_trace_order_y_flip_scale_and_safe_lifts():
         assert coordinates["X"] == pytest.approx(x, abs=0.000051)
         assert coordinates["Y"] == pytest.approx(y, abs=0.000051)
     assert config.transform([0, 0]) == pytest.approx((10, 210))
-    assert config.transform([200, 200]) == pytest.approx((210, 10))
+    assert config.transform([175, 175]) == pytest.approx((210, 10))
     assert output.count("G1 Z0.0000") == 2
     assert output.count("G0 Z3.0000") == 3
     assert "G4 P100" in output
@@ -79,7 +79,7 @@ def test_reject_invalid_geometry(strokes):
         validate_drawing(payload(strokes))
 
 
-@pytest.mark.parametrize("change", [{"version": True}, {"version": 1.0}, {"version": 3}, {"submission_id": "bad"}, {"gcode": "anything"}])
+@pytest.mark.parametrize("change", [{"version": True}, {"version": 1.0}, {"version": 4}, {"submission_id": "bad"}, {"gcode": "anything"}])
 def test_reject_invalid_schema(change):
     with pytest.raises(InvalidDrawing):
         validate_drawing(payload() | change)
@@ -93,9 +93,22 @@ def test_reject_unsafe_config(changes):
 
 def test_small_bed_is_uniformly_fitted():
     config = PrinterConfig(bed_width_mm=100, bed_height_mm=100)
-    assert config.scale == pytest.approx(80 / 200)
-    for point in ([0, 0], [200, 200]):
+    assert config.scale == pytest.approx(80 / 175)
+    for point in ([0, 0], [175, 175]):
         assert all(10 <= coordinate <= 90 for coordinate in config.transform(point))
+
+
+def test_calibrated_rectangle_version_validation_and_mapping():
+    strokes = [[[0, 0], [175, 0], [175, 175], [0, 175], [0, 0]]]
+    _, clean, length, canonical = validate_drawing(payload(strokes, version=3))
+    assert length == 700
+    assert json.loads(canonical)["version"] == 3
+    config = PrinterConfig()
+    output = generate_gcode(clean, config, version=3)
+    assert "175 x 175 mm calibrated square" in output
+    for point in ([175.001, 0], [0, 175.001]):
+        with pytest.raises(InvalidDrawing):
+            validate_drawing(payload([[point]], version=3))
 
 
 def test_atomic_storage_idempotency_conflict_and_private_api(client, settings):
@@ -194,8 +207,8 @@ def test_square_boundary_validation_and_one_to_one_mapping():
     assert length == 800
     assert json.loads(canonical)["version"] == 2
     config = PrinterConfig()
-    assert config.scale == 1
-    output = generate_gcode(clean, config)
+    assert config.scale_for(2) == 1
+    output = generate_gcode(clean, config, version=2)
     for command in ("G0 X10.0000 Y210.0000", "G1 X210.0000 Y210.0000",
                     "G1 X210.0000 Y10.0000", "G1 X10.0000 Y10.0000"):
         assert command in output
