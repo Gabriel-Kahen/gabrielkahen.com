@@ -104,8 +104,8 @@ Export opens the database read-only, selects by UUID, and writes only the reques
 `printer_worker.py` consumes new database rows, regenerating bounded movements from
 validated vectors. **It never executes the archived placeholder G-code.** The
 website still accepts the full 200 mm square; the worker scales it uniformly to
-the verified 140 mm square X−173..−33, Y−40..100, centered X−103 Y30. Legacy Letter
-vectors are also uniformly fit. Contact Z is −3.00 mm, lifted Z0, drawing feed
+the verified 140 mm square X−173..−33, Y−180..−40, centered X−103 Y−110. Legacy Letter
+vectors are also uniformly fit. Contact Z is −3.50 mm, lifted Z0, drawing feed
 720 mm/min (12 mm/s), travel1200 (20 mm/s), Z30 (0.5 mm/s). Before motor-step quantization, the worker removes pointer jitter with 0.06 mm
 RDP tolerance and rounds gentle turns using quadratic curves with at most 0.5 mm
 trim per side (limited to a quarter of either adjacent segment). Curve sampling
@@ -116,11 +116,11 @@ are checked against calibrated bounds. Archived vectors and the browser sketch
 remain original; this processing applies to the physical printer path. Quantized
 duplicate points are removed. Continuous local serial delivery waits for
 completion per stroke, not per segment. The pen lifts between strokes and parks
-at X−3 Y130 Z0 to present the bed to the front camera. The expanded
+at X−3 Y−10 Z0 to present the bed to the front camera. The expanded
 travel envelope is permitted only at lifted Z0; writing bounds remain unchanged. Temporary M204 P100 T100 / M205 X1 Y1 use the tested gentle profile.
 
 The worker exclusively opens the USB serial device, verifies starting motor counts
-(−240,10400,0), matching logical coordinates, endstops and M92 80/80/400. It disables
+(−240,−800,0), matching logical coordinates, endstops and M92 80/80/400. It disables
 idle stepper release with M84 S0 to retain this temporary calibration. It must be
 stopped before manual serial calibration. No homing, origin reset, EEPROM write,
 extrusion, or heating is performed. On clean stop, it finishes the current stroke,
