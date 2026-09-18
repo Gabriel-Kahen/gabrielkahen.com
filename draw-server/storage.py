@@ -74,6 +74,9 @@ class Store:
         # Archive-only installations have no printer session or active backlog.
         tables = {row[0] for row in db.execute("SELECT name FROM sqlite_master WHERE type='table' AND name IN ('plot_session','plot_jobs')")}
         if len(tables) == 2:
+            session = db.execute('SELECT active,heartbeat FROM plot_session WHERE id=1').fetchone()
+            if session and (not session['active'] or now - session['heartbeat'] >= 30):
+                raise AdmissionLimited("The plotter is offline. Please try again when it is accepting drawings.", 15)
             pending = db.execute("""SELECT COUNT(*) FROM drawings d
                 JOIN plot_session s ON s.id=1 AND d.rowid>s.cutoff
                 LEFT JOIN plot_jobs j ON j.submission_id=d.submission_id

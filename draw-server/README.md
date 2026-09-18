@@ -19,7 +19,11 @@ The deployed service stores the database at `/mnt/fastssd/gabriel-draw/drawings.
 
 ## API
 
-`GET /health` returns `{"status":"ok","version":1}`. `POST /drawings` accepts `Content-Type: application/json`:
+`GET /health` returns `{"status":"ok","version":1}`. `GET /status` returns
+the aggregate printer state (`ready`, `drawing`, `full`, or `offline`), whether
+new drawings are being accepted, and queue depth without exposing drawing IDs.
+The status response uses `Cache-Control: no-store`. `POST /drawings` accepts
+`Content-Type: application/json`:
 
 ```json
 {
@@ -32,7 +36,9 @@ The deployed service stores the database at `/mnt/fastssd/gabriel-draw/drawings.
 }
 ```
 
-`/draw-api/health` and `/draw-api/drawings` are identical aliases so a reverse proxy can preserve or remove the `/draw-api` prefix. There are no public read, list, export, or deletion endpoints.
+`/draw-api/health`, `/draw-api/status`, and `/draw-api/drawings` are identical
+aliases so a reverse proxy can preserve or remove the `/draw-api` prefix. There
+are no public drawing read, list, export, or deletion endpoints.
 
 Version 3 coordinates are millimeters on the calibrated 215 × 175 mm rectangle, with `(0, 0)` at the upper-left corner and `(215, 175)` at the lower-right. Versions 1 and 2 remain accepted with their original Letter and 200 mm square dimensions and retry identities. The coordinate version is saved with each drawing; existing records and G-code remain unchanged. Each stroke is an ordered list of `[x, y]` points. A single point is a dot. The server rejects unknown fields, invalid UUIDs, duplicate JSON keys, numeric strings, booleans, nonfinite coordinates, out-of-area coordinates, empty strokes, over 200 strokes, over 20,000 total points, and bodies over 1 MiB, including streamed bodies. It recomputes the sum of distances between adjacent points *within each stroke*. The maximum is 1219.2 mm (48 inches), with 0.000001 mm floating-point tolerance. Pen-up travel does not count. Client-supplied G-code is never accepted.
 
@@ -48,7 +54,7 @@ A new drawing returns HTTP 201:
 }
 ```
 
-The example length is illustrative. Retrying the same submission UUID and geometry returns the original receipt with HTTP 200; changing geometry under the same UUID returns 409. A client should retain its UUID until a submission succeeds or the drawing changes. Uploads have a 15-second body deadline. Errors use `{"error":"Message"}` with 408 for upload timeout, 413 for body size, 415 for unsupported media/encoding, 422 for validation, 429 for rate limit (with `Retry-After: 60`), and 503 for storage capacity/busy conditions.
+The example length is illustrative. Retrying the same submission UUID and geometry returns the original receipt with HTTP 200; changing geometry under the same UUID returns 409. New drawings are rejected while an installed printer worker is inactive or stale, so accepted work is not silently stranded. Existing identical retries still return their receipt. A client should retain its UUID until a submission succeeds or the drawing changes. Uploads have a 15-second body deadline. Errors use `{"error":"Message"}` with 408 for upload timeout, 413 for body size, 415 for unsupported media/encoding, 422 for validation, 429 for rate or availability limits (with `Retry-After`), and 503 for storage capacity/busy conditions.
 
 CORS permits only `https://gabrielkahen.com` and `https://www.gabrielkahen.com` by default. POST requests with another Origin are rejected. This is a public submission service; CORS is a browser policy, not authentication.
 
@@ -130,12 +136,13 @@ Inspect/recalibrate before restarting; firmware counts cannot detect manual moti
 ## Live drawing camera
 
 `camera_server.py` reads the existing Pi ustreamer feed, crops the 1920 × 1080
-camera to `760:650:610:190`, rotates it 180 degrees, and retains only the newest
+camera to `700:700:640:110`, rotates it 180 degrees, and retains only the newest
 JPEG in memory. `gabriel-camera.service` serves loopback port 8766; the existing
-Tailscale Funnel exposes it at `/draw-camera`. The browser polls at 5 fps and
-pauses when its tab is hidden. Requests are limited to a burst of 16 per client
-over two seconds, cross-site image requests must originate from the production
-site, and other sites cannot embed the feed. No video or frame archive is made.
+Tailscale Funnel exposes it at `/draw-camera`. The browser uses one continuous
+15 FPS MJPEG connection and closes it when its tab is hidden. Requests are
+limited to a burst of 16 per client over two seconds, with at most 12 concurrent
+viewers. Cross-site image requests must originate from the production site, and
+other sites cannot embed the feed. No video or frame archive is made.
 
 `plot_session` records an atomic MAX(rowid) cutoff at arming. **Every existing
 submission is excluded**, including old retries. New jobs are claimed durably in

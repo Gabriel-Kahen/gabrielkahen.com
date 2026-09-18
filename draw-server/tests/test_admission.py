@@ -48,10 +48,24 @@ def test_queue_cap_counts_queued_and_printing_but_not_history(tmp_path):
         job=queue.claim()
         queue.heartbeat(False)  # Pausing the printer must not bypass the backlog cap.
         denied=client.post('/drawings',json=payload())
-        assert denied.status_code==429 and 'queue is full' in denied.json()['error']
+        assert denied.status_code==429 and 'offline' in denied.json()['error']
         assert client.post('/drawings',json=accepted[0]).status_code==200
         queue.finish(job['submission_id'],'done')
+        queue.heartbeat()
         assert client.post('/drawings',json=payload()).status_code==201
+
+
+def test_offline_plotter_rejects_new_drawings_but_keeps_retries(tmp_path):
+    settings=Settings(db_path=str(tmp_path/'offline.sqlite3'))
+    queue=Queue(settings.db_path)
+    with TestClient(create_app(settings)) as client:
+        existing=payload()
+        assert client.post('/drawings',json=existing).status_code==201
+        queue.arm()
+        queue.heartbeat(False)
+        denied=client.post('/drawings',json=payload())
+        assert denied.status_code==429 and denied.headers['retry-after']=='15'
+        assert client.post('/drawings',json=existing).status_code==200
 
 
 def test_concurrent_acceptance_cannot_overfill_queue(tmp_path):

@@ -21,9 +21,13 @@ screen `(0, 0)` at machine `X−148 Y−15`, and screen `(215, 175)` at
 The physical pen determines line width;
 the preview approximates a BIC ballpoint.
 
-The drawing page also shows a live, upright 760 × 650 view cropped around the
-paper. The Pi encodes the camera once and serves the newest in-memory JPEG at
-five frames per second per browser; frames are not recorded or written to disk.
+The drawing page also shows a live, upright 700 × 700 view cropped around the
+paper. The Pi encodes the camera once and serves a continuous 15 FPS MJPEG
+stream; frames are not recorded or written to disk.
+
+The page reads the worker heartbeat and queue state every three seconds. Its
+status indicator distinguishes ready, drawing, full, and offline states, and the
+submission button is available only while the physical plotter can accept work.
 
 Version 1 Letter and version 2 square submissions retain their original dimensions,
 and saved server records are never rewritten. New rectangular drawings use a
@@ -48,8 +52,8 @@ then `gabriel-draw.service`.
 The existing Tailscale Funnel routes `/draw-api` on
 `https://gabepi.tail0cb95e.ts.net:8443` to loopback port 8012. It preserves the
 other existing routes. The page's API URL is in `draw/config.js`. HTTPS uploads
-are public; no Tailscale account is required for visitors. If the Pi is offline,
-the page preserves the drawing so visitors can retry later.
+are public; no Tailscale account is required for visitors. If the Pi or plotter
+worker is offline, the page preserves the drawing so visitors can retry later.
 
 On devices in the Pi's own Tailscale network, MagicDNS resolves the API hostname
 to the Pi's private address. Chrome may ask for local-network access; allow it

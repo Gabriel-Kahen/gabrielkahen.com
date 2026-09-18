@@ -98,6 +98,12 @@ def create_app(settings=None):
     async def health():
         return {"status": "ok", "version": 1}
 
+    @app.get("/status")
+    @app.get("/draw-api/status")
+    async def plotter_status():
+        snapshot = await run_in_threadpool(Queue(settings.db_path).snapshot, settings.max_pending_drawings)
+        return JSONResponse(snapshot, headers={"Cache-Control": "no-store"})
+
     @app.post("/drawings")
     @app.post("/draw-api/drawings")
     async def submit(request: Request):

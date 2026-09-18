@@ -13,7 +13,7 @@ from urllib.parse import urlsplit
 HOST = "127.0.0.1"
 PORT = 8766
 UPSTREAM = os.getenv("DRAW_CAMERA_UPSTREAM", "http://100.107.130.73:8080/stream")
-FILTER = "fps=10,crop=760:650:610:190,hflip,vflip"
+FILTER = "fps=15,crop=700:700:640:110,hflip,vflip"
 ALLOWED_HOSTS = {
     "127.0.0.1:8766",
     "localhost:8766",
@@ -22,16 +22,19 @@ ALLOWED_HOSTS = {
 ALLOWED_REFERER_HOSTS = {"gabrielkahen.com", "www.gabrielkahen.com"}
 ALLOWED_ORIGINS = {"https://gabrielkahen.com", "https://www.gabrielkahen.com"}
 latest = (b"", 0.0)
-frame_lock = threading.Lock()
+frame_ready = threading.Condition()
 rate_lock = threading.Lock()
 requests = defaultdict(deque)
+stream_slots = threading.BoundedSemaphore(12)
 stopping = False
 
 
 def capture(pipe):
     global latest
     buffer = bytearray()
-    while chunk := pipe.read(65536):
+    # read1 returns the bytes currently available instead of waiting to fill a
+    # 64 KiB buffer, which would release several frames in visible bursts.
+    while chunk := pipe.read1(65536):
         buffer.extend(chunk)
         while True:
             start = buffer.find(b"\xff\xd8")
@@ -45,8 +48,9 @@ def capture(pipe):
                 break
             frame = bytes(buffer[: end + 2])
             del buffer[: end + 2]
-            with frame_lock:
+            with frame_ready:
                 latest = (frame, time.monotonic())
+                frame_ready.notify_all()
         if len(buffer) > 4 * 1024 * 1024:
             buffer.clear()
 
@@ -96,12 +100,12 @@ class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
         path = urlsplit(self.path).path
         if path in ("/health", "/draw-camera/health"):
-            with frame_lock:
+            with frame_ready:
                 _, stamp = latest
             body = json.dumps({"status": "ok" if time.monotonic() - stamp < 2 else "waiting"}).encode()
             self.respond(200, body, "application/json")
             return
-        if path not in ("/frame.jpg", "/draw-camera/frame.jpg"):
+        if path not in ("/frame.jpg", "/draw-camera/frame.jpg", "/stream.mjpg", "/draw-camera/stream.mjpg"):
             self.send_error(404)
             return
         if not allowed_request(self):
@@ -113,12 +117,47 @@ class Handler(BaseHTTPRequestHandler):
             self.send_header("Content-Length", "0")
             self.end_headers()
             return
-        with frame_lock:
+        if path.endswith("stream.mjpg"):
+            self.stream()
+            return
+        with frame_ready:
             body, stamp = latest
         if not body or time.monotonic() - stamp > 2:
             self.send_error(503, "Camera frame unavailable")
             return
         self.respond(200, body, "image/jpeg")
+
+    def stream(self):
+        if not stream_slots.acquire(blocking=False):
+            self.send_error(503, "Camera viewer limit reached")
+            return
+        try:
+            self.send_response(200)
+            self.send_header("Content-Type", "multipart/x-mixed-replace; boundary=frame")
+            self.send_header("Cache-Control", "no-store, max-age=0")
+            self.send_header("Cross-Origin-Resource-Policy", "cross-origin")
+            self.send_header("X-Content-Type-Options", "nosniff")
+            self.send_header("Connection", "close")
+            self.end_headers()
+            sent = 0.0
+            while not stopping:
+                with frame_ready:
+                    frame_ready.wait_for(lambda: latest[1] > sent or stopping, timeout=2)
+                    body, stamp = latest
+                if stopping:
+                    break
+                if not body or stamp <= sent or time.monotonic() - stamp > 2:
+                    continue
+                self.wfile.write(
+                    b"--frame\r\nContent-Type: image/jpeg\r\nContent-Length: "
+                    + str(len(body)).encode() + b"\r\n\r\n" + body + b"\r\n"
+                )
+                self.wfile.flush()
+                sent = stamp
+        except (BrokenPipeError, ConnectionResetError, TimeoutError):
+            pass
+        finally:
+            stream_slots.release()
 
     def respond(self, status, body, content_type):
         self.send_response(status)

@@ -22,11 +22,22 @@ try {
   await page.route('**/draw-camera/frame.jpg*', route => route.fulfill({
     status: 200,
     contentType: 'image/svg+xml',
-    body: '<svg xmlns="http://www.w3.org/2000/svg" width="760" height="650"/>',
+    body: '<svg xmlns="http://www.w3.org/2000/svg" width="700" height="700"/>',
+  }));
+  await page.route('**/draw-camera/stream.mjpg*', route => route.fulfill({
+    status: 200,
+    contentType: 'image/svg+xml',
+    body: '<svg xmlns="http://www.w3.org/2000/svg" width="700" height="700"/>',
+  }));
+  await page.route('**/draw-api/status', route => route.fulfill({
+    status: 200,
+    contentType: 'application/json',
+    body: JSON.stringify({ state: 'ready', accepting_drawings: true, drawing: false, queued: 0, capacity: 3 }),
   }));
   await page.goto(url);
   await page.waitForFunction(() => document.querySelector('#paper').dataset.locked === 'false');
   await page.waitForFunction(() => document.querySelector('#camera-status').textContent === 'Live');
+  await page.waitForFunction(() => document.querySelector('#plotter-status').dataset.state === 'ready');
   assert.equal(await page.locator('#bed-camera').getAttribute('alt'), 'Live view of the Ender 3 drawing bed');
   const draft = () => page.evaluate(key => JSON.parse(localStorage.getItem(key)), key);
   const stroke = async points => {
@@ -39,7 +50,9 @@ try {
   const paperBox = await page.locator('#paper').boundingBox();
   assert(Math.abs(paperBox.width / paperBox.height - 215 / 175) < .01);
   assert.equal(await page.locator('#paper').getAttribute('viewBox'), '0 0 215 175');
-  assert.equal(await page.locator('#paper-label').textContent(), '21.5 × 17.5 CM');
+  assert.equal(await page.locator('.paper-label').textContent(), '21.5 × 17.5 CM');
+  const cameraBox = await page.locator('#bed-camera').boundingBox();
+  assert(Math.abs(cameraBox.x - paperBox.x) > paperBox.width);
   assert(await page.locator('#submit').isDisabled());
   await stroke([[.2, .2], [.3, .3], [.4, .2]]);
   await stroke([[.6, .6]]);
@@ -107,12 +120,24 @@ try {
   await mobile.route('**/draw-camera/frame.jpg*', route => route.fulfill({
     status: 200,
     contentType: 'image/svg+xml',
-    body: '<svg xmlns="http://www.w3.org/2000/svg" width="760" height="650"/>',
+    body: '<svg xmlns="http://www.w3.org/2000/svg" width="700" height="700"/>',
+  }));
+  await mobile.route('**/draw-camera/stream.mjpg*', route => route.fulfill({
+    status: 200,
+    contentType: 'image/svg+xml',
+    body: '<svg xmlns="http://www.w3.org/2000/svg" width="700" height="700"/>',
+  }));
+  await mobile.route('**/draw-api/status', route => route.fulfill({
+    status: 200,
+    contentType: 'application/json',
+    body: JSON.stringify({ state: 'ready', accepting_drawings: true, drawing: false, queued: 0, capacity: 3 }),
   }));
   await mobile.goto(url);
   await mobile.waitForFunction(() => document.querySelector('#paper').dataset.locked === 'false');
   const box = await mobile.locator('#paper').boundingBox();
+  const mobileCameraBox = await mobile.locator('#bed-camera').boundingBox();
   assert(Math.abs(box.width / box.height - 215 / 175) < .01);
+  assert(mobileCameraBox.y > box.y + box.height);
   const cdp = await mobile.context().newCDPSession(mobile);
   await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: box.x + 50, y: box.y + 50 }] });
   await cdp.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: box.x + 90, y: box.y + 100 }] });

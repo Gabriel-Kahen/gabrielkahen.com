@@ -54,6 +54,21 @@ def test_fifo_done_and_offline(queue):
     assert queue.claim() is None
 
 
+def test_public_snapshot_tracks_worker_and_queue(queue):
+    assert queue.snapshot(3) == {
+        'state': 'offline', 'accepting_drawings': False,
+        'drawing': False, 'queued': 0, 'capacity': 3,
+    }
+    queue.arm()
+    assert queue.snapshot(3)['state'] == 'ready'
+    insert(queue.path)
+    state = queue.snapshot(3)
+    assert state['accepting_drawings'] and state['queued'] == 1
+    queue.claim()
+    state = queue.snapshot(3)
+    assert state['state'] == 'drawing' and state['drawing'] and state['queued'] == 0
+
+
 def job(strokes,version=3):
     return {'submission_id':str(uuid4()),'vector_json':json.dumps({'version':version,'strokes':strokes})}
 

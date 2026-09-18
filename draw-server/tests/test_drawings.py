@@ -142,6 +142,14 @@ def test_cors(client):
     assert preflight.status_code == 200
 
 
+def test_plotter_status_alias_is_public_and_uncached(client, settings):
+    status = client.get('/draw-api/status')
+    assert status.status_code == 200
+    assert status.headers['cache-control'] == 'no-store'
+    assert status.json() == client.get('/status').json()
+    assert status.json()['state'] == 'offline'
+
+
 def test_body_bounds_json_and_encoding(client):
     assert client.post("/drawings", content="{}", headers={"Content-Type": "text/plain"}).status_code == 415
     assert client.post("/drawings", json=payload(), headers={"Content-Encoding": "gzip"}).status_code == 415

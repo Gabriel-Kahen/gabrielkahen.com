@@ -14,34 +14,83 @@ let activePointer = null;
 let activeShape = null;
 let sending = false;
 let submitted = false;
-let cameraTimer;
-let cameraObjectUrl;
+let plotterAvailable = false;
+let cameraRetry;
+let cameraGeneration = 0;
+let plotterTimer;
 
-async function loadCamera() {
-  clearTimeout(cameraTimer);
+function cameraStatus(message) {
+  if ($('camera-status').textContent !== message) $('camera-status').textContent = message;
+}
+
+async function startCamera() {
+  clearTimeout(cameraRetry);
+  const generation = ++cameraGeneration;
   if (document.hidden) return;
+  cameraStatus('Connecting…');
   try {
     const response = await fetch(`${window.DRAW_CONFIG.cameraUrl}?t=${Date.now()}`, {
       cache: 'no-store',
       targetAddressSpace: 'local',
     });
     if (!response.ok) throw new Error(`Camera returned ${response.status}`);
-    const nextUrl = URL.createObjectURL(await response.blob());
+    await response.body?.cancel();
+    if (generation !== cameraGeneration || document.hidden) return;
     camera.onload = () => {
-      if (cameraObjectUrl) URL.revokeObjectURL(cameraObjectUrl);
-      cameraObjectUrl = nextUrl;
-      $('camera-status').textContent = 'Live';
-      cameraTimer = setTimeout(loadCamera, 200);
+      if (generation === cameraGeneration) cameraStatus('Live');
     };
     camera.onerror = () => {
-      URL.revokeObjectURL(nextUrl);
-      $('camera-status').textContent = 'Camera offline';
-      cameraTimer = setTimeout(loadCamera, 1500);
+      if (generation !== cameraGeneration) return;
+      cameraStatus('Camera offline');
+      cameraRetry = setTimeout(startCamera, 1500);
     };
-    camera.src = nextUrl;
+    camera.src = `${window.DRAW_CONFIG.cameraStreamUrl}?t=${Date.now()}`;
   } catch {
-    $('camera-status').textContent = 'Camera offline';
-    cameraTimer = setTimeout(loadCamera, 1500);
+    if (generation !== cameraGeneration) return;
+    cameraStatus('Camera offline');
+    cameraRetry = setTimeout(startCamera, 1500);
+  }
+}
+
+function stopCamera() {
+  cameraGeneration++;
+  clearTimeout(cameraRetry);
+  camera.removeAttribute('src');
+}
+
+function setPlotterStatus(state, message, available) {
+  const indicator = $('plotter-status');
+  if (indicator.dataset.state !== state) indicator.dataset.state = state;
+  const label = indicator.lastElementChild;
+  if (label.textContent !== message) label.textContent = message;
+  if (plotterAvailable !== available) {
+    plotterAvailable = available;
+    updateControls();
+  }
+}
+
+async function loadPlotterStatus() {
+  clearTimeout(plotterTimer);
+  if (document.hidden) return;
+  try {
+    const response = await fetch(window.DRAW_CONFIG.statusUrl, {
+      cache: 'no-store',
+      credentials: 'omit',
+      targetAddressSpace: 'local',
+    });
+    if (!response.ok) throw new Error();
+    const data = await response.json();
+    const messages = {
+      ready: 'Accepting drawings',
+      drawing: data.accepting_drawings ? 'Drawing now · Accepting drawings' : 'Drawing now · Queue full',
+      full: data.drawing ? 'Drawing now · Queue full' : 'Queue full · Please wait',
+      offline: 'Drawings paused · Plotter offline',
+    };
+    setPlotterStatus(data.state, messages[data.state] || 'Status unavailable', data.accepting_drawings === true);
+  } catch {
+    setPlotterStatus('error', 'Status unavailable', false);
+  } finally {
+    if (!document.hidden) plotterTimer = setTimeout(loadPlotterStatus, 3000);
   }
 }
 
@@ -52,7 +101,8 @@ function status(message, error = false) {
 
 function updateControls() {
   $('undo').disabled = sending || submitted || !strokes.length;
-  $('submit').disabled = sending || submitted || !strokes.length || activePointer !== null;
+  $('submit').disabled = sending || submitted || !strokes.length || activePointer !== null || !plotterAvailable;
+  $('submit').title = plotterAvailable ? '' : 'The plotter is not accepting drawings right now.';
   $('submit').hidden = submitted;
   $('another').hidden = !submitted;
   $('submit').textContent = sending ? 'Submitting…' : 'Submit drawing ↗';
@@ -174,8 +224,12 @@ window.addEventListener('blur', endStroke);
 document.addEventListener('visibilitychange', () => {
   if (document.hidden) {
     endStroke();
-    clearTimeout(cameraTimer);
-  } else loadCamera();
+    stopCamera();
+    clearTimeout(plotterTimer);
+  } else {
+    startCamera();
+    loadPlotterStatus();
+  }
 });
 
 function undo() {
@@ -264,4 +318,5 @@ try {
   }
 } catch { /* Ignore unavailable storage or an invalid saved draft. */ }
 updateControls();
-loadCamera();
+startCamera();
+loadPlotterStatus();

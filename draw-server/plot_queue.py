@@ -62,3 +62,31 @@ class Queue:
         except sqlite3.OperationalError:
             pass  # Receiver also operates without a printer worker installed.
         return None
+
+    def snapshot(self, capacity):
+        """Return public aggregate state without exposing jobs or printer details."""
+        try:
+            with self.connect() as db:
+                session = db.execute(
+                    'SELECT cutoff,active,heartbeat FROM plot_session WHERE id=1'
+                ).fetchone()
+                if not session:
+                    raise sqlite3.OperationalError
+                online = bool(session['active']) and time.time() - session['heartbeat'] < 30
+                queued = db.execute('''SELECT COUNT(*) FROM drawings d
+                    LEFT JOIN plot_jobs j ON j.submission_id=d.submission_id
+                    WHERE d.rowid>? AND j.submission_id IS NULL''', (session['cutoff'],)).fetchone()[0]
+                drawing = db.execute("""SELECT COUNT(*) FROM plot_jobs
+                    WHERE source_rowid>? AND status='printing'""", (session['cutoff'],)).fetchone()[0]
+        except sqlite3.OperationalError:
+            online = False
+            queued = drawing = 0
+        pending = queued + drawing
+        state = 'offline' if not online else 'full' if pending >= capacity else 'drawing' if drawing else 'ready'
+        return {
+            'state': state,
+            'accepting_drawings': online and pending < capacity,
+            'drawing': bool(drawing),
+            'queued': queued,
+            'capacity': capacity,
+        }
