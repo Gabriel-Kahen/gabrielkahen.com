@@ -19,4 +19,5 @@ ProtectSystem=strict
 ProtectHome=read-only
 ReadWritePaths=/mnt/fastssd/gabriel-draw
 DevicePolicy=closed
-DeviceAllow=/dev/ttyUSB0 rw
+# The stable by-id path may re-enumerate as ttyUSB0, ttyUSB1, and so on.
+DeviceAllow=char-ttyUSB rw
