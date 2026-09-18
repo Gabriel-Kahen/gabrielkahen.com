@@ -15,19 +15,34 @@ let activeShape = null;
 let sending = false;
 let submitted = false;
 let cameraTimer;
+let cameraObjectUrl;
 
-function loadCamera() {
+async function loadCamera() {
   clearTimeout(cameraTimer);
   if (document.hidden) return;
-  camera.onload = () => {
-    $('camera-status').textContent = 'Live';
-    cameraTimer = setTimeout(loadCamera, 200);
-  };
-  camera.onerror = () => {
+  try {
+    const response = await fetch(`${window.DRAW_CONFIG.cameraUrl}?t=${Date.now()}`, {
+      cache: 'no-store',
+      targetAddressSpace: 'local',
+    });
+    if (!response.ok) throw new Error(`Camera returned ${response.status}`);
+    const nextUrl = URL.createObjectURL(await response.blob());
+    camera.onload = () => {
+      if (cameraObjectUrl) URL.revokeObjectURL(cameraObjectUrl);
+      cameraObjectUrl = nextUrl;
+      $('camera-status').textContent = 'Live';
+      cameraTimer = setTimeout(loadCamera, 200);
+    };
+    camera.onerror = () => {
+      URL.revokeObjectURL(nextUrl);
+      $('camera-status').textContent = 'Camera offline';
+      cameraTimer = setTimeout(loadCamera, 1500);
+    };
+    camera.src = nextUrl;
+  } catch {
     $('camera-status').textContent = 'Camera offline';
     cameraTimer = setTimeout(loadCamera, 1500);
-  };
-  camera.src = `${window.DRAW_CONFIG.cameraUrl}?t=${Date.now()}`;
+  }
 }
 
 function status(message, error = false) {

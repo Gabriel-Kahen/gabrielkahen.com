@@ -20,6 +20,7 @@ ALLOWED_HOSTS = {
     "gabepi.tail0cb95e.ts.net:8443",
 }
 ALLOWED_REFERER_HOSTS = {"gabrielkahen.com", "www.gabrielkahen.com"}
+ALLOWED_ORIGINS = {"https://gabrielkahen.com", "https://www.gabrielkahen.com"}
 latest = (b"", 0.0)
 frame_lock = threading.Lock()
 rate_lock = threading.Lock()
@@ -54,12 +55,15 @@ def allowed_request(handler):
     if handler.headers.get("Host") not in ALLOWED_HOSTS:
         return False
     if handler.headers.get("Sec-Fetch-Site") == "cross-site":
+        destination = handler.headers.get("Sec-Fetch-Dest")
         referer = urlsplit(handler.headers.get("Referer", ""))
-        if (
-            handler.headers.get("Sec-Fetch-Dest") != "image"
-            or referer.scheme != "https"
-            or referer.hostname not in ALLOWED_REFERER_HOSTS
-        ):
+        image_request = (
+            destination == "image"
+            and referer.scheme == "https"
+            and referer.hostname in ALLOWED_REFERER_HOSTS
+        )
+        fetch_request = destination == "empty" and handler.headers.get("Origin") in ALLOWED_ORIGINS
+        if not image_request and not fetch_request:
             return False
     return True
 
@@ -120,6 +124,10 @@ class Handler(BaseHTTPRequestHandler):
         self.send_response(status)
         self.send_header("Content-Type", content_type)
         self.send_header("Content-Length", str(len(body)))
+        origin = self.headers.get("Origin")
+        if origin in ALLOWED_ORIGINS:
+            self.send_header("Access-Control-Allow-Origin", origin)
+            self.send_header("Vary", "Origin")
         self.send_header("Cache-Control", "no-store, max-age=0")
         self.send_header("Cross-Origin-Resource-Policy", "cross-origin")
         self.send_header("X-Content-Type-Options", "nosniff")

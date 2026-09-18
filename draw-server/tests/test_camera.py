@@ -20,6 +20,18 @@ def test_camera_allows_site_images_and_rejects_cross_site_embedding():
     assert not camera_server.allowed_request(request({"Host": "example.com"}))
 
 
+def test_camera_allows_site_fetch_for_local_network_access():
+    allowed = request({
+        "Host": "gabepi.tail0cb95e.ts.net:8443",
+        "Sec-Fetch-Site": "cross-site",
+        "Sec-Fetch-Dest": "empty",
+        "Origin": "https://gabrielkahen.com",
+    })
+    denied = request({**allowed.headers, "Origin": "https://example.com"})
+    assert camera_server.allowed_request(allowed)
+    assert not camera_server.allowed_request(denied)
+
+
 def test_camera_rate_limit_has_a_small_burst():
     camera_server.requests.clear()
     visitor = request(client="203.0.113.1")
