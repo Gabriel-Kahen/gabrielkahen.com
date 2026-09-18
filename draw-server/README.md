@@ -111,7 +111,9 @@ Export opens the database read-only, selects by UUID, and writes only the reques
 validated vectors. **It never executes the archived placeholder G-code.** The
 version 3 website rectangle maps 1:1 to X−148..67 and Y−190..−15. Older Letter and
 square vectors are uniformly fit inside that rectangle. Contact Z is −5.60 mm, lifted Z0, drawing feed
-720 mm/min (12 mm/s), travel1200 (20 mm/s), Z30 (0.5 mm/s). Before motor-step quantization, the worker removes pointer jitter with 0.06 mm
+720 mm/min (12 mm/s), travel1200 (20 mm/s). Vertical lifts and the first part of
+descent use120 mm/min (2 mm/s); the final1 mm of descent uses30 mm/min (0.5 mm/s).
+Before motor-step quantization, the worker removes pointer jitter with 0.06 mm
 RDP tolerance and rounds gentle turns using quadratic curves with at most 0.5 mm
 trim per side (limited to a quarter of either adjacent segment). Curve sampling
 uses 0.2 mm control-polygon steps. Turns of 60 degrees or more stay sharp; open
@@ -132,6 +134,13 @@ extrusion, or heating is performed. On clean stop, it finishes the current strok
 lifts, and restores acceleration/jerk and software endstops. On a transport or
 position fault it disarms and closes without attempting uncertain recovery moves.
 Inspect/recalibrate before restarting; firmware counts cannot detect manual motion.
+
+For a planned update at the verified park, `--resume-cutoff N` replaces
+`--arm-new-only` for that one start. It requires an inactive session with exactly
+cutoff N and no printing jobs, and preserves pending drawings above that cutoff.
+Normal starts still exclude existing submissions. Before stopping for an update,
+pause admission and claiming only after the current drawing finishes; the API
+and camera services can remain online throughout.
 
 ## Live drawing camera
 

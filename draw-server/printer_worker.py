@@ -8,7 +8,7 @@ import signal
 import time
 from pathlib import Path
 
-from plot_path import CONTACT_Z,LIFT_Z,PARK,STEPS,DRAW_FEED,TRAVEL_FEED,Z_FEED,checked,counts,strokes_for
+from plot_path import CONTACT_Z,LIFT_Z,PARK,STEPS,DRAW_FEED,TRAVEL_FEED,Z_FEED,CONTACT_FEED,CONTACT_APPROACH,checked,counts,strokes_for
 from plot_queue import Queue
 from plot_notify import Wakeup
 
@@ -115,7 +115,8 @@ class Printer:
             self.lift()
             x,y,_=path[0]
             self.move((x,y,LIFT_Z),TRAVEL_FEED)
-            self.move((x,y,CONTACT_Z),Z_FEED)
+            self.move((x,y,min(LIFT_Z,CONTACT_Z+CONTACT_APPROACH)),Z_FEED)
+            self.move((x,y,CONTACT_Z),CONTACT_FEED)
             for target in path[1:]:
                 self.move(target,DRAW_FEED)
             if len(path)==1:
@@ -146,7 +147,9 @@ def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--db',required=True)
     parser.add_argument('--port',default='/dev/serial/by-id/usb-1a86_USB_Serial-if00-port0')
-    parser.add_argument('--arm-new-only',action='store_true',required=True)
+    mode=parser.add_mutually_exclusive_group(required=True)
+    mode.add_argument('--arm-new-only',action='store_true')
+    mode.add_argument('--resume-cutoff',type=int,help='Resume a cleanly stopped session with this exact cutoff')
     args=parser.parse_args()
     stopping=False
     def stop(*_):
@@ -164,7 +167,7 @@ def main():
     try:
         printer.prepare()
         wakeup=Wakeup(args.db)
-        cutoff=queue.arm()
+        cutoff=queue.arm() if args.resume_cutoff is None else queue.resume(args.resume_cutoff)
         armed=True
         last_beat=0.
         def heartbeat():

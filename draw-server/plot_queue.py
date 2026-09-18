@@ -32,6 +32,16 @@ class Queue:
         with self.connect() as db:
             db.execute('UPDATE plot_session SET active=?,heartbeat=? WHERE id=1', (int(active),time.time()))
 
+    def resume(self, cutoff):
+        with self.connect() as db:
+            db.execute('BEGIN IMMEDIATE')
+            session=db.execute('SELECT cutoff,active FROM plot_session WHERE id=1').fetchone()
+            unfinished=db.execute("SELECT COUNT(*) FROM plot_jobs WHERE status='printing'").fetchone()[0]
+            if not session or session['active'] or session['cutoff']!=cutoff or unfinished:
+                raise RuntimeError('Session is not cleanly paused at the requested cutoff')
+            db.execute('UPDATE plot_session SET active=1,heartbeat=? WHERE id=1',(time.time(),))
+            return cutoff
+
     def claim(self):
         with self.connect() as db:
             db.execute('BEGIN IMMEDIATE')

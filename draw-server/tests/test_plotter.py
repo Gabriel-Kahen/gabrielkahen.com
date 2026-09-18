@@ -127,6 +127,33 @@ def test_cancel_before_first_stroke():
     assert not any(c.startswith('G1') for c in printer.commands)
 
 
+def test_vertical_speed_and_gentle_contact():
+    printer=FakePrinter()
+    printer.draw(strokes_for(job([[[0,0]]])),lambda:False)
+    moves=[c for c in printer.commands if c.startswith('G1')]
+    assert moves == [
+        'G1 X-148.0000 Y-15.0000 Z-4.6000 F120',
+        'G1 X-148.0000 Y-15.0000 Z-5.6000 F30',
+        'G1 X-148.0000 Y-15.0000 Z0.0000 F120',
+    ]
+
+
+def test_planned_resume_preserves_pending_jobs(queue):
+    insert(queue.path)
+    cutoff=queue.arm()
+    pending=insert(queue.path)
+    with pytest.raises(RuntimeError):
+        queue.resume(cutoff)
+    queue.heartbeat(False)
+    with pytest.raises(RuntimeError):
+        queue.resume(cutoff+1)
+    assert queue.resume(cutoff)==cutoff
+    assert queue.claim()['submission_id']==pending
+    queue.heartbeat(False)
+    with pytest.raises(RuntimeError):
+        queue.resume(cutoff)
+
+
 def test_presentation_area_only_allows_lifted_travel():
     assert checked(PARK,travel=True)==PARK
     for point in ((-149,-15,CONTACT_Z),(68,-15,CONTACT_Z),(-148,-14,CONTACT_Z)):
