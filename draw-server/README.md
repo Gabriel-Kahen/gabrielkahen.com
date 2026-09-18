@@ -34,7 +34,7 @@ The deployed service stores the database at `/mnt/fastssd/gabriel-draw/drawings.
 
 `/draw-api/health` and `/draw-api/drawings` are identical aliases so a reverse proxy can preserve or remove the `/draw-api` prefix. There are no public read, list, export, or deletion endpoints.
 
-Version 3 coordinates are millimeters on the calibrated 175 × 175 mm square, with `(0, 0)` at the upper-left corner and `(175, 175)` at the lower-right. Versions 1 and 2 remain accepted with their original Letter and 200 mm square dimensions and retry identities. The coordinate version is saved with each drawing; existing records and G-code remain unchanged. Each stroke is an ordered list of `[x, y]` points. A single point is a dot. The server rejects unknown fields, invalid UUIDs, duplicate JSON keys, numeric strings, booleans, nonfinite coordinates, out-of-area coordinates, empty strokes, over 200 strokes, over 20,000 total points, and bodies over 1 MiB, including streamed bodies. It recomputes the sum of distances between adjacent points *within each stroke*. The maximum is 1219.2 mm (48 inches), with 0.000001 mm floating-point tolerance. Pen-up travel does not count. Client-supplied G-code is never accepted.
+Version 3 coordinates are millimeters on the calibrated 215 × 175 mm rectangle, with `(0, 0)` at the upper-left corner and `(215, 175)` at the lower-right. Versions 1 and 2 remain accepted with their original Letter and 200 mm square dimensions and retry identities. The coordinate version is saved with each drawing; existing records and G-code remain unchanged. Each stroke is an ordered list of `[x, y]` points. A single point is a dot. The server rejects unknown fields, invalid UUIDs, duplicate JSON keys, numeric strings, booleans, nonfinite coordinates, out-of-area coordinates, empty strokes, over 200 strokes, over 20,000 total points, and bodies over 1 MiB, including streamed bodies. It recomputes the sum of distances between adjacent points *within each stroke*. The maximum is 1219.2 mm (48 inches), with 0.000001 mm floating-point tolerance. Pen-up travel does not count. Client-supplied G-code is never accepted.
 
 A new drawing returns HTTP 201:
 
@@ -103,8 +103,8 @@ Export opens the database read-only, selects by UUID, and writes only the reques
 
 `printer_worker.py` consumes new database rows, regenerating bounded movements from
 validated vectors. **It never executes the archived placeholder G-code.** The
-version 3 website square maps 1:1 to X−108..67 and Y−190..−15. Older Letter and
-square vectors are uniformly fit inside that square. Contact Z is −5.60 mm, lifted Z0, drawing feed
+version 3 website rectangle maps 1:1 to X−148..67 and Y−190..−15. Older Letter and
+square vectors are uniformly fit inside that rectangle. Contact Z is −5.60 mm, lifted Z0, drawing feed
 720 mm/min (12 mm/s), travel1200 (20 mm/s), Z30 (0.5 mm/s). Before motor-step quantization, the worker removes pointer jitter with 0.06 mm
 RDP tolerance and rounds gentle turns using quadratic curves with at most 0.5 mm
 trim per side (limited to a quarter of either adjacent segment). Curve sampling
@@ -115,11 +115,11 @@ are checked against calibrated bounds. Archived vectors and the browser sketch
 remain original; this processing applies to the physical printer path. Quantized
 duplicate points are removed. Continuous local serial delivery waits for
 completion per stroke, not per segment. The pen lifts between strokes and parks
-at X−108 Y−15 Z0. Raised travel and pen-down writing share the measured XY bounds.
+at X−148 Y−15 Z0. Raised travel and pen-down writing share the measured XY bounds.
 Temporary M204 P100 T100 / M205 X1 Y1 use the tested gentle profile.
 
 The worker exclusively opens the USB serial device, verifies starting motor counts
-(−8640,−1200,0), matching logical coordinates, endstops and M92 80/80/400. It disables
+(−11840,−1200,0), matching logical coordinates, endstops and M92 80/80/400. It disables
 idle stepper release with M84 S0 to retain this temporary calibration. It must be
 stopped before manual serial calibration. No homing, origin reset, EEPROM write,
 extrusion, or heating is performed. On clean stop, it finishes the current stroke,

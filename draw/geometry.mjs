@@ -1,5 +1,5 @@
 export const DRAWING_VERSION = 3;
-export const PAPER = Object.freeze({ width: 175, height: 175 });
+export const PAPER = Object.freeze({ width: 215, height: 175 });
 const LEGACY_PAPER = Object.freeze({ width: 215.9, height: 279.4 });
 const SQUARE_PAPER = Object.freeze({ width: 200, height: 200 });
 export const INK_LIMIT = 1219.2;

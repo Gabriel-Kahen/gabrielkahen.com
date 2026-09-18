@@ -6,9 +6,9 @@ from smoothing import smooth_stroke
 
 CONTACT_Z = -5.6
 LIFT_Z = 0.0
-PARK = (-108.0,-15.0,LIFT_Z)
-BOUNDS = ((-108.,67.),(-190.,-15.),(CONTACT_Z,LIFT_Z))
-TRAVEL_BOUNDS = ((-108.,67.),(-190.,-15.),(LIFT_Z,LIFT_Z))
+PARK = (-148.0,-15.0,LIFT_Z)
+BOUNDS = ((-148.,67.),(-190.,-15.),(CONTACT_Z,LIFT_Z))
+TRAVEL_BOUNDS = ((-148.,67.),(-190.,-15.),(LIFT_Z,LIFT_Z))
 STEPS = (80,80,400)
 DRAW_FEED = 720
 TRAVEL_FEED = 1200
@@ -30,8 +30,8 @@ def strokes_for(job):
     source = json.loads(job['vector_json'])
     _,strokes,_,_ = validate_drawing({**source,'submission_id':job['submission_id']})
     width,height = PAGE_DIMENSIONS[source['version']]
-    scale = min(175/width,175/height)
-    left = -108+(175-width*scale)/2
+    scale = min(215/width,175/height)
+    left = -148+(215-width*scale)/2
     top = -15-(175-height*scale)/2
     result=[]
     for stroke in strokes:

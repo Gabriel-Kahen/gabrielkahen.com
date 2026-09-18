@@ -30,9 +30,9 @@ try {
     await page.mouse.up();
   };
   const paperBox = await page.locator('#paper').boundingBox();
-  assert(Math.abs(paperBox.width - paperBox.height) < 1);
-  assert.equal(await page.locator('#paper').getAttribute('viewBox'), '0 0 175 175');
-  assert.equal(await page.locator('#paper-label').textContent(), '17.5 × 17.5 CM');
+  assert(Math.abs(paperBox.width / paperBox.height - 215 / 175) < .01);
+  assert.equal(await page.locator('#paper').getAttribute('viewBox'), '0 0 215 175');
+  assert.equal(await page.locator('#paper-label').textContent(), '21.5 × 17.5 CM');
   assert(await page.locator('#submit').isDisabled());
   await stroke([[.2, .2], [.3, .3], [.4, .2]]);
   await stroke([[.6, .6]]);
@@ -80,7 +80,7 @@ try {
   assert.equal(await page.locator('#ink').textContent(), '48.0 in left');
   await stroke([[.5, .5], [1.1, .6]]);
   const edge = (await draft()).strokes[0].at(-1);
-  assert.equal(edge[0], 175);
+  assert.equal(edge[0], 215);
   assert(edge[1] >= 0 && edge[1] <= 175);
 
   const legacy = { version: 1, submission_id: '6f59cd0a-314e-48f7-92db-f1d83e57aba8', strokes: [[[215.9, 279.4]]], submitted: false };
@@ -100,7 +100,7 @@ try {
   await mobile.goto(url);
   await mobile.waitForFunction(() => document.querySelector('#paper').dataset.locked === 'false');
   const box = await mobile.locator('#paper').boundingBox();
-  assert(Math.abs(box.width - box.height) < 1);
+  assert(Math.abs(box.width / box.height - 215 / 175) < .01);
   const cdp = await mobile.context().newCDPSession(mobile);
   await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: box.x + 50, y: box.y + 50 }] });
   await cdp.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: box.x + 90, y: box.y + 100 }] });

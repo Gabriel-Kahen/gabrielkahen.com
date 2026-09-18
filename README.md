@@ -6,7 +6,7 @@ The site is published from `main` by GitHub Pages. The drawing page lives at
 ## Drawing project
 
 `draw/` is a standalone, dependency-free drawing interface. It records ordered
-polylines in millimeters on a 175 × 175 mm square, using an approximate
+polylines in millimeters on a 215 × 175 mm rectangle, using an approximate
 0.4 mm ballpoint line. Pen-down distance is limited to 1219.2 mm (48 inches); lifted
 travel does not count. Undo restores the last stroke's allowance.
 
@@ -15,8 +15,8 @@ and saves both representations in SQLite on `gabe@gabepi`. An explicitly armed
 worker streams new submissions to the printer. See [the server guide](draw-server/README.md) for
 calibration, settings, API details, and exporting saved jobs.
 
-New version 3 drawings map 1:1 to the manually measured 175 × 175 mm area:
-screen `(0, 0)` at machine `X−108 Y−15`, and screen `(175, 175)` at
+New version 3 drawings map 1:1 to the manually measured 215 × 175 mm area:
+screen `(0, 0)` at machine `X−148 Y−15`, and screen `(215, 175)` at
 `X67 Y−190`. Stroke order is preserved and screen Y is flipped into machine Y.
 The physical pen determines line width;
 the preview approximates a BIC ballpoint.

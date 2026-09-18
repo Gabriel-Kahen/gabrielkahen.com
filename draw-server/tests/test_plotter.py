@@ -12,7 +12,7 @@ def insert(path, strokes=None, version=3):
     identifier=str(uuid4())
     with sqlite3.connect(path) as db:
         db.execute('INSERT INTO drawings(submission_id,vector_json) VALUES (?,?)',
-                   (identifier,json.dumps({'version':version,'strokes':strokes or [[[0,0],[175,175]]]})))
+                   (identifier,json.dumps({'version':version,'strokes':strokes or [[[0,0],[215,175]]]})))
     return identifier
 
 
@@ -59,15 +59,15 @@ def job(strokes,version=3):
 
 
 def test_bounds_mapping_dedup_and_legacy():
-    paths=strokes_for(job([[[0,0],[175,0],[175,175],[0,175],[0,0]],[[87.5,87.5],[87.501,87.5]]]))
-    assert paths[0]==[(-108,-15,-5.6),(67,-15,-5.6),(67,-190,-5.6),(-108,-190,-5.6),(-108,-15,-5.6)]
-    assert paths[1]==[(-20.5,-102.5,-5.6)]
+    paths=strokes_for(job([[[0,0],[215,0],[215,175],[0,175],[0,0]],[[107.5,87.5],[107.501,87.5]]]))
+    assert paths[0]==[(-148,-15,-5.6),(67,-15,-5.6),(67,-190,-5.6),(-148,-190,-5.6),(-148,-15,-5.6)]
+    assert paths[1]==[(-40.5,-102.5,-5.6)]
     legacy=strokes_for(job([[[0,0],[215.9,279.4]]],1))[0]
     assert legacy[0][1]==-15 and legacy[1][1]==-190
-    assert -108 < legacy[0][0] < legacy[1][0] < 67
+    assert -148 < legacy[0][0] < legacy[1][0] < 67
 
 
-@pytest.mark.parametrize('stroke',[[[-1,0]],[[176,0]],[[0,176]],[[float('nan'),0]],[[True,0]],[[0,0],[175,175]]*6])
+@pytest.mark.parametrize('stroke',[[[-1,0]],[[216,0]],[[0,176]],[[float('nan'),0]],[[True,0]],[[0,0],[215,175]]*6])
 def test_reject_before_motion(stroke):
     with pytest.raises(ValueError):
         strokes_for(job([stroke]))
@@ -114,14 +114,14 @@ def test_cancel_before_first_stroke():
 
 def test_presentation_area_only_allows_lifted_travel():
     assert checked(PARK,travel=True)==PARK
-    for point in ((-109,-15,CONTACT_Z),(68,-15,CONTACT_Z),(-108,-14,CONTACT_Z)):
+    for point in ((-149,-15,CONTACT_Z),(68,-15,CONTACT_Z),(-148,-14,CONTACT_Z)):
         with pytest.raises(ValueError):
             checked(point)
     printer=FakePrinter()
     with pytest.raises(ValueError):
         printer.move((68,-15,CONTACT_Z),30)
     with pytest.raises(ValueError,match='vertical'):
-        printer.move((-20.5,-102.5,CONTACT_Z),30)
+        printer.move((-40.5,-102.5,CONTACT_Z),30)
     with pytest.raises(ValueError):
         printer.move((68,-15,LIFT_Z),1200)
     assert not printer.commands
@@ -130,9 +130,9 @@ def test_presentation_area_only_allows_lifted_travel():
 def test_consecutive_drawings_return_to_presentation_position():
     printer=FakePrinter()
     for _ in range(2):
-        assert printer.draw(strokes_for(job([[[0,0],[175,175]]])),lambda:False)
-        assert printer.physical==counts((-108,-15,LIFT_Z))
-        assert printer.commands[-4].startswith('G1 X-108.0000 Y-15.0000 Z0.0000')
+        assert printer.draw(strokes_for(job([[[0,0],[215,175]]])),lambda:False)
+        assert printer.physical==counts((-148,-15,LIFT_Z))
+        assert printer.commands[-4].startswith('G1 X-148.0000 Y-15.0000 Z0.0000')
 
 
 def test_real_api_to_queue_to_mock_printer(tmp_path):

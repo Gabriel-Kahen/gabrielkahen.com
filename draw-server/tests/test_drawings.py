@@ -34,7 +34,7 @@ def client(settings):
 
 def test_trace_order_y_flip_scale_and_safe_lifts():
     config = PrinterConfig()
-    strokes = [[[0, 0], [12, 30], [3, 50]], [[175, 175]]]
+    strokes = [[[0, 0], [12, 30], [3, 50]], [[215, 175]]]
     output = generate_gcode(strokes, config)
     lines = output.splitlines()
     moves = [line for line in lines if line.startswith(("G0 X", "G1 X"))]
@@ -43,8 +43,8 @@ def test_trace_order_y_flip_scale_and_safe_lifts():
         x, y = config.transform(point)
         assert coordinates["X"] == pytest.approx(x, abs=0.000051)
         assert coordinates["Y"] == pytest.approx(y, abs=0.000051)
-    assert config.transform([0, 0]) == pytest.approx((10, 210))
-    assert config.transform([175, 175]) == pytest.approx((210, 10))
+    assert config.transform([0, 0]) == pytest.approx((10, 191.3953488372))
+    assert config.transform([215, 175]) == pytest.approx((210, 28.6046511628))
     assert output.count("G1 Z0.0000") == 2
     assert output.count("G0 Z3.0000") == 3
     assert "G4 P100" in output
@@ -93,20 +93,20 @@ def test_reject_unsafe_config(changes):
 
 def test_small_bed_is_uniformly_fitted():
     config = PrinterConfig(bed_width_mm=100, bed_height_mm=100)
-    assert config.scale == pytest.approx(80 / 175)
-    for point in ([0, 0], [175, 175]):
+    assert config.scale == pytest.approx(80 / 215)
+    for point in ([0, 0], [215, 175]):
         assert all(10 <= coordinate <= 90 for coordinate in config.transform(point))
 
 
 def test_calibrated_rectangle_version_validation_and_mapping():
-    strokes = [[[0, 0], [175, 0], [175, 175], [0, 175], [0, 0]]]
+    strokes = [[[0, 0], [215, 0], [215, 175], [0, 175], [0, 0]]]
     _, clean, length, canonical = validate_drawing(payload(strokes, version=3))
-    assert length == 700
+    assert length == 780
     assert json.loads(canonical)["version"] == 3
     config = PrinterConfig()
     output = generate_gcode(clean, config, version=3)
-    assert "175 x 175 mm calibrated square" in output
-    for point in ([175.001, 0], [0, 175.001]):
+    assert "215 x 175 mm calibrated area" in output
+    for point in ([215.001, 0], [0, 175.001]):
         with pytest.raises(InvalidDrawing):
             validate_drawing(payload([[point]], version=3))
 

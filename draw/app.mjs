@@ -1,4 +1,4 @@
-import { DRAWING_VERSION, PAPER, PEN_WIDTH, INK_LIMIT, MAX_STROKES, MAX_POINTS, distance, drawingLength, clipToPaper, spendInk, validDraft } from './geometry.mjs?v=53';
+import { DRAWING_VERSION, PAPER, PEN_WIDTH, INK_LIMIT, MAX_STROKES, MAX_POINTS, distance, drawingLength, clipToPaper, spendInk, validDraft } from './geometry.mjs?v=54';
 
 const $ = id => document.getElementById(id);
 const paper = $('paper');
