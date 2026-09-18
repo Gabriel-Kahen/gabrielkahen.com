@@ -145,6 +145,24 @@ try {
   const mobileDraft = await mobile.evaluate(key => JSON.parse(localStorage.getItem(key)), key);
   assert.equal(mobileDraft.strokes.length, 1);
   assert(mobileDraft.strokes[0].length >= 2);
+  // Start with room to scroll in either direction, then drag off the paper.
+  await mobile.evaluate(() => scrollTo(0, 80));
+  const scrollBefore = await mobile.evaluate(() => scrollY);
+  const touchBox = await mobile.locator('#paper').boundingBox();
+  await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: touchBox.x + 120, y: touchBox.y + 80 }] });
+  for (let offset = 100; offset <= 420; offset += 20) {
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: touchBox.x + 120, y: touchBox.y + offset }] });
+  }
+  await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+  assert.equal(await mobile.evaluate(() => scrollY), scrollBefore, 'Drawing must not scroll the page, including beyond the paper edge');
+  // A new gesture outside the drawing surface must still scroll normally.
+  await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: 5, y: 700 }] });
+  for (let y = 680; y >= 400; y -= 20) {
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: 5, y }] });
+  }
+  await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+  assert(await mobile.evaluate(before => scrollY > before, scrollBefore), 'The page must remain scrollable outside the drawing surface');
+  await mobile.evaluate(() => scrollTo(0, 0));
   assert(await mobile.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
   await mobile.screenshot({ path: 'test-results/draw-mobile.png', fullPage: true });
   assert.deepEqual(errors, []);

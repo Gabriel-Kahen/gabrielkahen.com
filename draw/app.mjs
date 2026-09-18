@@ -4,6 +4,23 @@ const $ = id => document.getElementById(id);
 const paper = $('paper');
 const layer = $('strokes');
 const camera = $('bed-camera');
+const paperSurface = paper.closest('.paper-surface');
+let drawingTouch = false;
+
+// Keep the whole gesture on the paper, even after a stroke reaches its edge
+// or ink limit. Non-passive touch events also cover mobile SVG pan handling.
+paperSurface.addEventListener('touchstart', event => {
+  drawingTouch = true;
+  if (event.cancelable) event.preventDefault();
+}, { passive: false });
+document.addEventListener('touchmove', event => {
+  if (drawingTouch && event.cancelable) event.preventDefault();
+}, { passive: false });
+for (const type of ['touchend', 'touchcancel']) {
+  document.addEventListener(type, event => {
+    if (!event.touches.length) drawingTouch = false;
+  }, { passive: true });
+}
 const DRAFT_KEY = 'gabe.draw.draft.v3';
 const NS = 'http://www.w3.org/2000/svg';
 let strokes = [];

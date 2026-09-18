@@ -7,9 +7,9 @@
   <meta name="description" content="Draw a little picture with a black pen. Your strokes become a drawing on paper.">
   <title>Draw · Gabriel Kahen</title>
   <link rel="preconnect" href="https://gabepi.tail0cb95e.ts.net:8443" crossorigin>
-  <link rel="stylesheet" href="./style.css?v=8">
+  <link rel="stylesheet" href="./style.css?v=9">
   <script src="./config.js" defer></script>
-  <script src="./app.mjs?v=57" type="module"></script>
+  <script src="./app.mjs?v=58" type="module"></script>
 </head>
 <body>
   <main>
@@ -25,9 +25,11 @@
           <h2 id="drawer-heading">Your drawing</h2>
           <span class="paper-label">21.5 × 17.5 CM</span>
         </div>
+        <div class="paper-surface">
         <svg id="paper" viewBox="0 0 215 175" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Drawing area, 21.5 by 17.5 centimeters. Draw with your mouse, finger, or pen." aria-describedby="drawing-help">
           <g id="strokes" fill="none" stroke="#000" stroke-width="0.4" stroke-linecap="round" stroke-linejoin="round"></g>
         </svg>
+        </div>
         <p id="drawing-help" class="visually-hidden">Drag on the paper to draw in black ink. Undo removes your last stroke. Drawings may use up to 48 inches of line.</p>
         <div class="toolbar">
           <button id="undo" class="secondary" type="button" disabled title="Undo last stroke (Ctrl or Command Z)"><span aria-hidden="true">↶</span> Undo</button>
